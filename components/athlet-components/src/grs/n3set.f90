@@ -19,26 +19,38 @@ DIMENSION NSEGS(NRODS),IZONE(IHV),NOLAYS(L7IHV),IQF(L2RODS),ISEG(LIHROD)
 real(8),dimension(LAYAL1)::SV
 real(8),dimension(LAYAL1)::TT
 call athlet_instance%log%info("grs.Athlet", "n3set() - entry")
-
+      !if (.not.athlet_instance%setup_var) then 
       call athlet_instance%n3set%n3set_transferCCC(KEYA1)
       call athlet_instance%n3set%n3set_transferCDGE(VOLI,size(VOLI),ZTI,size(ZTI),ZBI,size(ZBI))
       call athlet_instance%n3set%n3set_transferCDML(IMLK,size(IMLK),IML,size(IML))
-      !call n3set_client%n3set_transferCDNW(IILO,size(IILO),IIRO,size(IIRO))
+      call athlet_instance%n3set%n3set_transferCDNW(IILO,size(IILO),IIRO,size(IIRO))
       call athlet_instance%n3set%n3set_transferCDPR(TFHT,size(TFHT),TL,size(TL))
       call athlet_instance%n3set%n3set_transferCDQ(QI,size(QI))
-      !call n3set_client%n3set_transferCDSS(NSSITE)
+      call athlet_instance%n3set%n3set_transferCDSS(NSSITE)
       call athlet_instance%n3set%n3set_transferCDTF(XQM,size(XQM),AV,size(AV),ROF,size(ROF), IKS)
-      !call n3set_client%n3set_transferCGCO(LSGIMP,YNAME,size(YNAME))
-      !call n3set_client%n3set_transferCHCD(NKHCO,size(NKHCO))
+      call athlet_instance%n3set%n3set_transferCGCO(LSGIMP,YNAME,size(YNAME))
+      call athlet_instance%n3set%n3set_transferCHCD(NKHCO,size(NKHCO),S0H,size(S0H))
       !away IHV,LAYAL1,LHLENG,LHCU,NRODS,IAHO,size(IAHO),IOUT
-      call athlet_instance%n3set%n3set_transferCHCP(POWERN,size(POWERN))
+       
+      call athlet_instance%n3set%n3set_transferCHCP( IHV,LAYAL1,LHCU,LHLENG,POWERN,size(POWERN),NRODS,IAHO,size(IAHO),IOUT)
       !L7IHV,L2RODS,LOHROD - away
-      call athlet_instance%n3set%n3set_transferCHCO(HC,size(HC))
-      !call n3set_client%n3set_transferCHRD(LFLUID,size(LFLUID))
+      call athlet_instance%n3set%n3set_transferCHCO(L7IHV,L2RODS,LIHROD)
+      
+      if(size(HC).GT.0) then
+      
+	call athlet_instance%n3set%n3set_transferCHCOArrays(HC,size(HC))
+      endif
+      call athlet_instance%n3set%n3set_transferCHRD(LFLUID,size(LFLUID))
       !LBORON - away
-      !call athlet_instance%n3set%n3set_transferCKBO(LBORON,CBOR,size(CBOR),XBOR,size(XBOR))
+      call athlet_instance%n3set%n3set_transferCKBO(LBORON,CBOR,size(CBOR),XBOR,size(XBOR))
       call athlet_instance%n3set%n3set_transferCNI(NLAYSK,size(NLAYSK),INLAYS,ISDK)
       call athlet_instance%n3set%n3set_invoke(NSEGS,size(NSEGS),IZONE,size(IZONE),NOLAYS,size(NOLAYS),SV,size(SV),TT,size(TT),IQF,size(IQF),ISEG,size(ISEG),ISD)
+     
       call athlet_instance%n3set%n3set_transferResults(XBOR,size(XBOR),NLAYSK,size(NLAYSK),INLAYS,ISDK)
+      print *,"XBOR_QB:",XBOR
+      print *,"NLAYSK_QB:",NLAYSK
+      print *,"INLAYS_QB:",INLAYS
+      print *,"ISDK_QB:",ISDK		 
+      !endif
 call athlet_instance%log%info("grs.Athlet", "n3set() - exit")
 END

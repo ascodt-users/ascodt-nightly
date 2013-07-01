@@ -45,9 +45,9 @@ C
 #endif
 #endif
 C
-      IF(LCFX) THEN
-         GOTO (1,9,3,9,9,9,7,9,9,9) KCFX/100
-      ENDIF
+C      IF(LCFX) THEN
+C         GOTO (1,9,3,9,9,9,7,9,9,9) KCFX/100
+C      ENDIF
 C
  1    VERSN(1) ='ATHLET M'
       VERSN(2) ='od3.0 Cy'
@@ -173,6 +173,33 @@ C
 C --- CLOSE INPUT UNIT
       CLOSE (UNIT=1)
 C
+ 9020 FORMAT(/,' ',80('+'),//,' ATHLET PROGRAM VERSION:',
+     &/,' ',23('-'),/,' ',3A8,/,' PROGRAM VERSION DATE: ',A8)
+ 9021 FORMAT(/,' OMP PARALLEL VERSION OF ATHLET:',/,' ',31('-'),/,
+     &' OMP SCHEDULE: DYNAMIC',/,
+     &' NUMBER OF THREADS AND CHUNK SIZE SPECIFIED BY INPUT.')
+ 9023 FORMAT(/,' SERIAL VERSION OF ATHLET',/,' ',24('-'))
+ 9030 FORMAT(/,' RUN START TIME:',/,' ',15('-'),
+     &/,' DATE:  ',A,/,
+     &' TIME:  ',A)
+ 9040 FORMAT(/,' ',80('+'),///)
+ 2102 FORMAT('</body>'/'</html>')
+ 2302 FORMAT('</pre>'/'</body>'/'</html>')
+      END subroutine
+
+      subroutine athlet_start
+#ifdef _OMP
+      USE OMP_LIB
+#endif
+      USE CACFX, ONLY: LCFX, KCFX, IRCFX
+      USE CCS, ONLY: ICPUTM
+      USE CCA, ONLY: T, IWBER, IPUNC, VERSN, CPUT0
+      USE CCAC, ONLY: T0TRNS
+      USE CCC, ONLY: KEYA1, IOIN, IOPRI, IOPLO, IOPL2, IOSIG, PID, RID,
+     &               RRID, TARDIR, RESDIR, INFILE, NOQUIT, EXECFIL
+      USE EMODATHL, ONLY: IHEAT
+      USE CAOHTM, ONLY: IHTMFL
+C
       IF(LCFX) GOTO 10000
 C
 C --- GLOBAL INITIALIZATION - START CALCULATION (STEADY STATE)
@@ -184,7 +211,7 @@ C
       WRITE(6,*) 'ATHLET: Start of steady state calculation'
 #endif
 #endif
-C      CALL ASTART
+      CALL ASTART
 #ifdef _WIN32
 #ifndef _COCOSYS
       WRITE(6,*) 'ATHLET: End   of steady state calculation'
@@ -199,7 +226,7 @@ C
 C     ZERO-TRANSIENT CALCULATION FOR TFD MODELS?
       IF(T.LT.T0TRNS) KEYA1 = 500
 C
-C      CALL ATRANS
+      CALL ATRANS
 C
       IF(LCFX) THEN
          IF(KCFX /= 709) GOTO 10000
@@ -258,8 +285,5 @@ C
 C     RETURNS IF LCFX=.T. (WITHOUT RETURN STATEMENT)
 10000 CONTINUE
 C
-      END subroutine
-
-      subroutine athlet_start
       end subroutine
 

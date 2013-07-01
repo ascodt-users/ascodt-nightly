@@ -36,6 +36,7 @@ procedure,public::n3inte_transferCHCP
 procedure,public::n3inte_transferCNI
 procedure,public::n3inte_transferCNK
 procedure,public::n3inte_transferCNR
+procedure,public::n3inte_transferCRCI
 procedure,public::n3inte_invoke
 procedure,public::n3inte_transferResults
 procedure,public::n3set_transferCCC
@@ -50,6 +51,7 @@ procedure,public::n3set_transferCGCO
 procedure,public::n3set_transferCHCD
 procedure,public::n3set_transferCHCP
 procedure,public::n3set_transferCHCO
+procedure,public::n3set_transferCHCOArrays
 procedure,public::n3set_transferCHRD
 procedure,public::n3set_transferCKBO
 procedure,public::n3set_transferCNI
@@ -88,28 +90,28 @@ subroutine setup(this)
     class( QuaboxImplementation)::this
     !if(this%is_valid()) then
         call this%logger%info("grs.Quabox", "start setup Quabox")
-       !call athlet_setup()
-       CALL APRESET
-      CALL EPRESET
-      CALL FPRESET
-
-      CALL AGETPA
-
-
-      CALL ERRSET( 208, 0, 20,2,0,208)
-      CALL ERRSET( 202,10,255,2,0,202)
-      CALL ERRSET( 141,10,255,2,0,141)
-      CALL ERRSET( 162, 0, 20,2,0,162)
-      CALL ERRSET( 163, 0, 20,2,0,163)
-      CALL ERRSET( 187,10,255,2,0,187)
-      CALL ERRSET( 209,10,255,2,0,209)
-      !KEYA1  = 100
-
-      CALL AIN0
-      CALL ADIM
-      !KEYA1  = 200
-      CALL AIN1
-      CLOSE (UNIT=1)
+       call athlet_setup()
+       !CALL APRESET
+      !CALL EPRESET
+      !CALL FPRESET
+!
+!      CALL AGETPA
+!
+!
+!      CALL ERRSET( 208, 0, 20,2,0,208)
+!      CALL ERRSET( 202,10,255,2,0,202)
+!      CALL ERRSET( 141,10,255,2,0,141)
+!      CALL ERRSET( 162, 0, 20,2,0,162)
+!      CALL ERRSET( 163, 0, 20,2,0,163)
+!      CALL ERRSET( 187,10,255,2,0,187)
+!      CALL ERRSET( 209,10,255,2,0,209)
+!      !KEYA1  = 100
+!
+!      CALL AIN0
+!      CALL ADIM
+!      !KEYA1  = 200
+!      CALL AIN1
+!      CLOSE (UNIT=1)
 
         call this%logger%info("grs.Quabox", "finish setup Quabox")
     !endif
@@ -162,6 +164,7 @@ subroutine n3set_invoke(this,&
     ISEG,ISEG_len,&
     ISD)
     USE CCA, only: T
+    USE CHCP,only:LHLENG
     class( QuaboxImplementation)::this
     integer,intent(in),dimension(*)::NSEGS
     integer,intent(in)::NSEGS_len
@@ -179,6 +182,7 @@ subroutine n3set_invoke(this,&
     integer,intent(in)::ISEG_len
     integer,intent(in)::ISD
     call this%logger%info("grs.Quabox", "in:n3set_invoke()")
+    print *,"nhleng before set:",LHLENG
     call n3set(NSEGS,IZONE,NOLAYS,SV,TT,IQF,ISEG,ISD)
     call this%logger%info("grs.Quabox", "out:n3set_invoke()")
     !!print *,"n3set_invoke"
@@ -257,31 +261,53 @@ subroutine n3set_transferCHRD(this,&
     !put your implementation here
 end subroutine n3set_transferCHRD
 subroutine n3set_transferCHCO(this,&
-    HC_in,HC_len)
-    USE CHCO,only:HC
+    L7IHV_in,L2RODS_in,LIHROD_in)
+    USE CHCO,only: L7IHV,L2RODS,LIHROD
     class( QuaboxImplementation)::this
-    real(8),intent(in),dimension(*)::HC_in
-    integer,intent(in)::HC_len
+    integer,intent(in)::L7IHV_in
+    integer,intent(in)::L2RODS_in
+    integer,intent(in)::LIHROD_in
     integer::i
     call this%logger%info("grs.Quabox", "in:n3set_transferCHCO()")
-    if(.not.allocated(HC)) then
-        allocate(HC(HC_len))
-    end if
-
-    do i=1,HC_len
-        HC(i)=HC_in(i)
-    end do
+    L7IHV = L7IHV_in
+    L2RODS = L2RODS_in
+    LIHROD = LIHROD_in
     call this%logger%info("grs.Quabox", "out:n3set_transferCHCO()")
     !!print *,"n3set_transferCHCO"
     !put your implementation here
 end subroutine n3set_transferCHCO
+subroutine n3set_transferCHCOArrays(this,&
+    HC_in,HC_len)
+	USE CHCO,only:HC 
+	class( QuaboxImplementation)::this
+	real(8),intent(in),dimension(*)::HC_in
+	integer,intent(in)::HC_len
+	integer::i
+	if(.not.allocated(HC)) then
+	        allocate(HC(HC_len))
+    	end if
+
+    	do i=1,HC_len
+        	HC(i)=HC_in(i)
+    	end do
+    
+end subroutine n3set_transferCHCOArrays
 subroutine n3set_transferCHCP(this,&
-    POWERN_in,POWERN_len)
-    USE CHCP,only:POWERN
+    IHV_in,LAYAL1_in,LHCU_in,LHLENG_in,POWERN_in,POWERN_len,NRODS_in,IAHO_in,IAHO_len,IOUT_in)
+    USE CHCP,only:IHV,LAYAL1,LHCU,LHLENG,POWERN,NRODS,IAHO,IOUT
     class( QuaboxImplementation)::this
     real(8),intent(in),dimension(*)::POWERN_in
+    integer,intent(in)::IHV_in
+    integer,intent(in)::LAYAL1_in
+    integer,intent(in)::LHCU_in
+    integer,intent(in),value::LHLENG_in
     integer,intent(in)::POWERN_len
+    integer,intent(in)::NRODS_in
+    integer,intent(in),dimension(*)::IAHO_in
+    integer,intent(in)::IAHO_len 
+    integer,intent(in)::IOUT_in
     integer::i
+
     call this%logger%info("grs.Quabox", "in:n3set_transferCHCP()")
     if(.not.allocated(POWERN)) then
          allocate(POWERN(POWERN_len))
@@ -290,24 +316,46 @@ subroutine n3set_transferCHCP(this,&
     do i=1,POWERN_len
         POWERN(i)=POWERN_in(i)
     end do
+    IHV=IHV_in
+    LAYAL1=LAYAL1_in
+    LHCU=LHCU_in
+    LHLENG=LHLENG_in
+    print *,"qb n3set lhleng:",LHLENG
+    NRODS=NRODS_in
+    if(.not.allocated(IAHO)) then
+         allocate(IAHO(IAHO_len))
+
+    end if
+    do i=1,IAHO_len
+        IAHO(i)=IAHO_in(i)
+    end do
+    IOUT=IOUT_in 
     call this%logger%info("grs.Quabox", "out:n3set_transferCHCP()")	
     !!print *,"n3set_transferCHCP"
     !put your implementation here
 end subroutine n3set_transferCHCP
 subroutine n3set_transferCHCD(this,&
-    NKHCO_in,NKHCO_len)
-    use CHCD,only:NKHCO
+    NKHCO_in,NKHCO_len,S0H_in,S0H_len)
+    use CHCD,only:NKHCO,S0H
     class( QuaboxImplementation)::this
-        integer,intent(in),dimension(*)::NKHCO_in
+    integer,intent(in),dimension(*)::NKHCO_in
     integer,intent(in)::NKHCO_len
-    integer::i
+    real(8),intent(in),dimension(*)::S0H_in
+    integer,intent(in)::S0H_len
+    	
+     integer::i
      call this%logger%info("grs.Quabox", "in:n3set_transferCHCD()")
      if(.not.allocated(NKHCO)) then
        allocate(NKHCO(NKHCO_len))
     end if
-
+     if(.not.allocated(S0H)) then
+       allocate(S0H(S0H_len))
+    end if
     do i=1,NKHCO_len
         NKHCO(i)=NKHCO_in(i)
+    end do
+    do i=1,S0H_len
+        S0H(i)=S0H_in(i)
     end do
      call this%logger%info("grs.Quabox", "out:n3set_transferCHCD()")
     
@@ -575,12 +623,7 @@ subroutine n3rest_invoke(this,&
     integer,intent(in)::IUN
     call n3rest(IDIR,IFORM,IUN)
     !CALL SOUT
-    if (KEYOUT.eq.1) then
-        CALL SOSTEP
-        !call SOPLPO
-        CALL AOUTPT
-        KEYOUT=1
-    endif
+   
     !!print *,"invoking n3rest"
     !put your implementation here
 end subroutine n3rest_invoke
@@ -674,12 +717,7 @@ subroutine n3inte_invoke(this,&
     integer,intent(in)::QNKI_len
     integer::copy
     real(8)::copy_of_t
-    !if(KEYOUT.eq.1)
-    copy= KEYOUT
-    copy_of_t=T
-    CALL AOUTPT
-    KEYOUT=copy
-    T=copy_of_t
+    
     call n3inte(ITERNB,LINIK,QNKI)
 
 
@@ -690,6 +728,21 @@ subroutine n3inte_invoke(this,&
     !!print *,"invoking n3inte"
     !put your implementation here
 end subroutine n3inte_invoke
+subroutine n3inte_transferCRCI(this,&
+    QROD0_in,QROD0_len)
+    USE CRCI,only:QROD0
+    class( QuaboxImplementation)::this
+    real(8),intent(in),dimension(*)::QROD0_in
+    integer,intent(in)::QROD0_len
+    integer::i
+    if(.not.allocated(QROD0)) then
+       allocate(QROD0(QROD0_len))
+    end if
+
+    do i=1,QROD0_len
+        QROD0(i)=QROD0_in(i)
+    end do
+end subroutine n3inte_transferCRCI
 subroutine n3inte_transferCNR(this,&
     QNKI0_in,QNKI0_len)
     USE CNR,only:QNKI0
@@ -731,15 +784,16 @@ subroutine n3inte_transferCHCP(this,&
     IAHO_in,IAHO_len,&
     LHCU_in,&
     LHLENG_in,&
-    POWERN_in,POWERN_len)
-    USE CHCP,only:IAHO,LHCU,LHLENG,POWERN
+    POWERN_in,POWERN_len,NRODS_in)
+    USE CHCP,only:IAHO,LHCU,LHLENG,POWERN,NRODS
     class( QuaboxImplementation)::this
     integer,intent(in),dimension(*)::IAHO_in
     integer,intent(in)::IAHO_len
     integer,intent(in)::LHCU_in
     integer,intent(in)::LHLENG_in
-    real(8),intent(inout),dimension(*)::POWERN_in
+    real(8),intent(in),dimension(*)::POWERN_in
     integer,intent(in)::POWERN_len
+    integer,intent(in)::NRODS_in
     integer::i
     if(.not.allocated(IAHO)) then
         allocate(IAHO(IAHO_len))
@@ -756,15 +810,16 @@ subroutine n3inte_transferCHCP(this,&
     end do
     LHCU=LHCU_in
     LHLENG=LHLENG_in
-
+    NRODS=NRODS_in 
     !put your implementation here
 end subroutine n3inte_transferCHCP
 subroutine n3inte_transferCHCO(this,&
-    HC_in,HC_len)
-    USE CHCO,only:HC
+    HC_in,HC_len,HCTIME_in)
+    USE CHCO,only:HC,HCTIME
     class( QuaboxImplementation)::this
     real(8),intent(in),dimension(*)::HC_in
     integer,intent(in)::HC_len
+    real(8),intent(in)::HCTIME_in
     integer::i
     if(.not.allocated(HC)) then
          allocate(HC(HC_len))
@@ -773,6 +828,7 @@ subroutine n3inte_transferCHCO(this,&
     do i=1,HC_len
         HC(i)=HC_in(i)
     end do
+    HCTIME=HCTIME_in
     !put your implementation here
 end subroutine n3inte_transferCHCO
 subroutine n3inte_transferCHCD(this,&
@@ -819,13 +875,16 @@ subroutine n3inte_transferCCC(this,&
 end subroutine n3inte_transferCCC
 subroutine n3inte_transferCCAC(this,&
     TFFKT_in,&
-    TFFKT0_in)
-    USE CCAC, only: TFFKT,TFFKT0
+    TFFKT0_in,&
+    T0TRNS_in)
+    USE CCAC, only: TFFKT,TFFKT0,T0TRNS
     class( QuaboxImplementation)::this
     real(8),intent(in)::TFFKT_in
     real(8),intent(in)::TFFKT0_in
+    real(8),intent(in)::T0TRNS_in
     TFFKT=TFFKT_in
     TFFKT0=TFFKT0_in
+    T0TRNS=T0TRNS_in 
     !put your implementation here
 end subroutine n3inte_transferCCAC
 subroutine n3inte_transferCCA(this,&
@@ -854,6 +913,7 @@ subroutine n3inp_invoke(this)
     CHARACTER*3 CH3
      print *,"invoking n3inp"
      call n3inp
+     print *,"finish invoking n3inp"
      CALL AOUTPT
 
      CALL SOCMP(1,0,0,1,'Q/C       ',0)

@@ -58,7 +58,8 @@ SET(LIBRARY_OUTPUT_PATH  "../../native/lib")
 
 SET(SRC_COMP_EXEC
 	../../components/java/grs/QuaboxAbstractImplementation.f90
-	../../src/grs/QuaboxImplementation.f90 
+	../../src/grs/QuaboxImplementation.f90
+	../../src/grs/athlet.f  
 	../../components/java/grs/QuaboxFProxy.f90
 	../../components/java/grs/QuaboxC2FProxy.cpp 
 	

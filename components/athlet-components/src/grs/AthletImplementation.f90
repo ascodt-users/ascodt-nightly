@@ -11,7 +11,9 @@ implicit none
 
 type, extends ( AthletAbstractImplementation ), public :: AthletImplementation 
      ! Declaration of private members
-     private 
+     logical,public::setup_var 
+     private
+     
      !list of procedures
      contains
      procedure,public::createInstance
@@ -25,7 +27,7 @@ contains
 
 subroutine createInstance(this)
     class( AthletImplementation)::this
-    !put your initialization code here
+    this%setup_var=.False.
 end subroutine createInstance
 
 subroutine destroyInstance(this)
@@ -35,13 +37,16 @@ end subroutine destroyInstance
 
 subroutine start(this)
     class( AthletImplementation)::this
-    
-    !put your implementation here
+    call this%log%info("grs.Athlet","Startring Athlet simulation")
+    call athlet_start()
+    call this%log%info("grs.Athlet","Finish Athlet simulation")
 end subroutine start
 subroutine setup(this)
     class( AthletImplementation)::this
     call this%log%info("grs.Athlet","Startring Athlet setup")
+    this%setup_var=.True.
     call athlet_setup()
+    this%setup_var=.False.
     call this%log%info("grs.Athlet","Finish Athlet setup")
     !put your implementation here
 end subroutine setup

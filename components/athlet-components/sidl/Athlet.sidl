@@ -39,7 +39,7 @@ package grs {
 	//USE CCA,    ONLY: L3DNK,DT
 	n3inte_transferCCA(in int L3DNK,in double DT, in double T);
 	//USE CCAC,   ONLY: TFFKT, TFFKT0
-    n3inte_transferCCAC(in double TFFKT,in double TFFKT0);
+    n3inte_transferCCAC(in double TFFKT,in double TFFKT0,in double t0trns);
     //USE CCC,    ONLY: KEYOUT, KEYA1
     n3inte_transferCCC(in int KEYA1,in int KEYE,in int KEYOUT);
     //USE CGCO,   ONLY: TE
@@ -47,15 +47,17 @@ package grs {
     //USE CHCD,   ONLY: NKHCO
     n3inte_transferCHCD(in int NKHCO[]);
     //USE CHCO,   ONLY: HC
-    n3inte_transferCHCO(in double HC[]);
+    n3inte_transferCHCO(in double HC[],in double HCTIME);
     //USE CHCP,   ONLY: IAHO, LHCU, LHLENG, POWERN
-    n3inte_transferCHCP(in int IAHO[],in int LHCU,in int LHLENG,inout double POWERN[]);
+    n3inte_transferCHCP(in int IAHO[],in int LHCU,in int LHLENG,in double POWERN[],in int NRODS);
     //USE CNI ,   ONLY: NKSGMX, NNRODK
     n3inte_transferCNI(in int NKSGMX,in int NNRODK);
     //USE CNK,    ONLY: INITIA
     n3inte_transferCNK(in int INITIA);
     //USE CNR ,   ONLY: QNKI0
     n3inte_transferCNR(in double QNKI0[]);
+    n3inte_transferCRCI(in double qrod0 []);
+ 
     //INVOKE  ITERNB,LINIK,QNKI 
     n3inte_invoke(inout int ITERNB,in bool LINIK,inout double QNKI []);
      
@@ -97,13 +99,14 @@ package grs {
     //USE CGCO, ONLY: LSGIMP, YNAME
     n3set_transferCGCO(in int LSGIMP, in string YNAME[]);
     //USE CHCD, ONLY: NKHCO, S0H
-    n3set_transferCHCD(in int NKHCO[]);
+    n3set_transferCHCD(in int NKHCO[],in double S0H[]);
     //USE CHCP, ONLY: IHV, LAYAL1, LHLENG, LHCU, NRODS, IAHO, IOUT,
     //&                *POWERN
-    n3set_transferCHCP(in double POWERN[]); 
+    n3set_transferCHCP(in int IHV, in int LAYAL1,in int LHCU,in int LHLENG, in double POWERN[],in int NRODS,in int IAHO[],in int IOUT); 
     
     //USE CHCO, ONLY: L7IHV, L2RODS, LIHROD, HC
-    n3set_transferCHCO(in double HC[]);
+    n3set_transferCHCO(in int L7IHV,in int L2RODS,in int LIHROD);
+    n3set_transferCHCOArrays(in double HC[]);
     //USE CHRD, ONLY: LFLUID
     n3set_transferCHRD(in int LFLUID[]);
     //USE CKBO, ONLY: LBORON, CBOR, XBOR
