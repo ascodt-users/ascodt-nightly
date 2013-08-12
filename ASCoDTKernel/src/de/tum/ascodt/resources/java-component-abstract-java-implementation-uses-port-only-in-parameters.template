@@ -23,7 +23,12 @@
   /**
    * @see Case class 
    */
-  public __USES_PORT_TYPE__AbstractPort createPortFor__USES_PORT_AS__(de.tum.ascodt.repository.Target  target) {
+  public __USES_PORT_TYPE__AbstractPort createPortFor__USES_PORT_AS__(
+    de.tum.ascodt.repository.Target  target,
+    de.tum.ascodt.repository.TargetParameters targetParameters
+  
+  ) {
+    
     __USES_PORT_TYPE__AbstractPort result = null;
         
     if (target.getType()==de.tum.ascodt.repository.Target.TargetType.JavaLocal) {

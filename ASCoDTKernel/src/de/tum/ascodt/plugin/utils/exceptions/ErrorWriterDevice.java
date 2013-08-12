@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.eclipse.swt.widgets.Display;
 
 import de.tum.ascodt.utils.ConsoleDevice;
 
@@ -27,7 +26,6 @@ public class ErrorWriterDevice {
 
 	private FileWriter      _fileWriter;
 	private BufferedWriter  _errorLog;
-	private boolean 						_isTest;
 
 	private ErrorWriterDevice() {
 		try {
@@ -38,19 +36,13 @@ public class ErrorWriterDevice {
 			errorLogFile.createNewFile();
 			_fileWriter  = new FileWriter(errorLogFile,true);
 			_errorLog   = new BufferedWriter(_fileWriter);
-			_isTest = false;
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void enableTesting(){
-		_isTest=true;
-	}
 
-	public void disableTesting(){
-		_isTest=false;
-	}
 
 	private static String now() {
 		final String DateFormat = "yyyy.MM.dd G 'at' hh:mm:ss z";
@@ -97,24 +89,17 @@ public class ErrorWriterDevice {
 
 
 	private void displayErrorMessage(final String fullQualifiedClassName, final String methodName, final String errorMessage ){
-		if(!_isTest)
-			Display.getDefault().asyncExec(new Runnable(){
-				public void run(){
-					final String outputText = fullQualifiedClassName + "." + methodName + "\n" + errorMessage ;
-					org.eclipse.jface.dialogs.MessageDialog.openError(Display.getDefault().getActiveShell(),"ASCoDT Error" , outputText );
+		String outputText = fullQualifiedClassName + "." + methodName + "\n" + errorMessage ;
+		try {
+			_errorLog.write( now() + "\n" );
+			_errorLog.write( outputText + "\n" );
+			_errorLog.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-					try {
-						_errorLog.write( now() + "\n" );
-						_errorLog.write( outputText + "\n" );
-						_errorLog.flush();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-
-					ConsoleDevice.getInstance().getConsole( "ASCoDT Error" ).println( outputText );
-				}
-
-			});
-
+		ConsoleDevice.getInstance().getConsole( "ASCoDT Error" ).println( outputText );
 	}
+
+
 }

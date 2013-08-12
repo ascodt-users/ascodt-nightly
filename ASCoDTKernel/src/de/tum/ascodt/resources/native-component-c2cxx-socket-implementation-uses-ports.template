@@ -1,0 +1,49 @@
+#include "__PATH_FULL_QUALIFIED_PORT_TYPE__NativeSocketDispatcher.h"
+#include "__PATH_FULL_QUALIFIED_PORT_TYPE__Cxx2SocketPlainPort.h"
+void invoker_create_client_port_for___USES_PORT_AS__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer){
+  long long portref=0;
+  int port;
+  int hostname_len=0;
+  char* host;
+  readData((char*)&hostname_len,sizeof(int),rcvBuffer,newsockfd,buffer_size);
+  host = new char[hostname_len];
+  readData((char*)host,hostname_len,rcvBuffer,newsockfd,buffer_size);
+  readData((char*)&port,sizeof(int),rcvBuffer,newsockfd,buffer_size);
+  portref=(long long)new __CXX_FULL_QUALIFIED_PORT_TYPE__Cxx2SocketPlainPort(
+        host,
+        port,
+        buffer_size
+   );
+  delete [] host;
+  sendData((char*)&portref,sizeof(long long),sendBuffer,newsockfd,buffer_size);
+ 
+}
+  
+
+void invoker_connect_client_dispatcher___USES_PORT_AS__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer){
+  long long portref=0;
+  int port;
+  int hostname_len=0;
+  char* host;
+  readData((char*)&hostname_len,sizeof(int),rcvBuffer,newsockfd,buffer_size);
+  host = new char[hostname_len];
+
+  readData((char*)host,hostname_len,rcvBuffer,newsockfd,buffer_size);
+  readData((char*)&port,sizeof(int),rcvBuffer,newsockfd,buffer_size);
+  portref=(long long)new __CXX_FULL_QUALIFIED_PORT_TYPE__NativeSocketDispatcher(
+           host,
+           port,
+           buffer_size
+     );
+  ((__CXX_FULL_QUALIFIED_NAME__Implementation*)*ref)->connect__USES_PORT_AS__((__CXX_FULL_QUALIFIED_PORT_TYPE__NativeSocketDispatcher*)portref);   
+  delete[]host;
+  sendData((char*)&portref,sizeof(long long),sendBuffer,newsockfd,buffer_size);
+}
+
+
+
+
+void invoker_disconnect_client_dispatcher___USES_PORT_AS__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer){
+ ((__CXX_FULL_QUALIFIED_NAME__Implementation*)*ref)->disconnect__USES_PORT_AS__();
+}
+

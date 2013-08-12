@@ -37,14 +37,14 @@ public class CreateComponentsAndInterfaces {
 			_symbolTable.getGlobalScope().getFlattenedEnumsElements()){
 			CreateJavaAndCxxEnumeration createJavaEnumeration = new CreateJavaAndCxxEnumeration(
 					_symbolTable, 
-					
+
 					generatedFilesDestinationDirectory,
 					_symbolTable.getScope(enumeration).getFullIdentifierOfPackage()
 
 					);
 			enumeration.apply(createJavaEnumeration);
 		}
-	
+
 		generatePorts(generatedFilesDestinationDirectory, offset_map);
 		try{
 			for ( 
@@ -74,7 +74,7 @@ public class CreateComponentsAndInterfaces {
 							nativeDestinationDirectory,
 							_symbolTable.getScope(component).getFullIdentifierOfPackage()
 							);
-					CreateCxxMakefile createMakefile = new CreateCxxMakefile(
+					CreateCxxBuildScripts createMakefile = new CreateCxxBuildScripts(
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
 							generatedFilesDestinationDirectory,
@@ -108,7 +108,7 @@ public class CreateComponentsAndInterfaces {
 							nativeDestinationDirectory,
 							_symbolTable.getScope(component).getFullIdentifierOfPackage()
 							);
-					CreateBuildScripts createMakefile = new CreateBuildScripts(
+					CreateFortranBuildScripts createMakefile = new CreateFortranBuildScripts(
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
 							generatedFilesDestinationDirectory,
@@ -134,37 +134,6 @@ public class CreateComponentsAndInterfaces {
 					component.apply( createMakefile);
 					implementationClassName = createJavaNativeComponent.getFullQualifiedNameOfTheComponentImplementation();
 				}else if(component.getTarget()!=null && Target.isCxxRemoteSocket(component.getTarget().getText())){ 
-					CreateCxxComponent createCxxComponent = new CreateCxxComponent(
-							_symbolTable, 
-							userImplementedFilesDestinationDirectory,
-							generatedFilesDestinationDirectory,
-							_symbolTable.getScope(component).getFullIdentifierOfPackage()
-							);
-//					CreateSocketProxyForCxx createCxxSocketServerComponent = new CreateSocketServerProxyForCxx(
-//							_symbolTable, 
-//							userImplementedFilesDestinationDirectory,
-//							generatedFilesDestinationDirectory,
-//							_symbolTable.getScope(component).getFullIdentifierOfPackage(),
-//							offset_map
-//							);
-					//component.apply( createCxxSocketServerComponent );
-					component.apply( createCxxComponent );
-					implementationClassName ="TBD";
-				}else if(component.getTarget()!=null && Target.isReverseCxxRemoteSocket(component.getTarget().getText())){ 
-					//        	CreateCxxComponent createCxxComponent = new CreateCxxComponent(
-							//              _symbolTable, 
-							//              userImplementedFilesDestinationDirectory,
-							//              generatedFilesDestinationDirectory,
-							//              _symbolTable.getScope(component).getFullIdentifierOfPackage()
-							//            );
-					//        	CreateClientSocketProxyForCxx createJNIComponent = new CreateServerSocketProxyForCxx(
-					//              _symbolTable, 
-					//              userImplementedFilesDestinationDirectory,
-					//              generatedFilesDestinationDirectory,
-					//              _symbolTable.getScope(component).getFullIdentifierOfPackage()
-					//            );
-					//        	
-				}else if(component.getTarget()!=null && Target.isFortranRemoteSocket(component.getTarget().getText())){
 					CreateJava2SocketServer createJave2SocketServer = new CreateJava2SocketServer(
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
@@ -172,6 +141,74 @@ public class CreateComponentsAndInterfaces {
 							nativeDestinationDirectory,
 							_symbolTable.getScope(component).getFullIdentifierOfPackage(),
 							offset_map
+							);
+					CreateCxxComponent createCxxComponent = new CreateCxxComponent(
+							_symbolTable, 
+							userImplementedFilesDestinationDirectory,
+							generatedFilesDestinationDirectory,
+							_symbolTable.getScope(component).getFullIdentifierOfPackage()
+							);
+					CreateSocketProxyForCxx createSocketServerProxy = new CreateSocketProxyForCxx(
+							_symbolTable, 
+							userImplementedFilesDestinationDirectory,
+							generatedFilesDestinationDirectory,
+							_symbolTable.getScope(component).getFullIdentifierOfPackage(),
+							offset_map
+							);
+					//					CreateSocketProxyForCxx createCxxSocketServerComponent = new CreateSocketServerProxyForCxx(
+					//							_symbolTable, 
+					//							userImplementedFilesDestinationDirectory,
+					//							generatedFilesDestinationDirectory,
+					//							_symbolTable.getScope(component).getFullIdentifierOfPackage(),
+					//							offset_map
+					//							);
+					//component.apply( createCxxSocketServerComponent );
+					component.apply( createCxxComponent );
+					implementationClassName ="TBD";
+				}else if(component.getTarget()!=null && Target.isReverseCxxRemoteSocket(component.getTarget().getText())){ 
+					CreateJava2SocketClient createJave2SocketClient = new CreateJava2SocketClient(
+							_symbolTable, 
+							userImplementedFilesDestinationDirectory,
+							generatedFilesDestinationDirectory,
+							nativeDestinationDirectory,
+							_symbolTable.getScope(component).getFullIdentifierOfPackage(),
+							offset_map,
+						  "Cxx"
+							);
+					CreateCxxComponent createCxxComponent = new CreateCxxComponent(
+							_symbolTable, 
+							userImplementedFilesDestinationDirectory,
+							generatedFilesDestinationDirectory,
+							_symbolTable.getScope(component).getFullIdentifierOfPackage()
+							);
+					CreateSocketProxyForCxx createSocketServerProxy = new CreateSocketProxyForCxx(
+							_symbolTable, 
+							userImplementedFilesDestinationDirectory,
+							generatedFilesDestinationDirectory,
+							_symbolTable.getScope(component).getFullIdentifierOfPackage(),
+							offset_map
+							);
+					CreateCxxBuildScripts createMakefile = new CreateCxxBuildScripts(
+							_symbolTable, 
+							userImplementedFilesDestinationDirectory,
+							generatedFilesDestinationDirectory,
+							nativeDestinationDirectory,
+							_symbolTable.getScope(component).getFullIdentifierOfPackage()
+							);
+					component.apply( createSocketServerProxy );
+					component.apply( createJave2SocketClient );
+					component.apply( createCxxComponent);
+					component.apply( createMakefile);
+				
+				}else if(component.getTarget()!=null && Target.isFortranRemoteSocket(component.getTarget().getText())){
+					CreateJava2SocketClient createJave2SocketClient = new CreateJava2SocketClient(
+							_symbolTable, 
+							userImplementedFilesDestinationDirectory,
+							generatedFilesDestinationDirectory,
+							nativeDestinationDirectory,
+							_symbolTable.getScope(component).getFullIdentifierOfPackage(),
+							offset_map,
+							"Fortran"
 							);
 					CreateFortranComponent createFortranComponent = new CreateFortranComponent(
 							_symbolTable, 
@@ -186,17 +223,17 @@ public class CreateComponentsAndInterfaces {
 							_symbolTable.getScope(component).getFullIdentifierOfPackage(),
 							offset_map
 							);
-					CreateBuildScripts createMakefile = new CreateBuildScripts(
+					CreateFortranBuildScripts createBuildscripts = new CreateFortranBuildScripts(
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
 							generatedFilesDestinationDirectory,
 							nativeDestinationDirectory,
 							_symbolTable.getScope(component).getFullIdentifierOfPackage()
 							);
-					component.apply( createJave2SocketServer );
+					component.apply( createJave2SocketClient );
 					component.apply( createSocketServerProxy );
 					component.apply( createFortranComponent );
-					component.apply( createMakefile);
+					component.apply( createBuildscripts);
 					implementationClassName ="TBD";
 				}else if(component.getTarget()!=null && Target.isReverseFortranRemoteSocket(component.getTarget().getText())){
 					CreateJava2SocketClient createJave2SocketClient = new CreateJava2SocketClient(
@@ -205,7 +242,8 @@ public class CreateComponentsAndInterfaces {
 							generatedFilesDestinationDirectory,
 							nativeDestinationDirectory,
 							_symbolTable.getScope(component).getFullIdentifierOfPackage(),
-							offset_map
+							offset_map,
+							"Fortran"
 							);
 					CreateFortranComponent createFortranComponent = new CreateFortranComponent(
 							_symbolTable, 
@@ -213,7 +251,7 @@ public class CreateComponentsAndInterfaces {
 							generatedFilesDestinationDirectory,
 							_symbolTable.getScope(component).getFullIdentifierOfPackage()
 							);
-					CreateBuildScripts createMakefile = new CreateBuildScripts(
+					CreateFortranBuildScripts createMakefile = new CreateFortranBuildScripts(
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
 							generatedFilesDestinationDirectory,
@@ -313,9 +351,9 @@ public class CreateComponentsAndInterfaces {
 					offset_map
 					);
 			port.apply(createPlainNative2SocketClientPorts);
-			
-		
-			
+
+
+
 			//7. plain java2remote ports
 
 			//8. plain remote2remote ports
@@ -328,7 +366,7 @@ public class CreateComponentsAndInterfaces {
 					offset_map
 					);
 			port.apply(createPlainSocketClient2JavaPorts);
-			
+
 		}
 	}
 }

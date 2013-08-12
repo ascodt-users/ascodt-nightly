@@ -94,6 +94,7 @@ public class CreateSocketProxyForFortran extends de.tum.ascodt.sidlcompiler.fron
 			
 
 			_templateFilesOfC2FProxyImplementation.peek().addMapping( "__COMPONENT_NAME__", componentName.toLowerCase() );
+			_templateFilesOfC2FProxyImplementation.peek().addMapping( "__COMPONENT_NAME_4WIN__", componentName.toUpperCase() );
 			_templateFilesOfC2FProxyImplementation.peek().addMapping( "__COMPONENT_NAME_ENV__",componentName.toUpperCase());
 			_templateFilesOfFortranProxyImplementation.peek().addMapping( "__COMPONENT_NAME__", componentName );
 			_templateFilesOfFortranProxyImplementation.peek().addMapping( "__FULL_QUALIFIED_NAME__", _fullQualifiedName.replaceAll("[.]", "_") );
@@ -122,11 +123,12 @@ public class CreateSocketProxyForFortran extends de.tum.ascodt.sidlcompiler.fron
 		String fullQualifiedpPortType = getPorts.getUsesPorts("", ".");
 		String portName = node.getAs().getText();
 		String portType=fullQualifiedpPortType.substring(fullQualifiedpPortType.lastIndexOf(".")+1);
-		String templateFileForC2F    = "native-component-c2f-socket-implementation-uses-ports.template";
+	  String templateFileForC2F    = "native-component-c2f-socket-implementation-uses-ports.template";
 		String templateFileForFProxy    = "native-component-fproxy-implementation-uses-port.template";
 		try {
 			TemplateFile templateForC2F = new TemplateFile( _templateFilesOfC2FProxyImplementation.peek(), templateFileForC2F );
 			templateForC2F.addMapping( "__USES_PORT_AS__",   portName );
+			templateForC2F.addMapping( "__USES_PORT_AS_4WIN__",portName.toUpperCase());
 			templateForC2F.addMapping( "__USES_PORT_TYPE__", portType );
 			
 			TemplateFile templateForFProxy = new TemplateFile( _templateFilesOfFortranProxyImplementation.peek(), templateFileForFProxy );
@@ -135,12 +137,12 @@ public class CreateSocketProxyForFortran extends de.tum.ascodt.sidlcompiler.fron
 			templateForFProxy.addMapping( "__FULL_QUALIFIED_USES_PORT_TYPE__", fullQualifiedpPortType.replaceAll("\\.","_").toLowerCase());
 			_templateFilesUsesPortsForC2F.push(templateForC2F);
 			_templateFilesUsesPortsForFProxy.push(templateForFProxy);
-			_serverInvokers.push("invokers["+(_offset_map.get(_fullQualifiedPortName+"createPort"))+"]=invoker_create_client_port_for_"+portName+";\n");
-			_serverInvokers.push("invokers["+(_offset_map.get(_fullQualifiedPortName+"connectPort"))+"]=invoker_connect_client_dispatcher_"+portName+";\n");
-			_serverInvokers.push("invokers["+(_offset_map.get(_fullQualifiedPortName+"disconnectPort"))+"]=invoker_disconnect_client_dispatcher_"+portName+";\n");
-			_clientInvokers.push("invokers["+(_offset_map.get(_fullQualifiedPortName+"createPort"))+"]=invoker_create_client_port_for_"+portName+";\n");
-			_clientInvokers.push("invokers["+(_offset_map.get(_fullQualifiedPortName+"connectPort"))+"]=invoker_connect_client_dispatcher_"+portName+";\n");
-			_clientInvokers.push("invokers["+(_offset_map.get(_fullQualifiedPortName+"disconnectPort"))+"]=invoker_disconnect_client_dispatcher_"+portName+";\n");
+			_serverInvokers.push("invokers["+(_offset_map.get(fullQualifiedpPortType+"createPort"))+"]=invoker_create_client_port_for_"+portName+";\n");
+			_serverInvokers.push("invokers["+(_offset_map.get(fullQualifiedpPortType+"connectPort"))+"]=invoker_connect_client_dispatcher_"+portName+";\n");
+			_serverInvokers.push("invokers["+(_offset_map.get(fullQualifiedpPortType+"disconnectPort"))+"]=invoker_disconnect_client_dispatcher_"+portName+";\n");
+			_clientInvokers.push("invokers["+(_offset_map.get(fullQualifiedpPortType+"createPort"))+"]=invoker_create_client_port_for_"+portName+";\n");
+			_clientInvokers.push("invokers["+(_offset_map.get(fullQualifiedpPortType+"connectPort"))+"]=invoker_connect_client_dispatcher_"+portName+";\n");
+			_clientInvokers.push("invokers["+(_offset_map.get(fullQualifiedpPortType+"disconnectPort"))+"]=invoker_disconnect_client_dispatcher_"+portName+";\n");
 		}catch (ASCoDTException  e ) {
 			ErrorWriterDevice.getInstance().showError(getClass().getName(), "inAInterfacePackageElement(...)", e);
 		}
@@ -205,7 +207,7 @@ public class CreateSocketProxyForFortran extends de.tum.ascodt.sidlcompiler.fron
 			_serverInvokers.push("invokers["+(_offset_map.get(_fullQualifiedPortName+node.getName().getText()))+"]=invoker_"+node.getName().getText()+";\n");
 			_clientInvokers.push("invokers["+(_offset_map.get(_fullQualifiedPortName+node.getName().getText()))+"]=invoker_"+node.getName().getText()+";\n");
 			
-			String templateC2FProxyImplementationFile    = "native-component-c2fproxy-implementation-provides-port.template";
+			String templateC2FProxyImplementationFile    = "native-component-c2f-socket-implementation-provides-port.template";
 			//String templateJNIProxyImplementationHeaderFile    = "native-component-jniproxy-cxx-header-provides-port.template";
 			String templateFortranProxyImplementationFile    = "native-component-fproxy-implementation-provides-port.template";
 
@@ -225,7 +227,10 @@ public class CreateSocketProxyForFortran extends de.tum.ascodt.sidlcompiler.fron
 			c2FProxyImplementationTemplate.addMapping("__SOCKET_PUSH__", parameterList.pushOutToSocketForCxx());
 			c2FProxyImplementationTemplate.addMapping("__OPERATION_PARAMETERS_LIST__",parameterList.getParameterListInJNI(onlyInParameters.areAllParametersInParameters()) );
 			c2FProxyImplementationTemplate.addMapping("__OPERATION_NAME__", node.getName().getText());
+			c2FProxyImplementationTemplate.addMapping("__OPERATION_NAME_4WIN__", node.getName().getText().toUpperCase());
 			c2FProxyImplementationTemplate.addMapping("__F_OPERATION_NAME__", node.getName().getText().toLowerCase());
+
+			c2FProxyImplementationTemplate.addMapping("__F_OPERATION_NAME_4WIN__", node.getName().getText().toUpperCase());
 			c2FProxyImplementationTemplate.addMapping("__OPERATION_PARAMETERS_LIST_C2F__",parameterList.getParameterListInC2F());
 			String funcCallParamters= parameterList.getFunctionCallListInCxx();
 			if(!funcCallParamters.equals(""))

@@ -11,23 +11,31 @@ __OPEN_PACKAGE__;
 public class __PORT_NAME__Socket2JavaPlainPort extends __PORT_NAME__AbstractSocketPort 
      implements java.lang.Runnable,java.nio.channels.CompletionHandler< java.nio.channels.AsynchronousSocketChannel, Object>{
 
+  interface __PORT_NAME__SocketInvoker {
+    void invoke() throws de.tum.ascodt.utils.exceptions.ASCoDTException;
+  } 
   private long _ref;
-  public __PORT_NAME__Socket2JavaPlainPort(String host,int port) {
+  private __PORT_NAME__SocketInvoker[] _invokers;
+  private java.util.concurrent.ExecutorService _executor;
+  public __PORT_NAME__Socket2JavaPlainPort(String host,int port) throws de.tum.ascodt.utils.exceptions.ASCoDTException {
     super(host,port);
-    
+    _invokers = new  __PORT_NAME__SocketInvoker[__OPERATIONS__];
+    __SET_INVOKERS__
   }
   
-  public __PORT_NAME__Socket2JavaPlainPort() {
+  public __PORT_NAME__Socket2JavaPlainPort() throws de.tum.ascodt.utils.exceptions.ASCoDTException {
     super();
-    
+    _invokers = new  __PORT_NAME__SocketInvoker[__OPERATIONS__];
+    __SET_INVOKERS__
   }
   
   @Override
   public void completed(java.nio.channels.AsynchronousSocketChannel result, java.lang.Object attachment) {
     super.completed(result,attachment);
     //createInstance();
-    Thread t = new Thread(this);
-    t.start();
+    _executor=java.util.concurrent.Executors.newSingleThreadExecutor();
+    _executor.execute(this);           
+   
   }
 
   @Override
@@ -36,29 +44,17 @@ public class __PORT_NAME__Socket2JavaPlainPort extends __PORT_NAME__AbstractSock
      
   }
   
-  public void createInstance(){
+  public void createInstance() throws de.tum.ascodt.utils.exceptions.ASCoDTException{
      int methodId=0;
-     try{
-          sendIntData(methodId);
-          _ref=readLongData();
-     }catch(java.io.IOException ioe){
-     } catch (java.lang.InterruptedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-     } catch (java.util.concurrent.ExecutionException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-     }
+     sendIntData(methodId);
+     _ref=readLongData();
+    
   }
-  public void destroyInstance(){
+  public void destroyInstance() throws de.tum.ascodt.utils.exceptions.ASCoDTException{
      int methodId=1;
-     try{
-          sendIntData(methodId);
-          sendLongData(_ref);
+     sendIntData(methodId);
+     sendLongData(_ref);
           
-     }catch(java.io.IOException ioe){
-          
-     }     
   }
   
   /**
@@ -81,23 +77,31 @@ public class __PORT_NAME__Socket2JavaPlainPort extends __PORT_NAME__AbstractSock
      _ref=ref;
   }
   
+  public void close(){
+     if(_executor!=null&&!_executor.isShutdown())
+          _executor.shutdownNow();
+     super.close();
+  }
   public void run(){
      int methodId=0;
      try{
-     while(methodId!=-1){
-          methodId=readIntData();
-          __METHODS_SWITCH__
+          methodId=readIntData(); 
+          while(methodId!=-1){
+             
+              _invokers[methodId].invoke();
+              methodId=readIntData();      
+          }
+         
+     }catch(Exception e){
           
+          
+          de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().showError(
+            __PORT_NAME__Socket2JavaPlainPort.class.getCanonicalName(),
+            "run()",
+            "Operation fetching error:"+e.getMessage()
+           
+          );
      }
-     }catch(java.io.IOException ioe){
-     } catch (java.lang.InterruptedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-     } catch (java.util.concurrent.ExecutionException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-     }
-     destroyInstance();
      super.close();
   }
 -- INSERT HERE --

@@ -27,6 +27,8 @@ public abstract class __COMPONENT_NAME__AbstractJavaImplementation implements __
     return _reference;
   }  
   
+  public void setProjectLocation(String location){
+  }
   public void setReference(long reference){
      _reference = reference;
   }
@@ -53,7 +55,9 @@ public abstract class __COMPONENT_NAME__AbstractJavaImplementation implements __
   public de.tum.ascodt.repository.Target getTarget() {
     return de.tum.ascodt.repository.Target.createJavaLocalTarget();
   }
-  
+  public de.tum.ascodt.repository.TargetParameters getTargetParameters(){
+    return null;
+  }
 
   /**
    * @see de.tum.ascodt.repository.entities

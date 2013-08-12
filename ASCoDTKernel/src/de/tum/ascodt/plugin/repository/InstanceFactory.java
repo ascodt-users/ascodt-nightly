@@ -69,6 +69,7 @@ public class InstanceFactory implements CreationFactory{
 			componentClass =_project.getClasspathRepository().loadClass(classToLoad);
 			de.tum.ascodt.repository.entities.Component application = (de.tum.ascodt.repository.entities.Component)
 			componentClass.getConstructor(String.class).newInstance(gefComponent.getReference());
+			application.setProjectLocation(_project.getEclipseProjectHandle().getLocation().toPortableString());
 			gefComponent.setCCAComponent(application);
 		} catch (ClassNotFoundException e) {
 			ErrorWriterDevice.getInstance().showError( getClass().getName(), "loadObject()",  "Cannot load class "+classToLoad, e );
@@ -124,6 +125,7 @@ public class InstanceFactory implements CreationFactory{
 				component.setReference(reference);
 				component.setClassName(_componentInterface);
 				component.setTarget(_target);
+				application.setProjectLocation(_project.getEclipseProjectHandle().getLocation().toPortableString());
 				SymbolTable symbolTable=_project.getSymbolTable();
 				
 				AClassPackageElement node=symbolTable.getGlobalScope().getClassDefinition(_componentInterface);

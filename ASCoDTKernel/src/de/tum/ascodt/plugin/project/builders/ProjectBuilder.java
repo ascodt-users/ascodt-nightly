@@ -15,6 +15,8 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import de.tum.ascodt.plugin.ASCoDTKernel;
 import de.tum.ascodt.plugin.project.Project;
 import de.tum.ascodt.plugin.utils.tracing.Trace;
 import de.tum.ascodt.sidlcompiler.backend.CreateComponentsAndInterfaces;
@@ -48,14 +50,22 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	 */
 	@Override
 	protected IProject[] build(int kind, @SuppressWarnings("rawtypes") Map args, IProgressMonitor monitor)
-	throws CoreException {
+			throws CoreException {
 		_trace.in("build(..)","kind:"+kind);
+		ASCoDTKernel.getDefault();
 		if (kind==IncrementalProjectBuilder.AUTO_BUILD){
 			IResourceDelta delta = getDelta(getProject());
 			_trace.debug("build()", "starting incremental build");
 			ProjectResourceDeltaListener deltaListener=new ProjectResourceDeltaListener();
-			if(delta!=null)
+			if(delta!=null){
 				delta.accept(deltaListener);
+				try {
+					deltaListener.buildAll(de.tum.ascodt.plugin.project.ProjectBuilder.getInstance().getProject(getProject()));
+				} catch (ASCoDTException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 
 		}
 		_trace.out("build(..)");
@@ -87,13 +97,13 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	 * @throws ASCoDTException
 	 */
 	public static de.tum.ascodt.sidlcompiler.frontend.node.Start buildStartSymbolsForSIDLResource(String resourceLocation) throws ASCoDTException{
-	  try {
+		try {
 			return buildStartSymbolsForSIDLResource(new java.io.FileInputStream(resourceLocation));
 		} catch (FileNotFoundException e) {
 			throw new ASCoDTException(ProjectBuilder.class.getName(), "buildComponentsAndInterfaces()",e.getMessage(), e);
 		} 
 	}
-	
+
 	/**
 	 * Compile an added or modified resource file. We start by parsing the corresponding sidl file and filling
 	 * up the parsed entries in the project symbol table. After this step we make sure that there are no conflicts
@@ -112,11 +122,11 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 					new de.tum.ascodt.sidlcompiler.frontend.lexer.Lexer(
 							new java.io.PushbackReader(
 									fileReader
+									)
 							)
-					)
-			);
+					);
 			result = parser.parse();
-			
+
 		} catch (ParserException e) {
 			throw new ASCoDTException(ProjectBuilder.class.getName(), "buildComponentsAndInterfaces()",e.getMessage(), e);
 		} catch (LexerException e) {
@@ -126,9 +136,9 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		}
 		return result;
 	}
-	
+
 	public static void extendSymbolTable(Start startNode,SymbolTable symbolTable, String resourceLocation){
-		
+
 		BuildSymbolTable symbolTableBuilderForResource=new BuildSymbolTable(symbolTable,resourceLocation);
 		startNode.apply(symbolTableBuilderForResource);
 
@@ -142,7 +152,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	public static void generateBlueprints(IProject eclipseProject) throws ASCoDTException {
 		Project project = de.tum.ascodt.plugin.project.ProjectBuilder.getInstance().getProject(eclipseProject);
 		assert(project.getSymbolTable()!=null);
-		
+
 		CreateComponentsAndInterfaces interfaces= new CreateComponentsAndInterfaces(project.getSymbolTable());
 		try {
 			interfaces.create(
@@ -151,7 +161,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 					new File(eclipseProject.getLocation().toPortableString()+project.getJavaSourcesFolder()).toURI().toURL(),
 					new File(eclipseProject.getLocation().toPortableString()+project.getNativeFolder()).toURI().toURL()
 
-			);
+					);
 
 
 			eclipseProject.refreshLocal(IResource.DEPTH_INFINITE, null);

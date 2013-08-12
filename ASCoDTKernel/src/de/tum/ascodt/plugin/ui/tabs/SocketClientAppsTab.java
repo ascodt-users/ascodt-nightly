@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Text;
 
 import de.tum.ascodt.plugin.services.SocketService;
 import de.tum.ascodt.repository.entities.SocketComponent;
+import de.tum.ascodt.utils.exceptions.ASCoDTException;
 
 /**
  * A socket client tab with additional fields for hostname and port
@@ -22,14 +23,14 @@ public class SocketClientAppsTab extends ProgramArgsTab{
 	private Text textHostname;
 	private Text textPort;
 	private SocketComponent component;
-	
+	private int _daemonPort;
 	public SocketClientAppsTab(
 			String label,
 			SocketComponent component,
 			String containerId) {
 		super(label, containerId);
 		this.component=component;
-		
+		_daemonPort=SocketService.getDefault().getFreePort();
 	}
 
 	protected void createControlGroup(ExpandBar bar){
@@ -76,16 +77,26 @@ public class SocketClientAppsTab extends ProgramArgsTab{
 	public String getCommandForExecution() {
 		return textProgramExecutable.getText()+" "+textProgramArguments.getText();
 	}
-	public void onStart(){
+	public void onStart() throws ASCoDTException{
 		super.onStart();
 		this.component.open();
 		
 	}
 	public String[] getEnv(){
 		return new String[]{
-				this.label.toUpperCase()+"_HOSTNAME="+textHostname.getText(),
-				this.label.toUpperCase()+"_PORT="+textPort.getText()
+				this._label.toUpperCase()+"_BUFFER_SIZE="+SocketService.getDefault().getBufferSize(),
+				this._label.toUpperCase()+"_DAEMON_PORT="+_daemonPort,
+				this._label.toUpperCase()+"_HOSTNAME="+textHostname.getText(),
+				this._label.toUpperCase()+"_PORT="+textPort.getText()
 		};
+	}
+	
+	public String getHost(){
+		return textHostname.getText();
+	}
+	
+	public int getPort(){
+		return _daemonPort;
 	}
 	
 	@Override 

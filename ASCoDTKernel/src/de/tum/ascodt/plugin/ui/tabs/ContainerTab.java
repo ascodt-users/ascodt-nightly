@@ -32,11 +32,12 @@ public abstract class ContainerTab {
 	/**
 	 * the actual tab item
 	 */
-	private TabItem tabItem;
+	private TabItem _tabItem;
 	private String _parentContainerID;
-	protected String label;
+	protected String _label;
 	private boolean _contentCreated;
 	private boolean _isDisposed;
+	protected boolean _visibility;
 	
 	/**
 	 * Constructor
@@ -45,11 +46,12 @@ public abstract class ContainerTab {
 	 */
 	protected ContainerTab(String label, String containerId) {
 	
-		this.label=label;
+		this._label=label;
 		_contentCreated=false;
 		_parentContainerID=containerId;
 		this.setVisible(false);
 		_isDisposed=false;
+		_visibility=false;
 	}
   
 	void createContent(){
@@ -103,21 +105,21 @@ public abstract class ContainerTab {
 	public void setVisible(final boolean visibility){
 		class CustomThread extends Thread{
 			public void run() {
-				if(tabItem!=null && !visibility){
-					tabItem.dispose();
-					tabItem=null;
+				if(_tabItem!=null && !visibility){
+					_tabItem.dispose();
+					_tabItem=null;
 				}
-				if(tabItem==null && visibility){
+				if(_tabItem==null && visibility){
 					if(!_contentCreated)
 						createContent();
-					tabItem=new TabItem(ASCoDTKernel.getDefault().getUIservice().getContainer(_parentContainerID),SWT.FILL);
-					tabItem.setText(label);
-					tabItem.setControl(tabFolderPageScrolled);
+					_tabItem=new TabItem(ASCoDTKernel.getDefault().getUIservice().getContainer(_parentContainerID),SWT.FILL);
+					_tabItem.setText(_label);
+					_tabItem.setControl(tabFolderPageScrolled);
 				}
 			}
 		}
 		PlatformUI.getWorkbench().getDisplay().syncExec(new CustomThread());
-
+    _visibility=visibility;
 	}
 	public synchronized boolean isDisposed(){
 		return _isDisposed;
@@ -129,9 +131,9 @@ public abstract class ContainerTab {
 	public void dispose() {
 		class CustomThread extends Thread{
 			public void run() {
-				if(tabItem!=null){
-					tabItem.dispose();
-					tabItem=null;
+				if(_tabItem!=null){
+					_tabItem.dispose();
+					_tabItem=null;
 				}
 				if(tabFolderPage!=null){
 					tabFolderPage.dispose();

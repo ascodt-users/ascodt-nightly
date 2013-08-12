@@ -1,6 +1,7 @@
 package de.tum.ascodt.repository.entities;
 
 import de.tum.ascodt.repository.Target;
+import de.tum.ascodt.repository.TargetParameters;
 
 /**
  * Represents one component
@@ -40,7 +41,7 @@ public interface Component {
   
   void openGUI();
   void closeGUI();
-  
+  void setProjectLocation(String location);
   /**
    * Yields the target object, i.e. a description about the location and mode 
    * in which this component is running.
@@ -54,4 +55,6 @@ public interface Component {
   void setInstanceName(String instanceName);
 
 	void destroy();
+
+	TargetParameters getTargetParameters();
 }

@@ -39,6 +39,6 @@ __CLOSE_PACKAGE_____COMPONENT_NAME__Implementation
 
 
 PROGRAM __COMPONENT_NAME__
-    call socket_client_loop()
+    call main_loop()
 
 end PROGRAM

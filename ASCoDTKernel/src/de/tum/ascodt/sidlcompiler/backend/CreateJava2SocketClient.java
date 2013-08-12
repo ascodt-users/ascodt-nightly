@@ -50,10 +50,12 @@ public class CreateJava2SocketClient extends de.tum.ascodt.sidlcompiler.frontend
 	private String _fullQualifiedName;
 	private HashMap<String,Integer> _operationMap;
 	private String _fullQualifiedPortName;
+	private String _language;
 	
 	
 	CreateJava2SocketClient(SymbolTable symbolTable, URL userImplementationsDestinationDirectory
-			,URL generatedFilesDirectory,URL nativeDirectory, String[] namespace,HashMap<String,Integer> operationMap) {
+			,URL generatedFilesDirectory,URL nativeDirectory, String[] namespace,HashMap<String,Integer> operationMap,
+			String language) {
 		_templateFilesForAbstractComponent  = new java.util.Stack< TemplateFile >();
 		_templateFilesForJavaBasisImplementation = new java.util.Stack< TemplateFile >();
 		_templateFilesForJavaImplementation  = new java.util.Stack< TemplateFile >();
@@ -63,6 +65,7 @@ public class CreateJava2SocketClient extends de.tum.ascodt.sidlcompiler.frontend
 		_namespace            = namespace;
 		_symbolTable          = symbolTable;
 		_operationMap=operationMap;
+		_language=language;
 	}
 
 	public void inAClassPackageElement(AClassPackageElement node) {
@@ -96,6 +99,8 @@ public class CreateJava2SocketClient extends de.tum.ascodt.sidlcompiler.frontend
 		_templateFilesForJavaBasisImplementation.peek().addMapping( "__COMPONENT_NAME__", componentName );
 		_templateFilesForJavaImplementation.peek().addMapping( "__COMPONENT_NAME__", componentName );
 		_templateFilesForJavaBasisImplementation.peek().addMapping("__FULL_QUALIFIED_COMPONENT_NAME__",_fullQualifiedName);
+
+		_templateFilesForAbstractComponent.peek().addMapping("__LANG__", _language);
 		_templateFilesForAbstractComponent.peek().open();
 		_templateFilesForJavaBasisImplementation.peek().open();
 		_templateFilesForJavaImplementation.peek().open();
@@ -104,6 +109,7 @@ public class CreateJava2SocketClient extends de.tum.ascodt.sidlcompiler.frontend
 				definedType.apply(this);
 			}
 			_generateProvidesMethods = false;
+			
 		}catch (ASCoDTException  e ) {
 			ErrorWriterDevice.getInstance().showError(getClass().getName(), "inAClassPackageElement(...)", e);
 		}
@@ -162,11 +168,10 @@ public class CreateJava2SocketClient extends de.tum.ascodt.sidlcompiler.frontend
 			TemplateFile template = new TemplateFile( _templateFilesForAbstractComponent.peek(), templateFile );
 			template.addMapping( "__USES_PORT_AS__",   portName );
 			template.addMapping( "__USES_PORT_TYPE__", portType );
-			System.out.println("Key2:"+_fullQualifiedPortName+"createPort:"+	_operationMap.get(_fullQualifiedPortName+"createPort"));
 			
-			template.addMapping("__CREATE_PORT_ID__",""+_operationMap.get(_fullQualifiedPortName+"createPort"));
-			template.addMapping("__CONNECT_DISPATCHER_PORT_ID__",""+_operationMap.get(_fullQualifiedPortName+"connectPort"));
-			template.addMapping("__DISCONNECT_DISPATCHER_PORT_ID__",""+_operationMap.get(_fullQualifiedPortName+"disconnectPort"));
+			template.addMapping("__CREATE_PORT_ID__",""+_operationMap.get(portType+"createPort"));
+			template.addMapping("__CONNECT_DISPATCHER_PORT_ID__",""+_operationMap.get(portType+"connectPort"));
+			template.addMapping("__DISCONNECT_DISPATCHER_PORT_ID__",""+_operationMap.get(portType+"disconnectPort"));
 			//template.addMapping("__CONNECT_PORT_ID__",""+_operationId++);
 			//template.addMapping("__DISCONNECT_PORT_ID__",""+_operationId++);
 			template.open();

@@ -15,6 +15,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 //TODO import de.tum.ascodt.plugin.core.model.CCAClasspathRepository;
 import de.tum.ascodt.plugin.ui.gef.model.Port;
 
+
 /**
  * This class defines a special border with port anchors
  * @author atanasoa
@@ -24,12 +25,10 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder{
 	/**
 	 * reference to the repository
 	 */
-	//TODO private CCAClasspathRepository rep;
-
+	
 	/**
 	 * flag remote component 
 	 */
-	//TODO private boolean isRemote;
 	private Figure parent;
 	protected HashMap<Port,PortAnchor> inputConnectionAnchors;
 	protected HashMap<Port,PortAnchor> outputConnectionAnchors;
@@ -41,9 +40,15 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder{
 	private Port matchingPort;
 	protected Vector<RectangleFigure> usePortsFigs;
 	protected Vector<RectangleFigure> providePortsFigs;
-	public ComponentBorder(boolean isRemote, Figure parent,
-			Vector<Port> usePorts,Vector<Port> providePorts, 
-			Vector<RectangleFigure> input, Vector<RectangleFigure> output){
+	protected ClassLoader _classLoader;
+	public ComponentBorder(
+			boolean isRemote,
+			Figure parent,
+			Vector<Port> usePorts,
+			Vector<Port> providePorts, 
+			Vector<RectangleFigure> input,
+			Vector<RectangleFigure> output,
+			ClassLoader classLoader){
 		super();
 		//TODO this.rep=rep;
 		//this.isRemote=isRemote;
@@ -58,6 +63,7 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder{
 		usePortsFigs=output;
 		providePortsFigs=input;
 		anchorSize=new int[2];
+		_classLoader=classLoader;
 		createConnectionAnchors(parent.getBounds().getCopy());
 
 
@@ -90,17 +96,18 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder{
 		inputConnectionPorts.put(anchor,model);
 	}
 	private boolean checkIfClassesCompotible(String classUsePort,String classProvidePort){
-//		Class<?> usePortClass=null;
-//		Class<?> providePortClass=null;
-//		try {
-//			usePortClass = rep.loadClass(classUsePort);
-//
-//			providePortClass=rep.loadClass(classProvidePort);
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}	
-//		if(usePortClass!=null&&providePortClass!=null)
-//			return usePortClass.isAssignableFrom(providePortClass);
+		Class<?> usePortClass=null;
+		Class<?> providePortClass=null;
+		try {
+		
+			usePortClass =_classLoader.loadClass(classUsePort);
+
+			providePortClass=_classLoader.loadClass(classProvidePort);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}	
+		if(usePortClass!=null&&providePortClass!=null)
+			return usePortClass.isAssignableFrom(providePortClass);
 		return true;
 	}
 	/**
@@ -256,6 +263,7 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder{
 
 	
 	public void unmarkCompatibleTargets(){
+		
 		matchingPort=null;
 	}
 	public void markCompatibleTargets(Port port) {

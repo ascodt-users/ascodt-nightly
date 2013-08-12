@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -193,7 +194,15 @@ public class NewComponentUIWizardPage extends WizardPage implements RepositoryLi
 
 	@Override
 	public void begin() {
-		_componentInterfacesComboBox.removeAll();
+		Display.getDefault().syncExec(new Runnable(){
+
+			@Override
+			public void run() {
+				_componentInterfacesComboBox.removeAll();
+			}
+			
+		});
+	
 	}
 
 	@Override

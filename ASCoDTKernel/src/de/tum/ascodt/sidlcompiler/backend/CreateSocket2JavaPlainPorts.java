@@ -30,7 +30,8 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
 public class CreateSocket2JavaPlainPorts extends DepthFirstAdapter {
 	private static Trace                      _trace = new Trace(CreateSocket2JavaPlainPorts.class.getCanonicalName() );
 	
-	private java.util.Stack< TemplateFile >   _templateJava;
+	private java.util.Stack< TemplateFile >   _templateJava2Scoket;
+	private java.util.Stack< TemplateFile >   _templateJavaSocket2Socket;
 	private java.util.Stack< TemplateFile >   _templateJavaOperations;
 	private URL                               _destinationDirectory;
 	private String[]                          _namespace;
@@ -39,23 +40,25 @@ public class CreateSocket2JavaPlainPorts extends DepthFirstAdapter {
 
 	private boolean _generateSuperport;
 
-	private String _operation_switch;
-
+	private String _operationInvokers;
 	private HashMap<String,Integer>			  _operationsMap;
 
 	private String _fullQualifiedPortName;
+
+	private String _portName;
 	public CreateSocket2JavaPlainPorts(
 			SymbolTable symbolTable,
 			URL destinationDirectory,
 			String[] namespace,
 			HashMap<String,Integer>	operationsMap){
-		_templateJava         		   = new java.util.Stack< TemplateFile >();
+		_templateJava2Scoket         		   = new java.util.Stack< TemplateFile >();
+		_templateJavaSocket2Socket		   = new java.util.Stack< TemplateFile >();
 		_templateJavaOperations 		 = new java.util.Stack< TemplateFile >();
 		_destinationDirectory        = destinationDirectory;
 		_namespace                   = namespace;
 		_symbolTable                 = symbolTable;
 		_generateSuperport=false;
-		_operation_switch="";
+		_operationInvokers="";
 		_operationsMap = operationsMap ;
 		
 	}
@@ -64,22 +67,26 @@ public class CreateSocket2JavaPlainPorts extends DepthFirstAdapter {
 		_trace.in( "inAInterfacePackageElement(...)", "open new port interface" );
 		try {
 			if(!_generateSuperport){
-				String  portName              = node.getName().getText();
+				_portName = node.getName().getText();
 				
-				_fullQualifiedPortName = _symbolTable.getScope(node).getFullQualifiedName(portName);
+				_fullQualifiedPortName = _symbolTable.getScope(node).getFullQualifiedName(_portName);
 				
-				String templateFileJava                  = "java-port-socket2java-plain-port.template";
-				
-				String fullQualifiedComponentName    = _symbolTable.getScope(node).getFullQualifiedName(portName);
+				String templateFileJava              = "java-port-socket2java-plain-port.template";
+				String templateFileSocket2Socket     = "java-port-socket2socket-plain-port.template";
+				String fullQualifiedComponentName    = _symbolTable.getScope(node).getFullQualifiedName(_portName);
 				String destinationFileJava           = _destinationDirectory.toString() + File.separatorChar + fullQualifiedComponentName.replaceAll("[.]", "/") + "Socket2JavaPlainPort.java";
+				String destinationFileSocket2Socket  = _destinationDirectory.toString() + File.separatorChar + fullQualifiedComponentName.replaceAll("[.]", "/") + "Socket2SocketPlainPort.java";
 				
-				_templateJava.push( 
+				_templateJava2Scoket.push( 
 						new TemplateFile( templateFileJava, destinationFileJava, _namespace, TemplateFile.getLanguageConfigurationForJava() ,true)
 						);
+				_templateJavaSocket2Socket.push( 
+						new TemplateFile( templateFileSocket2Socket, destinationFileSocket2Socket, _namespace, TemplateFile.getLanguageConfigurationForJava() ,true)
+						);
 				
-				addMappingsJava(portName);
+				addMappingsJava(_portName,_fullQualifiedPortName);
 				
-				//_templateJava.peek().open();
+				_templateJavaSocket2Socket.peek().open();
 				
 			}
 		}
@@ -94,20 +101,28 @@ public class CreateSocket2JavaPlainPorts extends DepthFirstAdapter {
 
 	/**
 	 * @param portName
+	 * @param fullQualifiedPortName 
 	 */
-	public void addMappingsJava(String portName) {
-		_templateJava.peek().addMapping("__PORT_NAME__", portName);
-		_templateJava.peek().addMapping("__NATIVE_COMPONENT__", NativeComponent.class.getCanonicalName());
+	public void addMappingsJava(String portName, String fullQualifiedPortName) {
+		_templateJava2Scoket.peek().addMapping("__PORT_NAME__", portName);
+		_templateJava2Scoket.peek().addMapping("__NATIVE_COMPONENT__", NativeComponent.class.getCanonicalName());
+		_templateJavaSocket2Socket.peek().addMapping("__PORT_NAME__", portName);
+		_templateJavaSocket2Socket.peek().addMapping("__FULL_QUALIFIED_PORT_NAME__", fullQualifiedPortName);
+		_templateJavaSocket2Socket.peek().addMapping("__NATIVE_COMPONENT__", NativeComponent.class.getCanonicalName());
+		
+		
 	}
 	
 	
 	
 	public void outAInterfacePackageElement(AInterfacePackageElement node) {
-		Assert.isTrue( _templateJava.size()==1 );
+		Assert.isTrue( _templateJava2Scoket.size()==1 );
+		Assert.isTrue(_templateJavaSocket2Socket.size()==1 );
 		if(!_generateSuperport){
 			try {
-				_templateJava.peek().addMapping("__METHODS_SWITCH__", _operation_switch);
-				_templateJava.peek().open();
+				_templateJava2Scoket.peek().addMapping("__SET_INVOKERS__",_operationInvokers);
+				_templateJava2Scoket.peek().addMapping("__OPERATIONS__",""+2+_operationsMap.size());
+				_templateJava2Scoket.peek().open();
 				while(!_templateJavaOperations.isEmpty()){
 					_templateJavaOperations.peek().open();
 					_templateJavaOperations.peek().close();
@@ -115,13 +130,14 @@ public class CreateSocket2JavaPlainPorts extends DepthFirstAdapter {
 					_templateJavaOperations.pop();
 					
 				}
-				_templateJava.peek().close();
+				_templateJavaSocket2Socket.peek().close();
+				_templateJava2Scoket.peek().close();
 			}
 			catch (ASCoDTException  e ) {
 				ErrorWriterDevice.getInstance().showError(getClass().getName(), "inAInterfacePackageElement(...)", e);
 			}
-
-			_templateJava.pop();
+			_templateJavaSocket2Socket.pop();
+			_templateJava2Scoket.pop();
 		}
 	}
 	
@@ -148,15 +164,19 @@ public class CreateSocket2JavaPlainPorts extends DepthFirstAdapter {
 
 			String templateFile = "java-port-socket2java-operation-plain-java-implementation.template";
 				
-			TemplateFile templateJava = new TemplateFile( _templateJava.peek(), templateFile );
+			TemplateFile templateJava = new TemplateFile( _templateJava2Scoket.peek(), templateFile );
 			
 			GetParameterList parameterList = new GetParameterList(_symbolTable.getScope(node));
 			node.apply( parameterList );
 			templateJava.addMapping("__SOCKET_PULL__", parameterList.pullInFromSocketForJava());
 			templateJava.addMapping("__SOCKET_PUSH__", parameterList.pushOutToSocketFromJava2Cxx());
 			templateJava.addMapping( "__OPERATION_NAME__" , node.getName().getText() );
-			_operation_switch+="if(methodId=="+(+_operationsMap.get(_fullQualifiedPortName+""+node.getName().getText()))+")\n";
-			_operation_switch+="\t\t\tinvoke_"+node.getName().getText()+"();\n";			
+			
+			_operationInvokers+="\t_invokers["+_operationsMap.get(_fullQualifiedPortName+""+node.getName().getText())+"]= new "+_portName+"SocketInvoker(){\n"; 
+			_operationInvokers+="\t\tpublic void invoke() throws de.tum.ascodt.utils.exceptions.ASCoDTException{\n";
+			_operationInvokers+="\t\t\tinvoke_"+node.getName().getText()+"();\n";
+			_operationInvokers+="\t\t}\n";
+			_operationInvokers+="\t};\n";
 			templateJava.addMapping( "__OPERATION_PARAMETERS_LIST__" , parameterList.getParameterListInJava(onlyInParameters.areAllParametersInParameters()) );
 			templateJava.addMapping( "__FUNCTION_CALL_PARAMETERS_LIST__" , parameterList.getFunctionCallListInJava() );
 			

@@ -17,7 +17,8 @@ public abstract class __COMPONENT_NAME__AbstractJavaNativeImplementation impleme
   private String   _instanceName;
   
   protected long     _ref;
-  
+  public void setProjectLocation(String location){
+  }
 
   public __COMPONENT_NAME__AbstractJavaNativeImplementation(String instanceName) {
     assert(instanceName!=null); 
@@ -67,7 +68,9 @@ public abstract class __COMPONENT_NAME__AbstractJavaNativeImplementation impleme
   public de.tum.ascodt.repository.Target getTarget() {
     return de.tum.ascodt.repository.Target.createCxxNativeTarget();
   }
-  
+  public de.tum.ascodt.repository.TargetParameters getTargetParameters(){
+    return null;
+  }
 
   /**
    * @see de.tum.ascodt.repository.entities

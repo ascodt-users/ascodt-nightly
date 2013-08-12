@@ -165,9 +165,9 @@ public class CreateJava2SocketServer extends de.tum.ascodt.sidlcompiler.frontend
 			TemplateFile template = new TemplateFile( _templateFilesForAbstractComponent.peek(), templateFile );
 			template.addMapping( "__USES_PORT_AS__",   portName );
 			template.addMapping( "__USES_PORT_TYPE__", portType );
-			template.addMapping("__CREATE_PORT_ID__",""+_operationMap.get(_fullQualifiedPortName+"createPort"));
-			template.addMapping("__CONNECT_DISPATCHER_PORT_ID__",""+_operationMap.get(_fullQualifiedPortName+"connectPort"));
-			template.addMapping("__DISCONNECT_DISPATCHER_PORT_ID__",""+_operationMap.get(_fullQualifiedPortName+"disconnectPort"));
+			template.addMapping("__CREATE_PORT_ID__",""+_operationMap.get(portType+"createPort"));
+			template.addMapping("__CONNECT_DISPATCHER_PORT_ID__",""+_operationMap.get(portType+"connectPort"));
+			template.addMapping("__DISCONNECT_DISPATCHER_PORT_ID__",""+_operationMap.get(portType+"disconnectPort"));
 			//template.addMapping("__CONNECT_PORT_ID__",""+_operationId++);
 			//template.addMapping("__DISCONNECT_PORT_ID__",""+_operationId++);
 			template.open();
@@ -210,6 +210,7 @@ public class CreateJava2SocketServer extends de.tum.ascodt.sidlcompiler.frontend
 		AInterfacePackageElement interfaceNode=_symbolTable.getScope(node).getInterfaceDefinition(fullQualifiedSymbol);
 		String portName                      = interfaceNode.getName().getText();
 		_fullQualifiedPortName = _symbolTable.getScope(interfaceNode).getFullQualifiedName(portName);
+		Assert.isNotNull(_fullQualifiedPortName);
 		if (_generateProvidesMethods) {
 			if(interfaceNode!=null)
 				interfaceNode.apply(this);

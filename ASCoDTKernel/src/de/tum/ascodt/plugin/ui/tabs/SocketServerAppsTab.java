@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import de.tum.ascodt.repository.entities.SocketComponent;
+import de.tum.ascodt.utils.exceptions.ASCoDTException;
 
 public class SocketServerAppsTab extends ProgramArgsTab{
 
@@ -63,13 +64,13 @@ public class SocketServerAppsTab extends ProgramArgsTab{
 	public String getCommandForExecution() {
 		return textProgramExecutable.getText()+" "+textProgramArguments.getText();
 	}
-	public void onStart(){
+	public void onStart() throws ASCoDTException{
 		super.onStart();
 		this.component.open();
 	}
 	public String[] getEnv(){
 		return new String[]{
-				this.label.toUpperCase()+"_PORT="+textPort.getText()
+				this._label.toUpperCase()+"_PORT="+textPort.getText()
 		};
 	}
 	

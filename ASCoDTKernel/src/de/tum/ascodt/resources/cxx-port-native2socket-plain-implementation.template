@@ -26,7 +26,6 @@ __FULL_QUALIFIED_NAME__Cxx2SocketPlainPort::__PORT_NAME__Cxx2SocketPlainPort(cha
      _buffer_size(buffer_size){
      _rcvBuffer=new char[_buffer_size];
      _sendBuffer=new char[_buffer_size];
-     std::cout<<"open c client"<<host<<","<<port<<std::endl;
      __FULL_QUALIFIED_NAME__Cxx2SocketPlainPort::open_client(host,port,_sockfd,_newsockfd);
      
 }

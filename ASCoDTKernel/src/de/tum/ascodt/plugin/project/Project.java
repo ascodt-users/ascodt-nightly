@@ -7,27 +7,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.tools.Diagnostic;
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.StandardLocation;
-import javax.tools.ToolProvider;
-import javax.tools.JavaCompiler.CompilationTask;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -64,11 +53,12 @@ import de.tum.ascodt.sidlcompiler.frontend.node.Start;
 import de.tum.ascodt.sidlcompiler.symboltable.SymbolTable;
 import de.tum.ascodt.utils.TemplateFile;
 import de.tum.ascodt.utils.exceptions.ASCoDTException;
+
+import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.internal.resources.Folder;
-import org.eclipse.core.internal.resources.Workspace;
-import org.osgi.resource.Resource;
+//import org.eclipse.core.internal.resources.Folder;
+import org.eclipse.core.filesystem.IFileSystem;
 
 
 /**
@@ -157,11 +147,11 @@ public class Project {
 		_projectFileName      = "." + _eclipseProjectHandle.getName() + ".ascodt";
 		_folders = new Vector<IFolder>();
 		setSymbolTable(new SymbolTable());
-		
+
 		org.eclipse.core.resources.IFile projectFile = _eclipseProjectHandle.getFile( getNameOfProjectFile() );
 		if (!projectFile.exists()) {
 			writeProjectFile();
-			
+
 
 		}
 		addClasspathEntries();
@@ -170,6 +160,7 @@ public class Project {
 
 		//folder for included sidl files
 		createIncludes();
+		createSettings();
 		//folder where all native libraries are collected
 		createNative();
 		//folder for all imported components
@@ -245,7 +236,7 @@ public class Project {
 			throw new ASCoDTException(getClass().getName(), "buildProjectSources()", "getting sidl dependencies failed", e);
 		}
 	}
-	
+
 	/**
 	 * build all project sidl files in given folder
 	 * @param startSymbolsMap a hash map for stroring resources startsymbols
@@ -373,6 +364,22 @@ public class Project {
 	}
 
 	/**
+	 * creates a folder where we store the libraries needed
+	 * for native components
+	 * @throws ASCoDTException 
+	 */
+	private void createSettings() throws ASCoDTException {
+		IFolder settingsFolder=_eclipseProjectHandle.getFolder(getSettingsFolder());
+		try{
+			settingsFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
+			if(!settingsFolder.exists())
+				createParentFolders(settingsFolder);
+		}catch(CoreException e){
+			throw new ASCoDTException(getClass().getName(), "createIncludes()", "creating an includes folder failed", e);
+		}
+
+	}
+	/**
 	 * creates all folders where the java classes are generated and sets the corresponding classpaths
 	 * @throws ASCoDTException
 	 */
@@ -391,7 +398,7 @@ public class Project {
 				createParentFolders(proxiesFolder);
 			if(!classOutputFolder.exists())
 				createParentFolders(classOutputFolder);
-			
+
 			addClasspathSource(Path.ROOT+sourcesFolder.getLocation().removeFirstSegments(_eclipseProjectHandle.getLocation().segmentCount()-1
 					).toPortableString());
 			addClasspathSource(Path.ROOT+proxiesFolder.getLocation().removeFirstSegments(_eclipseProjectHandle.getLocation().segmentCount()-1
@@ -492,7 +499,7 @@ public class Project {
 			templateFile.open();
 			templateFile.close();
 			_eclipseProjectHandle.refreshLocal(IResource.DEPTH_INFINITE, null);
-			compileComponents();
+
 		} catch (Exception e) {
 			throw new ASCoDTException(getClass().getName(), "createUserInterface()", "creating user interface for \""+componentInterface+"\" from template failed", e);
 		}
@@ -583,18 +590,18 @@ public class Project {
 	 */
 	private void addClasspathEntries() throws ASCoDTException {
 		IJavaProject javaProject = JavaCore.create(_eclipseProjectHandle); 
+	
 		try {
 			Set<IClasspathEntry> entries = new HashSet<IClasspathEntry>();
 			for(IClasspathEntry classElement: Arrays.asList(javaProject.getRawClasspath())){
 				if(classElement.getEntryKind()==org.eclipse.jdt.core.IClasspathEntry.CPE_CONTAINER||
-						(!classElement.getPath().toString().toLowerCase().contains("ascodt")&&
-								classElement.getEntryKind()==org.eclipse.jdt.core.IClasspathEntry.CPE_LIBRARY))
+						classElement.getEntryKind()==org.eclipse.jdt.core.IClasspathEntry.CPE_LIBRARY)
 					entries.add(classElement);
 			}
 			if(!entries.contains(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("",ASCoDTKernel.ID).getPath()),null,null,false)))
-			entries.add(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("",ASCoDTKernel.ID).getPath()),null,null,false));
-			if(!entries.contains(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("swt.jar",ASCoDTKernel.ID).getPath()),null,null,false)))
-			entries.add(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("swt.jar",ASCoDTKernel.ID).getPath()),null,null,false));
+				entries.add(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("",ASCoDTKernel.ID).getPath()),null,null,false));
+			if(!entries.contains(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("third-party-libs/swt.jar",ASCoDTKernel.ID).getPath()),null,null,false)))
+				entries.add(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("third-party-libs/swt.jar",ASCoDTKernel.ID).getPath()),null,null,false));
 			if(!entries.contains(JavaRuntime.getDefaultJREContainerEntry()))
 				entries.add(JavaRuntime.getDefaultJREContainerEntry());
 			IExtensionRegistry reg = RegistryFactory.getRegistry();
@@ -650,8 +657,8 @@ public class Project {
 		if (parent instanceof org.eclipse.core.resources.IFolder) {
 			createParentFolders((org.eclipse.core.resources.IFolder) parent);
 		}
-		@SuppressWarnings("restriction")
-		IFileStore store = ((Folder)folder).getStore();
+		IFileSystem fileSystem = EFS.getLocalFileSystem();
+		IFileStore store = fileSystem.getStore(folder.getFullPath());
 		IFileInfo localInfo = store.fetchInfo();
 		if (!folder.exists()) {
 			if(!localInfo.exists())
@@ -681,10 +688,12 @@ public class Project {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
+					Vector<IFile> instances= Project.this.closeRunningWorkbenchInstances();
 					initiliaseClasspathRepository();
 					System.gc();
 					compileComponents_i();
 					
+					Project.this.openWorkbenchEditors(instances);
 					return Status.OK_STATUS;
 				} catch (Exception e) {
 					return Status.CANCEL_STATUS;
@@ -693,70 +702,23 @@ public class Project {
 
 		};
 		job.schedule();
+	
+		
 	}
 	/**
 	 * compiles the java classes for all components in the project
 	 * @throws ASCoDTException
 	 */
 	public void compileComponents_i() {
-		try{
-			//Vector<IFile> workbenchInstances=closeRunningWorkbenchInstances();
-
-			JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-			if(compiler == null){
-				ErrorWriterDevice.getInstance().showError( getClass().getName(), "compileComponents()",  "Exclipse not executed via JDK! Please change eclipse ini or Path env!", null );
-
-				return;
-			}
-			//use standard java file manager
-			StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-			//retrieve all sources 
-			List<File> sources=new LinkedList<File>(Arrays.asList(getComponentJavaProxies()));
-			sources.addAll(Arrays.asList(getComponentJavaSources()));
-			if(!sources.isEmpty()){
-				Iterable<? extends JavaFileObject> compilationUnitsForJavaProxies =
-						fileManager.getJavaFileObjectsFromFiles(sources);
-
-				//set the compiler output folder
-				fileManager.setLocation(StandardLocation.CLASS_OUTPUT,Arrays.asList(new File( _eclipseProjectHandle.getLocation().toPortableString()+getClassOutputFolder())));
-				List<File> fileList=new ArrayList<File>();
-				IJavaProject jProject=JavaCore.create(_eclipseProjectHandle);
-
-
-				for(IClasspathEntry entry:jProject.getRawClasspath()){
-					if(entry.getEntryKind()==IClasspathEntry.CPE_LIBRARY)
-						//if(!entry.getPath().toString().startsWith("/"+_eclipseProjectHandle.getName()))
-						fileList.add(entry.getPath().toFile());
-
-				}
-
-				fileManager.setLocation(StandardLocation.CLASS_PATH,fileList);
-
-				//here we collect error messages
-				DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
-
-				CompilationTask compilationTask=compiler.getTask(null, fileManager, diagnostics,null, null, compilationUnitsForJavaProxies);
-				boolean status=compilationTask.call();
-				fileManager.close();
-				if(status){
-					_eclipseProjectHandle.refreshLocal(IResource.DEPTH_INFINITE,null);
-					//TODO resetClasspathRepository();
-					//TODO notifyRepository();
-					//TODO openWorkbenchEditors(workbenchInstances);
-				}else{
-					String errors="";
-					for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics()){
-
-						errors+=diagnostic+"\n";
-					}
-					ErrorWriterDevice.getInstance().showError( getClass().getName(), "compileComponents()",  "Compilation error:"+errors, null );
-
-				}
-			}
-		}catch (Exception e) {
+		IJavaProject jProject=JavaCore.create(_eclipseProjectHandle);
+		try {
+			jProject.getProject().build(IncrementalProjectBuilder.FULL_BUILD, "org.eclipse.jdt.core.javabuilder", null, null);
+		} catch (CoreException e) {
 			ErrorWriterDevice.getInstance().showError( getClass().getName(), "compileComponents()",  e.getLocalizedMessage(), e ); 
 		}
-
+		
+		
+		
 	}
 
 	public void openWorkbenchEditors(final Vector<IFile> workbenchInputs) throws ASCoDTException{
@@ -869,10 +831,14 @@ public class Project {
 		return "/native";
 	}
 
-
 	public String getImportsFolder(){
 		return "/imports";
 	}
+	
+	public String getSettingsFolder(){
+		return "/settings";
+	}
+	
 	public String getJavaProxiesFolder(){
 		return "/components/java";
 	}
@@ -1037,7 +1003,6 @@ public class Project {
 		{
 			de.tum.ascodt.plugin.project.builders.ProjectBuilder.extendSymbolTable(startNode, _symbolTable, dependency);
 			de.tum.ascodt.plugin.project.builders.ProjectBuilder.generateBlueprints(_eclipseProjectHandle);
-			compileComponents();
 			String oldDependencies=_eclipseProjectHandle.getPersistentProperty(new QualifiedName("de.tum.ascodt.plugin.ASCoDTKernel", DEPENDENCIES));
 
 			if(oldDependencies!=null){

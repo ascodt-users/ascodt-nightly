@@ -46,6 +46,10 @@ import de.tum.ascodt.plugin.ui.gef.model.Port;
 public class ComponentEditPart extends AbstractGraphicalEditPart implements NodeEditPart, PropertyChangeListener{
 	protected DirectEditManager manager;
 	private double cachedZoom = -1.0;
+	private ClassLoader classLoader;
+	public ComponentEditPart(ClassLoader classLoader){
+		this.classLoader=classLoader;
+	}
 	private ZoomListener zoomListener = new ZoomListener() {
 		public void zoomChanged(double newZoom) {
 			updateScaleFactor(newZoom);
@@ -133,7 +137,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			ConnectionAnchor ctor =getSourceConnectionAnchor(request);
 			if(ctor!=null&&ctor instanceof PortAnchor)
 				((DiagramEditPart)this.getParent()).markCompatibleTargets(((ComponentFigure)getFigure()).getModelForAnchor((PortAnchor)ctor),this);
-			//((ASCoDTDiagramEditPart)this.getParent()).get
+			
 		}
 		super.showSourceFeedback(request);
 	}
@@ -202,7 +206,9 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	protected IFigure createFigure() {
 		return new ComponentFigure(this.getCastedModel().hasGUI(),
 				this.getCastedModel().isRemote(),this.getCastedModel().getReference(),this.getCastedModel().getComponentName(),null,
-				this.getCastedModel().getUsePorts(),this.getCastedModel().getProvidePorts());
+				this.getCastedModel().getUsePorts(),this.getCastedModel().getProvidePorts(),
+				classLoader
+				);
 	}
 
 	/**

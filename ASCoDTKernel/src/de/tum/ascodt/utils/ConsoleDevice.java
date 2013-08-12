@@ -36,14 +36,14 @@ public class ConsoleDevice {
 		
 			//no console found, so create a new one
 			final ConsoleStream myConsole = new ConsoleStream(name);
-			Display.getDefault().syncExec(new Runnable(){
+			//Display.getDefault().syncExec(new Runnable(){
 
-				@Override
-				public void run() {
+				//@Override
+				//public void run() {
 					myConsole.setWaterMarks(80000,100000);
-				}
+				//}
 				
-			});
+			//});
 			
 			conMan.addConsoles(new IConsole[]{myConsole});
 			return myConsole;

@@ -16,7 +16,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SafeRunner;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -44,6 +47,8 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.handlers.IHandlerService;
+
+import de.tum.ascodt.plugin.ASCoDTKernel;
 import de.tum.ascodt.plugin.project.ProjectBuilder;
 import de.tum.ascodt.plugin.ui.gef.commands.ComponentDeleteCommand;
 import de.tum.ascodt.plugin.ui.gef.model.Component;
@@ -104,7 +109,16 @@ public class WorkbenchEditor extends GraphicalEditor {
 		service.activateHandler(zoomOut.getActionDefinitionId(),
 				new ActionHandler(zoomOut)); 
 		GraphicalViewer viewer = getGraphicalViewer();
-		viewer.setEditPartFactory(new EditPartsFactory());
+		Display.getDefault().syncExec(new Runnable(){
+
+			@Override
+			public void run() {
+				ASCoDTKernel.getDefault();
+				getGraphicalViewer().setEditPartFactory(new EditPartsFactory(ProjectBuilder.getInstance().getProject(getProject()).getClasspathRepository()));
+				
+			}
+			
+		});
 		viewer.setRootEditPart(root);
 		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer));
 		viewer.addDropTargetListener(new TemplateTransferDropTargetListener(getGraphicalViewer()));
@@ -257,6 +271,7 @@ public class WorkbenchEditor extends GraphicalEditor {
 	 */
 	@Override
 	protected void setInput(IEditorInput input) {
+		
 		super.setInput(input);
 		IFile file = ((IFileEditorInput)input).getFile();
 
@@ -289,8 +304,22 @@ public class WorkbenchEditor extends GraphicalEditor {
 	 */
 	@Override 
 	public void setFocus(){
+		Job job = new Job("Pallete Initialisation") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					ProjectBuilder.getInstance().setWorkbench(WorkbenchEditor.this);
+
+					return Status.OK_STATUS;
+				} catch (Exception e) {
+					return Status.CANCEL_STATUS;
+				}
+			}
+
+		};
+		job.schedule();
 		
-		ProjectBuilder.getInstance().setWorkbench(this);
 	}
 
 

@@ -8,7 +8,9 @@
 __OPEN_PACKAGE__;
 public class SocketComponent 
      implements java.nio.channels.CompletionHandler< java.nio.channels.AsynchronousSocketChannel, Object>,
-     __SOCKET_COMPONENT__{
+     
+     __SOCKET_COMPONENT__,__PROCESS_LISTENER__{
+     
      
      protected String _host;
      protected int _port;
@@ -17,103 +19,133 @@ public class SocketComponent
      protected int _bufferSize;
      protected  java.nio.channels.AsynchronousChannelGroup _group;
      protected boolean _isServer;
-     
+     protected java.nio.ByteBuffer _rcvBuffer;
+     protected java.nio.ByteBuffer _sendBuffer;
+     protected byte[] _rcvBytes;
+     protected byte[] _sendBytes;
      /**
       * default constructor
       */
-     protected SocketComponent(){
-         this(1024); 
+     protected SocketComponent()  throws de.tum.ascodt.utils.exceptions.ASCoDTException{
+          this(de.tum.ascodt.plugin.services.SocketService.getDefault().getBufferSize()); 
      }
-     
-     protected SocketComponent(String host){
-         this(host,1024); 
+
+     protected SocketComponent(String host)  throws de.tum.ascodt.utils.exceptions.ASCoDTException{
+          this(host,de.tum.ascodt.plugin.services.SocketService.getDefault().getBufferSize()); 
      }
-     
+
      public int getPort(){
           return _port;
      }
-     
+
      public String getHost(){
           return _host;
      }
-     
+
      /**
       * server constructor
       */
-     protected SocketComponent(int bufferSize){
+     protected SocketComponent(int bufferSize)  throws de.tum.ascodt.utils.exceptions.ASCoDTException{
           _host="localhost";
-          _port=__SOCKET_SERVICE__.getDefault().getFreePort();
+          _port=de.tum.ascodt.plugin.services.SocketService.getDefault().getFreePort();
           _bufferSize=bufferSize;
+          _rcvBytes=new byte[bufferSize];
+          _sendBytes=new byte[bufferSize];
+          _rcvBuffer=java.nio.ByteBuffer.wrap(_rcvBytes).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+          _sendBuffer=java.nio.ByteBuffer.wrap(_sendBytes).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+          //_rcvBuffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+          //_sendBuffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
           try {
                _group = java.nio.channels.AsynchronousChannelGroup.withThreadPool(java.util.concurrent.Executors.newSingleThreadExecutor());
-               _isServer=true;
           } catch (java.io.IOException e) {
-               // TODO Auto-generated catch block
-               e.printStackTrace();
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
           }
-     }
-     
-     protected SocketComponent(String host,int bufferSize){
+          _isServer=true;
 
-           _host = host;
-           _port = de.tum.ascodt.plugin.services.SocketService.getDefault().getFreePort();
-           _bufferSize = bufferSize;
-           try {
-               _group = java.nio.channels.AsynchronousChannelGroup.withThreadPool(java.util.concurrent.Executors.newSingleThreadExecutor());
-                _isServer=false;
-          } catch (java.io.IOException e) {
-               // TODO Auto-generated catch block
-               e.printStackTrace();
-          }          
-          
-      } 
-     
-     public void open(){
-      
-          try {
-                if(_isServer){
-                     System.out.println("open new server:"+_port);
-                     _server=java.nio.channels.AsynchronousServerSocketChannel.open(_group).bind(
-                          new java.net.InetSocketAddress(_port));
-                    try {
-                         completed(_server.accept().get(),null);
-                    } catch (java.util.concurrent.ExecutionException e) {
-                         e.printStackTrace();
-                                  
-                    }
-                }else{
-                
-                     System.out.println("open new client:"+_host+","+_port);
-                       boolean initialized=false;
-                   java.nio.channels.AsynchronousSocketChannel channel=null;
-                     while(!initialized){
-                          
-                          try {
-                             
-                     channel= java.nio.channels.AsynchronousSocketChannel.open();
-                                   channel.connect(new java.net.InetSocketAddress(_host,_port)).get();
-                                   
-                              } catch (java.util.concurrent.ExecutionException e) {
-                                   System.out.println("trying client connection:"+_host+","+_port);
-                                   Thread.sleep(1000);
-                                   continue;
-                              }
-                          initialized=true;
-                     }
-                     completed(channel,null);
-                }
-          }catch(java.nio.channels.ShutdownChannelGroupException se){
-               System.out.println("accept break");
-          } catch (java.io.IOException e) {
-               // TODO Auto-generated catch block
-               e.printStackTrace();
-          } catch (java.lang.InterruptedException e) {
-               // TODO Auto-generated catch block
-               e.printStackTrace();
-          }
- 
      }
-     
+
+     protected SocketComponent(String host,int bufferSize)  throws de.tum.ascodt.utils.exceptions.ASCoDTException{
+          _host = host;
+          _port = de.tum.ascodt.plugin.services.SocketService.getDefault().getFreePort();
+          _bufferSize = bufferSize;
+          _rcvBytes=new byte[bufferSize];
+          _sendBytes=new byte[bufferSize];
+          _rcvBuffer=java.nio.ByteBuffer.wrap(_rcvBytes).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+          _sendBuffer=java.nio.ByteBuffer.wrap(_sendBytes).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+          try {
+               _group = java.nio.channels.AsynchronousChannelGroup.withThreadPool(java.util.concurrent.Executors.newSingleThreadExecutor());
+               _isServer=false;
+          } catch (java.io.IOException e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
+          }
+
+     } 
+     public void processFinished(int exitValue) throws de.tum.ascodt.utils.exceptions.ASCoDTException{
+          if(exitValue!=0)
+               close();
+
+     }
+
+     public void open() throws de.tum.ascodt.utils.exceptions.ASCoDTException{
+
+
+          if(_isServer){
+               try{
+                    _server=java.nio.channels.AsynchronousServerSocketChannel.open(_group).bind(
+                              new java.net.InetSocketAddress(_port));
+                    completed(_server.accept().get(),null);
+               }catch (Exception e) {
+                    throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                              SocketComponent.class.getCanonicalName(),
+                              "sendIntData()",
+                              e.getLocalizedMessage(),
+                              e);
+               }
+          }else{
+               try{
+                    boolean initialized=false;
+                    java.nio.channels.AsynchronousSocketChannel channel=null;
+                    while(!initialized){
+
+                         try {
+
+                              channel= java.nio.channels.AsynchronousSocketChannel.open();
+                              channel.connect(new java.net.InetSocketAddress(_host,_port)).get();
+
+                         } catch (java.util.concurrent.ExecutionException e) {
+                              System.out.println("trying client connection:"+_host+","+_port);
+                              Thread.sleep(1000);
+                              continue;
+                         }
+                         initialized=true;
+                    }
+                    completed(channel,null);
+               } catch (java.lang.InterruptedException e) {
+                    throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                              SocketComponent.class.getCanonicalName(),
+                              "sendIntData()",
+                              e.getLocalizedMessage(),
+                              e);
+               } catch (java.io.IOException e) {
+                    throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                              SocketComponent.class.getCanonicalName(),
+                              "sendIntData()",
+                              e.getLocalizedMessage(),
+                              e);
+               }
+          }
+
+
+     }
+
      public boolean isServer(){
           return _isServer;
      }
@@ -122,327 +154,312 @@ public class SocketComponent
           synchronized(this){
                _channel=result;
           }
-          
+
      }
 
      public synchronized boolean isConnected(){
           return _channel!=null;
      }
-     
-    
+
+
      @Override
      public void failed(Throwable exc, Object attachment) {
           //de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().showError(fullQualifiedClassName, methodName, message) 
      }
- 
-     protected void sendIntData(int data) throws java.io.IOException {
-          
-          java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-          buffer.asIntBuffer().put(data);
-          try{
-          _channel.write(buffer).get();
-          } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (java.util.concurrent.ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+     protected void sendIntData(int data) throws de.tum.ascodt.utils.exceptions.ASCoDTException {
+
+          _sendBuffer.clear();
+          _sendBuffer.asIntBuffer().put(data);
+          try {
+               _channel.write(_sendBuffer).get();
+          } catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
+          }
+
      }
 
-     protected void sendIntData(int []data) throws java.io.IOException{
-          
-         int bufferSize= (int) Math.ceil(((double)data.length*4.0)/1024.0)*1024;
-         java.nio.ByteBuffer buffer= java.nio.ByteBuffer.allocateDirect(bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-         buffer.asIntBuffer().put(data);
-         int offset=0;
-          while(offset*1024<bufferSize){
-            byte []buf=new byte[1024];
-            java.nio.ByteBuffer sendBuf=java.nio.ByteBuffer.wrap(buf).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-              buffer.get(buf);
-            try{ 
-            _channel.write(sendBuf).get();
-            } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (java.util.concurrent.ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            offset++;
+     protected void sendIntData(int []data) throws de.tum.ascodt.utils.exceptions.ASCoDTException {
+
+          int bufferSize= (((data.length*4-1)/_bufferSize)+1)*_bufferSize;
+          java.nio.ByteBuffer buffer= java.nio.ByteBuffer.allocate(bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+          buffer.asIntBuffer().put(data);
+          int offset=0;
+          try {
+               while(offset*_bufferSize<bufferSize){
+                    _sendBuffer.clear();
+                    buffer.get(_sendBytes);
+                    _channel.write(_sendBuffer).get();
+                    offset++;
+               }
+          }catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
           }
      }
-     
-     protected void sendDoubleData(double data) throws java.io.IOException{
-          java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-          buffer.asDoubleBuffer().put(data);
+
+     protected void sendDoubleData(double data) throws de.tum.ascodt.utils.exceptions.ASCoDTException {
+          //java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+          _sendBuffer.clear();
+          _sendBuffer.asDoubleBuffer().put(data);
           try{
-          _channel.write(buffer).get();
-          } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (java.util.concurrent.ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-     }
-     
-     protected void sendDoubleData(double []data) throws java.io.IOException{
-         int bufferSize= (int) Math.ceil(((double)data.length*8.0)/1024.0)*1024;
-         java.nio.ByteBuffer buffer= java.nio.ByteBuffer.allocateDirect(bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-         buffer.asDoubleBuffer().put(data);
-         int offset=0;
-          while(offset*1024<bufferSize){
-            byte []buf=new byte[1024];
-            java.nio.ByteBuffer sendBuf=java.nio.ByteBuffer.wrap(buf).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-              buffer.get(buf);
-            try{ 
-            _channel.write(sendBuf).get();
-            } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (java.util.concurrent.ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            offset++;
-         }
-     }
-     
-     protected void sendBooleanData(boolean data) throws java.io.IOException{
-          java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocate(_bufferSize);
-          buffer.order(java.nio.ByteOrder.LITTLE_ENDIAN);
-          buffer.putInt(data?1:0);
-          try{
-          _channel.write(buffer).get();
-          } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (java.util.concurrent.ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+               _channel.write(_sendBuffer).get();
+          } catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
+          }
+
      }
 
-     protected void sendBooleanData(boolean[] data) throws java.io.IOException{
-          int bytes2Copy=data.length*4;
-          int copiedBytes=0;
+     protected void sendDoubleData(double []data) throws de.tum.ascodt.utils.exceptions.ASCoDTException{
+          int bufferSize= (((data.length*8-1)/_bufferSize)+1)*_bufferSize;
+          java.nio.ByteBuffer buffer= java.nio.ByteBuffer.allocate(bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+          buffer.asDoubleBuffer().put(data);
           int offset=0;
+          try {
+               while(offset*_bufferSize<bufferSize){
+                   _sendBuffer.clear();
+                    buffer.get(_sendBytes);
+                    _channel.write(_sendBuffer).get();
+                    offset++;
+               }
+          } catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
+          }
+     }
+
+     protected void sendBooleanData(boolean data) throws de.tum.ascodt.utils.exceptions.ASCoDTException{
+          sendIntData(data?1:0);
+     }
+
+     protected void sendBooleanData(boolean[] data) throws de.tum.ascodt.utils.exceptions.ASCoDTException{
           int[] convertedData=new int[data.length];
           for(int i=0;i<data.length;i++)
                convertedData[i]=data[i]?1:0;
-          while(copiedBytes<bytes2Copy){
-               java.nio.ByteBuffer buffer =java.nio.ByteBuffer.allocate(_bufferSize);
-               buffer.order(java.nio.ByteOrder.LITTLE_ENDIAN);
-               if(bytes2Copy-copiedBytes>_bufferSize){
-                    buffer.asIntBuffer().put(convertedData,offset,_bufferSize/4);
-                    offset+=_bufferSize/4;
-               }else{
-                    buffer.asIntBuffer().put(convertedData,offset,(bytes2Copy-copiedBytes)/4);
-               }
-               try{
+          sendIntData(convertedData);
+     }
+
+     protected void sendStringData(String data)  throws de.tum.ascodt.utils.exceptions.ASCoDTException {
+          try {
+               java.nio.ByteBuffer strBuf=java.nio.charset.Charset.forName("UTF-8").encode(data+"\0");
+               int bufferSize= (int) Math.ceil(((double)strBuf.capacity())/(double)de.tum.ascodt.plugin.services.SocketService.getDefault().getBufferSize())*de.tum.ascodt.plugin.services.SocketService.getDefault().getBufferSize();
+               java.nio.ByteBuffer buffer= java.nio.ByteBuffer.allocate(bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+               buffer.put(strBuf);   
+               sendIntData(strBuf.capacity());
+               buffer.rewind();
                _channel.write(buffer).get();
-               } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (java.util.concurrent.ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+          } catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
           }
      }
 
-     protected void sendStringData(String data) throws java.io.IOException {
-          java.nio.ByteBuffer strBuf=java.nio.charset.Charset.forName("UTF-8").encode(data);
-          int bufferSize= (int) Math.ceil(((double)strBuf.capacity())/1024.0)*1024;
-          java.nio.ByteBuffer buffer= java.nio.ByteBuffer.allocateDirect(bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-          buffer.put(strBuf);   
-          sendIntData(strBuf.capacity());
-          buffer.rewind();
-          try{
-          _channel.write(buffer).get();
-          } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (java.util.concurrent.ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-     }
-     
-     protected void sendStringData(String [] data) throws java.io.IOException {
-         for(int i=0;i<data.length;i++){
-           sendStringData(data[i]);
-         }
+     protected void sendStringData(String [] data) throws de.tum.ascodt.utils.exceptions.ASCoDTException {
+          for(int i=0;i<data.length;i++){
+               sendStringData(data[i]);
+          }
      }
 
-     protected int readIntData() throws java.io.IOException, java.lang.InterruptedException,java.util.concurrent.ExecutionException{
-
-         java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-         _channel.read(buffer).get();
-         buffer.flip();
-         
-         
-         return buffer.getInt();
+     protected int readIntData() throws de.tum.ascodt.utils.exceptions.ASCoDTException {
+          try {
+               //java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocate(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+               _rcvBuffer.clear();
+               _channel.read(_rcvBuffer).get();
+               _rcvBuffer.flip();
+               return _rcvBuffer.getInt();
+          } catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
+          }
      }
 
 
-     protected void readIntData(int[] result,int size) throws java.io.IOException, java.lang.InterruptedException,java.util.concurrent.ExecutionException{
+     protected void readIntData(int[] result,int size)  throws de.tum.ascodt.utils.exceptions.ASCoDTException {
           int readBytes=0;
           int bytesToRead=size*4;
-          java.nio.ByteBuffer resultBuffer=java.nio.ByteBuffer.allocateDirect(bytesToRead).order(java.nio.ByteOrder.LITTLE_ENDIAN);;
-          java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-          while(readBytes<bytesToRead){
-               _channel.read(buffer).get();
-               readBytes+=_bufferSize;
-                buffer.flip();
-               if(readBytes>bytesToRead){
-                  byte[] bt=new byte[bytesToRead-readBytes+_bufferSize]; 
-                  buffer.get(bt);
-                  resultBuffer.put(bt);
-               }else{
-                  byte[] bt=new byte[_bufferSize];
-                  buffer.get(bt);
-                  resultBuffer.put(bt);
+          java.nio.ByteBuffer resultBuffer=java.nio.ByteBuffer.allocate(bytesToRead).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+          try{
+               while(readBytes<bytesToRead){
+                    _rcvBuffer.clear();
+                    _channel.read(_rcvBuffer).get();
+                    readBytes+=_bufferSize;
+                    _rcvBuffer.flip();
+                    if(readBytes>bytesToRead){
+                         resultBuffer.put(_rcvBytes,0,bytesToRead-readBytes+_bufferSize);
+                    }else{
+                         resultBuffer.put(_rcvBytes);
+                    }
                }
+               resultBuffer.flip();
+               resultBuffer.asIntBuffer().get(result);
+          } catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
           }
-          resultBuffer.flip();
-          resultBuffer.asIntBuffer().get(result);
      }
 
-     protected double readDoubleData() throws java.io.IOException, java.lang.InterruptedException,java.util.concurrent.ExecutionException{
-
-           java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-         _channel.read(buffer).get();
-          buffer.flip();
-          return buffer.getDouble();
-     }
-
-
-     protected void readDoubleData(double [] result,int size) throws java.io.IOException, java.lang.InterruptedException,java.util.concurrent.ExecutionException{
-         int readBytes=0;
-         int bytesToRead=size*8;
-         java.nio.ByteBuffer resultBuffer=java.nio.ByteBuffer.allocateDirect(bytesToRead).order(java.nio.ByteOrder.LITTLE_ENDIAN);;
-         java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-         while(readBytes<bytesToRead){
-              _channel.read(buffer).get();
-              readBytes+=_bufferSize;
-               buffer.flip();
-              if(readBytes>bytesToRead){
-                 byte[] bt=new byte[bytesToRead-readBytes+_bufferSize]; 
-                 buffer.get(bt);
-                 resultBuffer.put(bt);
-              }else{
-                 byte[] bt=new byte[_bufferSize];
-                 buffer.get(bt);
-                 resultBuffer.put(bt);
-              }
-         }
-         resultBuffer.flip();
-         resultBuffer.asDoubleBuffer().get(result);
-     }
-
-     protected boolean readBooleanData() throws java.io.IOException, java.lang.InterruptedException,java.util.concurrent.ExecutionException{
-          
-          java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-          _channel.read(buffer).get();
-          buffer.flip();
-          boolean data=buffer.getInt()==1?true:false;
-          return data;
+     protected double readDoubleData()  throws de.tum.ascodt.utils.exceptions.ASCoDTException  {
+          try{
+               _rcvBuffer.clear();
+               _channel.read(_rcvBuffer).get();
+               _rcvBuffer.flip();
+               return _rcvBuffer.getDouble();
+          } catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
+          }
      }
 
 
-     protected void readBooleanData(boolean[] result,int size) throws java.io.IOException, java.lang.InterruptedException,java.util.concurrent.ExecutionException{
-         int readBytes=0;
-         int bytesToRead=size*4;
-         java.nio.ByteBuffer resultBuffer=java.nio.ByteBuffer.allocateDirect(bytesToRead).order(java.nio.ByteOrder.LITTLE_ENDIAN);;
-         java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-         int []result_i=new int[size];
-         while(readBytes<bytesToRead){
-              _channel.read(buffer).get();
-              readBytes+=_bufferSize;
-               buffer.flip();
-              if(readBytes>bytesToRead){
-                 byte[] bt=new byte[bytesToRead-readBytes+_bufferSize]; 
-                 buffer.get(bt);
-                 resultBuffer.put(bt);
-              }else{
-                 byte[] bt=new byte[_bufferSize];
-                 buffer.get(bt);
-                 resultBuffer.put(bt);
-              }
-         }
-         resultBuffer.flip();
-         resultBuffer.asIntBuffer().get(result_i);
+     protected void readDoubleData(double [] result,int size)  throws de.tum.ascodt.utils.exceptions.ASCoDTException  {
+          try{
+               int readBytes=0;
+               int bytesToRead=size*8;
+               java.nio.ByteBuffer resultBuffer=java.nio.ByteBuffer.allocate(bytesToRead).order(java.nio.ByteOrder.LITTLE_ENDIAN);;
+               while(readBytes<bytesToRead){
+                    _rcvBuffer.clear();
+                    _channel.read(_rcvBuffer).get();
+                    readBytes+=_bufferSize;
+                    _rcvBuffer.flip();
+                    if(readBytes>bytesToRead){
+                         resultBuffer.put(_rcvBytes,0,bytesToRead-readBytes+_bufferSize);
+                    }else{
+                         resultBuffer.put(_rcvBytes);
+                    }
+               }
+               resultBuffer.flip();
+               resultBuffer.asDoubleBuffer().get(result);
+          } catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
+          }
+     }
+
+     protected boolean readBooleanData() throws de.tum.ascodt.utils.exceptions.ASCoDTException {
+          return readIntData()==1;
+     }
+
+
+     protected void readBooleanData(boolean[] result,int size)  throws de.tum.ascodt.utils.exceptions.ASCoDTException {
+          int []result_i=new int[size];
+          readIntData(result_i,size);
           for(int i=0;i<size;i++)
-            result[i]=result_i[i]==1?true:false;
+               result[i]=result_i[i]==1;
      }
 
-     protected void sendLongData(long data) throws java.io.IOException{
-       java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-       buffer.asLongBuffer().put(data);
-       try{
-       _channel.write(buffer).get();
-       } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (java.util.concurrent.ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+     protected void sendLongData(long data)  throws de.tum.ascodt.utils.exceptions.ASCoDTException {
+          try{
+                _sendBuffer.clear();
+                _sendBuffer.asLongBuffer().put(data);
+
+               _channel.write(_sendBuffer).get();
+          } catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
+          }
      }
-     
-     protected long readLongData() throws java.io.IOException, java.lang.InterruptedException,java.util.concurrent.ExecutionException{
-         java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(_bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-         int bytes=_channel.read(buffer).get();
-          buffer.flip();
-         
-         
-         return buffer.getLong();
+
+     protected long readLongData()  throws de.tum.ascodt.utils.exceptions.ASCoDTException  {
+          try{
+               _rcvBuffer.clear();
+               _channel.read(_rcvBuffer).get();
+               _rcvBuffer.flip();
+               return _rcvBuffer.getLong();
+          } catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
+          }
      }
-     
-     protected String readStringData() throws java.io.IOException, java.lang.InterruptedException,java.util.concurrent.ExecutionException{
-         String res="";
-         int stringSize=readIntData();
-         int bufferSize= (int) Math.ceil(((double)stringSize)/1024.0)*1024;
-         java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocateDirect(bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-         _channel.read(buffer).get();
-         byte[] strBytes=new byte[stringSize];
-         buffer.flip();
-         buffer.get(strBytes);
-         res=new String(strBytes,java.nio.charset.Charset.forName("UTF-8"));
-         return res;
+
+     protected String readStringData()  throws de.tum.ascodt.utils.exceptions.ASCoDTException  {
+          try{
+               String res="";
+               int stringSize=readIntData();
+               int bufferSize= (int) Math.ceil(((double)stringSize)/(double)de.tum.ascodt.plugin.services.SocketService.getDefault().getBufferSize())*de.tum.ascodt.plugin.services.SocketService.getDefault().getBufferSize();
+               java.nio.ByteBuffer buffer=java.nio.ByteBuffer.allocate(bufferSize).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+               _channel.read(buffer).get();
+               byte[] strBytes=new byte[stringSize];
+               buffer.flip();
+               buffer.get(strBytes);
+               res=new String(strBytes,java.nio.charset.Charset.forName("UTF-8"));
+               return res;
+          } catch (Exception e) {
+               throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
+                         SocketComponent.class.getCanonicalName(),
+                         "sendIntData()",
+                         e.getLocalizedMessage(),
+                         e);
+          }
      }
-     
-     void readStringData(String[]data,int size) throws java.io.IOException, java.lang.InterruptedException,java.util.concurrent.ExecutionException{
-        for(int i=0;i<size;i++){
-          data[i]=readStringData();
-        }
+
+     void readStringData(String[]data,int size)  throws de.tum.ascodt.utils.exceptions.ASCoDTException {
+          for(int i=0;i<size;i++){
+               data[i]=readStringData();
+          }
      }
-     
+
      public void close(){
-          try {
-               
+          try{
                if(_channel!=null){
 
                     _channel.close();
                     _channel=null;
-                    
+
                     System.out.println("destroying channel");
                }
-               
+
                if(_server!=null){
                     System.out.println("destroying server");
                     _server.close();
                     _server=null;
                }
                _group.shutdownNow();
-          } catch (java.io.IOException e) {
-               // TODO Auto-generated catch block
-               e.printStackTrace();
+          }catch (Exception e) {
+               de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().showError(
+                SocketComponent.class.getCanonicalName(),
+                 "close()",
+                 "close exception()"+e.getMessage()
+                
+               );
           }
      }
-     
+
+
      
 }  
 __CLOSE_PACKAGE__

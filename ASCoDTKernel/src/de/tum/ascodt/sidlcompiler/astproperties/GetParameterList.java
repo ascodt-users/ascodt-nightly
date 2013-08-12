@@ -355,7 +355,8 @@ public class GetParameterList extends DepthFirstAdapter {
 			}
 
 			if (parameter.type==Parameter.Type.Boolean && (!parameter.isArray)) {
-				result+="sendData((char*)&"+parameter.name+",sizeof(bool),_sendBuffer,_newsockfd,_buffer_size);\n";
+				result+="int "+parameter.name+"_as_int="+parameter.name+"?1:0;\n";
+				result+="sendData((char*)&"+parameter.name+"_as_int,sizeof(int),_sendBuffer,_newsockfd,_buffer_size);\n";
 			}
 			if (parameter.type==Parameter.Type.Double && (!parameter.isArray )) {
 				result+="sendData((char*)&"+parameter.name+",sizeof(double),_sendBuffer,_newsockfd,_buffer_size);\n";
@@ -478,13 +479,8 @@ public class GetParameterList extends DepthFirstAdapter {
 			}
 			if (parameter.type==Parameter.Type.String && (!parameter.isArray )&& !parameter.isOut ) {
 				result+="String "+parameter.name+"=readStringData();\n";
-//				result+="int "+parameter.name+"_str_len=0;\n";
-//				result+="readData((char*)&"+parameter.name+"_str_len,sizeof(int),rcvBuffer,newsockfd,buffer_size);\n";
-//				result+="char* "+parameter.name+"=new char["+parameter.name+"_str_len];\n";  
-//				result+="readData((char*)"+parameter.name+","+parameter.name+"_str_len,rcvBuffer,newsockfd,buffer_size);\n";
 			}
 			if (parameter.type==Parameter.Type.UserDefined && (!parameter.isArray ) && !parameter.isOut) {
-				//result+="readData((char*)"+parameter.name+",sizeof(bool),_rcvBuffer,_newsockfd,_buffer_size);\n";
 			}
 			if (parameter.type==Parameter.Type.Opaque && (!parameter.isArray) && !parameter.isOut ) {
 			}
@@ -504,13 +500,8 @@ public class GetParameterList extends DepthFirstAdapter {
 			if (parameter.type==Parameter.Type.String && (!parameter.isArray )&& parameter.isOut ) {
 				result+="String [] "+parameter.name+"= new String[1];\n";
 				result+="readStringData("+parameter.name+",1);\n";
-//				result+="int "+parameter.name+"_str_len=0;\n";
-//				result+="readData((char*)&"+parameter.name+"_str_len,sizeof(int),rcvBuffer,newsockfd,buffer_size);\n";
-//				result+="char* "+parameter.name+"=new char["+parameter.name+"_str_len];\n";  
-//				result+="readData((char*)"+parameter.name+","+parameter.name+"_str_len,rcvBuffer,newsockfd,buffer_size);\n";
 			}
 			if (parameter.type==Parameter.Type.UserDefined && (!parameter.isArray ) && parameter.isOut) {
-				//result+="readData((char*)"+parameter.name+",sizeof(bool),_rcvBuffer,_newsockfd,_buffer_size);\n";
 			}
 			if (parameter.type==Parameter.Type.Opaque && (!parameter.isArray) && parameter.isOut ) {
 			}
@@ -566,7 +557,9 @@ public class GetParameterList extends DepthFirstAdapter {
 
 			if (parameter.type==Parameter.Type.Boolean && (!parameter.isArray)) {
 				result+="bool "+parameter.name+";\n";
-				result+="readData((char*)&"+parameter.name+",sizeof(bool),rcvBuffer,newsockfd,buffer_size);\n";
+				result+="bool "+parameter.name+"_as_int;\n";
+				result+="readData((char*)&"+parameter.name+"_as_int,sizeof(int),rcvBuffer,newsockfd,buffer_size);\n";
+				result+=parameter.name+"="+parameter.name+"_as_int==1?true:false;\n";
 			}
 			if (parameter.type==Parameter.Type.Double && (!parameter.isArray )) {
 				result+="double "+parameter.name+";\n";
@@ -583,7 +576,6 @@ public class GetParameterList extends DepthFirstAdapter {
 				result+="readData((char*)"+parameter.name+","+parameter.name+"_str_len,rcvBuffer,newsockfd,buffer_size);\n";
 			}
 			if (parameter.type==Parameter.Type.UserDefined && (!parameter.isArray )) {
-				//result+="readData((char*)"+parameter.name+",sizeof(bool),_rcvBuffer,_newsockfd,_buffer_size);\n";
 			}
 			if (parameter.type==Parameter.Type.Opaque && (!parameter.isArray)) {
 			}
@@ -623,7 +615,8 @@ public class GetParameterList extends DepthFirstAdapter {
 				}
 
 				if (parameter.type==Parameter.Type.Boolean && (!parameter.isArray)) {
-					result+="sendData((char*)&"+parameter.name+",sizeof(bool),sendBuffer,newsockfd,buffer_size);\n";
+					result+="int "+parameter.name+"_as_int="+parameter.name+";\n";
+					result+="sendData((char*)&"+parameter.name+"_as_int,sizeof(int),sendBuffer,newsockfd,buffer_size);\n";
 				}
 				if (parameter.type==Parameter.Type.Double && (!parameter.isArray )) {
 					result+="sendData((char*)&"+parameter.name+",sizeof(double),sendBuffer,newsockfd,buffer_size);\n";
@@ -649,16 +642,26 @@ public class GetParameterList extends DepthFirstAdapter {
 		for (Parameter parameter: _parameters) {
 			if(parameter.isOut){
 				if (parameter.type==Parameter.Type.Boolean ) {
+					if(parameter.isArray)
+						result+="sendIntData("+parameter.name+".length);\n";
 					result+="sendBooleanData("+parameter.name+");\n";
 				}
 				if (parameter.type==Parameter.Type.Double) {
+					if(parameter.isArray)
+						result+="sendIntData("+parameter.name+".length);\n";
+					
 					result+="sendDoubleData("+parameter.name+");\n";
 				}
 				if (parameter.type==Parameter.Type.Integer) {
+					if(parameter.isArray)
+						result+="sendIntData("+parameter.name+".length);\n";
+					
 					result+="sendIntData("+parameter.name+");\n";
 				}
 				if (parameter.type==Parameter.Type.String ) {
-					//TODOresult+=socketPrefix+"sendBooleanData("+parameter.name+");\n";
+					if(parameter.isArray)
+						result+="sendIntData("+parameter.name+".length);\n";
+					result+="sendStringData("+parameter.name+");\n";
 				}
 				if (parameter.type==Parameter.Type.UserDefined ) {
 
@@ -703,7 +706,8 @@ public class GetParameterList extends DepthFirstAdapter {
 				}
 
 				if (parameter.type==Parameter.Type.Boolean && (!parameter.isArray)) {
-					result+="sendData((char*)&"+parameter.name+",sizeof(bool),sendBuffer,newsockfd,buffer_size);\n";
+					result+=parameter.name+"_as_int="+parameter.name+"?1:0\n;";
+					result+="sendData((char*)&"+parameter.name+"_as_int,sizeof(int),sendBuffer,newsockfd,buffer_size);\n";
 				}
 				if (parameter.type==Parameter.Type.Double && (!parameter.isArray )) {
 					result+="sendData((char*)&"+parameter.name+",sizeof(double),sendBuffer,newsockfd,buffer_size);\n";
@@ -851,8 +855,9 @@ public class GetParameterList extends DepthFirstAdapter {
 				}
 
 				if (parameter.type==Parameter.Type.Boolean && (!parameter.isArray)) {
-					//result+="bool "+parameter.name+";\n";
-					result+="readData((char*)&"+parameter.name+",sizeof(bool),_rcvBuffer,_newsockfd,_buffer_size);\n";
+					
+					result+="readData((char*)&"+parameter.name+"_as_int,sizeof(int),_rcvBuffer,_newsockfd,_buffer_size);\n";
+					result+=parameter.name+"="+parameter.name+"_as_int==1;\n";
 				}
 				if (parameter.type==Parameter.Type.Double && (!parameter.isArray )) {
 					//result+="double "+parameter.name+";\n";
@@ -869,7 +874,7 @@ public class GetParameterList extends DepthFirstAdapter {
 					result+="readData((char*)"+parameter.name+"_data,"+parameter.name+"_str_len,_rcvBuffer,_newsockfd,_buffer_size);\n";
 				}
 				if (parameter.type==Parameter.Type.UserDefined && (!parameter.isArray )) {
-					//result+="readData((char*)"+parameter.name+",sizeof(bool),__rcvBuffer,_newsockfd,_buffer_size);\n";
+					
 				}
 				if (parameter.type==Parameter.Type.Opaque && (!parameter.isArray)) {
 				}

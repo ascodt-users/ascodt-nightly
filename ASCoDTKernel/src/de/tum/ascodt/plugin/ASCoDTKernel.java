@@ -68,9 +68,6 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		initializeSwing();
-		initialiseServices();
-
-		initializeProjects();
 		initializeProjectLifeCycle();
 		initializeOutputDevice();
 	}
@@ -105,6 +102,9 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 	 */
 	public ASCoDTKernel() {
 		singleton=this;
+		initialiseServices();
+
+		initializeProjects();
 	  // for uncaught exceptions
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(){
 
@@ -149,6 +149,7 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 					if(event.kind==LifecycleEvent.PRE_PROJECT_OPEN){
 						prepareProject((IProject)event.resource);
 					}else if(event.kind==LifecycleEvent.PRE_PROJECT_CLOSE){
+						ProjectBuilder.getInstance().getProject((IProject)event.resource).closeRunningWorkbenchInstances();
 						ProjectBuilder.getInstance().removeProject((IProject)event.resource);
 					}else if(event.kind==LifecycleEvent.PRE_PROJECT_DELETE){
 						ProjectBuilder.getInstance().removeProject((IProject)event.resource);
@@ -164,26 +165,31 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 	 * This method loops through all ascodt projects and setups their project objects
 	 */
 	public void initializeProjects(){
-		Job job = new Job("Projects initialisation") {
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+//		Job job = new Job("Projects initialisation") {
+//
+//			@Override
+//			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					for(IProject project:((Workspace) ResourcesPlugin.getWorkspace()).getRoot().getProjects()){
 
 						if(project.isOpen()&&project.isNatureEnabled(ASCoDTNature.ID))
 							prepareProject(project);
 					}
-					 return Status.OK_STATUS;
+					 //return Status.OK_STATUS;
 				} catch (CoreException e) {
 					ErrorWriterDevice.getInstance().showError( getClass().getName(), "initializeProjects()", "Cannot initialize an existing project:" + e.getCause(), e );
-					 return Status.CANCEL_STATUS;
+					// return Status.CANCEL_STATUS;
 				}
-			}
-
-		};
-		job.schedule();
-
+//			}
+//
+//		};
+//		job.schedule();
+//		try {
+//			job.wait();
+//		} catch (InterruptedException e) {
+//			ErrorWriterDevice.getInstance().showError( getClass().getName(), "initializeProjects()", "Cannot initialize an existing project:" + e.getCause(), e );
+//			
+//		}
 	}
 
 

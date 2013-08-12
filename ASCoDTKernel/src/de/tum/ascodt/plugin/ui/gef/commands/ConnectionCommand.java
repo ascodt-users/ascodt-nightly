@@ -51,7 +51,10 @@ public class ConnectionCommand 	extends Command{
 			connection.detachTarget();
 			connection.setTarget(target);
 			connection.setTargetPort(targetPort); 
-			connection.attachTarget();
+			if(!connection.attachTarget()){
+				source=null;
+				target=null;
+			}
 		}
 		if (source == null && target == null){
 			connection.detachSource();

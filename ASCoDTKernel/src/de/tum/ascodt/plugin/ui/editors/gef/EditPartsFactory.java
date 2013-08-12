@@ -22,7 +22,10 @@ import de.tum.ascodt.plugin.ui.gef.model.StickyNote;
  */
 public class EditPartsFactory implements EditPartFactory {
 
-
+   private ClassLoader classLoader;
+	public EditPartsFactory(ClassLoader classLoader){
+  	 this.classLoader=classLoader;
+   }
 	/**
 	 * creates an edit part for given model
 	 */
@@ -44,7 +47,7 @@ public class EditPartsFactory implements EditPartFactory {
 			return new DiagramEditPart();
 		}
 		if(modelElement instanceof Component)
-			return new ComponentEditPart();
+			return new ComponentEditPart(classLoader);
 		if(modelElement instanceof Connection)
 			return new ConnectionEditPart();
 		if(modelElement instanceof StickyNote)

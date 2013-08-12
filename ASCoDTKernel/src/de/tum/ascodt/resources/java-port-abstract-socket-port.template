@@ -7,16 +7,15 @@
 //
 __OPEN_PACKAGE__;
 
-
-public abstract class __PORT_NAME__AbstractSocketPort extends SocketComponent implements __PORT_NAME__ {
+public abstract class __PORT_NAME__AbstractSocketPort extends SocketComponent implements __PORT_NAME__SocketPort{
 
   protected __PORT_NAME__  _destination;
   
-  public __PORT_NAME__AbstractSocketPort() {
+  public __PORT_NAME__AbstractSocketPort() throws de.tum.ascodt.utils.exceptions.ASCoDTException {
     _destination = null;
   }
   
-  public __PORT_NAME__AbstractSocketPort(String host,int port) {
+  public __PORT_NAME__AbstractSocketPort(String host,int port) throws de.tum.ascodt.utils.exceptions.ASCoDTException {
     super(host,port);
     _destination = null;
   }

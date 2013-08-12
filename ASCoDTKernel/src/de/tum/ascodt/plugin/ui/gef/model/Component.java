@@ -13,6 +13,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
 import de.tum.ascodt.plugin.utils.tracing.Trace;
 import de.tum.ascodt.repository.Target;
+import de.tum.ascodt.repository.TargetParameters;
 
 
 /**
@@ -154,11 +155,11 @@ public class Component extends Geometry implements IPropertySource{
 	public void setClassName(String className){
 		this.className=className;
 	}
-	
+
 	public void setTarget(String target) {
 		_target=target;
 	}
-	
+
 	public String getTarget(){
 		return _target;
 	}
@@ -237,10 +238,12 @@ public class Component extends Geometry implements IPropertySource{
 	 * a callback for the connect method
 	 * @param connection
 	 */
-	public void connectInput(Connection connection) {
-		if(handleConnect(connection))
+	public boolean connectInput(Connection connection) {
+		boolean res=false;
+		if(res=handleConnect(connection))
 			inputConnections.add(connection);
 		firePropertyChange(INPUT_CONNECTIONS,true,connection);
+		return res;
 	}
 
 
@@ -258,7 +261,7 @@ public class Component extends Geometry implements IPropertySource{
 		Component target=connection.getTarget();
 		UsePort sourcePort = (UsePort) connection.getSourcePort();
 		ProvidePort targetPort = (ProvidePort) connection.getTargetPort();
-		
+
 		Assert.isNotNull(source);
 
 		Assert.isNotNull(target);
@@ -268,9 +271,9 @@ public class Component extends Geometry implements IPropertySource{
 		Assert.isNotNull(targetPort);
 		Method createPort;
 		try {
-			createPort = source.getCCAComponent().getClass().getMethod("createPortFor"+sourcePort.getReference(),Target.class);
+			createPort = source.getCCAComponent().getClass().getMethod("createPortFor"+sourcePort.getReference(),Target.class,TargetParameters.class);
 			if(createPort!=null&&target.getCCAComponent().getTarget()!=null){
-				Object usePort=createPort.invoke(source.getCCAComponent(),target.getCCAComponent().getTarget());
+				Object usePort=createPort.invoke(source.getCCAComponent(),target.getCCAComponent().getTarget(),target.getCCAComponent().getTargetParameters());
 				for(Method m:usePort.getClass().getMethods())
 					if(m.getName().equals("connect")&&((m.getModifiers()&Modifier.NATIVE)==0))
 						m.invoke(usePort, target.getCCAComponent());
@@ -306,26 +309,28 @@ public class Component extends Geometry implements IPropertySource{
 		Component target=connection.getTarget();
 		UsePort sourcePort = (UsePort) connection.getSourcePort();
 		Assert.isNotNull(_connections);
-		Assert.isNotNull(_connections.get(connection));
-		Object usePort=_connections.get(connection);
-		try {
-			for(Method m:usePort.getClass().getMethods())
-				if(m.getName().equals("disconnect"))
-					m.invoke(usePort,target.getCCAComponent());
+		if(_connections.get(connection)!=null){
+			Object usePort=_connections.get(connection);
+			try {
+				Assert.isNotNull(usePort!=null);
+				for(Method m:usePort.getClass().getMethods())
+					if(m.getName().equals("disconnect"))
+						m.invoke(usePort,target.getCCAComponent());
+				Assert.isNotNull(source.getCCAComponent());
+				for(Method m:source.getCCAComponent().getClass().getMethods())
+					if(m.getName().equals("disconnect"+sourcePort.getReference()))
+						m.invoke(source.getCCAComponent(), usePort);
+				_connections.remove(connection);
+			}catch(Exception e){
+				ErrorWriterDevice.getInstance().showError( getClass().getName(), "handleDisconnect()",  "Cannot delete connection between "+
+						source.getReference()+":"+source.getComponentName()+" and "+target.getReference()+":"+target.getComponentName(), e );
+				return false;
+			}
 
-			for(Method m:source.getCCAComponent().getClass().getMethods())
-				if(m.getName().equals("disconnect"+sourcePort.getReference()))
-					m.invoke(source.getCCAComponent(), usePort);
-			_connections.remove(connection);
-		}catch(Exception e){
-			ErrorWriterDevice.getInstance().showError( getClass().getName(), "handleDisconnect()",  "Cannot delete connection between "+
-					source.getReference()+":"+source.getComponentName()+" and "+target.getReference()+":"+target.getComponentName(), e );
-			return false;
+			_trace.out("handleDisconnect");
+			return true;
 		}
-		
-		_trace.out("handleDisconnect");
-		return true;
-
+		return false;
 	}
 
 
@@ -405,9 +410,9 @@ public class Component extends Geometry implements IPropertySource{
 	public boolean isValid(){
 		return valid;
 	}
-	
-	
 
-	
+
+
+
 
 }

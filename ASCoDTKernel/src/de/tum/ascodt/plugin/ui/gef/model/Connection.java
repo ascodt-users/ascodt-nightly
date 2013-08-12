@@ -46,10 +46,10 @@ public class Connection extends ModelElement{
 		getSource().connectOutput(this);
 	}
 
-	public void attachTarget(){
+	public boolean attachTarget(){
 		if (getTarget() == null || getTarget().getTargetConnections().contains(this))
-			return;
-		getTarget().connectInput(this);
+			return false;
+		return getTarget().connectInput(this);
 	}
 
 	public void detachSource(){

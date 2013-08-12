@@ -7,13 +7,16 @@ import java.util.Vector;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -38,29 +41,25 @@ public class BuildComponentsAction implements IWorkbenchWindowActionDelegate {
 	@Override
 	public void run(IAction action) {
 		for(IProject project:selection){
-		
+			Assert.isTrue(project.isOpen());
 			MessageBox dialog = 
-					  new MessageBox(shell, SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
-					dialog.setText("Warning");
-					dialog.setMessage("Rebuilding the current project needs to reinitiate the project workbench files! Are your sure?");
+					new MessageBox(shell, SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
+			dialog.setText("Warning");
+			dialog.setMessage("Rebuilding the current project needs to reinitiate the project workbench files! Are your sure?");
 
-			
+
 			if(dialog.open()==SWT.OK){
-				Vector<IFile> files=ProjectBuilder.getInstance().getProject(project).closeRunningWorkbenchInstances();
 				ProjectBuilder.getInstance().getProject(project).compileComponents();
-				try {
-					ProjectBuilder.getInstance().getProject(project).openWorkbenchEditors(files);
-				} catch (ASCoDTException e) {
-					ErrorWriterDevice.getInstance().showError( getClass().getName(),e.getLocalizedMessage(), e );
-				}
+				
 			}
 		}
+
 	}
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		this.selection.clear();
-		
+
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
 			for (
@@ -74,7 +73,7 @@ public class BuildComponentsAction implements IWorkbenchWindowActionDelegate {
 					if(element instanceof DiagramEditPart){
 						IEditorPart part = 
 								((DefaultEditDomain)((DiagramEditPart)element).getViewer().getEditDomain()).getEditorPart();
-						
+
 						IFile file_element=null;
 						if(part!=null&&part.getEditorInput() instanceof  IFileEditorInput){
 							file_element =((IFileEditorInput)part.getEditorInput()).getFile();
@@ -87,11 +86,13 @@ public class BuildComponentsAction implements IWorkbenchWindowActionDelegate {
 							}
 						}
 					}
-					if(element instanceof Project)
+					if(element instanceof Project&&((Project) element).getEclipseProjectHandle().isOpen())
 						this.selection.add(((Project) element).getEclipseProjectHandle());
-					if(element instanceof IProject)
+					if(element instanceof IProject&&((IProject)element).isOpen())
 						this.selection.add(((IProject) element));
-					if(element instanceof IResource&&((IResource) element).getProject().hasNature(ASCoDTNature.ID))
+					
+					if(element instanceof IResource &&
+							((IResource) element).getProject().isOpen()&&((IResource) element).getProject().hasNature(ASCoDTNature.ID))
 						this.selection.add(((IResource) element).getProject());
 				} catch (CoreException e) {
 					ErrorWriterDevice.getInstance().showError( getClass().getName(),e.getLocalizedMessage(), e );
@@ -99,27 +100,28 @@ public class BuildComponentsAction implements IWorkbenchWindowActionDelegate {
 			}
 
 		}
-		
+
 		if (selection instanceof TextSelection) {
-			 IEditorPart activeEditor = PlatformUI
-	                    .getWorkbench()
-	                    .getActiveWorkbenchWindow()
-	                    .getActivePage()
-	                    .getActiveEditor();
-	        
+			IEditorPart activeEditor = PlatformUI
+					.getWorkbench()
+					.getActiveWorkbenchWindow()
+					.getActivePage()
+					.getActiveEditor();
+
 			IFile element=null;
 			if(activeEditor!=null&&activeEditor.getEditorInput() instanceof  IFileEditorInput)
 				element =((IFileEditorInput)activeEditor.getEditorInput()).getFile();
 
-				try {
-					if(element!=null && element instanceof IResource&&((IResource) element).getProject().hasNature(ASCoDTNature.ID))
-						this.selection.add(((IResource) element).getProject());
-				} catch (CoreException e) {
-					ErrorWriterDevice.getInstance().showError( getClass().getName(),e.getLocalizedMessage(), e );
-				}
+			try {
+				if(element!=null && element instanceof IResource&&((IResource) element).getProject().isOpen()
+						&&((IResource) element).getProject().hasNature(ASCoDTNature.ID))
+					this.selection.add(((IResource) element).getProject());
+			} catch (CoreException e) {
+				ErrorWriterDevice.getInstance().showError( getClass().getName(),e.getLocalizedMessage(), e );
 			}
+		}
 
-		
+
 	}
 
 	@Override

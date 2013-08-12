@@ -12,7 +12,7 @@ public class __PORT_NAME__SocketDispatcher extends  SocketComponent {
   private long _ref;
   protected java.util.HashSet<__PORT_NAME__>  _destinations;
   
-  public __PORT_NAME__SocketDispatcher(){
+  public __PORT_NAME__SocketDispatcher() throws de.tum.ascodt.utils.exceptions.ASCoDTException{
     _destinations = new java.util.HashSet<__PORT_NAME__>();
   
   }
@@ -38,36 +38,20 @@ public class __PORT_NAME__SocketDispatcher extends  SocketComponent {
      
   }
   
-  public void createInstance(){
+  public void createInstance() throws de.tum.ascodt.utils.exceptions.ASCoDTException{
      int methodId=0;
-     try{
-          sendIntData(methodId);
-          _ref=readLongData();
-     }catch(java.io.IOException ioe){
-     } catch (java.lang.InterruptedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-     } catch (java.util.concurrent.ExecutionException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-     }
+     sendIntData(methodId);
+     _ref=readLongData();
+     
   } 
   
-  protected void finalize(){
-    destroyInstance();
-    super.close();
-  }
   
-  public void destroyInstance(){
+  /*public void destroyInstance() throws de.tum.ascodt.utils.exceptions.ASCoDTException{
      int methodId=1;
-     try{
-          sendIntData(methodId);
-          sendLongData(_ref);
-          
-     }catch(java.io.IOException ioe){
-          
-     } 
-  }
+     sendIntData(methodId);
+     sendLongData(_ref);
+      
+  }*/
   
   /**
    * Connect a uses port.
@@ -83,13 +67,11 @@ public class __PORT_NAME__SocketDispatcher extends  SocketComponent {
     _destinations.add(port);
   }
   
-  public void connect(long portRef){
+  public void connect(long portRef) throws de.tum.ascodt.utils.exceptions.ASCoDTException{
       int method=0;
-      try{
-          sendIntData(method);
-          sendLongData(portRef);
-      }catch(java.io.IOException ie){
-      }
+      sendIntData(method);
+      sendLongData(portRef);
+     
   }
   
   public void disconnect(__PORT_NAME__  port) throws de.tum.ascodt.utils.exceptions.ASCoDTException {
@@ -106,13 +88,11 @@ public class __PORT_NAME__SocketDispatcher extends  SocketComponent {
     _destinations.remove(port);
   }
   
-  public void disconnect(long portRef){
+  public void disconnect(long portRef) throws de.tum.ascodt.utils.exceptions.ASCoDTException{
      int method=1;
-     try{
-          sendIntData(method);
-          sendLongData(portRef);
-     }catch(java.io.IOException ie){
-     }
+     sendIntData(method);
+     sendLongData(portRef);
+     
   }
   
   public boolean isConnected(){

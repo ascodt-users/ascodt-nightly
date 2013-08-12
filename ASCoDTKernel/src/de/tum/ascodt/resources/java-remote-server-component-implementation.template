@@ -11,17 +11,26 @@ __OPEN_PACKAGE__;
 public abstract class __COMPONENT_NAME__AbstractJavaImplementation extends SocketComponent implements __COMPONENT_NAME__{
   protected __SOCKET_SERVER_UI__ _appTab;
   protected String   _instanceName;
-  public __COMPONENT_NAME__AbstractJavaImplementation( String instanceName ) {
+  protected String  _projectLocation;
+  public __COMPONENT_NAME__AbstractJavaImplementation( String instanceName ) throws de.tum.ascodt.utils.exceptions.ASCoDTException  {
     super("localhost");
     _instanceName = instanceName;
     _appTab = new __SOCKET_SERVER_UI__("__COMPONENT_NAME__",this, __APPS_CONTAINER__.ID);
     _appTab.setVisible(true);
+    _appTab.addListener(this);
     if(_appTab.hasApplicationSettings())
           _appTab.execute();
   }
   
   public de.tum.ascodt.repository.Target getTarget() {
-     return de.tum.ascodt.repository.Target.createFortranRemoteSocketTarget();
+     return de.tum.ascodt.repository.Target.create__LANG__RemoteSocketTarget();
+  }
+  
+  public de.tum.ascodt.repository.TargetParameters getTargetParameters(){
+     return de.tum.ascodt.repository.TargetParameters.createRemoteSocketParameters(
+          _appTab.getHost(),
+          _appTab.getPort()
+          );
   }
 
   public long getReference(){
@@ -32,6 +41,12 @@ public abstract class __COMPONENT_NAME__AbstractJavaImplementation extends Socke
    
   }
   
+  public void setProjectLocation(String location){
+     _projectLocation=location;
+     _appTab.setProjectLocation(location);
+     if(_appTab.hasApplicationSettings())
+          _appTab.execute();
+  } 
   /**
    * @see de.tum.ascodt.repository.entities
    */
@@ -49,16 +64,18 @@ public abstract class __COMPONENT_NAME__AbstractJavaImplementation extends Socke
   
  
   public void destroy() {
-    try {
+     try{
           if(isConnected())
                sendIntData(1);
-          super.close();
-          _appTab.setVisible(false);
-          _appTab.dispose();
+     }catch(de.tum.ascodt.utils.exceptions.ASCoDTException e){
+          de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().showError(getClass().getName(), "destroy()", e);
+     }
+     super.close();
+     _appTab.removeListener(this);
+     _appTab.setVisible(false);
+     _appTab.dispose();
           
-    }catch(java.io.IOException e){
-     
-    }
+   
   }
   
   public boolean isValid() {

@@ -72,12 +72,13 @@ public class CreateJavaPortInterface extends DepthFirstAdapter {
 				
 				String templateFileOfAbstractPort    = "java-port-abstract-port.template";
 				String templateFileOfAbstractSocketPort    = "java-port-abstract-socket-port.template";
-
+				String templateFileOfSocketPort    = "java-port-socket-port.template";
 				_fullQualifiedComponentName = _symbolTable.getScope(node).getFullQualifiedName(portName);
 				String destinationFileOfInterface    = _destinationDirectory.toString() + File.separatorChar + _fullQualifiedComponentName.replaceAll("[.]", "/") + ".java";
 				String destinationFileOfDispatcherPort = _destinationDirectory.toString() + File.separatorChar + _fullQualifiedComponentName.replaceAll("[.]", "/") + "Dispatcher.java";
 				String destinationFileOfAbstractPort = _destinationDirectory.toString() + File.separatorChar + _fullQualifiedComponentName.replaceAll("[.]", "/") + "AbstractPort.java";
 				String destinationFileOfAbstractSocketPort = _destinationDirectory.toString() + File.separatorChar + _fullQualifiedComponentName.replaceAll("[.]", "/") + "AbstractSocketPort.java";
+				String destinationFileOfSocketPort = _destinationDirectory.toString() + File.separatorChar + _fullQualifiedComponentName.replaceAll("[.]", "/") + "SocketPort.java";
 				
 				String destinationFileOfDispatcherNativePort = _destinationDirectory.toString() + File.separatorChar + _fullQualifiedComponentName.replaceAll("[.]", "/") + "NativeDispatcher.java";
 				String destinationFileOfDispatcherSocketPort = _destinationDirectory.toString() + File.separatorChar + _fullQualifiedComponentName.replaceAll("[.]", "/") + "SocketDispatcher.java";
@@ -86,7 +87,6 @@ public class CreateJavaPortInterface extends DepthFirstAdapter {
 				_portsHashmap.put(_fullQualifiedComponentName+"connectPort", 2+_portsHashmap.size());
 				_portsHashmap.put(_fullQualifiedComponentName+"disconnectPort", 2+_portsHashmap.size());
 				
-				System.out.println("Key1:"+_fullQualifiedComponentName+"createPort:"+	_portsHashmap.get(_fullQualifiedComponentName+"createPort"));
 				
 				_templateInterfaceFiles.push( 
 						new TemplateFile( templateFileOfInterface, destinationFileOfInterface, _namespace, TemplateFile.getLanguageConfigurationForJava(),true)
@@ -102,6 +102,7 @@ public class CreateJavaPortInterface extends DepthFirstAdapter {
 						);
 				TemplateFile templateAbstractPort =  new TemplateFile( templateFileOfAbstractPort, destinationFileOfAbstractPort, _namespace, TemplateFile.getLanguageConfigurationForJava(),true );
 				TemplateFile templateAbstractSocketPort =  new TemplateFile( templateFileOfAbstractSocketPort, destinationFileOfAbstractSocketPort, _namespace, TemplateFile.getLanguageConfigurationForJava(),true );
+				TemplateFile templateSocketPort =  new TemplateFile( templateFileOfSocketPort, destinationFileOfSocketPort, _namespace, TemplateFile.getLanguageConfigurationForJava(),true );
 				
 				_templateInterfaceFiles.peek().addMapping("__PORT_NAME__", portName);
 				_templateDispatcherFiles.peek().addMapping("__PORT_NAME__", portName);
@@ -118,10 +119,13 @@ public class CreateJavaPortInterface extends DepthFirstAdapter {
 
 				}
 				templateAbstractPort.addMapping("__PORT_NAME__", portName);
+				templateSocketPort.addMapping("__PORT_NAME__", portName);
 				templateAbstractSocketPort.addMapping("__PORT_NAME__", portName);
 				_templateInterfaceFiles.peek().addMapping("__SUPER_TYPES__", interfaceExtensions);
 				templateAbstractPort.open();
 				templateAbstractPort.close();
+				templateSocketPort.open();
+				templateSocketPort.close();
 				templateAbstractSocketPort.open();
 				templateAbstractSocketPort.close();
 				_templateInterfaceFiles.peek().open();

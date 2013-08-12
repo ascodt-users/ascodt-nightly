@@ -9,7 +9,7 @@ __OPEN_PACKAGE__;
 
 
 public class __COMPONENT_NAME__JavaImplementation extends __COMPONENT_NAME__BasisJavaImplementation {
-  public __COMPONENT_NAME__JavaImplementation( String identifier ) {
+  public __COMPONENT_NAME__JavaImplementation( String identifier ) throws de.tum.ascodt.utils.exceptions.ASCoDTException{
     super(identifier);
   }
   

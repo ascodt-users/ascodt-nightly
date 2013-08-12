@@ -11,6 +11,10 @@ import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -26,22 +30,36 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
-import de.tum.ascodt.plugin.utils.Importer;
+import de.tum.ascodt.plugin.project.Project;
+import de.tum.ascodt.plugin.project.ProjectBuilder;
+import de.tum.ascodt.plugin.utils.ProcessExitDetector;
+import de.tum.ascodt.plugin.utils.ProcessListener;
 import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
 import de.tum.ascodt.utils.exceptions.ASCoDTException;
-abstract class ProgramArgsTab extends ContainerTab{
+abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
 
 	protected Text textProgramArguments;
 	protected Text textProgramExecutable;
 	private java.io.File applicationSettings;
 	private boolean _isStarted;
-	
+	protected ProcessExitDetector _exitDetector;
+	private String _projectLocation;
+	private Process _process;
+	private ExecutorService _executionService;
 	protected ProgramArgsTab(String label, String containerId) {
 		super(label, containerId);
-		applicationSettings = new java.io.File(label+".settings");
+		_exitDetector= new ProcessExitDetector();
+		_exitDetector.addListener(this);
 		_isStarted=false;
 	}
  
+	public void setProjectLocation(String location){
+		_projectLocation=location;
+		if(textProgramExecutable!=null)
+			textProgramExecutable.setText(_projectLocation+File.separator+"native"+File.separator+_label);
+		applicationSettings = new java.io.File(_projectLocation+File.separator+"settings"+File.separator+_label+".settings");
+		loadStorageFiles();	
+	}
 	protected void createControlGroup(){
 		
 		
@@ -58,11 +76,9 @@ abstract class ProgramArgsTab extends ContainerTab{
 		gridData.grabExcessVerticalSpace = true;
 		bar.setLayoutData(gridData);
 		createControlGroup(bar);
-		loadStorageFiles();
-		//super.createControlGroup(bar);
 	}
 	public boolean hasApplicationSettings(){
-		return applicationSettings.exists();
+		return applicationSettings!=null&&applicationSettings.exists();
 	}
 	private void loadStorageFiles() {
 		if(hasApplicationSettings())
@@ -94,14 +110,21 @@ abstract class ProgramArgsTab extends ContainerTab{
 		
 		createArgsCotrolItems(bar);
 	}
+	public void addListener(ProcessListener processListner){
+		_exitDetector.addListener(processListner);
+	}
 	
-	public void onStart(){
+	public void removeListener(ProcessListener processListner){
+		_exitDetector.removeListener(processListner);
+	}
+	public void onStart() throws ASCoDTException{
 		saveProgramSettings();
 		synchronized(this){
 			_isStarted=true;
 		}
 	}
 	private void saveProgramSettings() {
+		Assert.isNotNull(applicationSettings);
 		FileWriter fwriter;
 		try {
 			fwriter = new FileWriter(applicationSettings,false);
@@ -111,7 +134,12 @@ abstract class ProgramArgsTab extends ContainerTab{
 			writer.write(textProgramExecutable.getText()+"\n");
 			writer.write(textProgramArguments.getText()+"\n");
 			writer.close();
+			Project project=ProjectBuilder.getInstance().getProject(new Path(_projectLocation).lastSegment());
+			project.getEclipseProjectHandle().refreshLocal(IResource.DEPTH_INFINITE, null);
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -134,7 +162,7 @@ abstract class ProgramArgsTab extends ContainerTab{
 		labelProgramExecutable.setLayoutData(textGridData);
 		
 		textProgramExecutable=new Text(argsComp,SWT.RIGHT);
-		textProgramExecutable.setText("/work_fast/atanasoa/Programme/runtime-HelloSocketFortran/AthletCoupling/native/Athlet");
+		textProgramExecutable.setText("");
 		textProgramExecutable.setLayoutData(textGridData);
 		
 		Label labelProgramArgumets=new Label(argsComp,SWT.LEFT);
@@ -200,7 +228,7 @@ abstract class ProgramArgsTab extends ContainerTab{
 //	public String[] getCmd(){
 //		String[] tokenizedArgs=  textProgramArguments.getText().split(" ");
 //		String[] res = new String[tokenizedArgs.length+1];
-//		res[0]= textProgramExecutable.getText();
+//		res[0]= textProgramExecutable.getText();_exitDetector= new ProcessExitDetector(p);
 //		for(int i=0;i<tokenizedArgs.length;i++)
 //			res[i+1]=tokenizedArgs[i];
 //		return res;
@@ -223,43 +251,43 @@ abstract class ProgramArgsTab extends ContainerTab{
 			if (env != null)
 				for(String envVar: getEnv()){
 					String[] envPair=envVar.split("=");
+					Assert.isTrue(envPair.length==2);
 					env.put(envPair[0],envPair[1]);
 				}
-			final Process p = pb.start();
 			
-			//final Process p=Runtime.getRuntime().exec(cmd,getEnv());
-			ExecutorService exService=java.util.concurrent.Executors.newCachedThreadPool();
-			exService.execute(new Runnable(){
+		 _process=pb.start();
+			_exitDetector.setProcess(_process);
+			_executionService = java.util.concurrent.Executors.newCachedThreadPool();
+			_executionService.execute(_exitDetector);
+			_executionService.execute(new Runnable(){
 
 				@Override
 				public void run() {
-					BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					BufferedReader reader = new BufferedReader(new InputStreamReader(_process.getInputStream()));
 					String line="";
 					try {
 						while ((line=reader.readLine())!=null)
 								System.out.println(line);
 						reader.close();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						ErrorWriterDevice.getInstance().showError( getClass().getName(),e.getLocalizedMessage(), e );
 					}
 					
 				}
 				
 			});
-			exService.execute(new Runnable(){
+			_executionService.execute(new Runnable(){
 
 				@Override
 				public void run() {
-					BufferedReader reader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+					BufferedReader reader = new BufferedReader(new InputStreamReader(_process.getErrorStream()));
 					String line="";
 					try {
 						while ((line=reader.readLine())!=null)
 								System.err.println(line);
 						reader.close();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						ErrorWriterDevice.getInstance().showError( getClass().getName(),e.getLocalizedMessage(), e );
 					}
 					
 				}
@@ -268,9 +296,33 @@ abstract class ProgramArgsTab extends ContainerTab{
 			onStart();
 			
 		
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		}catch (IOException |ASCoDTException e) {
+			if(_process!=null)
+				_process.destroy();
+			ErrorWriterDevice.getInstance().showError( getClass().getName(),e.getLocalizedMessage(), e );
 		}
+	}
+	public void processFinished(int returnValue) throws de.tum.ascodt.utils.exceptions.ASCoDTException{
+		if(_process!=null)
+		_process=null;
+		if(_executionService!=null && returnValue!=0){
+			_executionService.shutdownNow();
+			_executionService=null;
+		}
+	}
+	/**
+	 * clear running processes
+	 */
+	@Override
+	public void dispose() {
+		_exitDetector.removeListener(this);
+		if(_process!=null){
+			if(_executionService!=null&&!_executionService.isShutdown()){
+				_executionService.shutdownNow();
+				_executionService=null;
+			}
+			_process.destroy();
+		}
+		super.dispose();
 	}
 }

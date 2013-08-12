@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.URL;
 
 import de.tum.ascodt.plugin.services.SocketService;
+import de.tum.ascodt.plugin.utils.ProcessExitDetector;
+import de.tum.ascodt.plugin.utils.ProcessListener;
 import de.tum.ascodt.repository.entities.SocketComponent;
 import de.tum.ascodt.utils.TemplateFile;
 import de.tum.ascodt.utils.exceptions.ASCoDTException;
@@ -31,7 +33,7 @@ public class CreateSocketComponent {
 	}
 	public void apply() throws ASCoDTException{
 		_templateFileForSocketComponent.addMapping( "__SOCKET_COMPONENT__",SocketComponent.class.getCanonicalName());
-				
+		_templateFileForSocketComponent.addMapping( "__PROCESS_LISTENER__",ProcessListener.class.getCanonicalName());
 		_templateFileForSocketComponent.addMapping( "__SOCKET_SERVICE__", SocketService.class.getCanonicalName() );
 		_templateFileForSocketComponent.open();
 		_templateFileForSocketComponent.close();

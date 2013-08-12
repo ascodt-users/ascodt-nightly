@@ -13,6 +13,7 @@ public class __COMPONENT_NAME__JavaNativeImplementation extends __COMPONENT_NAME
     super(identifier);
   }
   
+ 
   
   public boolean isValid() {
     // @todo Insert your code here
