@@ -5,24 +5,26 @@
 //
 // Authors: Tobias Weinzierl, Atanas Atanasov   
 //
-package de.tum.charts;
+package grs;
 
 
-public class LinePlotterJavaImplementation extends LinePlotterBasisJavaImplementation {
-  
-  public LinePlotterJavaImplementation( String identifier ) {
+public class QuaboxJavaImplementation extends QuaboxBasisJavaImplementation {
+  private QuaboxUI _ui;
+
+public QuaboxJavaImplementation( String identifier ) {
     super(identifier);
-    _ui = new LinePlotterUI(this);
-    _ui.setVisible(false);
+    _ui= new QuaboxUI(this);
   }
   
   
   public boolean isValid() {
+    // @todo Insert your code here
     return true;
   }
 
 
   public boolean hasGUI() {
+    // @todo Insert your code here
     return true;
   }
   
@@ -37,9 +39,8 @@ public class LinePlotterJavaImplementation extends LinePlotterBasisJavaImplement
   }
 
   public void destroy(){
-	  _ui.dispose();
-	  super.destroy();
-     
+     super.destroy();
+     _ui.dispose();
   }
 
 }

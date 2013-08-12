@@ -5,41 +5,42 @@
 //
 // Authors: Tobias Weinzierl, Atanas Atanasov   
 //
-package de.tum.charts;
+package grs;
 
 
-public class LinePlotterJavaImplementation extends LinePlotterBasisJavaImplementation {
-  
-  public LinePlotterJavaImplementation( String identifier ) {
+public class AthletJavaImplementation extends AthletBasisJavaImplementation {
+  private AthletUI _ui;
+
+public AthletJavaImplementation( String identifier ) {
     super(identifier);
-    _ui = new LinePlotterUI(this);
-    _ui.setVisible(false);
+    _ui= new AthletUI(this);
   }
   
   
   public boolean isValid() {
+    // @todo Insert your code here
     return true;
   }
 
 
   public boolean hasGUI() {
+    // @todo Insert your code here
     return true;
   }
   
   
   public void openGUI() {
-	  _ui.setVisible(true);
+   _ui.setVisible(true);
   }
   
   
   public void closeGUI() {
-	  _ui.setVisible(false);
+    _ui.setVisible(false);
   }
 
   public void destroy(){
-	  _ui.dispose();
-	  super.destroy();
-     
+     super.destroy();
+     _ui.dispose();
   }
 
 }
