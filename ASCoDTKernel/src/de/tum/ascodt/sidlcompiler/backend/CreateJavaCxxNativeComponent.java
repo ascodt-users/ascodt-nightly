@@ -26,8 +26,8 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * @author Atanas Atanasov
  *
  */
-public class CreateJavaNativeComponent extends de.tum.ascodt.sidlcompiler.frontend.analysis.DepthFirstAdapter{
-	private Trace                      _trace = new Trace(CreateJavaNativeComponent.class.getCanonicalName());
+public class CreateJavaCxxNativeComponent extends de.tum.ascodt.sidlcompiler.frontend.analysis.DepthFirstAdapter{
+	private Trace                      _trace = new Trace(CreateJavaCxxNativeComponent.class.getCanonicalName());
 	private java.util.Stack< TemplateFile >   _templateFilesOfAbstractImplementation;
 	private java.util.Stack< TemplateFile >   _templateFilesOfPlainImplementation;
 	private URL                               _userImplementationsDestinationDirectory;
@@ -45,7 +45,7 @@ public class CreateJavaNativeComponent extends de.tum.ascodt.sidlcompiler.fronte
 	private boolean                           _generateProvidesMethods;
 	private String _fullQualifiedName;
 
-	CreateJavaNativeComponent(SymbolTable symbolTable, URL userImplementationsDestinationDirectory
+	CreateJavaCxxNativeComponent(SymbolTable symbolTable, URL userImplementationsDestinationDirectory
 			,URL generatedFilesDirectory,URL nativeDirectory, String[] namespace) {
 		_templateFilesOfAbstractImplementation  = new java.util.Stack< TemplateFile >();
 		_templateFilesOfPlainImplementation     = new java.util.Stack< TemplateFile >();
@@ -63,11 +63,11 @@ public class CreateJavaNativeComponent extends de.tum.ascodt.sidlcompiler.fronte
 			String  componentName              = node.getName().getText();
 			String fullQualifiedNameOfTheAbstractComponentImplementation = _symbolTable.getScope(node).getFullQualifiedName(componentName) + "AbstractJavaNativeImplementation";
 			_fullQualifiedName													 = _symbolTable.getScope(node).getFullQualifiedName(componentName) ;
-			String  templateFileForAbstractComponentImplementation       = "java-native-component-abstract-java-implementation.template";
+			String  templateFileForAbstractComponentImplementation       = "java-cxx-native-component-abstract-java-implementation.template";
 			String  templateFileForComponentImplementation               = "java-native-component-java-implementation.template";
 		
-			String  destinationFileForAbstractComponentImplementation    = _userImplementationsDestinationDirectory.toString() + File.separatorChar + fullQualifiedNameOfTheAbstractComponentImplementation.replaceAll("[.]", "/") + ".java";
-			String  destinationFileForComponentImplementation            = _userImplementationsDestinationDirectory.toString() + File.separatorChar + _fullQualifiedName.replaceAll("[.]", "/") + "JavaNativeImplementation.java";
+			String  destinationFileForAbstractComponentImplementation    = _generatedFilesDirectory.toString() + File.separatorChar + fullQualifiedNameOfTheAbstractComponentImplementation.replaceAll("[.]", "/") + ".java";
+			String  destinationFileForComponentImplementation            = _userImplementationsDestinationDirectory.toString() + File.separatorChar + _fullQualifiedName.replaceAll("[.]", "/") + "JavaImplementation.java";
 			_templateFilesOfAbstractImplementation.push( 
 					new TemplateFile( templateFileForAbstractComponentImplementation, destinationFileForAbstractComponentImplementation, _namespace, TemplateFile.getLanguageConfigurationForJava(),true)
 					);
@@ -104,7 +104,7 @@ public class CreateJavaNativeComponent extends de.tum.ascodt.sidlcompiler.fronte
 	 * @return
 	 */
 	public String getFullQualifiedNameOfTheComponentImplementation() {
-		return _fullQualifiedName+"JavaNativeImplementation";
+		return _fullQualifiedName+"JavaImplementation";
 	}
 
 
@@ -141,7 +141,7 @@ public class CreateJavaNativeComponent extends de.tum.ascodt.sidlcompiler.fronte
 
 			String portType = getPorts.getUsesPorts("", ".");
 			String portName = node.getAs().getText();
-			String templateFile    = "java-native-component-abstract-java-implementation-uses-port.template";
+			String templateFile    = "java-cxx-native-component-abstract-java-implementation-uses-port.template";
 			TemplateFile template = new TemplateFile( _templateFilesOfAbstractImplementation.peek(), templateFile );
 			template.addMapping( "__USES_PORT_AS__",   portName );
 			template.addMapping( "__USES_PORT_TYPE__", portType );
@@ -159,8 +159,8 @@ public class CreateJavaNativeComponent extends de.tum.ascodt.sidlcompiler.fronte
 	public void inAOperation(AOperation node) {
 		Assert.isTrue( _generateProvidesMethods );
 		try {        
-			String templateJavaImplementationFile    = "java-native-component-java-implementation-provides-port.template";
-			TemplateFile javaImplementationTemplate = new TemplateFile( _templateFilesOfPlainImplementation.peek(), templateJavaImplementationFile );
+			String templateJavaImplementationFile    = "java-cxx-native-component-java-implementation-provides-port.template";
+			TemplateFile javaImplementationTemplate = new TemplateFile( _templateFilesOfAbstractImplementation.peek(), templateJavaImplementationFile );
 			
 			ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
 			node.apply( onlyInParameters );

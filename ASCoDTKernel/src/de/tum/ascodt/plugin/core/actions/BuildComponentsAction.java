@@ -49,7 +49,16 @@ public class BuildComponentsAction implements IWorkbenchWindowActionDelegate {
 
 
 			if(dialog.open()==SWT.OK){
-				ProjectBuilder.getInstance().getProject(project).compileComponents();
+			
+				try {
+					ProjectBuilder.getInstance().removeProject(project);
+					System.gc();
+					ProjectBuilder.getInstance().createProject(project);
+					ProjectBuilder.getInstance().getProject(project).compileComponents();
+				} catch (ASCoDTException e) {
+					ErrorWriterDevice.getInstance().showError( getClass().getName(), "prepareProject()", "Cannot create project representation object due to " + e.getCause(), e );
+				}
+				
 				
 			}
 		}

@@ -1,5 +1,6 @@
 package de.tum.ascodt.plugin.repository;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -101,5 +102,11 @@ public class ClasspathRepository extends URLClassLoader {
 	public boolean findCCAClass(final String name){
 		return (this.findLoadedClass(name)!=null);
 	}
-
+	protected void finalize(){
+		System.out.println("classpath removed");
+	}
+  public void close() throws IOException{
+  	_project=null;
+  	super.close();
+  }
 }

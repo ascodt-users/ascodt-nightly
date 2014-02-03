@@ -8,11 +8,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
 public class ProjectContentProvider implements IStructuredContentProvider {
-	ComboViewer _viewer;
-	@Override
-	public void dispose() {
-		_viewer=null;
-	}
+	
 
 	@Override
 	public void inputChanged(final Viewer viewer, Object oldInput, Object newInput) {
@@ -39,13 +35,13 @@ public class ProjectContentProvider implements IStructuredContentProvider {
       return new Object[0];
   }
 
-	public void setViewer(ComboViewer combo) {
-		_viewer=combo;
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
 	}
+
 	
-	public ComboViewer getViewer(){
-		return _viewer;
-	}
 	
 
 }

@@ -5,6 +5,7 @@ subroutine __COMPONENT_NAME___fproxy___OPERATION_NAME__(this__OPERATION_PARAMETE
     Type( c_ptr ),intent(in) :: this
     type( __COMPONENT_NAME__Implementation ),pointer :: pt
     __PARAMETER_LIST_TYPES_INTENTS__
+    __PARAMETER_LIST_CONV__
     call c_f_pointer(this,pt)
     call pt%__OPERATION_NAME__(__FUNCTION_CALL_PARAMETERS_LIST__)
 end subroutine __COMPONENT_NAME___fproxy___OPERATION_NAME__

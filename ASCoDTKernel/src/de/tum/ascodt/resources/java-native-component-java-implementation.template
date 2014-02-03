@@ -8,8 +8,8 @@
 __OPEN_PACKAGE__;
 
 
-public class __COMPONENT_NAME__JavaNativeImplementation extends __COMPONENT_NAME__AbstractJavaNativeImplementation {
-  public __COMPONENT_NAME__JavaNativeImplementation( String identifier ) {
+public class __COMPONENT_NAME__JavaImplementation extends __COMPONENT_NAME__AbstractJavaNativeImplementation {
+  public __COMPONENT_NAME__JavaImplementation( String identifier ) {
     super(identifier);
   }
   
@@ -37,7 +37,7 @@ public class __COMPONENT_NAME__JavaNativeImplementation extends __COMPONENT_NAME
   }
 
   public void destroy(){
-    
+    super.destroy();
   }
   -- INSERT HERE --
 

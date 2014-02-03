@@ -84,10 +84,7 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 			ProjectBuilder.getInstance().createProject(project);
 		} catch (ASCoDTException e) {
 			ErrorWriterDevice.getInstance().showError( getClass().getName(), "prepareProject()", "Cannot create project representation object due to " + e.getCause(), e );
-
-		} catch (MalformedURLException e) {
-			ErrorWriterDevice.getInstance().showError( getClass().getName(), "prepareProject()", "Cannot create project representation object due to " + e.getCause(), e );
-		}	
+		}
 	}
 
 

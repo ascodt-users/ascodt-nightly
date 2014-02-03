@@ -25,11 +25,12 @@ public class __PORT_NAME__Native2JavaPlainPort extends __PORT_NAME__AbstractPort
    * @see Operation with name of any implementing component 
    */
   public void disconnect(__PORT_NAME__  port) throws de.tum.ascodt.utils.exceptions.ASCoDTException {
-     destroyInstance(_ref);
      super.disconnect(port);
   }
   
-  
+  public void destroy(){
+     destroyInstance(_ref);    
+  }
   public long getReference(){
     return _ref;
   }  

@@ -29,12 +29,12 @@ public class ASCoDTNavigatorContentProvider implements ITreeContentProvider, Pro
 	 * Costructor: here we register the provider as changed lister to the projectbuilder
 	 */
 	public ASCoDTNavigatorContentProvider(){
-		ProjectBuilder.getInstance().registerProjectChangedListener(this);
+		ProjectBuilder.getInstance().registerProjectsChangedListener(this);
 	}
 	
 	@Override
 	public void dispose() {
-		ProjectBuilder.getInstance().removeProjectChangedListener(this);
+		ProjectBuilder.getInstance().removeProjectsChangedListener(this);
 	}
 
 	@Override

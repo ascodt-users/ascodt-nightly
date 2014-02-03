@@ -142,7 +142,7 @@ newsockfd,int bufferSize){
      //clear buffer
      bzero(sendBuffer,bufferSize);
      while(total_send_bytes<numberOfBytes){
-          remaining_bytes_to_send=(numberOfBytes-send_bytes<=bufferSize)?numberOfBytes-send_bytes:bufferSize;
+          remaining_bytes_to_send=(numberOfBytes-total_send_bytes<=bufferSize)?numberOfBytes-total_send_bytes:bufferSize;
           memcpy(sendBuffer,data_ptr,remaining_bytes_to_send);
           send_bytes=0;
           char* send_buffer_ptr=sendBuffer;
@@ -344,7 +344,7 @@ void initialise_(__COMPONENT_NAME_ENV___arg& arg){
 #endif
    const char* client_port = getenv("__COMPONENT_NAME_ENV___PORT"); 
    const char* daemon_port = getenv("__COMPONENT_NAME_ENV___DAEMON_PORT");
-   const char* buffer_size = getenv("__COMPONENT_NAME_ENV___SIZE");
+   const char* buffer_size = getenv("__COMPONENT_NAME_ENV___BUFFER_SIZE");
    const char* hostname = getenv("__COMPONENT_NAME_ENV___HOSTNAME");
    const char* java_client_flag = getenv("__COMPONENT_NAME_ENV___JAVA");
    arg.buffer_size = (buffer_size!=NULL)?atoi(buffer_size):4096;
@@ -352,6 +352,12 @@ void initialise_(__COMPONENT_NAME_ENV___arg& arg){
    arg.client_port = (client_port!=NULL)?client_port:"50000";
    arg.daemon_port = (daemon_port!=NULL)?daemon_port:"50001";
    arg.java_client_flag=(java_client_flag!=NULL&&strcmp(java_client_flag,"off")==0)?false:true;
+   std::cout<<"client configuration:"<<std::endl;
+   std::cout<<"java client port:"<<client_port<<std::endl;
+   std::cout<<"java client hostname:"<<hostname<<std::endl;
+   std::cout<<"server daemon port:"<<daemon_port<<std::endl;
+   std::cout<<"socket buffer size:"<<buffer_size<<std::endl;
+   std::cout<<"java client falg:"<<java_client_flag<<std::endl;
    
    invoker_create_instance(&arg.ref,0,0,NULL,NULL);
    if(arg.java_client_flag)         
@@ -408,6 +414,7 @@ void main_loop_(){
   __COMPONENT_NAME_ENV___arg daemon_args;
 #ifdef _WIN32
   INITIALISE(daemon_args);
+  SOCKET_LOOP(daemon_args);
   DESTROY(daemon_args);     
 #else  
   initialise_(daemon_args);
@@ -417,28 +424,6 @@ void main_loop_(){
   
 }
 
-#ifdef _WIN32
-void DESTROY(__COMPONENT_NAME_ENV___arg& arg){
-#else
-void destroy_(__COMPONENT_NAME_ENV___arg& arg){
-#endif
-#ifdef _WIN32
-  closesocket(arg.daemon_serverfd);
-  if(arg.java_client_flag)
-     closesocket(arg.java_serverfd);    
-#else
-  close(arg.daemon_serverfd);
-  if(arg.java_client_flag)
-     close(arg.java_serverfd);
-#endif
-  
-  
-   
-#ifdef _WIN32
-  WSACleanup();
-#endif   
-
-}
 
 
 }

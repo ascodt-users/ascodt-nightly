@@ -1,0 +1,6 @@
+SET(SRC_COMP
+     ../../components/java/__PATH_FULL_QUALIFIED_NAME__JNIProxy.cpp
+     ../../components/java/__PATH_FULL_QUALIFIED_NAME__AbstractImplementation.cpp
+     ../../src/__PATH_FULL_QUALIFIED_NAME__Implementation.cpp)
+
+-- INSERT HERE --

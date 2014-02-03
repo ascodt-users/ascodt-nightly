@@ -37,10 +37,14 @@
     if (target.getType()==de.tum.ascodt.repository.Target.TargetType.JavaNative) {
       result = new __USES_PORT_TYPE__Native2NativePlainPort();
     }
-    if (target.getType()==de.tum.ascodt.repository.Target.TargetType.FortranRemoteSocket) {
+    if (target.getType()==de.tum.ascodt.repository.Target.TargetType.FortranNative) {
+        result = new __USES_PORT_TYPE__Native2JavaPlainPort();
+    }
+  
+    /*if (target.getType()==de.tum.ascodt.repository.Target.TargetType.FortranRemoteSocket) {
       result = new __USES_PORT_TYPE__Native2SocketClientPlainPort();
     }
-    /*if (target.getType() == de.tum.ascodt.repository.Target.TargetType.CxxRemoteSocket){
+    if (target.getType() == de.tum.ascodt.repository.Target.TargetType.CxxRemoteSocket){
       result = new __USES_PORT_TYPE__Cxx2CxxRemoteSocketPort();
     }
     if (target.getType() == de.tum.ascodt.repository.Target.TargetType.ReverseCxxRemoteSocket){
@@ -66,8 +70,10 @@
     
     if(!___USES_PORT_AS__.isConnected()){
       disconnect__USES_PORT_AS__(_ref);
+      ___USES_PORT_AS__.destroy();
       ___USES_PORT_AS__ = null;
     }
   }
+  
   
    private native void disconnect__USES_PORT_AS__(long ref);

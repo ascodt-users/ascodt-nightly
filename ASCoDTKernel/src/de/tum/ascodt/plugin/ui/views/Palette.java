@@ -32,6 +32,7 @@ import org.eclipse.ui.wizards.IWizardDescriptor;
 
 import de.tum.ascodt.plugin.project.Project;
 import de.tum.ascodt.plugin.project.ProjectBuilder;
+import de.tum.ascodt.plugin.project.ProjectChangedListener;
 import de.tum.ascodt.plugin.ui.palette.ContextMenuProvider;
 import de.tum.ascodt.plugin.ui.palette.PaletteFactory;
 import de.tum.ascodt.plugin.ui.wizards.NewComponentWizard;
@@ -48,7 +49,7 @@ import org.eclipse.jface.viewers.LabelProvider;
  * 
  *
  */
-public class Palette extends ViewPart implements RepositoryListener {
+public class Palette extends ViewPart implements RepositoryListener, ProjectChangedListener{
 	public static String ID = Palette.class.getCanonicalName();
 
 	/**
@@ -65,6 +66,7 @@ public class Palette extends ViewPart implements RepositoryListener {
 	
 
 	private ComboViewer combo;
+	private ProjectContentProvider _projectContentProvider;
 	private Project _lastSelection;
 
 	/**
@@ -72,14 +74,14 @@ public class Palette extends ViewPart implements RepositoryListener {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
-
+		_projectContentProvider = new ProjectContentProvider();
 		_paletteViewer = new PaletteViewer();
 		_paletteViewer.createControl(parent);
 		
 		configurePaletteViewer();
 		initializePaletteViewer();
 		createToolbar();
-		ProjectBuilder.getInstance().setPalette(this);
+		
 	}
 
 
@@ -99,9 +101,7 @@ public class Palette extends ViewPart implements RepositoryListener {
 			@Override
 			protected Control createControl(Composite parent) {
 				combo = new ComboViewer(parent,SWT.None);
-				ProjectContentProvider provider=(ProjectContentProvider) ProjectBuilder.getInstance().getProjectsContentProvider();
-				provider.setViewer(combo);
-				combo.setContentProvider(provider);
+				combo.setContentProvider(_projectContentProvider);
 				combo.setInput(ProjectBuilder.getInstance().getProjects());
 				combo.setLabelProvider(new LabelProvider(){
 					@Override
@@ -214,6 +214,7 @@ public class Palette extends ViewPart implements RepositoryListener {
 			}
 
 		});
+		this._projectContentProvider.inputChanged(combo, null, null);
 	}
 
 	public void deleteSelectedItem(){
@@ -267,6 +268,13 @@ public class Palette extends ViewPart implements RepositoryListener {
 	
 	public PaletteViewer getViewer() {
 		return _paletteViewer;
+	}
+
+
+	@Override
+	public void notify(Project project) {
+		
+		
 	}
 	
 	

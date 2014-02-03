@@ -274,7 +274,7 @@ public class CreateCxxComponent extends de.tum.ascodt.sidlcompiler.frontend.anal
 	public void inAInterfacePackageElement(AInterfacePackageElement node){
 		if (_generateProvidesMethods) {
 			String fullQualifiedSymbolName = _symbolTable.getScope(node).getFullQualifiedName(Scope.getSymbol(node));
-			_providePortsIncludes+="#include \""+_generatedFilesDirectory.getPath().toString()+fullQualifiedSymbolName.replaceAll("[.]", "/")+".h\"\n";
+			_providePortsIncludes+="#include \""+fullQualifiedSymbolName.replaceAll("[.]", "/")+".h\"\n";
 			_providePortsInterfaces+= _delimiter+fullQualifiedSymbolName.replaceAll("[.]", "::");
 			_delimiter=",";
 		}

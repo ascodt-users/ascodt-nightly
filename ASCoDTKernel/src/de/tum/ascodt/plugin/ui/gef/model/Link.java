@@ -33,12 +33,12 @@ public class Link extends ModelElement{
 	private boolean isConnected;
 	/** Line drawing style for this link. */
 	private int lineStyle = Graphics.LINE_DASH;
-	/** Link's source */
-	private Component source;
 	/** Link's target */
 	private StickyNote target;
 	
 	private Class<?> type;
+
+	private Component source;
 	static {
 		descriptors[0] = new ComboBoxPropertyDescriptor(LINESTYLE_PROP, LINESTYLE_PROP, 
 				new String[] {DASH_STR});

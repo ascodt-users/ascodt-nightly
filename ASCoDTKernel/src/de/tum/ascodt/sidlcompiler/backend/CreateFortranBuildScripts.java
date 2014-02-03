@@ -6,6 +6,7 @@ import java.net.URL;
 import org.eclipse.core.runtime.Assert;
 
 import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
+import de.tum.ascodt.repository.Target;
 import de.tum.ascodt.sidlcompiler.astproperties.GetProvidesAndUsesPortsOfComponent;
 import de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement;
 import de.tum.ascodt.sidlcompiler.frontend.node.AUses;
@@ -21,21 +22,27 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
 public class CreateFortranBuildScripts extends de.tum.ascodt.sidlcompiler.frontend.analysis.DepthFirstAdapter{
 	private java.util.Stack< TemplateFile >   _templateFilesOfFortranMakefile;
 	private java.util.Stack< TemplateFile >   _templateFilesOfFortranCMakefile;
+
+	private java.util.Stack< TemplateFile >   _templateFilesOfSourcesFortranCMakefile;
+	private java.util.Stack< TemplateFile >   _templateFilesOfTargetsFortranCMakefile;
 	private URL                               _userImplementationsDestinationDirectory;
 	private URL 							  							_generatedFilesDirectory;
-	
+
 	private String[]                          _namespace;
 	private SymbolTable                       _symbolTable;
+	private Target 													  _target;
 
-
-	CreateFortranBuildScripts(SymbolTable symbolTable, URL userImplementationsDestinationDirectory
+	CreateFortranBuildScripts(Target target, SymbolTable symbolTable, URL userImplementationsDestinationDirectory
 			,URL generatedFilesDirectory,URL nativeDirectory, String[] namespace){
 		_templateFilesOfFortranMakefile  = new java.util.Stack< TemplateFile >();
 		_templateFilesOfFortranCMakefile = new java.util.Stack< TemplateFile >();
+		_templateFilesOfSourcesFortranCMakefile = new java.util.Stack< TemplateFile >();
+		_templateFilesOfTargetsFortranCMakefile = new java.util.Stack< TemplateFile >();
 		_userImplementationsDestinationDirectory = userImplementationsDestinationDirectory;
 		_generatedFilesDirectory  = generatedFilesDirectory;
 		_namespace            = namespace;
 		_symbolTable          = symbolTable;
+		_target=target;
 	}
 
 	public void inAClassPackageElement(AClassPackageElement node) {
@@ -47,6 +54,24 @@ public class CreateFortranBuildScripts extends de.tum.ascodt.sidlcompiler.fronte
 			String  destinationFileForFortranMakefile							 = _userImplementationsDestinationDirectory.toString() + File.separatorChar + "Makefile."+componentName;
 			String  templateFileForFortranCMakefile 						     = "cmakefile-fortran.template";
 			String  destinationFileForFortranCMakefile							 = _userImplementationsDestinationDirectory.toString() + File.separatorChar + "cmake-"+fullQualifiedName+ File.separatorChar +"CMakeLists.txt";
+			String  templateFileForSourcesCmakefile							 = "" ;
+			String  templateFileForTargetsCmakefile							 = "" ;
+			switch(_target.getType()){
+			case FortranNative: 
+				templateFileForSourcesCmakefile = "cmakefile-sources-native-fortran.template";
+				templateFileForTargetsCmakefile = "cmakefile-targets-native-fortran.template";
+
+				break;
+			case ReverseFortranRemoteSocket: 
+				templateFileForSourcesCmakefile = "cmakefile-sources-remote-fortran.template";
+				templateFileForTargetsCmakefile = "cmakefile-targets-remote-fortran.template";
+
+				break;
+			default: break;
+			}
+			String  destinationFileForSourcesFortranCMakefile							 = _userImplementationsDestinationDirectory.toString() + File.separatorChar + "cmake-"+fullQualifiedName+ File.separatorChar +"sources.cmake";
+			String  destinationFileForTargetsFortranCMakefile							 = _userImplementationsDestinationDirectory.toString() + File.separatorChar + "cmake-"+fullQualifiedName+ File.separatorChar +"targets.cmake";
+			
 			
 			
 			_templateFilesOfFortranMakefile.push(
@@ -55,12 +80,22 @@ public class CreateFortranBuildScripts extends de.tum.ascodt.sidlcompiler.fronte
 			_templateFilesOfFortranCMakefile.push(
 					new TemplateFile( templateFileForFortranCMakefile, destinationFileForFortranCMakefile, _namespace, TemplateFile.getLanguageConfigurationForCPP(),false)
 					);
+			_templateFilesOfSourcesFortranCMakefile.push(
+					new TemplateFile(templateFileForSourcesCmakefile, destinationFileForSourcesFortranCMakefile, _namespace, TemplateFile.getLanguageConfigurationForCPP(),true)
+					);
+			_templateFilesOfTargetsFortranCMakefile.push(
+					new TemplateFile(templateFileForTargetsCmakefile, destinationFileForTargetsFortranCMakefile, _namespace, TemplateFile.getLanguageConfigurationForCPP(),false)
+					);
 			createComponentMappings(componentName, fullQualifiedName,_templateFilesOfFortranMakefile);
 			createComponentMappings(componentName, fullQualifiedName,_templateFilesOfFortranCMakefile);
-			
+			createComponentMappings(componentName, fullQualifiedName,_templateFilesOfSourcesFortranCMakefile);
+
+			createComponentMappings(componentName, fullQualifiedName,_templateFilesOfTargetsFortranCMakefile);
 			_templateFilesOfFortranMakefile.peek().addMapping( "__TAB__","\t");
 			_templateFilesOfFortranMakefile.peek().open();
 			_templateFilesOfFortranCMakefile.peek().open();
+			_templateFilesOfSourcesFortranCMakefile.peek().open();
+			_templateFilesOfTargetsFortranCMakefile.peek().open();
 		}catch (ASCoDTException  e ) {
 			ErrorWriterDevice.getInstance().showError(getClass().getName(), "inAInterfacePackageElement(...)", e);
 		}
@@ -81,10 +116,15 @@ public class CreateFortranBuildScripts extends de.tum.ascodt.sidlcompiler.fronte
 	public void outAClassPackageElement(AClassPackageElement node) {
 		Assert.isTrue( _templateFilesOfFortranMakefile.size()==1 );
 		Assert.isTrue( _templateFilesOfFortranCMakefile.size()==1 );
+		Assert.isTrue( _templateFilesOfSourcesFortranCMakefile.size()==1 );
+
+		Assert.isTrue( _templateFilesOfTargetsFortranCMakefile.size()==1 );
 
 		try {
 			_templateFilesOfFortranMakefile.peek().close();
 			_templateFilesOfFortranCMakefile.peek().close();
+			_templateFilesOfSourcesFortranCMakefile.peek().close();
+			_templateFilesOfTargetsFortranCMakefile.peek().close();
 		}
 		catch (ASCoDTException  e ) {
 			ErrorWriterDevice.getInstance().showError(getClass().getName(), "inAInterfacePackageElement(...)", e);
@@ -92,6 +132,8 @@ public class CreateFortranBuildScripts extends de.tum.ascodt.sidlcompiler.fronte
 
 		_templateFilesOfFortranMakefile.pop();
 		_templateFilesOfFortranCMakefile.pop();
+		_templateFilesOfSourcesFortranCMakefile.pop();
+		_templateFilesOfTargetsFortranCMakefile.pop();
 	}
 
 	/**
@@ -110,7 +152,7 @@ public class CreateFortranBuildScripts extends de.tum.ascodt.sidlcompiler.fronte
 			templateMakefile.addMapping("__USES_PORT_PATH__",portTypePath);
 			templateMakefile.open();
 			templateMakefile.close();
-			TemplateFile templateCMakefile = new TemplateFile( _templateFilesOfFortranCMakefile.peek(), templateCMakefileName );
+			TemplateFile templateCMakefile = new TemplateFile( _templateFilesOfSourcesFortranCMakefile.peek(), templateCMakefileName );
 			templateCMakefile.addMapping("__USES_PORT_PATH__",portTypePath);
 			templateCMakefile.open();
 			templateCMakefile.close();

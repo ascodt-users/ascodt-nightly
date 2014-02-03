@@ -12,6 +12,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import de.tum.ascodt.plugin.project.ProjectBuilder;
 //TODO import de.tum.ascodt.plugin.core.model.CCAClasspathRepository;
 import de.tum.ascodt.plugin.ui.gef.model.Port;
 
@@ -40,7 +41,7 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder{
 	private Port matchingPort;
 	protected Vector<RectangleFigure> usePortsFigs;
 	protected Vector<RectangleFigure> providePortsFigs;
-	protected ClassLoader _classLoader;
+	private String _projectName;
 	public ComponentBorder(
 			boolean isRemote,
 			Figure parent,
@@ -48,7 +49,7 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder{
 			Vector<Port> providePorts, 
 			Vector<RectangleFigure> input,
 			Vector<RectangleFigure> output,
-			ClassLoader classLoader){
+			String projectName){
 		super();
 		//TODO this.rep=rep;
 		//this.isRemote=isRemote;
@@ -63,7 +64,7 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder{
 		usePortsFigs=output;
 		providePortsFigs=input;
 		anchorSize=new int[2];
-		_classLoader=classLoader;
+		_projectName=projectName;
 		createConnectionAnchors(parent.getBounds().getCopy());
 
 
@@ -98,17 +99,19 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder{
 	private boolean checkIfClassesCompotible(String classUsePort,String classProvidePort){
 		Class<?> usePortClass=null;
 		Class<?> providePortClass=null;
+		boolean res=false;
 		try {
-		
-			usePortClass =_classLoader.loadClass(classUsePort);
+		  
+			usePortClass =ProjectBuilder.getInstance().getProject(_projectName).getClasspathRepository().loadClass(classUsePort);
 
-			providePortClass=_classLoader.loadClass(classProvidePort);
-		} catch (ClassNotFoundException e) {
+			providePortClass=ProjectBuilder.getInstance().getProject(_projectName).getClasspathRepository().loadClass(classProvidePort);
+		  res = usePortClass!=null&&providePortClass!=null && usePortClass.isAssignableFrom(providePortClass);
+		  usePortClass=null;
+		  providePortClass=null;
+		} catch (ClassNotFoundException e) { 
 			e.printStackTrace();
 		}	
-		if(usePortClass!=null&&providePortClass!=null)
-			return usePortClass.isAssignableFrom(providePortClass);
-		return true;
+		return res; 
 	}
 	/**
 	 * draws boxes for the different connectors and creates

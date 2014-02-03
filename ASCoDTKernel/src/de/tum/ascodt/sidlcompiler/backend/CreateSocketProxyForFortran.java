@@ -257,6 +257,7 @@ public class CreateSocketProxyForFortran extends de.tum.ascodt.sidlcompiler.fron
 
 			fortranProxyImplementationTemplate.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",parameterList.getFunctionCallListInFServer().replaceFirst(",",""));
 			fortranProxyImplementationTemplate.addMapping("__PARAMETER_LIST_TYPES_INTENTS__", parameterList.getParameterListTypesForFCBindedFromC());
+			fortranProxyImplementationTemplate.addMapping("__PARAMETER_LIST_CONV__",parameterList.getParameterListC2FConversions());	
 			//			_templateFilesProvidesPorts.add(jniProxyImplementationTemplate);
 			//			jniProxyImplementationHeaderTemplate.open();
 			//			jniProxyImplementationHeaderTemplate.close();

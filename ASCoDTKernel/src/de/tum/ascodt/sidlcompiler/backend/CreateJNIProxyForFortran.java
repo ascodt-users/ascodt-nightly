@@ -199,19 +199,23 @@ public class CreateJNIProxyForFortran extends de.tum.ascodt.sidlcompiler.fronten
 			
 			jniProxyImplementationTemplate.addMapping( "__JNI_FULL_QUALIFIED_NAME__",_fullQualifiedName.replaceAll("[.]", "_"));
 			jniProxyImplementationTemplate.addMapping("__CXX_FULL_QUALIFIED_NAME__",_fullQualifiedName.replaceAll("[.]", "::"));
-			jniProxyImplementationTemplate.addMapping("__START_METHOD_CALL__",parameterList.prepareJNIParametersForCxxCall());
-			jniProxyImplementationTemplate.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",parameterList.getFunctionCallListInJNI2Cxx());
+			jniProxyImplementationTemplate.addMapping("__START_METHOD_CALL__",
+					parameterList.prepareJNIParametersForCxxCall()
+					+ parameterList.convertC2F()
+					);
+			String parameters= "";
+			parameters=parameterList.getFunctionCallListInJNI2Cxx();
+			if(parameters.length()>0)
+				parameters=","+parameters;
+			jniProxyImplementationTemplate.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",parameters);
 			jniProxyImplementationTemplate.addMapping("__END_METHOD_CALL__", parameterList.writeCxxParamatersFromJNIProvideCall());
 			jniProxyImplementationTemplate.addMapping("__OPERATION_PARAMETERS_LIST_C2F__",parameterList.getParameterListInC2F());
-			
 			fortranProxyImplementationTemplate.addMapping("__OPERATION_NAME__", node.getName().getText());
-			String parameterListF=parameterList.getParameterListInF(onlyInParameters.areAllParametersInParameters()) ;
-			if(!parameterListF.equals(""))
-				parameterListF+=",";
-			fortranProxyImplementationTemplate.addMapping("__OPERATION_PARAMETERS_LIST__",parameterListF);
+		  fortranProxyImplementationTemplate.addMapping("__OPERATION_PARAMETERS_LIST__",parameterList.getParameterListInF(onlyInParameters.areAllParametersInParameters()));
+			fortranProxyImplementationTemplate.addMapping("__PARAMETER_LIST_TYPES_INTENTS__", parameterList.getParameterListTypesForFCBindedFromC());
 			
-			fortranProxyImplementationTemplate.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",parameterList.getFunctionCallListInFClient(false));
-			
+			fortranProxyImplementationTemplate.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",parameterList.getFunctionCallListInFServer().replaceFirst(",",""));
+			fortranProxyImplementationTemplate.addMapping("__PARAMETER_LIST_CONV__",parameterList.getParameterListC2FConversions());
 			_templateFilesProvidesPorts.add(jniProxyImplementationTemplate);
 			jniProxyImplementationHeaderTemplate.open();
 			jniProxyImplementationHeaderTemplate.close();

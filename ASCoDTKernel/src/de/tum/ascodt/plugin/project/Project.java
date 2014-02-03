@@ -178,14 +178,23 @@ public class Project {
 	 * @throws IOException 
 	 */
 	private void initiliaseClasspathRepository() throws IOException {
-		if(_classpathRepository!=null){
-			_classpathRepository.close();
-			_classpathRepository=null;
-		}
+		
 		_classpathRepository=new ClasspathRepository(_eclipseProjectHandle,ASCoDTKernel.getDefault().getClass().getClassLoader());
 		_classpathRepository.addURL(new File(_eclipseProjectHandle.getLocation().toPortableString()+"/bin").toURI().toURL());
 	}
 
+	public void destroy() {
+		Vector<IFile> instances= Project.this.closeRunningWorkbenchInstances();
+		if(_classpathRepository!=null){
+			try {
+				_classpathRepository.close();
+			} catch (IOException e) {
+				_classpathRepository=null;
+				
+			}
+			_classpathRepository=null;
+		}
+	}
 	/**
 	 * @return the _classpathRepository
 	 */
@@ -569,21 +578,21 @@ public class Project {
 	}
 
 
-	private void evaluateContributions(IExtensionRegistry registry, Set<IClasspathEntry> classpathEntries) throws CoreException, ASCoDTException{
-		IConfigurationElement[] config =
-				registry.getConfigurationElementsFor(de.tum.ascodt.plugin.extensions.Project.ID);
-
-		for (IConfigurationElement e : config) {
-
-			final Object o =
-					e.createExecutableExtension("class");
-			if (o!=null&&o instanceof de.tum.ascodt.plugin.extensions.Project) {
-				_trace.debug("evaluateContributions()","executing a contribution");
-				((de.tum.ascodt.plugin.extensions.Project)o).addClasspathEntries(classpathEntries);
-			}
-		}
-
-	}
+//	private void evaluateContributions(IExtensionRegistry registry, Set<IClasspathEntry> classpathEntries) throws CoreException, ASCoDTException{
+//		IConfigurationElement[] config =
+//				registry.getConfigurationElementsFor(de.tum.ascodt.plugin.extensions.Project.ID);
+//
+////		for (IConfigurationElement e : config) {
+////
+////			final Object o =
+////					e.createExecutableExtension("class");
+////			if (o!=null&&o instanceof de.tum.ascodt.plugin.extensions.Project) {
+////				_trace.debug("evaluateContributions()","executing a contribution");
+////				((de.tum.ascodt.plugin.extensions.Project)o).addClasspathEntries(classpathEntries);
+////			}
+////		}
+//
+//	}
 	/**
 	 * sets the default classpath entries of the ascodt project
 	 * @throws ASCoDTException 
@@ -604,17 +613,14 @@ public class Project {
 				entries.add(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("third-party-libs/swt.jar",ASCoDTKernel.ID).getPath()),null,null,false));
 			if(!entries.contains(JavaRuntime.getDefaultJREContainerEntry()))
 				entries.add(JavaRuntime.getDefaultJREContainerEntry());
-			IExtensionRegistry reg = RegistryFactory.getRegistry();
-			evaluateContributions(reg,entries);
+			//IExtensionRegistry reg = RegistryFactory.getRegistry();
+			//evaluateContributions(reg,entries);
 			javaProject.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
 		} catch (JavaModelException e) {
 			throw new ASCoDTException(getClass().getName(), "addClasspathEntries()", "adding default classpath entries to project "+_eclipseProjectHandle.getLocation().toString()+" failed", e);
 		} catch (IOException e) {
 			throw new ASCoDTException(getClass().getName(), "addClasspathEntries()", "adding default classpath entries to project "+_eclipseProjectHandle.getLocation().toString()+" failed", e);
-		} catch (CoreException e) {
-			throw new ASCoDTException(getClass().getName(), "addClasspathEntries()", "adding extensions classpath entries to project "+_eclipseProjectHandle.getLocation().toString()+" failed", e);
-
-		}
+		} 
 	}
 
 
@@ -688,12 +694,12 @@ public class Project {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					Vector<IFile> instances= Project.this.closeRunningWorkbenchInstances();
-					initiliaseClasspathRepository();
-					System.gc();
+					
+					
+				
 					compileComponents_i();
 					
-					Project.this.openWorkbenchEditors(instances);
+					//Project.this.openWorkbenchEditors(instances);
 					return Status.OK_STATUS;
 				} catch (Exception e) {
 					return Status.CANCEL_STATUS;

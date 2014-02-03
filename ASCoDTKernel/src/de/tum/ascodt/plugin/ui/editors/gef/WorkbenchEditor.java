@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
@@ -46,12 +48,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
 
 import de.tum.ascodt.plugin.ASCoDTKernel;
 import de.tum.ascodt.plugin.project.ProjectBuilder;
 import de.tum.ascodt.plugin.ui.gef.commands.ComponentDeleteCommand;
+import de.tum.ascodt.plugin.ui.gef.commands.ConnectionCommand;
 import de.tum.ascodt.plugin.ui.gef.model.Component;
+import de.tum.ascodt.plugin.ui.gef.model.Connection;
 import de.tum.ascodt.plugin.ui.gef.model.Diagram;
 import de.tum.ascodt.plugin.ui.gef.model.Geometry;
 import de.tum.ascodt.plugin.ui.views.Palette;
@@ -74,7 +80,7 @@ public class WorkbenchEditor extends GraphicalEditor {
 	private org.eclipse.jface.util.TransferDropTargetListener _templateDropListener;
 
 
-	protected PaletteViewer _paletteViewer;
+
 	public WorkbenchEditor(){
 		super();
 		setEditDomain(new DefaultEditDomain(this));
@@ -109,16 +115,17 @@ public class WorkbenchEditor extends GraphicalEditor {
 		service.activateHandler(zoomOut.getActionDefinitionId(),
 				new ActionHandler(zoomOut)); 
 		GraphicalViewer viewer = getGraphicalViewer();
-		Display.getDefault().syncExec(new Runnable(){
+		
+		getGraphicalViewer().setEditPartFactory(new EditPartsFactory(ProjectBuilder.getInstance().getProject(getProject()).getName()));
+		try {
+			Palette pallette = (Palette) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(Palette.ID);
+			getEditDomain().setPaletteViewer(pallette.getViewer());
+			pallette.setProject(ProjectBuilder.getInstance().getProject(getProject()));
+		} catch (PartInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-			@Override
-			public void run() {
-				ASCoDTKernel.getDefault();
-				getGraphicalViewer().setEditPartFactory(new EditPartsFactory(ProjectBuilder.getInstance().getProject(getProject()).getClasspathRepository()));
-				
-			}
-			
-		});
 		viewer.setRootEditPart(root);
 		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer));
 		viewer.addDropTargetListener(new TemplateTransferDropTargetListener(getGraphicalViewer()));
@@ -162,39 +169,6 @@ public class WorkbenchEditor extends GraphicalEditor {
 				_templateDropListener
 				);
 
-		//		
-		//		Display.getDefault().asyncExec(new Runnable(){
-		//
-		//
-		//
-		//			@Override
-		//			public void run() {
-		//				
-		//				
-		//				IWorkbenchWindow activeWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		//				IWorkbenchPage page = activeWindow.getActivePage();
-		//				
-		//				try {
-		//					while(activeWindow==null||page==null){
-		//						Thread.sleep(40);
-		//						activeWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		//						page = activeWindow.getActivePage();
-		//					}
-		//					if (activeWindow!=null&&page != null) {
-		//						IViewPart part;
-		//						part = page.showView(Palette.ID);
-		//						if(part!=null&&part instanceof Palette)
-		//							_paletteViewer=((Palette)part).getViewer();
-		//						getEditDomain().setPaletteViewer(_paletteViewer);
-		//					
-		//
-		//					}
-		//				} catch (Exception e) {
-		//					ErrorWriterDevice.getInstance().showError( getClass().getName(), "initializeGraphicalViewer()",  "Cannot open palette view", e );
-		//				}
-		//			}
-		//
-		//		});
 		getGraphicalViewer().setContents(_diagram);
 
 
@@ -239,7 +213,7 @@ public class WorkbenchEditor extends GraphicalEditor {
 				for(Geometry geometry:_diagram.getChildren()){
 					if(geometry instanceof Component){
 						Component component=((Component)geometry);
-					
+
 						component.reconnect();
 					}
 
@@ -271,7 +245,7 @@ public class WorkbenchEditor extends GraphicalEditor {
 	 */
 	@Override
 	protected void setInput(IEditorInput input) {
-		
+
 		super.setInput(input);
 		IFile file = ((IFileEditorInput)input).getFile();
 
@@ -304,22 +278,21 @@ public class WorkbenchEditor extends GraphicalEditor {
 	 */
 	@Override 
 	public void setFocus(){
-		Job job = new Job("Pallete Initialisation") {
+		//		Job job = new Job("Pallete Initialisation") {
+		//
+		//			@Override
+		//			protected IStatus run(IProgressMonitor monitor) {
+		//				try {
+		//					
+		//					return Status.OK_STATUS;
+		//				} catch (Exception e) {
+		//					return Status.CANCEL_STATUS;
+		//				}
+		//			}
+		//
+		//		};
+		//		job.schedule();
 
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					ProjectBuilder.getInstance().setWorkbench(WorkbenchEditor.this);
-
-					return Status.OK_STATUS;
-				} catch (Exception e) {
-					return Status.CANCEL_STATUS;
-				}
-			}
-
-		};
-		job.schedule();
-		
 	}
 
 
@@ -358,42 +331,67 @@ public class WorkbenchEditor extends GraphicalEditor {
 
 	public void dispose() {
 		if(		getGraphicalViewer()!=null){
+			System.out.println("disposing we");
+			getGraphicalViewer().setEditPartFactory(null);
 			getGraphicalViewer().removeDropTargetListener(_templateDropListener);
-			getEditDomain().removeViewer(_paletteViewer);
+
 			{
 				Vector<ComponentDeleteCommand> commands=new Vector<ComponentDeleteCommand>();
+				Vector<ConnectionCommand> connectionCommands=new Vector<ConnectionCommand>();
 				for(Geometry geometry:_diagram.getChildren()){
+
 					if(geometry instanceof Component){
 						Component component=((Component)geometry);
+
+						for(Connection con:component.getConnections()){
+							ConnectionCommand connCmd=new ConnectionCommand();
+							connCmd.setConnection(con);
+							connCmd.setSource(null);
+							connCmd.setTarget(null);
+							connCmd.setSourcePort(null);
+							connCmd.setTargetPort(null);
+							connectionCommands.add(connCmd);
+						}	
 						ComponentDeleteCommand deleteCmd=new ComponentDeleteCommand();
 						deleteCmd.setParent(_diagram);
 						deleteCmd.setChild(component);
 						commands.add(deleteCmd);
 					}
 				}
+				for(ConnectionCommand deleteConn:connectionCommands){
+					System.out.println("deleting connection");
+					this.getCommandStack().execute(deleteConn);
+				}
 				for(ComponentDeleteCommand deleteCmd:commands){
+					System.out.println("deleting components");
 					this.getCommandStack().execute(deleteCmd);
 				}
 				commands.clear();
 			}
+			//getEditDomain().removeViewer(_paletteViewer);
 			_templateDropListener=null;
-			_paletteViewer=null;
+			//_paletteViewer=null;
 			_diagram=null;
-			System.gc();
+			try {
+				Palette pallette = (Palette) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(Palette.ID);
+				getEditDomain().removeViewer(pallette.getViewer());
 
+			} catch (PartInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
-	public void connectToPalette(final Palette palette) {
+	/*public void connectToPalette(final Palette palette) {
 		Display.getDefault().asyncExec(new Runnable(){
 			@Override
 			public void run() {
 				_paletteViewer=palette.getViewer();
-				getEditDomain().setPaletteViewer(_paletteViewer);
-				palette.setProject(ProjectBuilder.getInstance().getProject(getProject()));
+
 
 			}
 
 		});
-	}
+	}*/
 }

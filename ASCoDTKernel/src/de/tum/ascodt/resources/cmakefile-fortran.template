@@ -29,24 +29,12 @@ INCLUDE_DIRECTORIES(../../commons)
 INCLUDE_DIRECTORIES(../../src)
 INCLUDE_DIRECTORIES(../../components/java)
 SET(EXECUTABLE_OUTPUT_PATH "../../native")
-SET(LIBRARY_OUTPUT_PATH  "../../native/lib")
+SET(LIBRARY_OUTPUT_PATH  "../../native")
 
 
 
-SET(SRC_COMP_EXEC
-	../../components/java/__PATH_FULL_QUALIFIED_NAME__AbstractImplementation.f90
-	../../src/__PATH_FULL_QUALIFIED_NAME__Implementation.f90 
-	../../components/java/__PATH_FULL_QUALIFIED_NAME__FProxy.f90
-	../../components/java/__PATH_FULL_QUALIFIED_NAME__C2FProxy.cpp 
-	
-)
-
-SET(SRC_COMP_LIB
-	../../components/java/__PATH_FULL_QUALIFIED_NAME__AbstractImplementation.f90
-	../../src/__PATH_FULL_QUALIFIED_NAME__Implementation.f90)
-
--- INSERT HERE --
- 	 
-ADD_EXECUTABLE(__COMPONENT_NAME__ ${SRC_COMP_EXEC} )
-ADD_LIBRARY(__COMPONENT_NAME__-dev STATIC ${SRC_COMP_LIB} )
+include(${CMAKE_CURRENT_SOURCE_DIR}/sources.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/targets.cmake)
+ 
 SET_TARGET_PROPERTIES(__COMPONENT_NAME__ PROPERTIES LINKER_LANGUAGE Fortran)
+target_link_libraries(__COMPONENT_NAME__ pthread)

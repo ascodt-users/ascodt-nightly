@@ -187,8 +187,4 @@ implements PropertyChangeListener  {
 				((ComponentEditPart) part).unmarkCompatibleTargets();	
 	}
 
-//	public CCAClasspathRepository getClasspathRepository() {
-//		return this.getCastedModel().getEditor().getRepository().getClasspathRepository();
-//	}
-	
 }

@@ -31,9 +31,7 @@ public abstract class __COMPONENT_NAME__AbstractJavaNativeImplementation impleme
   public long getNativeReference(){
      return _ref;
   }
-  protected void finalize(){
-    destroyInstance(_ref);
-  }
+  
   /**
    * proxy for the native factory method
    */  
@@ -66,8 +64,9 @@ public abstract class __COMPONENT_NAME__AbstractJavaNativeImplementation impleme
    * @see de.tum.ascodt.repository.entities
    */
   public de.tum.ascodt.repository.Target getTarget() {
-    return de.tum.ascodt.repository.Target.createCxxNativeTarget();
+    return de.tum.ascodt.repository.Target.createFortranNativeTarget();
   }
+  
   public de.tum.ascodt.repository.TargetParameters getTargetParameters(){
     return null;
   }
@@ -89,12 +88,17 @@ public abstract class __COMPONENT_NAME__AbstractJavaNativeImplementation impleme
   /**
    * @see de.tum.ascodt.repository.entities
    */
-  public abstract void destroy();
+  public void destroy(){
+     destroyInstance(_ref);
+  }
   
   public long getReference(){
     return _ref;
   }
   
+  public void setReference(long ref) {
+     _ref=ref;
+  }
   -- INSERT HERE --
 
 }

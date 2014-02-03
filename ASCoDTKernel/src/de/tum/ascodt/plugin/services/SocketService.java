@@ -7,7 +7,7 @@ public class SocketService{
 	private int port=50000;
 	private int _bufferSize;
 	public SocketService() {
-		_bufferSize=1024*16;
+		_bufferSize=16*1024;
 		
 	}
 	public static SocketService getDefault(){

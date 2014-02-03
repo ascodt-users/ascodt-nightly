@@ -45,12 +45,12 @@ public class ComponentFigure extends Figure{
 
 	private Vector<RectangleFigure> output;
 	
-
+	
 
 	
 
 	public ComponentFigure(boolean hasGUI,boolean isRemote,String ref,String className,String iconPath,
-			Vector<Port> usePorts,Vector<Port> providePorts,ClassLoader loader){
+			Vector<Port> usePorts,Vector<Port> providePorts,String projectName){
 		setBackgroundColor(ColorConstants.tooltipBackground);
 		setForegroundColor(ColorConstants.tooltipForeground);
 		input=new Vector<RectangleFigure>();
@@ -70,7 +70,7 @@ public class ComponentFigure extends Figure{
 			add(rf);
 		}
 		
-		componentBorder=new ComponentBorder(isRemote,this,usePorts,providePorts,input,output,loader);
+		componentBorder=new ComponentBorder(isRemote,this,usePorts,providePorts,input,output,projectName);
 		this.setBorder(componentBorder);
 		openGUIImage=new ImageFigure( ImageDescriptor.createFromFile(ASCoDTKernel.class, "./ui/resources/openGUI.png").createImage());
 		closeGUIImage=new ImageFigure( ImageDescriptor.createFromFile(ASCoDTKernel.class, "./ui/resources/closeGUI.png").createImage());

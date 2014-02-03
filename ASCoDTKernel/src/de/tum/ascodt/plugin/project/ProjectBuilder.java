@@ -60,14 +60,9 @@ public class ProjectBuilder extends PlatformObject{
 	 */
 	protected java.util.Map<String, Project> _nameToProjectEntitiesMap;
 	private java.util.Map<org.eclipse.core.resources.IProject, Project>  _eclipseProjectToProjectMap;
-	private ArrayList<Project>  _projects;
 	private java.util.Set<ProjectChangedListener> _listeners;
-	private ProjectContentProvider _projectsContentProvider;
-
-	private Palette _palette;
-
-	private WorkbenchEditor _workbench;
-
+	
+	
 	/**
 	 * @return Reference to singleton
 	 */
@@ -83,8 +78,7 @@ public class ProjectBuilder extends PlatformObject{
 		_eclipseProjectToProjectMap = new java.util.HashMap<org.eclipse.core.resources.IProject, Project>();
 		_nameToProjectEntitiesMap           = new java.util.HashMap<String, Project>();
 		_listeners = new java.util.HashSet<ProjectChangedListener>();
-		_projects=new ArrayList<Project>();
-		_projectsContentProvider=new ProjectContentProvider();
+	
 	}
 
 
@@ -154,7 +148,7 @@ public class ProjectBuilder extends PlatformObject{
 	 * @throws ASCoDTException
 	 * @throws MalformedURLException 
 	 */
-	public void createProject(IProject eclipseProject) throws ASCoDTException, MalformedURLException{
+	public void createProject(IProject eclipseProject) throws ASCoDTException{
 		Trace trace = new Trace( getClass().getName() );
 		trace.in( "createProject(...)", eclipseProject.getName() );
 		Project  newProject     = new Project(eclipseProject);
@@ -162,10 +156,6 @@ public class ProjectBuilder extends PlatformObject{
 		_nameToProjectEntitiesMap.put(eclipseProject.getName(), newProject);
 		_eclipseProjectToProjectMap.put(eclipseProject, newProject);
 		newProject.buildProjectSources();
-
-		_projects.add(newProject);
-		_projectsContentProvider.inputChanged(_projectsContentProvider.getViewer(), null, null);
-
 		notifyProjectChangedListeners();
 		trace.out( "createProject(...)" );
 	}
@@ -252,17 +242,16 @@ public class ProjectBuilder extends PlatformObject{
 	 */
 	public void removeProject(IProject project){
 		if(_eclipseProjectToProjectMap.get(project)!=null){
-			_eclipseProjectToProjectMap.get(project).getStaticRepository().removeListener(_palette);
-			_projects.remove(_eclipseProjectToProjectMap.get(project));
-
-			if(_nameToProjectEntitiesMap.get(project.getName())!=null)
-				_nameToProjectEntitiesMap.remove(project.getName());
-
+			_eclipseProjectToProjectMap.get(project).destroy();
 			_eclipseProjectToProjectMap.remove(project);
-			_projectsContentProvider.inputChanged(_projectsContentProvider.getViewer(), null, null);
-
-			notifyProjectChangedListeners();
+			
 		}
+		if(_nameToProjectEntitiesMap.get(project.getName())!=null){
+			
+			_nameToProjectEntitiesMap.remove(project.getName());
+		}
+		notifyProjectChangedListeners();
+		
 	}
 
 
@@ -295,13 +284,13 @@ public class ProjectBuilder extends PlatformObject{
 	}
 
 
-	public void registerProjectChangedListener(
+	public void registerProjectsChangedListener(
 			ProjectChangedListener listener) {
 		_listeners.add(listener);
 
 	}
 
-	public void removeProjectChangedListener(
+	public void removeProjectsChangedListener(
 			ProjectChangedListener listener) {
 		_listeners.remove(listener);
 
@@ -312,8 +301,8 @@ public class ProjectBuilder extends PlatformObject{
 	 * @return all projects
 	 */
 	public Collection<Project> getProjects() {
-		Assert.isNotNull(_projects);
-		return _projects;
+		Assert.isNotNull(_nameToProjectEntitiesMap.values());
+		return _nameToProjectEntitiesMap.values();
 	}
 
 
@@ -334,29 +323,6 @@ public class ProjectBuilder extends PlatformObject{
 			for(Project project:this._nameToProjectEntitiesMap.values())
 				listener.notify(project);
 			listener.end();
-		}
-	}
-
-
-	public IContentProvider getProjectsContentProvider() {
-		return _projectsContentProvider;
-	}
-
-
-	public void setWorkbench(WorkbenchEditor workbenchEditor) {
-		if(_workbench!=null&& workbenchEditor.equals(_workbench))
-			return;
-		_workbench=workbenchEditor;
-		if(_palette!=null){
-			_workbench.connectToPalette(_palette);
-		}
-	}
-
-
-	public void setPalette(Palette palette) {
-		_palette=palette;
-		if(_workbench!=null){
-			_workbench.connectToPalette(_palette);
 		}
 	}
 

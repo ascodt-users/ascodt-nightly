@@ -6,7 +6,7 @@
  }
  
  void __CXX_FULL_QUALIFIED_NAME__AbstractImplementation::disconnect__USES_PORT_AS__(){
-    delete ___USES_PORT_AS__;
+    //delete ___USES_PORT_AS__;
     ___USES_PORT_AS__=NULL;
  }
  

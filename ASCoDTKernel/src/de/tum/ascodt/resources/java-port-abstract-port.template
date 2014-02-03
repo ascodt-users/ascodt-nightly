@@ -52,6 +52,9 @@ public abstract class __PORT_NAME__AbstractPort implements __PORT_NAME__ {
     _destination = null;
   }
   
+  public void destroy(){
+  
+  }
 //  public void lock() {
 //    if (_destination!=null) {
 //      _destination.lock();

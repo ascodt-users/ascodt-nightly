@@ -87,7 +87,8 @@ public class SocketClientAppsTab extends ProgramArgsTab{
 				this._label.toUpperCase()+"_BUFFER_SIZE="+SocketService.getDefault().getBufferSize(),
 				this._label.toUpperCase()+"_DAEMON_PORT="+_daemonPort,
 				this._label.toUpperCase()+"_HOSTNAME="+textHostname.getText(),
-				this._label.toUpperCase()+"_PORT="+textPort.getText()
+				this._label.toUpperCase()+"_PORT="+textPort.getText(),
+				this._label.toUpperCase()+"_JAVA=on",
 		};
 	}
 	

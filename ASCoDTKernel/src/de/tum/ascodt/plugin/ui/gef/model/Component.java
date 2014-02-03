@@ -189,7 +189,9 @@ public class Component extends Geometry implements IPropertySource{
 	 */
 	public void destroy(){
 		Assert.isNotNull(_component);
+		_trace.in("destroy","");
 		_component.destroy();
+		_trace.out("destroy","");
 	}
 
 
@@ -314,12 +316,21 @@ public class Component extends Geometry implements IPropertySource{
 			try {
 				Assert.isNotNull(usePort!=null);
 				for(Method m:usePort.getClass().getMethods())
-					if(m.getName().equals("disconnect"))
+					if(m.getName().equals("disconnect")){
+						_trace.debug("handleDisconnect", "disconnecting target component");
 						m.invoke(usePort,target.getCCAComponent());
+					}
 				Assert.isNotNull(source.getCCAComponent());
 				for(Method m:source.getCCAComponent().getClass().getMethods())
-					if(m.getName().equals("disconnect"+sourcePort.getReference()))
+					if(m.getName().equals("disconnect"+sourcePort.getReference())){
+						_trace.debug("handleDisconnect", "disconnecting source use port");
 						m.invoke(source.getCCAComponent(), usePort);
+					}
+				for(Method m:usePort.getClass().getMethods())
+					if(m.getName().equals("destroy")){
+						_trace.debug("handleDisconnect", "destroying wrappers");
+						m.invoke(usePort);
+					}
 				_connections.remove(connection);
 			}catch(Exception e){
 				ErrorWriterDevice.getInstance().showError( getClass().getName(), "handleDisconnect()",  "Cannot delete connection between "+

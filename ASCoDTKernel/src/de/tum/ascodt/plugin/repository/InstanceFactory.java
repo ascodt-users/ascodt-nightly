@@ -55,7 +55,7 @@ public class InstanceFactory implements CreationFactory{
 		_componentInterface=componentInterface;
 		_target=target;
 	}
-	
+
 	/**
 	 * loads additional variables of the serialized component. This includes:
 	 * 1. reinstantiate the current application.

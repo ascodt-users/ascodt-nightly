@@ -69,7 +69,6 @@ public class ComponentDeleteCommand extends Command {
 		parent.removeChild(child);
 		child.destroy();
 		child.setCCAComponent(null);
-		System.gc();
 	}
 	
 	public void undo() {

@@ -67,7 +67,7 @@ public class CreateComponentsAndInterfaces {
 					component.apply( createJavaComponent );
 					implementationClassName = createJavaComponent.getFullQualifiedNameOfTheComponentImplementation();
 				}else if(component.getTarget()!=null && Target.isCxxNative(component.getTarget().getText())){
-					CreateJavaNativeComponent createJavaNativeComponent = new CreateJavaNativeComponent(
+					CreateJavaCxxNativeComponent createJavaNativeComponent = new CreateJavaCxxNativeComponent(
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
 							generatedFilesDestinationDirectory,
@@ -75,6 +75,7 @@ public class CreateComponentsAndInterfaces {
 							_symbolTable.getScope(component).getFullIdentifierOfPackage()
 							);
 					CreateCxxBuildScripts createMakefile = new CreateCxxBuildScripts(
+							Target.createTarget(component.getTarget().getText()),
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
 							generatedFilesDestinationDirectory,
@@ -101,7 +102,7 @@ public class CreateComponentsAndInterfaces {
 
 					implementationClassName = createJavaNativeComponent.getFullQualifiedNameOfTheComponentImplementation();
 				}else if(component.getTarget()!=null && Target.isFortranNative(component.getTarget().getText())){
-					CreateJavaNativeComponent createJavaNativeComponent = new CreateJavaNativeComponent(
+					CreateJavaFortranNativeComponent createJavaNativeComponent = new CreateJavaFortranNativeComponent(
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
 							generatedFilesDestinationDirectory,
@@ -109,6 +110,7 @@ public class CreateComponentsAndInterfaces {
 							_symbolTable.getScope(component).getFullIdentifierOfPackage()
 							);
 					CreateFortranBuildScripts createMakefile = new CreateFortranBuildScripts(
+							Target.createTarget(component.getTarget().getText()),
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
 							generatedFilesDestinationDirectory,
@@ -189,6 +191,7 @@ public class CreateComponentsAndInterfaces {
 							offset_map
 							);
 					CreateCxxBuildScripts createMakefile = new CreateCxxBuildScripts(
+							Target.createTarget(component.getTarget().getText()),
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
 							generatedFilesDestinationDirectory,
@@ -224,6 +227,7 @@ public class CreateComponentsAndInterfaces {
 							offset_map
 							);
 					CreateFortranBuildScripts createBuildscripts = new CreateFortranBuildScripts(
+							Target.createTarget(component.getTarget().getText()),
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
 							generatedFilesDestinationDirectory,
@@ -252,6 +256,7 @@ public class CreateComponentsAndInterfaces {
 							_symbolTable.getScope(component).getFullIdentifierOfPackage()
 							);
 					CreateFortranBuildScripts createMakefile = new CreateFortranBuildScripts(
+							Target.createTarget(component.getTarget().getText()),
 							_symbolTable, 
 							userImplementedFilesDestinationDirectory,
 							generatedFilesDestinationDirectory,

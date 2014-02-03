@@ -134,7 +134,7 @@ newsockfd,int bufferSize){
      //clear buffer
      bzero(sendBuffer,bufferSize);
      while(total_send_bytes<numberOfBytes){
-          remaining_bytes_to_send=(numberOfBytes-send_bytes<=bufferSize)?numberOfBytes-send_bytes:bufferSize;
+          remaining_bytes_to_send=(numberOfBytes-total_send_bytes<=bufferSize)?numberOfBytes-total_send_bytes:bufferSize;
           memcpy(sendBuffer,data_ptr,remaining_bytes_to_send);
           send_bytes=0;
           char* send_buffer_ptr=sendBuffer;
