@@ -86,6 +86,7 @@ public class GetParameterList extends DepthFirstAdapter {
 		result = result.replaceFirst(",", "");
 		return result;
 	}
+	
 	public String getFunctionCallListInJava2JNI() {
 		String result = "";  
 
@@ -103,7 +104,7 @@ public class GetParameterList extends DepthFirstAdapter {
 		result = result.replaceFirst(",", "");
 		return result;
 	}
-	public String getFunctionCallListInJNI2Cxx() {
+	public String getFunctionCallListInJNI2Cxx(boolean isFortran) {
 		String result = "";  
 
 		for (Parameter parameter: _parameters) {
@@ -137,7 +138,7 @@ public class GetParameterList extends DepthFirstAdapter {
 				result +="_jni"; 
 			if(parameter.type==Parameter.Type.Boolean)
 				result +="_b";
-			if(parameter.type==Parameter.Type.Opaque)
+			if(parameter.type==Parameter.Type.Opaque&&isFortran)
 				result +="_c2f"; 
 			if(!parameter.isArray&&parameter.isOut&&parameter.type!=Parameter.Type.Boolean)
 				result += "[0]";

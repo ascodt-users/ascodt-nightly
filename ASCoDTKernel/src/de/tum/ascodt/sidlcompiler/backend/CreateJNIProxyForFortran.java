@@ -204,7 +204,7 @@ public class CreateJNIProxyForFortran extends de.tum.ascodt.sidlcompiler.fronten
 					+ parameterList.convertC2F()
 					);
 			String parameters= "";
-			parameters=parameterList.getFunctionCallListInJNI2Cxx();
+			parameters=parameterList.getFunctionCallListInJNI2Cxx(true);
 			if(parameters.length()>0)
 				parameters=","+parameters;
 			jniProxyImplementationTemplate.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",parameters);

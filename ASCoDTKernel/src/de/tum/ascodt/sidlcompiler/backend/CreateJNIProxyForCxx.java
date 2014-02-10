@@ -175,7 +175,7 @@ public class CreateJNIProxyForCxx extends de.tum.ascodt.sidlcompiler.frontend.an
 			jniProxyImplementationTemplate.addMapping( "__JNI_FULL_QUALIFIED_NAME__",_fullQualifiedName.replaceAll("[.]", "_"));
 			jniProxyImplementationTemplate.addMapping("__CXX_FULL_QUALIFIED_NAME__",_fullQualifiedName.replaceAll("[.]", "::"));
 			jniProxyImplementationTemplate.addMapping("__START_METHOD_CALL__",parameterList.prepareJNIParametersForCxxCall());
-			jniProxyImplementationTemplate.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",parameterList.getFunctionCallListInJNI2Cxx());
+			jniProxyImplementationTemplate.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",parameterList.getFunctionCallListInJNI2Cxx(false));
 			jniProxyImplementationTemplate.addMapping("__END_METHOD_CALL__", parameterList.writeCxxParamatersFromJNIProvideCall());
 			
 			_templateFilesProvidesPorts.add(jniProxyImplementationTemplate);

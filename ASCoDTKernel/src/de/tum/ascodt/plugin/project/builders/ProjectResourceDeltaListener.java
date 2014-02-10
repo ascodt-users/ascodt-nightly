@@ -25,9 +25,8 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  */
 public class ProjectResourceDeltaListener implements IResourceDeltaVisitor {
 	private Trace _trace = new Trace(ProjectResourceDeltaListener.class.getCanonicalName());
-	private boolean _isbuilding=false;
+	private boolean _hasChanged=false;
 	
-
 	/**
 	 * visits changed/added/removed resources
 	 */
@@ -62,14 +61,7 @@ public class ProjectResourceDeltaListener implements IResourceDeltaVisitor {
 		return true;
 	}
 
-	public void buildAll(Project project) throws ASCoDTException{
-		if(_isbuilding){
-			ProjectBuilder.generateBlueprints(project.getEclipseProjectHandle());
-			project.compileComponents();
-			de.tum.ascodt.plugin.project.ProjectBuilder.getInstance().notifyProjectChangedListeners();
-			project.notifyRepository(); 
-		}
-	}
+	
 	/**
 	 * Builds the changed/added resource
 	 * @param delta delta object
@@ -80,16 +72,18 @@ public class ProjectResourceDeltaListener implements IResourceDeltaVisitor {
 	public void buildResource(IResourceDelta delta,
 			de.tum.ascodt.plugin.project.Project project, Mode mode)
 					throws ASCoDTException {
-		_isbuilding=true;
+		
 		Start startSymbol=ProjectBuilder.buildStartSymbolsForSIDLResource(delta.getResource().getLocation().toPortableString());
-
-		String err="";
-		//if((err=ProjectBuilder.validateSymbolTableForSIDLResource(startSymbol,delta.getResource().getLocation().toPortableString(), project.getSymbolTable())).equals("")){
 		ProjectBuilder.extendSymbolTable(startSymbol, project.getSymbolTable(), delta.getResource().getLocation().toPortableString());
-
-		//		}else
-		//			throw new ASCoDTException(ProjectResourceDeltaListener.class.getCanonicalName(),"buildResource()","Building resource "+delta.getResource().getLocation().toPortableString()+"failed:"+err,null);
+		_hasChanged=true;
 	}
+  
+	public void reset(){
+		_hasChanged=false;
+	}
+	public boolean hasChanged(){
+  	return _hasChanged;
+  }
 
 
 

@@ -49,7 +49,7 @@ import org.eclipse.jface.viewers.LabelProvider;
  * 
  *
  */
-public class Palette extends ViewPart implements RepositoryListener, ProjectChangedListener{
+public class Palette extends ViewPart implements RepositoryListener{
 	public static String ID = Palette.class.getCanonicalName();
 
 	/**
@@ -271,11 +271,5 @@ public class Palette extends ViewPart implements RepositoryListener, ProjectChan
 	}
 
 
-	@Override
-	public void notify(Project project) {
-		
-		
-	}
-	
 	
 }

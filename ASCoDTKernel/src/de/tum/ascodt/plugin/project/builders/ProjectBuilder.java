@@ -38,13 +38,14 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 
 	public static String ID=ProjectBuilder.class.getCanonicalName();
 	private Trace _trace = new Trace(ProjectBuilder.class.getCanonicalName());
-
+	ProjectResourceDeltaListener deltaListener=new ProjectResourceDeltaListener();
 	public ProjectBuilder(){
 		super();
 		_trace.in("Constructor");
 
 		_trace.out("Constructor");
 	}
+	
 	/**
 	 * 
 	 */
@@ -56,11 +57,14 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		if (kind==IncrementalProjectBuilder.AUTO_BUILD){
 			IResourceDelta delta = getDelta(getProject());
 			_trace.debug("build()", "starting incremental build");
-			ProjectResourceDeltaListener deltaListener=new ProjectResourceDeltaListener();
+
 			if(delta!=null){
 				delta.accept(deltaListener);
 				try {
-					deltaListener.buildAll(de.tum.ascodt.plugin.project.ProjectBuilder.getInstance().getProject(getProject()));
+					if(deltaListener.hasChanged()){
+						buildAll();
+						deltaListener.reset();
+					}
 				} catch (ASCoDTException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -172,5 +176,13 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
+	public void buildAll() throws ASCoDTException{
+		Project project = de.tum.ascodt.plugin.project.ProjectBuilder.getInstance().getProject(getProject());
+		ProjectBuilder.generateBlueprints(project.getEclipseProjectHandle());
+		project.compileComponents();
+		de.tum.ascodt.plugin.project.ProjectBuilder.getInstance().notifyProjectChangedListeners();
+		project.notifyRepository(); 
+
+	}
 
 }
