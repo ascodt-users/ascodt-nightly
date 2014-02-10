@@ -1,0 +1,21 @@
+CC=gcc
+CXX=g++
+RM=rm -f
+CPPFLAGS= -Icomponents/java -Isrc -I/usr/lib/jvm/java-6-openjdk/include -I/usr/lib/jvm/java-6-openjdk/include/linux -fPIC
+LDFLAGS=
+LDLIBS=
+
+SRCS= components/java/examples/heat/ImplicitEulerAbstractImplementation.cpp src/examples/heat/ImplicitEulerImplementation.cpp components/java/examples/heat/ImplicitEulerJNIProxy.cpp 
+SRCS += components/java/examples/heat/SolverNative2JavaPlainPort.cpp components/java/examples/heat/SolverNative2NativePlainPort.cpp components/java/examples/heat/SolverNativeDispatcher.cpp
+OBJS=$(subst .cpp,.o,$(SRCS))
+
+all: libImplicitEuler.so
+
+libImplicitEuler.so: $(OBJS)
+	$(CXX) -shared $(OBJS) -o native/libImplicitEuler.so
+
+clean:
+	$(RM) $(OBJS)
+
+dist-clean: clean
+	$(RM) libImplicitEuler.so

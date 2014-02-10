@@ -1,0 +1,4 @@
+deleting components
+classpath removed
+classpath removed
+sim time:90

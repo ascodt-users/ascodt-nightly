@@ -1,0 +1,21 @@
+CC=gcc
+CXX=g++
+RM=rm -f
+CPPFLAGS= -Icomponents/java -Isrc -I/usr/lib/jvm/java-6-openjdk/include -I/usr/lib/jvm/java-6-openjdk/include/linux -fPIC
+LDFLAGS=
+LDLIBS=
+
+SRCS= components/java/de/tum/DriverComponentAbstractImplementation.cpp src/de/tum/DriverComponentImplementation.cpp components/java/de/tum/DriverComponentJNIProxy.cpp 
+SRCS += components/java/de/tum/FooBarNative2JavaPlainPort.cpp components/java/de/tum/FooBarNative2NativePlainPort.cpp components/java/de/tum/FooBarNativeDispatcher.cpp
+OBJS=$(subst .cpp,.o,$(SRCS))
+
+all: libDriverComponent.so
+
+libDriverComponent.so: $(OBJS)
+	$(CXX) -shared $(OBJS) -o native/libDriverComponent.so
+
+clean:
+	$(RM) $(OBJS)
+
+dist-clean: clean
+	$(RM) libDriverComponent.so

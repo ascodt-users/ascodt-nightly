@@ -1,0 +1,1 @@
+ADD_LIBRARY(AdamsMoulton SHARED ${SRC_COMP} )

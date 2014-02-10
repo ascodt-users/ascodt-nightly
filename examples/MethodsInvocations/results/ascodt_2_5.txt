@@ -1,0 +1,11 @@
+staring ASCoDT time meassurement
+destroying channel
+destroying server
+destroying channel
+destroying server
+data_0:0.840188,0.394383
+time:0.003000
+data_1:0.840188,0.394383
+end of ASCoDT time meassurement
+destroying server
+destroying channel

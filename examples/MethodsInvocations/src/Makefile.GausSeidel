@@ -1,0 +1,20 @@
+CC=gcc
+CXX=g++
+RM=rm -f
+CPPFLAGS= -Icomponents/java -Isrc -I/usr/lib/jvm/java-6-openjdk/include -I/usr/lib/jvm/java-6-openjdk/include/linux -fPIC
+LDFLAGS=
+LDLIBS=
+
+SRCS= components/java/examples/heat/GausSeidelAbstractImplementation.cpp src/examples/heat/GausSeidelImplementation.cpp components/java/examples/heat/GausSeidelJNIProxy.cpp 
+OBJS=$(subst .cpp,.o,$(SRCS))
+
+all: libGausSeidel.so
+
+libGausSeidel.so: $(OBJS)
+	$(CXX) -shared $(OBJS) -o native/libGausSeidel.so
+
+clean:
+	$(RM) $(OBJS)
+
+dist-clean: clean
+	$(RM) libGausSeidel.so

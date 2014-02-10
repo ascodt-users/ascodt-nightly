@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../../components/java/examples/heat/FGausSeidelJNIProxy.h
+map
+-
+string
+-
+jni.h
+../../components/java/examples/heat/jni.h
+
+/usr/lib/jvm/java-6-openjdk/include/jni.h
+stdio.h
+-
+stdarg.h
+-
+jni_md.h
+/usr/lib/jvm/java-6-openjdk/include/jni_md.h
+
+/usr/lib/jvm/java-6-openjdk/include/jni_md.h
+
+/work_fast/atanasoa/Programme/runtime-HelloSocketFortran/MethodsInvocations/components/java/examples/heat/FGausSeidelJNIProxy.cpp
+examples/heat/FGausSeidelJNIProxy.h
+/work_fast/atanasoa/Programme/runtime-HelloSocketFortran/MethodsInvocations/components/java/examples/heat/examples/heat/FGausSeidelJNIProxy.h
+

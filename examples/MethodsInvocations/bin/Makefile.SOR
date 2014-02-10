@@ -1,0 +1,20 @@
+CC=gcc
+CXX=g++
+RM=rm -f
+CPPFLAGS= -Icomponents/java -Isrc -I/usr/lib/jvm/java-6-openjdk/include -I/usr/lib/jvm/java-6-openjdk/include/linux -fPIC
+LDFLAGS=
+LDLIBS=
+
+SRCS= components/java/examples/heat/SORAbstractImplementation.cpp src/examples/heat/SORImplementation.cpp components/java/examples/heat/SORJNIProxy.cpp 
+OBJS=$(subst .cpp,.o,$(SRCS))
+
+all: libSOR.so
+
+libSOR.so: $(OBJS)
+	$(CXX) -shared $(OBJS) -o native/libSOR.so
+
+clean:
+	$(RM) $(OBJS)
+
+dist-clean: clean
+	$(RM) libSOR.so

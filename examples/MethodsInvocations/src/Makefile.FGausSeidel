@@ -1,0 +1,43 @@
+CC=gcc
+CXX=g++
+FC=gfortran
+RM=rm -f
+CPPFLAGS= -Icomponents/java -Isrc -I/usr/lib/jvm/java-6-openjdk/include -I/usr/lib/jvm/java-6-openjdk/include/linux -fPIC
+LDFLAGS=
+LDLIBS=
+FCFLAGS = -fpic
+
+components/java/examples/heat/FGausSeidelAbstractImplementation.o : components/java/examples/heat/FGausSeidelAbstractImplementation.f90 
+	$(FC) $(FCFLAGS) -c -o components/java/examples/heat/FGausSeidelAbstractImplementation.o components/java/examples/heat/FGausSeidelAbstractImplementation.f90
+src/examples/heat/FGausSeidelImplementation.o : src/examples/heat/FGausSeidelImplementation.f90 
+	$(FC) $(FCFLAGS) -c -o src/examples/heat/FGausSeidelImplementation.o src/examples/heat/FGausSeidelImplementation.f90
+components/java/examples/heat/FGausSeidelFProxy.o : components/java/examples/heat/FGausSeidelFProxy.f90 
+	$(FC) $(FCFLAGS) -c -o components/java/examples/heat/FGausSeidelFProxy.o components/java/examples/heat/FGausSeidelFProxy.f90
+
+
+SRCS_LIB+= components/java/examples/heat/FGausSeidelAbstractImplementation.f90 src/examples/heat/FGausSeidelImplementation.f90 components/java/examples/heat/FGausSeidelJNIProxy.cpp 
+SRCS_EXEC+= components/java/examples/heat/FGausSeidelAbstractImplementation.f90 src/examples/heat/FGausSeidelImplementation.f90 components/java/examples/heat/FGausSeidelFProxy.f90 components/java/examples/heat/FGausSeidelC2FProxy.cpp 
+
+
+
+CXX_OBJS_LIB=$(subst .cpp,.o,$(SRCS_LIB))
+OBJS_LIB=$(subst .f90,.o,$(CXX_OBJS_LIB))
+CXX_OBJS_EXEC=$(subst .cpp,.o,$(SRCS_EXEC))
+OBJS_EXEC=$(subst .f90,.o,$(CXX_OBJS_EXEC))
+
+
+libFGausSeidel.a: $(OBJS_LIB)
+	ar rc  -o native/libFGausSeidel.a $(OBJS_LIB)
+
+libFGausSeidel.so: $(OBJS_LIB)
+	$(FC) -shared $(OBJS_LIB) -o native/libFGausSeidel.so
+
+FGausSeidel: $(OBJS_EXEC)
+	$(FC) $(OBJS_EXEC) -o native/FGausSeidel -lc -lstdc++ -lpthread
+
+
+clean:
+	$(RM) $(OBJS_LIB) $(OBJS_EXEC) *.mod native/libFGausSeidel.so native/libFGausSeidel.a native/FGausSeidel
+
+dist-clean: clean
+	$(RM) libFGausSeidel.so
