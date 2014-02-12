@@ -178,7 +178,7 @@ public class Project {
 	 * @throws IOException 
 	 */
 	private void initiliaseClasspathRepository() throws IOException {
-		
+
 		_classpathRepository=new ClasspathRepository(_eclipseProjectHandle,ASCoDTKernel.getDefault().getClass().getClassLoader());
 		_classpathRepository.addURL(new File(_eclipseProjectHandle.getLocation().toPortableString()+"/bin").toURI().toURL());
 	}
@@ -190,7 +190,7 @@ public class Project {
 				_classpathRepository.close();
 			} catch (IOException e) {
 				_classpathRepository=null;
-				
+
 			}
 			_classpathRepository=null;
 		}
@@ -217,27 +217,25 @@ public class Project {
 			for(String dep:getSIDLDependencies()){
 				deps.add(new Pair<String,Start>(
 						dep,
-						de.tum.ascodt.plugin.project.builders.ProjectBuilder.buildStartSymbolsForSIDLResource(dep))
+						de.tum.ascodt.plugin.project.builders.SiDLBuilder.buildStartSymbolsForSIDLResource(dep))
 						);
 			}
 			buildStartSymbolsForSIDLResources(imports,_eclipseProjectHandle.getFolder(getImportsFolder()));
 			buildStartSymbolsForSIDLResources(sources,_eclipseProjectHandle.getFolder(getSourcesFolder()));
 			for(Pair<String,Start> resourceEntry:deps){
-				de.tum.ascodt.plugin.project.builders.ProjectBuilder.extendSymbolTable(resourceEntry._second, symbolTable, resourceEntry._first);
+				de.tum.ascodt.plugin.project.builders.SiDLBuilder.extendSymbolTable(resourceEntry._second, symbolTable, resourceEntry._first);
 			}
 
 			for(Pair<String,Start> resourceEntry:imports){
-				de.tum.ascodt.plugin.project.builders.ProjectBuilder.extendSymbolTable(resourceEntry._second, symbolTable, resourceEntry._first);
+				de.tum.ascodt.plugin.project.builders.SiDLBuilder.extendSymbolTable(resourceEntry._second, symbolTable, resourceEntry._first);
 			}
 
 			for(Pair<String,Start> resourceEntry:sources){
-				de.tum.ascodt.plugin.project.builders.ProjectBuilder.extendSymbolTable(resourceEntry._second, symbolTable, resourceEntry._first);
+				de.tum.ascodt.plugin.project.builders.SiDLBuilder.extendSymbolTable(resourceEntry._second, symbolTable, resourceEntry._first);
 			}
-
+			_symbolTable=null;
 			_symbolTable=symbolTable;
-			de.tum.ascodt.plugin.project.builders.ProjectBuilder.generateBlueprints(_eclipseProjectHandle);
-			compileComponents();
-			de.tum.ascodt.plugin.project.ProjectBuilder.getInstance().notifyProjectChangedListeners();
+			de.tum.ascodt.plugin.project.builders.SiDLBuilder.generateBlueprints(_eclipseProjectHandle);
 
 
 
@@ -269,7 +267,7 @@ public class Project {
 			}else if(resource instanceof IFile &&resource.getName().contains(".sidl")){
 				startSymbolsMap.add(new Pair<String,Start>(
 						resource.getLocation().toPortableString(),
-						de.tum.ascodt.plugin.project.builders.ProjectBuilder.buildStartSymbolsForSIDLResource(resource.getLocation().toPortableString())
+						de.tum.ascodt.plugin.project.builders.SiDLBuilder.buildStartSymbolsForSIDLResource(resource.getLocation().toPortableString())
 						)
 						);
 			}
@@ -313,7 +311,6 @@ public class Project {
 			createProjectFile(workbenchFile,new ByteArrayInputStream(out.toByteArray()));
 
 			workbenchFile.refreshLocal(IResource.DEPTH_INFINITE,null);
-			ProjectBuilder.getInstance().notifyProjectChangedListeners();
 		} catch (CoreException e) {
 			throw new ASCoDTException(getClass().getName(), "createWorkbech()", "creating a workbench file failed", e); 
 		} catch (IOException e) {
@@ -441,9 +438,12 @@ public class Project {
 	 * @param componentTarget target language for the component to be compiled
 	 * @throws ASCoDTException 
 	 */
-	public void createComponentSIDLSourceFile(String componentName, String namespace, Target componentTarget) throws ASCoDTException{
+	public void createComponent(String componentName, String namespace, Target componentTarget) throws ASCoDTException{
 		_trace.in( "createComponentSIDLSourceFile()" );
-		org.eclipse.core.resources.IFile sourceFile = _eclipseProjectHandle.getFile( getSourcesFolder()+"/"+componentName+".sidl");
+		org.eclipse.core.resources.IFile sourceFile = _eclipseProjectHandle.getFile( 
+				getSourcesFolder()+"/"+
+						namespace+"."+
+						componentName+".sidl");
 
 		try {
 			Assert.isNotNull(namespace);
@@ -462,11 +462,29 @@ public class Project {
 			templateFile.open();
 			templateFile.close();
 			_eclipseProjectHandle.refreshLocal(IResource.DEPTH_INFINITE,null);
-			ProjectBuilder.getInstance().notifyProjectChangedListeners();
+			buildProjectSources();
+			compileComponents();
+			resetStaticRepository();
 		} catch (Exception e) {
 			throw new ASCoDTException(getClass().getName(), "createComponentSIDLSourceFile()", "creating SIDL file from template failed", e);
 		}
 		_trace.out( "createComponentSIDLSourceFile()" );
+	}
+
+	public void removeComponent(String componentName) throws ASCoDTException {
+		try {
+			org.eclipse.core.resources.IFile file = _eclipseProjectHandle.getFile( 
+					getSourcesFolder()+"/"+
+							componentName+""+
+					".sidl");
+			if(file.exists())
+				file.delete(true, null);
+			_eclipseProjectHandle.refreshLocal(IResource.DEPTH_INFINITE,null);
+			buildProjectSources();
+			resetStaticRepository();
+		} catch (Exception e) {
+			throw new ASCoDTException(getClass().getName(), "removeComponent()", "remove SIDL file from project failed", e);
+		}
 	}
 
 	/**
@@ -484,7 +502,6 @@ public class Project {
 			outputStream.close();	
 			createProjectFile(workbenchFile,new ByteArrayInputStream(out.toByteArray()));
 			workbenchFile.refreshLocal(IResource.DEPTH_INFINITE,null);
-			ProjectBuilder.getInstance().notifyProjectChangedListeners();
 		} catch (Exception e) {
 			throw new ASCoDTException(getClass().getName(), "createWorkbench()", "creating SIDL file from template failed", e);
 		}
@@ -578,28 +595,13 @@ public class Project {
 	}
 
 
-//	private void evaluateContributions(IExtensionRegistry registry, Set<IClasspathEntry> classpathEntries) throws CoreException, ASCoDTException{
-//		IConfigurationElement[] config =
-//				registry.getConfigurationElementsFor(de.tum.ascodt.plugin.extensions.Project.ID);
-//
-////		for (IConfigurationElement e : config) {
-////
-////			final Object o =
-////					e.createExecutableExtension("class");
-////			if (o!=null&&o instanceof de.tum.ascodt.plugin.extensions.Project) {
-////				_trace.debug("evaluateContributions()","executing a contribution");
-////				((de.tum.ascodt.plugin.extensions.Project)o).addClasspathEntries(classpathEntries);
-////			}
-////		}
-//
-//	}
 	/**
 	 * sets the default classpath entries of the ascodt project
 	 * @throws ASCoDTException 
 	 */
 	private void addClasspathEntries() throws ASCoDTException {
 		IJavaProject javaProject = JavaCore.create(_eclipseProjectHandle); 
-	
+
 		try {
 			Set<IClasspathEntry> entries = new HashSet<IClasspathEntry>();
 			for(IClasspathEntry classElement: Arrays.asList(javaProject.getRawClasspath())){
@@ -694,11 +696,11 @@ public class Project {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					
-					
-				
+
+
+
 					compileComponents_i();
-					
+
 					//Project.this.openWorkbenchEditors(instances);
 					return Status.OK_STATUS;
 				} catch (Exception e) {
@@ -708,8 +710,8 @@ public class Project {
 
 		};
 		job.schedule();
-	
-		
+
+
 	}
 	/**
 	 * compiles the java classes for all components in the project
@@ -722,9 +724,9 @@ public class Project {
 		} catch (CoreException e) {
 			ErrorWriterDevice.getInstance().showError( getClass().getName(), "compileComponents()",  e.getLocalizedMessage(), e ); 
 		}
-		
-		
-		
+
+
+
 	}
 
 	public void openWorkbenchEditors(final Vector<IFile> workbenchInputs) throws ASCoDTException{
@@ -840,11 +842,11 @@ public class Project {
 	public String getImportsFolder(){
 		return "/imports";
 	}
-	
+
 	public String getSettingsFolder(){
 		return "/settings";
 	}
-	
+
 	public String getJavaProxiesFolder(){
 		return "/components/java";
 	}
@@ -917,7 +919,8 @@ public class Project {
 	 * notify all project listeners for the changed symbolTable and write down the change
 	 * @throws ASCoDTException 
 	 */
-	public void notifyRepository() throws ASCoDTException{
+	public void resetStaticRepository() throws ASCoDTException{
+		_staticRepository.reset();
 		for ( 
 				de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement component:
 					_symbolTable.getGlobalScope().getFlattenedClassElements()
@@ -1003,12 +1006,12 @@ public class Project {
 	 */
 	public void addSIDLDependency(String dependency) throws ASCoDTException, CoreException {
 
-		Start startNode= de.tum.ascodt.plugin.project.builders.ProjectBuilder.buildStartSymbolsForSIDLResource(dependency);
+		Start startNode= de.tum.ascodt.plugin.project.builders.SiDLBuilder.buildStartSymbolsForSIDLResource(dependency);
 		String err="";
-		if((err=de.tum.ascodt.plugin.project.builders.ProjectBuilder.validateSymbolTableForSIDLResource(startNode,dependency, _symbolTable)).equals(""))
+		if((err=de.tum.ascodt.plugin.project.builders.SiDLBuilder.validateSymbolTableForSIDLResource(startNode,dependency, _symbolTable)).equals(""))
 		{
-			de.tum.ascodt.plugin.project.builders.ProjectBuilder.extendSymbolTable(startNode, _symbolTable, dependency);
-			de.tum.ascodt.plugin.project.builders.ProjectBuilder.generateBlueprints(_eclipseProjectHandle);
+			de.tum.ascodt.plugin.project.builders.SiDLBuilder.extendSymbolTable(startNode, _symbolTable, dependency);
+			de.tum.ascodt.plugin.project.builders.SiDLBuilder.generateBlueprints(_eclipseProjectHandle);
 			String oldDependencies=_eclipseProjectHandle.getPersistentProperty(new QualifiedName("de.tum.ascodt.plugin.ASCoDTKernel", DEPENDENCIES));
 
 			if(oldDependencies!=null){
@@ -1017,4 +1020,6 @@ public class Project {
 				_eclipseProjectHandle.setPersistentProperty(new QualifiedName("de.tum.ascodt.plugin.ASCoDTKernel", DEPENDENCIES), dependency);
 		}
 	}
+
+
 }

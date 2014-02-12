@@ -108,7 +108,7 @@
             restorable="true">
       </view>
    </extension>
-   <extension
+    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent
             activeByDefault="true"
@@ -178,33 +178,6 @@
       </commonWizard>
    </extension>
    <extension
-         id="de.tum.ascodt.plugin.ui.navigator.ASCoDTViewerContentBinding"
-         name="ASCoDT ViewerContentBinding"
-         point="org.eclipse.ui.navigator.viewer">
-         
-      <viewerContentBinding
-            viewerId="de.tum.ascodt.plugin.ui.views.ASCoDTNavigator">
-         <includes>
-           <contentExtension pattern="de.tum.ascodt.plugin.ui.navigator.ASCoDTContent"/>
-           <contentExtension
-          pattern="de.tum.ascodt.plugin.ui.navigator.ASCoDTNavigatorLinkHelper"/>
-         </includes>
-      </viewerContentBinding>
-      <viewerActionBinding viewerId="de.tum.ascodt.plugin.ui.views.ASCoDTNavigator">
-         <includes>
-            <actionExtension pattern="de.tum.ascodt.plugin.ui.navigator.ASCoDTActionProvider"/>
-         </includes>
-      </viewerActionBinding>
-      <viewer
-            viewerId="de.tum.ascodt.plugin.ui.views.ASCoDTNavigator">
-            <popupMenu
-                allowsPlatformContributions="true"
-                id="de.tum.ascodt.plugin.ui.views.ASCoDTNavigator#PopupMenu">  
-             <insertionPoint name="group.new"/>
-             </popupMenu>
-      </viewer>
-   </extension>
-   <extension
          point="org.eclipse.ui.navigator.linkHelper">
       <linkHelper
             class="de.tum.ascodt.plugin.ui.navigator.ASCoDTNavigatorLinkHelper"
@@ -240,27 +213,26 @@
       </editor>
    </extension>
    <extension
-         id="de.tum.ascodt.plugin.project.builders.ProjectBuilder"
-         name="ASCoDT Project Builder"
-         point="org.eclipse.core.resources.builders">
-      <builder
-            callOnEmptyDelta="false"
-            hasNature="true"
-            isConfigurable="true">
-         <run
-               class="de.tum.ascodt.plugin.project.builders.ProjectBuilder">
-         </run>
-      </builder>
-   </extension>
-   <extension
          point="org.eclipse.ui.commands">
       <command
             categoryId="org.eclipse.ui.category.project"
             defaultHandler="de.tum.ascodt.plugin.core.commands.BuildComponentsHandler"
             id="de.tum.ascodt.plugin.core.commands.BuildComponents"
-            name="Build Components">
+            name="Build Classes">
          <defaultHandler
                class="de.tum.ascodt.plugin.core.commands.BuildComponentsHandler">
+            <parameter
+                  name="ASCoDTKernel.parameter1"
+                  value="ASCoDTKernel.parameter1">
+            </parameter>
+         </defaultHandler>
+      </command>
+      <command
+            defaultHandler="de.tum.ascodt.plugin.core.commands.BuildSIDLHandler"
+            id="de.tum.ascodt.plugin.core.commands.BuildSIDL"
+            name="Build SIDL">
+         <defaultHandler
+               class="de.tum.ascodt.plugin.core.commands.BuildSIDLHandler">
             <parameter
                   name="ASCoDTKernel.parameter1"
                   value="ASCoDTKernel.parameter1">
@@ -278,7 +250,18 @@
                label="Project">
             <command
                   commandId="de.tum.ascodt.plugin.core.commands.BuildComponents"
-                  label="Build Components"
+                  label="Build Classes"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="true">
+                  <reference
+                        definitionId="de.tum.ascodt.plugin.project.Definition">
+                  </reference>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="de.tum.ascodt.plugin.core.commands.BuildSIDL"
+                  label="Build SIDL"
                   style="push">
                <visibleWhen
                      checkEnabled="true">
@@ -331,16 +314,30 @@
    </extension>
    <extension
          point="org.eclipse.ui.actionSets">
+      <filter
+         name="projectNature"
+         value="de.tum.ascodt.plugin.project.natures.ASCoDTNature">
+      </filter>
       <actionSet
             description="Components tools"
             id="de.tum.ascodt.plugin.actions.BuildComponentsActionSet"
-            label="Components tools"
-            visible="true">
+            label="Components tools">
          <action
                class="de.tum.ascodt.plugin.core.actions.BuildComponentsAction"
-               icon="de/tum/ascodt/plugin/ui/resources/build_2.gif"
                id="de.tum.ascodt.plugin.actions.BuildComponentsAction"
-               label="Build component"
+               label="Build classes"
+               pulldown="false"
+               style="push"
+               toolbarPath="Normal/additions">
+            
+         </action>
+         <action
+               class="de.tum.ascodt.plugin.core.actions.BuildSIDLAction"
+               id="de.tum.ascodt.plugin.actions.BuildSIDLAction"
+               label="Build SIDL"
+               pulldown="false"
+               state="true"
+               style="push"
                toolbarPath="Normal/additions">
          </action>
       </actionSet>

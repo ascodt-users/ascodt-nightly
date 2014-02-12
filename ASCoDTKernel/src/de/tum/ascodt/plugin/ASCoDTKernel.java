@@ -76,15 +76,13 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 	 * This function setups the ascodt project by invoking the project builder to create
 	 * the project representation object
 	 * @param project the current project
+	 * @throws ASCoDTException 
 	 * @throws JavaModelException
 	 * @throws IOException
 	 */
-	private void prepareProject(IProject project){
-		try {
-			ProjectBuilder.getInstance().createProject(project);
-		} catch (ASCoDTException e) {
-			ErrorWriterDevice.getInstance().showError( getClass().getName(), "prepareProject()", "Cannot create project representation object due to " + e.getCause(), e );
-		}
+	private void prepareProject(IProject project) throws ASCoDTException{
+		ProjectBuilder.getInstance().createProject(project);
+
 	}
 
 
@@ -102,7 +100,7 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 		initialiseServices();
 
 		initializeProjects();
-	  // for uncaught exceptions
+		// for uncaught exceptions
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(){
 
 			@Override
@@ -124,8 +122,8 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 		if(output!=null && output instanceof ConsoleStream && 
 				error_output!=null && error_output instanceof ConsoleStream){
 			System.setOut(new PrintStream(((ConsoleStream)output).newMessageStream()));
-	    MessageConsoleStream errorStream=((ConsoleStream)error_output).newMessageStream();
-	    errorStream.setColor(new org.eclipse.swt.graphics.Color(Display.getDefault(),255,0,0));
+			MessageConsoleStream errorStream=((ConsoleStream)error_output).newMessageStream();
+			errorStream.setColor(new org.eclipse.swt.graphics.Color(Display.getDefault(),255,0,0));
 			System.setErr(	new PrintStream(errorStream));
 		}
 	}
@@ -144,7 +142,12 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 						((IProject)event.resource).isNatureEnabled(ASCoDTNature.ID)){
 
 					if(event.kind==LifecycleEvent.PRE_PROJECT_OPEN){
-						prepareProject((IProject)event.resource);
+						try {
+							prepareProject((IProject)event.resource);
+						} catch (ASCoDTException e) {
+							ErrorWriterDevice.getInstance().showError( getClass().getName(), "prepareProject()", "Cannot create project representation object due to " + e.getCause(), e );
+
+						}
 					}else if(event.kind==LifecycleEvent.PRE_PROJECT_CLOSE){
 						ProjectBuilder.getInstance().getProject((IProject)event.resource).closeRunningWorkbenchInstances();
 						ProjectBuilder.getInstance().removeProject((IProject)event.resource);
@@ -162,31 +165,35 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 	 * This method loops through all ascodt projects and setups their project objects
 	 */
 	public void initializeProjects(){
-//		Job job = new Job("Projects initialisation") {
-//
-//			@Override
-//			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					for(IProject project:((Workspace) ResourcesPlugin.getWorkspace()).getRoot().getProjects()){
+		//		Job job = new Job("Projects initialisation") {
+		//
+		//			@Override
+		//			protected IStatus run(IProgressMonitor monitor) {
+		try {
+			for(IProject project:((Workspace) ResourcesPlugin.getWorkspace()).getRoot().getProjects()){
 
-						if(project.isOpen()&&project.isNatureEnabled(ASCoDTNature.ID))
-							prepareProject(project);
-					}
-					 //return Status.OK_STATUS;
-				} catch (CoreException e) {
-					ErrorWriterDevice.getInstance().showError( getClass().getName(), "initializeProjects()", "Cannot initialize an existing project:" + e.getCause(), e );
-					// return Status.CANCEL_STATUS;
-				}
-//			}
-//
-//		};
-//		job.schedule();
-//		try {
-//			job.wait();
-//		} catch (InterruptedException e) {
-//			ErrorWriterDevice.getInstance().showError( getClass().getName(), "initializeProjects()", "Cannot initialize an existing project:" + e.getCause(), e );
-//			
-//		}
+				if(project.isOpen()&&project.isNatureEnabled(ASCoDTNature.ID))
+					prepareProject(project);
+			}
+			//return Status.OK_STATUS;
+		} catch (CoreException e) {
+			ErrorWriterDevice.getInstance().showError( getClass().getName(), "initializeProjects()", "Cannot initialize an existing project:" + e.getCause(), e );
+			// return Status.CANCEL_STATUS;
+		}
+		//			}
+		//
+		//		};
+		//		job.schedule();
+		//		try {
+		//			job.wait();
+		//		} catch (InterruptedException e) {
+		//			ErrorWriterDevice.getInstance().showError( getClass().getName(), "initializeProjects()", "Cannot initialize an existing project:" + e.getCause(), e );
+		//			
+		//		}
+		catch (ASCoDTException e) {
+			ErrorWriterDevice.getInstance().showError( getClass().getName(), "initializeProjects()", "Cannot create project representation object due to " + e.getCause(), e );
+
+		}
 	}
 
 

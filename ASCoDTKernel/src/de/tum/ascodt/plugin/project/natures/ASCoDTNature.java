@@ -87,7 +87,7 @@ public class ASCoDTNature  implements IProjectNature{
 		
 		
 		for (int i = 0; i < commands.length; ++i) {
-			if (commands[i].getBuilderName().equals(de.tum.ascodt.plugin.project.builders.ProjectBuilder.ID)) {
+			if (commands[i].getBuilderName().equals(de.tum.ascodt.plugin.project.builders.SiDLBuilder.ID)) {
 				return;
 			}
 		}
@@ -95,7 +95,7 @@ public class ASCoDTNature  implements IProjectNature{
 		ICommand[] newCommands = new ICommand[1];
 		//System.arraycopy(commands, 0, newCommands, 0, commands.length);
 		ICommand command = desc.newCommand();
-		command.setBuilderName(de.tum.ascodt.plugin.project.builders.ProjectBuilder.ID);
+		command.setBuilderName(de.tum.ascodt.plugin.project.builders.SiDLBuilder.ID);
 		//TODO Map<String,String> args = new HashMap<String,String>();
 		//		args.put("output", "components");
 		//		if(args!=null)
@@ -115,7 +115,7 @@ public class ASCoDTNature  implements IProjectNature{
 		IProjectDescription description = getProject().getDescription();
 		ICommand[] commands = description.getBuildSpec();
 		for (int i = 0; i < commands.length; ++i) {
-			if (commands[i].getBuilderName().equals(de.tum.ascodt.plugin.project.builders.ProjectBuilder.ID)) {
+			if (commands[i].getBuilderName().equals(de.tum.ascodt.plugin.project.builders.SiDLBuilder.ID)) {
 				ICommand[] newCommands = new ICommand[commands.length - 1];
 				System.arraycopy(commands, 0, newCommands, 0, i);
 				System.arraycopy(commands, i + 1, newCommands, i,

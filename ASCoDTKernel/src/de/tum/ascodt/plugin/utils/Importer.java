@@ -142,7 +142,6 @@ public class Importer {
 					compileSIDLFiles(child,project);
 			de.tum.ascodt.plugin.project.Project proj=de.tum.ascodt.plugin.project.ProjectBuilder.getInstance().getProject(project);
 			proj.compileComponents();
-			de.tum.ascodt.plugin.project.ProjectBuilder.getInstance().notifyProjectChangedListeners();
 			
 		}
 		

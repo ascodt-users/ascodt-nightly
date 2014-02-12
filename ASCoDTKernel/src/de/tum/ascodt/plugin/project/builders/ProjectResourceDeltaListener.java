@@ -73,8 +73,8 @@ public class ProjectResourceDeltaListener implements IResourceDeltaVisitor {
 			de.tum.ascodt.plugin.project.Project project, Mode mode)
 					throws ASCoDTException {
 		
-		Start startSymbol=ProjectBuilder.buildStartSymbolsForSIDLResource(delta.getResource().getLocation().toPortableString());
-		ProjectBuilder.extendSymbolTable(startSymbol, project.getSymbolTable(), delta.getResource().getLocation().toPortableString());
+		Start startSymbol=SiDLBuilder.buildStartSymbolsForSIDLResource(delta.getResource().getLocation().toPortableString());
+		SiDLBuilder.extendSymbolTable(startSymbol, project.getSymbolTable(), delta.getResource().getLocation().toPortableString());
 		_hasChanged=true;
 	}
   

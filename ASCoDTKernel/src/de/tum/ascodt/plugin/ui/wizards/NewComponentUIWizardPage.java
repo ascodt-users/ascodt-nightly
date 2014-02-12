@@ -224,7 +224,6 @@ public class NewComponentUIWizardPage extends WizardPage implements RepositoryLi
 			_lastProject.getStaticRepository().removeListener(NewComponentUIWizardPage.this);
 		_lastProject=ProjectBuilder.getInstance().getProject(_projectsComboBox.getItem(_projectsComboBox.getSelectionIndex()));
 		_lastProject.getStaticRepository().addListener(NewComponentUIWizardPage.this);
-		_lastProject.getStaticRepository().informListenersAboutChangedComponents();
 		if(_componentInterfacesComboBox.getItemCount()>0)
 			_componentInterfacesComboBox.select(0);
 	}

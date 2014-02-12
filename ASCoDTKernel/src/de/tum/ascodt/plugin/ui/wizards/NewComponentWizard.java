@@ -59,7 +59,7 @@ public class NewComponentWizard extends Wizard implements INewWizard {
 	    String componentName = _page.getComponentName();
 	    String componentNamespace=_page.getComponentNamespace(); 
 	    Target componentTarget = _page.getComponentTarget();
-	    ProjectBuilder.getInstance().getProject(projectIdentifier).createComponentSIDLSourceFile(componentName, componentNamespace,componentTarget);
+	    ProjectBuilder.getInstance().getProject(projectIdentifier).createComponent(componentName, componentNamespace,componentTarget);
 	    
 		} catch (ASCoDTException e) {
       ErrorWriterDevice.getInstance().showError( getClass().getName(), "performFinish()",  "Cannot create new component", e );

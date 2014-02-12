@@ -34,50 +34,17 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * @author atanasoa
  *
  */
-public class ProjectBuilder extends IncrementalProjectBuilder {
-
-	public static String ID=ProjectBuilder.class.getCanonicalName();
-	private Trace _trace = new Trace(ProjectBuilder.class.getCanonicalName());
-	ProjectResourceDeltaListener deltaListener=new ProjectResourceDeltaListener();
-	public ProjectBuilder(){
+public class SiDLBuilder {
+	public static String ID=SiDLBuilder.class.getCanonicalName();
+	private Trace _trace = new Trace(SiDLBuilder.class.getCanonicalName());
+	public SiDLBuilder(){
 		super();
 		_trace.in("Constructor");
 
 		_trace.out("Constructor");
 	}
 	
-	/**
-	 * 
-	 */
-	@Override
-	protected IProject[] build(int kind, @SuppressWarnings("rawtypes") Map args, IProgressMonitor monitor)
-			throws CoreException {
-		_trace.in("build(..)","kind:"+kind);
-		ASCoDTKernel.getDefault();
-		if (kind==IncrementalProjectBuilder.AUTO_BUILD){
-			IResourceDelta delta = getDelta(getProject());
-			_trace.debug("build()", "starting incremental build");
-
-			if(delta!=null){
-				delta.accept(deltaListener);
-				try {
-					if(deltaListener.hasChanged()){
-						buildAll();
-						deltaListener.reset();
-					}
-				} catch (ASCoDTException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-		}
-		_trace.out("build(..)");
-		return null;
-
-	}
-
-	/**
+		/**
 	 * A routine to validate the global symbol table against specific sidl file
 	 * @param startNode the starting node of the sidl resource
 	 * @param symbolTable to validate with
@@ -104,7 +71,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		try {
 			return buildStartSymbolsForSIDLResource(new java.io.FileInputStream(resourceLocation));
 		} catch (FileNotFoundException e) {
-			throw new ASCoDTException(ProjectBuilder.class.getName(), "buildComponentsAndInterfaces()",e.getMessage(), e);
+			throw new ASCoDTException(SiDLBuilder.class.getName(), "buildComponentsAndInterfaces()",e.getMessage(), e);
 		} 
 	}
 
@@ -132,11 +99,11 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 			result = parser.parse();
 
 		} catch (ParserException e) {
-			throw new ASCoDTException(ProjectBuilder.class.getName(), "buildComponentsAndInterfaces()",e.getMessage(), e);
+			throw new ASCoDTException(SiDLBuilder.class.getName(), "buildComponentsAndInterfaces()",e.getMessage(), e);
 		} catch (LexerException e) {
-			throw new ASCoDTException(ProjectBuilder.class.getName(), "buildComponentsAndInterfaces()",e.getMessage(), e);
+			throw new ASCoDTException(SiDLBuilder.class.getName(), "buildComponentsAndInterfaces()",e.getMessage(), e);
 		} catch (IOException e) {
-			throw new ASCoDTException(ProjectBuilder.class.getName(), "buildComponentsAndInterfaces()",e.getMessage(), e);
+			throw new ASCoDTException(SiDLBuilder.class.getName(), "buildComponentsAndInterfaces()",e.getMessage(), e);
 		}
 		return result;
 	}
@@ -170,19 +137,11 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 
 			eclipseProject.refreshLocal(IResource.DEPTH_INFINITE, null);
 		} catch (MalformedURLException e) {
-			throw new ASCoDTException(ProjectBuilder.class.getName(), "generateBlueprints()","wrong blueprint url:"+e.getLocalizedMessage(), e);
+			throw new ASCoDTException(SiDLBuilder.class.getName(), "generateBlueprints()","wrong blueprint url:"+e.getLocalizedMessage(), e);
 		} catch (CoreException e) {
-			throw new ASCoDTException(ProjectBuilder.class.getName(), "generateBlueprints()","eclipse core exception:"+e.getLocalizedMessage(), e);
+			throw new ASCoDTException(SiDLBuilder.class.getName(), "generateBlueprints()","eclipse core exception:"+e.getLocalizedMessage(), e);
 		}
 	}
 
-	public void buildAll() throws ASCoDTException{
-		Project project = de.tum.ascodt.plugin.project.ProjectBuilder.getInstance().getProject(getProject());
-		ProjectBuilder.generateBlueprints(project.getEclipseProjectHandle());
-		project.compileComponents();
-		de.tum.ascodt.plugin.project.ProjectBuilder.getInstance().notifyProjectChangedListeners();
-		project.notifyRepository(); 
-
-	}
 
 }

@@ -32,7 +32,6 @@ import org.eclipse.ui.wizards.IWizardDescriptor;
 
 import de.tum.ascodt.plugin.project.Project;
 import de.tum.ascodt.plugin.project.ProjectBuilder;
-import de.tum.ascodt.plugin.project.ProjectChangedListener;
 import de.tum.ascodt.plugin.ui.palette.ContextMenuProvider;
 import de.tum.ascodt.plugin.ui.palette.PaletteFactory;
 import de.tum.ascodt.plugin.ui.wizards.NewComponentWizard;
@@ -62,8 +61,8 @@ public class Palette extends ViewPart implements RepositoryListener{
 	 */
 	private PaletteRoot _palette_model;
 
-	
-	
+
+
 
 	private ComboViewer combo;
 	private ProjectContentProvider _projectContentProvider;
@@ -77,11 +76,11 @@ public class Palette extends ViewPart implements RepositoryListener{
 		_projectContentProvider = new ProjectContentProvider();
 		_paletteViewer = new PaletteViewer();
 		_paletteViewer.createControl(parent);
-		
+
 		configurePaletteViewer();
 		initializePaletteViewer();
 		createToolbar();
-		
+
 	}
 
 
@@ -97,7 +96,7 @@ public class Palette extends ViewPart implements RepositoryListener{
 	private void createToolbar() {
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
 		ControlContribution projectsControl = new ControlContribution("Projects:"){
-			
+
 			@Override
 			protected Control createControl(Composite parent) {
 				combo = new ComboViewer(parent,SWT.None);
@@ -117,13 +116,12 @@ public class Palette extends ViewPart implements RepositoryListener{
 					@Override
 					public void selectionChanged(SelectionChangedEvent event) {
 						IStructuredSelection selection = (IStructuredSelection) event
-						.getSelection();
+								.getSelection();
 						if(selection.getFirstElement() instanceof Project){
 							if(_lastSelection!=null)
 								_lastSelection.getStaticRepository().removeListener(Palette.this);
 							_lastSelection=(Project) selection.getFirstElement();
 							_lastSelection.getStaticRepository().addListener(Palette.this);
-							_lastSelection.getStaticRepository().informListenersAboutChangedComponents();
 						}
 					}
 				});
@@ -137,7 +135,7 @@ public class Palette extends ViewPart implements RepositoryListener{
 		mgr.add(new Action("New component..."){
 			public void run() {
 				IWizardDescriptor descriptor = PlatformUI.getWorkbench()
-				.getNewWizardRegistry().findWizard(NewComponentWizard.ID);
+						.getNewWizardRegistry().findWizard(NewComponentWizard.ID);
 				try {
 					// Then if we have a wizard, open it.
 					if (descriptor != null) {
@@ -221,10 +219,13 @@ public class Palette extends ViewPart implements RepositoryListener{
 		if(_paletteViewer.getSelection() instanceof StructuredSelection &&
 				((StructuredSelection)_paletteViewer.getSelection()).getFirstElement() instanceof ToolEntryEditPart
 				&& 	((ToolEntryEditPart)((StructuredSelection)_paletteViewer.getSelection()).getFirstElement()).getModel() instanceof CombinedTemplateCreationEntry){
-			getProject().getStaticRepository().removeComponent(
-					((CombinedTemplateCreationEntry)	((ToolEntryEditPart)((StructuredSelection)_paletteViewer.getSelection()).getFirstElement()).getModel()).getLabel()
-					);
-			getProject().getStaticRepository().informListenersAboutChangedComponents();
+			String componentName=((CombinedTemplateCreationEntry)	((ToolEntryEditPart)((StructuredSelection)_paletteViewer.getSelection()).getFirstElement()).getModel()).getLabel();
+			try{
+				getProject().removeComponent(componentName);
+			} catch (ASCoDTException e) {
+				ErrorWriterDevice.getInstance().showError( getClass().getName(), "deleteSelectedItem()",  "Cannot add component to palette", e );
+
+			}
 		}
 	}
 	/**
@@ -241,7 +242,7 @@ public class Palette extends ViewPart implements RepositoryListener{
 							null,null));
 				} catch (ASCoDTException e) {
 					ErrorWriterDevice.getInstance().showError( getClass().getName(), "notify()",  "Cannot add component to palette", e );
-		      
+
 				}
 			}
 
@@ -250,14 +251,14 @@ public class Palette extends ViewPart implements RepositoryListener{
 
 	}
 
-	
+
 
 	public void setProject(Project project){
 		if(project!=null)
 			combo.setSelection(new StructuredSelection(project));
-		
+
 	}
-	
+
 	/**
 	 * Getter for the current palette project
 	 * @return
@@ -265,11 +266,11 @@ public class Palette extends ViewPart implements RepositoryListener{
 	public Project getProject(){
 		return (Project)((StructuredSelection)combo.getSelection()).getFirstElement();
 	}
-	
+
 	public PaletteViewer getViewer() {
 		return _paletteViewer;
 	}
 
 
-	
+
 }

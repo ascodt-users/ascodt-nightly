@@ -60,7 +60,6 @@ public class ProjectBuilder extends PlatformObject{
 	 */
 	protected java.util.Map<String, Project> _nameToProjectEntitiesMap;
 	private java.util.Map<org.eclipse.core.resources.IProject, Project>  _eclipseProjectToProjectMap;
-	private java.util.Set<ProjectChangedListener> _listeners;
 	
 	
 	/**
@@ -77,8 +76,7 @@ public class ProjectBuilder extends PlatformObject{
 	private ProjectBuilder() {
 		_eclipseProjectToProjectMap = new java.util.HashMap<org.eclipse.core.resources.IProject, Project>();
 		_nameToProjectEntitiesMap           = new java.util.HashMap<String, Project>();
-		_listeners = new java.util.HashSet<ProjectChangedListener>();
-	
+			
 	}
 
 
@@ -156,7 +154,6 @@ public class ProjectBuilder extends PlatformObject{
 		_nameToProjectEntitiesMap.put(eclipseProject.getName(), newProject);
 		_eclipseProjectToProjectMap.put(eclipseProject, newProject);
 		newProject.buildProjectSources();
-		notifyProjectChangedListeners();
 		trace.out( "createProject(...)" );
 	}
 
@@ -250,7 +247,7 @@ public class ProjectBuilder extends PlatformObject{
 			
 			_nameToProjectEntitiesMap.remove(project.getName());
 		}
-		notifyProjectChangedListeners();
+		
 		
 	}
 
@@ -274,7 +271,7 @@ public class ProjectBuilder extends PlatformObject{
 
 			ICommand[] newCommands = new ICommand[1];
 			ICommand command = description.newCommand();
-			command.setBuilderName(de.tum.ascodt.plugin.project.builders.ProjectBuilder.ID);
+			command.setBuilderName(de.tum.ascodt.plugin.project.builders.SiDLBuilder.ID);
 			newCommands[newCommands.length - 1] = command;
 			description.setBuildSpec(newCommands);
 			project.setDescription(description, null);
@@ -284,17 +281,6 @@ public class ProjectBuilder extends PlatformObject{
 	}
 
 
-	public void registerProjectsChangedListener(
-			ProjectChangedListener listener) {
-		_listeners.add(listener);
-
-	}
-
-	public void removeProjectsChangedListener(
-			ProjectChangedListener listener) {
-		_listeners.remove(listener);
-
-	}
 
 	/**
 	 * 
@@ -314,17 +300,7 @@ public class ProjectBuilder extends PlatformObject{
 		return _nameToProjectEntitiesMap.keySet();
 	}
 
-	/**
-	 * notify all views that the project model has changed
-	 */
-	public void notifyProjectChangedListeners(){
-		for(ProjectChangedListener listener:_listeners){
-			listener.begin();
-			for(Project project:this._nameToProjectEntitiesMap.values())
-				listener.notify(project);
-			listener.end();
-		}
-	}
+	
 
 
 

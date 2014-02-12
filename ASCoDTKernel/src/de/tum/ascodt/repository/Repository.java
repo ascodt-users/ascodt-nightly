@@ -37,10 +37,12 @@ public class Repository extends NonSerializableRepository implements Serializabl
 
   public void addListener( RepositoryListener listener ) {
     _myListeners.add( listener );
+    informListenersAboutChangedComponents();
   }
 
   public void removeListener( RepositoryListener listener ) {
     _myListeners.remove( listener );
+    informListenersAboutChangedComponents();
   }
   
   /**
@@ -56,20 +58,20 @@ public class Repository extends NonSerializableRepository implements Serializabl
   }
   
  
- /**
-  * remove a component interface from the repository
-  * @param componentInterface the interface to be removed
-  */
-  public void removeComponent(String componentInterface) {
-  	if(_componentInterfaces.containsKey(componentInterface)){
-  		_componentInterfaces.remove( componentInterface );
-  		informListenersAboutChangedComponents();
-  	}
-  }
-  
+// /**
+//  * remove a component interface from the repository
+//  * @param componentInterface the interface to be removed
+//  */
+//  public void removeComponent(String componentInterface) {
+//  	if(_componentInterfaces.containsKey(componentInterface)){
+//  		_componentInterfaces.remove( componentInterface );
+//  		informListenersAboutChangedComponents();
+//  	}
+//  }
+//  
  
   
-  public void informListenersAboutChangedComponents() {
+  private void informListenersAboutChangedComponents() {
     for (RepositoryListener listener: _myListeners) {
       listener.begin();
       for (Entry<String,String> componentEntry: _componentInterfaces.entrySet()) {
@@ -78,4 +80,10 @@ public class Repository extends NonSerializableRepository implements Serializabl
       listener.end();
     }
   }
+
+	public void reset() {
+		_componentInterfaces.clear();
+		informListenersAboutChangedComponents();
+	}
+	
 }
