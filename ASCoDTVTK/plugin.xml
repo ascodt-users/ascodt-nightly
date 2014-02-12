@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            category="de.tum.ascodt.plugin.catagery"
+            class="de.tum.ascodt.plugin.views.VTKView"
+            id="de.tum.ascodt.plugin.views.VTKView"
+            name="VTK View"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="de.tum.ascodt.plugin.perspectives.ASCoDTPerspective">
+         <view
+               id="de.tum.ascodt.plugin.views.VTKView"
+               minimized="false"
+               relationship="right"
+               visible="true">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="de.tum.ascodt.plugin.categories.ascodt"
+            class="de.tum.ascodt.plugin.ui.wizards.VTKWizard"
+            finalPerspective="de.tum.ascodt.plugin.perspectives.ASCoDTPerspective"
+            id="de.tum.ascodt.plugin.ui.wizards.VTKWizard"
+            name="VTK Wizard"
+            preferredPerspectives="de.tum.ascodt.plugin.perspectives.ASCoDTPerspective"
+            project="false">
+      </wizard>
+      <category
+            id="de.tum.ascodt.plugin.categories.ascodt"
+            name="ASCoDT">
+      </category>
+   </extension>
+   <extension
+         point="de.tum.ascodt.plugin.extensions.Project">
+      <project_extension
+            class="VTKExtension">
+      </project_extension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <commonWizard
+            menuGroupId="ASCoDT"
+            type="new"
+            wizardId="de.tum.ascodt.plugin.ui.wizards.VTKWizard">
+         <enablement></enablement>
+      </commonWizard>
+   </extension>
+
+</plugin>
