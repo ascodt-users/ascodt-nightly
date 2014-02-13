@@ -41,6 +41,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import de.tum.ascodt.plugin.ASCoDTKernel;
 import de.tum.ascodt.plugin.project.ProjectBuilder;
+import de.tum.ascodt.plugin.project.builders.SIDLPair;
 import de.tum.ascodt.plugin.repository.ClasspathRepository;
 import de.tum.ascodt.plugin.ui.editors.gef.WorkbenchEditor;
 import de.tum.ascodt.plugin.ui.gef.model.Diagram;
@@ -70,14 +71,7 @@ import org.eclipse.core.filesystem.IFileSystem;
  */
 public class Project {
 
-	class Pair<A,B>{
-		A _first;
-		B _second;
-		Pair(A first,B second){
-			_first=first;
-			_second=second;
-		}
-	}
+	
 	/**
 	 * @return the _eclipseProjectHandle
 	 */
@@ -162,7 +156,7 @@ public class Project {
 		createIncludes();
 		createSettings();
 		//folder where all native libraries are collected
-		createNative();
+		createBuildFolders();
 		//folder for all imported components
 		createImports();
 		//workspace for dynamic repositories
@@ -184,7 +178,8 @@ public class Project {
 	}
 
 	public void destroy() {
-		Vector<IFile> instances= Project.this.closeRunningWorkbenchInstances();
+		//Vector<IFile> instances= 
+		Project.this.closeRunningWorkbenchInstances();
 		if(_classpathRepository!=null){
 			try {
 				_classpathRepository.close();
@@ -210,27 +205,27 @@ public class Project {
 	 */
 	public void buildProjectSources() throws ASCoDTException{
 		try{
-			Vector<Pair<String,Start>> sources=new Vector<Pair<String,Start>>();
-			Vector<Pair<String,Start>> deps=new Vector<Pair<String,Start>>();
-			Vector<Pair<String,Start>> imports=new Vector<Pair<String,Start>>();
+			Vector<SIDLPair<String,Start>> sources=new Vector<SIDLPair<String,Start>>();
+			Vector<SIDLPair<String,Start>> deps=new Vector<SIDLPair<String,Start>>();
+			Vector<SIDLPair<String,Start>> imports=new Vector<SIDLPair<String,Start>>();
 			SymbolTable symbolTable=new SymbolTable();
 			for(String dep:getSIDLDependencies()){
-				deps.add(new Pair<String,Start>(
+				deps.add(new SIDLPair<String,Start>(
 						dep,
 						de.tum.ascodt.plugin.project.builders.SiDLBuilder.buildStartSymbolsForSIDLResource(dep))
 						);
 			}
-			buildStartSymbolsForSIDLResources(imports,_eclipseProjectHandle.getFolder(getImportsFolder()));
-			buildStartSymbolsForSIDLResources(sources,_eclipseProjectHandle.getFolder(getSourcesFolder()));
-			for(Pair<String,Start> resourceEntry:deps){
+			de.tum.ascodt.plugin.project.builders.SiDLBuilder.buildStartSymbolsForSIDLResources(imports,_eclipseProjectHandle.getFolder(getImportsFolder()));
+			de.tum.ascodt.plugin.project.builders.SiDLBuilder.buildStartSymbolsForSIDLResources(sources,_eclipseProjectHandle.getFolder(getSourcesFolder()));
+			for(SIDLPair<String,Start> resourceEntry:deps){
 				de.tum.ascodt.plugin.project.builders.SiDLBuilder.extendSymbolTable(resourceEntry._second, symbolTable, resourceEntry._first);
 			}
 
-			for(Pair<String,Start> resourceEntry:imports){
+			for(SIDLPair<String,Start> resourceEntry:imports){
 				de.tum.ascodt.plugin.project.builders.SiDLBuilder.extendSymbolTable(resourceEntry._second, symbolTable, resourceEntry._first);
 			}
 
-			for(Pair<String,Start> resourceEntry:sources){
+			for(SIDLPair<String,Start> resourceEntry:sources){
 				de.tum.ascodt.plugin.project.builders.SiDLBuilder.extendSymbolTable(resourceEntry._second, symbolTable, resourceEntry._first);
 			}
 			_symbolTable=null;
@@ -244,38 +239,7 @@ public class Project {
 		}
 	}
 
-	/**
-	 * build all project sidl files in given folder
-	 * @param startSymbolsMap a hash map for stroring resources startsymbols
-	 * @throws ASCoDTException
-	 */
-	private void buildStartSymbolsForSIDLResources(Vector<Pair<String,Start>> startSymbolsMap,IResource resource) throws ASCoDTException {
-
-		try{
-			if(resource instanceof IFolder){
-				Vector<IResource> files=new Vector<IResource>(); 
-				for(IResource child:((IFolder)resource).members()){
-					if(child instanceof IFile)
-						files.add(child);
-					else
-						buildStartSymbolsForSIDLResources(startSymbolsMap,child);
-
-				}
-				for(IResource file:files)
-					buildStartSymbolsForSIDLResources(startSymbolsMap,file);
-
-			}else if(resource instanceof IFile &&resource.getName().contains(".sidl")){
-				startSymbolsMap.add(new Pair<String,Start>(
-						resource.getLocation().toPortableString(),
-						de.tum.ascodt.plugin.project.builders.SiDLBuilder.buildStartSymbolsForSIDLResource(resource.getLocation().toPortableString())
-						)
-						);
-			}
-
-		}catch(CoreException e){
-			throw new ASCoDTException(getClass().getName(), "buildProjectSources()", "building sidl files failed", e);
-		}
-	}
+	
 
 
 	/**
@@ -340,12 +304,17 @@ public class Project {
 	 * for native components
 	 * @throws ASCoDTException 
 	 */
-	private void createNative() throws ASCoDTException {
-		IFolder nativeFolder=_eclipseProjectHandle.getFolder(getNativeFolder());
+	private void createBuildFolders() throws ASCoDTException {
+		IFolder executablesFolder=_eclipseProjectHandle.getFolder(getFolderForExecutables());
+		IFolder libsFolder=_eclipseProjectHandle.getFolder(getFolderForLibs());
+		
 		try{
-			nativeFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
-			if(!nativeFolder.exists())
-				createParentFolders(nativeFolder);
+			executablesFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
+			if(!executablesFolder.exists())
+				createParentFolders(executablesFolder);
+			libsFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
+			if(!libsFolder.exists())
+				createParentFolders(libsFolder);
 		}catch(CoreException e){
 			throw new ASCoDTException(getClass().getName(), "createIncludes()", "creating an includes folder failed", e);
 		}
@@ -835,8 +804,11 @@ public class Project {
 		return "/src";
 	}
 
-	public String getNativeFolder(){
-		return "/native";
+	public String getFolderForExecutables(){
+		return "/bin";
+	}
+	public String getFolderForLibs(){
+		return "/lib";
 	}
 
 	public String getImportsFolder(){

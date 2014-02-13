@@ -28,8 +28,8 @@ enable_language( Fortran )
 INCLUDE_DIRECTORIES(../../commons)
 INCLUDE_DIRECTORIES(../../src)
 INCLUDE_DIRECTORIES(../../components/java)
-SET(EXECUTABLE_OUTPUT_PATH "../../native")
-SET(LIBRARY_OUTPUT_PATH  "../../native")
+SET(EXECUTABLE_OUTPUT_PATH "../../bin")
+SET(LIBRARY_OUTPUT_PATH  "../../lib")
 
 
 

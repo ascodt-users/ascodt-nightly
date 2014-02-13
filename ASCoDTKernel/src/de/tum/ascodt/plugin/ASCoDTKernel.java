@@ -97,6 +97,8 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 	 */
 	public ASCoDTKernel() {
 		singleton=this;
+		System.out.println("plugin path:"+
+				ASCoDTKernel.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 		initialiseServices();
 
 		initializeProjects();

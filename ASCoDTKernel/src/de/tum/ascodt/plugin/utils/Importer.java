@@ -15,6 +15,7 @@ import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IProject;
 
+import de.tum.ascodt.plugin.project.ProjectBuilder;
 import de.tum.ascodt.utils.exceptions.ASCoDTException;
 
 /**
@@ -54,7 +55,12 @@ public class Importer {
 				Enumeration<? extends ZipEntry> entries=zipFile.entries();
 
 				File destinationDirectory=new File(targetPath+File.separatorChar+f.getName().substring(0,f.getName().lastIndexOf(".")));
-				File nativeDirectory=new File(project.getLocation().toPortableString()+"/native");
+				File libDirectory=new File(
+						project.getLocation().toPortableString()+
+						ProjectBuilder.getInstance().getProject(project).getFolderForLibs());
+				File exeDirectory=new File(
+						project.getLocation().toPortableString()+
+						ProjectBuilder.getInstance().getProject(project).getFolderForExecutables());
 				if(destinationDirectory.exists()){
 					//TODO deleteDirectory(directory);
 					destinationDirectory.mkdirs();
@@ -63,8 +69,8 @@ public class Importer {
 				while(entries.hasMoreElements()){
 					final ZipEntry entry = (ZipEntry)entries.nextElement();
 					final File file = new File(destinationDirectory, entry.getName());
-					final File native_file = new File(nativeDirectory, entry.getName());
-					
+					final File native_file = new File(libDirectory, entry.getName());
+					final File exe_file = new File(exeDirectory, entry.getName());
 					if (entry.isDirectory()) {
 						file.mkdirs();
 					} else {
@@ -72,6 +78,9 @@ public class Importer {
 						if(entry.getName().endsWith(".so")||entry.getName().endsWith(".dll"))
 							copyInputStream(zipFile.getInputStream(entry),
 									new BufferedOutputStream(new FileOutputStream(native_file)));
+						else if(entry.getName().endsWith(".exe"))
+							copyInputStream(zipFile.getInputStream(entry),
+									new BufferedOutputStream(new FileOutputStream(exe_file)));
 						else	
 							copyInputStream(zipFile.getInputStream(entry),
 								new BufferedOutputStream(new FileOutputStream(file)));

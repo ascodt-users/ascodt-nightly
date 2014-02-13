@@ -2,21 +2,20 @@ package de.tum.ascodt.plugin.project.builders;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Map;
+
+import java.util.Vector;
 
 
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 
-import de.tum.ascodt.plugin.ASCoDTKernel;
 import de.tum.ascodt.plugin.project.Project;
 import de.tum.ascodt.plugin.utils.tracing.Trace;
 import de.tum.ascodt.sidlcompiler.backend.CreateComponentsAndInterfaces;
@@ -130,7 +129,7 @@ public class SiDLBuilder {
 
 					new File(eclipseProject.getLocation().toPortableString()+project.getJavaProxiesFolder()).toURI().toURL(),
 					new File(eclipseProject.getLocation().toPortableString()+project.getJavaSourcesFolder()).toURI().toURL(),
-					new File(eclipseProject.getLocation().toPortableString()+project.getNativeFolder()).toURI().toURL()
+					new File(eclipseProject.getLocation().toPortableString()+project.getFolderForExecutables()).toURI().toURL()
 
 					);
 
@@ -143,5 +142,37 @@ public class SiDLBuilder {
 		}
 	}
 
+	/**
+	 * build all project sidl files in given folder
+	 * @param startSymbolsMap a hash map for stroring resources startsymbols
+	 * @throws ASCoDTException
+	 */
+	public static void buildStartSymbolsForSIDLResources(Vector<SIDLPair<String,Start>> startSymbolsMap,IResource resource) throws ASCoDTException {
+
+		try{
+			if(resource instanceof IFolder){
+				Vector<IResource> files=new Vector<IResource>(); 
+				for(IResource child:((IFolder)resource).members()){
+					if(child instanceof IFile)
+						files.add(child);
+					else
+						buildStartSymbolsForSIDLResources(startSymbolsMap,child);
+
+				}
+				for(IResource file:files)
+					buildStartSymbolsForSIDLResources(startSymbolsMap,file);
+
+			}else if(resource instanceof IFile &&resource.getName().contains(".sidl")){
+				startSymbolsMap.add(new SIDLPair<String,Start>(
+						resource.getLocation().toPortableString(),
+						de.tum.ascodt.plugin.project.builders.SiDLBuilder.buildStartSymbolsForSIDLResource(resource.getLocation().toPortableString())
+						)
+						);
+			}
+
+		}catch(CoreException e){
+			throw new ASCoDTException(SiDLBuilder.class.getName(), "buildProjectSources()", "building sidl files failed", e);
+		}
+	}
 
 }

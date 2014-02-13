@@ -56,7 +56,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
 	public void setProjectLocation(String location){
 		_projectLocation=location;
 		if(textProgramExecutable!=null)
-			textProgramExecutable.setText(_projectLocation+File.separator+"native"+File.separator+_label);
+			textProgramExecutable.setText(_projectLocation+File.separator+"bin"+File.separator+_label);
 		applicationSettings = new java.io.File(_projectLocation+File.separator+"settings"+File.separator+_label+".settings");
 		loadStorageFiles();	
 	}
