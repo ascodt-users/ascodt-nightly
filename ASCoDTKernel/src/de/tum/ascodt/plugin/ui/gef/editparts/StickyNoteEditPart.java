@@ -1,5 +1,6 @@
 package de.tum.ascodt.plugin.ui.gef.editparts;
 
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Vector;
@@ -23,6 +24,7 @@ import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+
 import de.tum.ascodt.plugin.ui.gef.commands.ChangeTextCommand;
 import de.tum.ascodt.plugin.ui.gef.commands.LinkCreateCommand;
 import de.tum.ascodt.plugin.ui.gef.directedit.LabelCellEditorLocator;
@@ -34,189 +36,200 @@ import de.tum.ascodt.plugin.ui.gef.model.Link;
 import de.tum.ascodt.plugin.ui.gef.model.ModelElement;
 import de.tum.ascodt.plugin.ui.gef.model.StickyNote;
 
+
 /**
  * The sticky note editpart controller
+ * 
  * @author atanasoa
- *
+ * 
  */
-public class StickyNoteEditPart extends AbstractGraphicalEditPart 
-implements PropertyChangeListener, NodeEditPart{
+public class StickyNoteEditPart extends AbstractGraphicalEditPart implements
+    PropertyChangeListener, NodeEditPart {
 
-	protected DirectEditManager manager;
+  protected DirectEditManager manager;
 
-	private Dimension size;
+  private Dimension size;
 
-	/**
-	 * The connection anchor of the current port
-	 */
-	private ConnectionAnchor anchor;
+  /**
+   * The connection anchor of the current port
+   */
+  private ConnectionAnchor anchor;
 
-	public StickyNoteEditPart(){		
-	}	
+  public StickyNoteEditPart() {}
 
-	@Override
-	public void activate() {
-		if (!isActive()) {
-			super.activate();
-			((ModelElement) getModel()).addPropertyChangeListener(this);
+  @Override
+  public void activate() {
+    if (!isActive()) {
+      super.activate();
+      ((ModelElement)getModel()).addPropertyChangeListener(this);
 
-		}
-	}
+    }
+  }
 
-	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(ConnectionEditPart arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  protected void createEditPolicies() {
+    // allow removal of the associated model element
+    installEditPolicy(EditPolicy.COMPONENT_ROLE,
+        new StickyNoteComponentEditPolicy());
+    // allow moving of the associated model element
+    installEditPolicy(EditPolicy.LAYOUT_ROLE, new StickyNoteFlowEditPolicy());
+    // allow editing of the associated model element
+    installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
+      @Override
+      protected Command getDirectEditCommand(DirectEditRequest request) {
+        return new ChangeTextCommand((StickyNote)getModel(), (String)request
+            .getCellEditor().getValue());
+      }
 
-	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(Request arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+      @Override
+      protected void showCurrentEditValue(DirectEditRequest request) {
+        ((StickyNoteFigure)getFigure()).setText((String)request.getCellEditor()
+            .getValue());
+        getFigure().getUpdateManager().performUpdate();
+      }
+    });
+    installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE,
+        new GraphicalNodeEditPolicy() {
 
-	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(ConnectionEditPart arg0) {
-		return getConnectionAnchor();
-	}
+          @Override
+          protected Command getConnectionCompleteCommand(
+              CreateConnectionRequest request) {
+            if (request.getStartCommand() instanceof LinkCreateCommand) {
+              LinkCreateCommand cmd = (LinkCreateCommand)request
+                  .getStartCommand();
+              cmd.setTarget((StickyNote)getHost().getModel());
+              return cmd;
+            }
+            return null;
+          }
 
-	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(Request arg0) {
-		return getConnectionAnchor();
-	}
+          @Override
+          protected Command getConnectionCreateCommand(
+              CreateConnectionRequest request) {
+            // TODO Auto-generated method stub
+            return null;
+          }
 
-	protected ConnectionAnchor getConnectionAnchor() {
-		if (anchor == null) {
-			if (getModel() instanceof StickyNote)
-				anchor = new ChopboxAnchor(getFigure());
-			else
-				throw new IllegalArgumentException("unexpected model");
-		}		
-		return anchor;
-	}
+          @Override
+          protected Command getReconnectSourceCommand(ReconnectRequest request) {
+            // TODO Auto-generated method stub
+            return null;
+          }
 
-	@Override
-	protected IFigure createFigure() {
-		return new StickyNoteFigure();
-	}
+          @Override
+          protected Command getReconnectTargetCommand(ReconnectRequest request) {
+            // TODO Auto-generated method stub
+            return null;
+          }
+        });
+  }
 
-	@Override
-	protected void createEditPolicies() {
-		// allow removal of the associated model element
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new StickyNoteComponentEditPolicy());
-		// allow  moving of the associated model element
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new StickyNoteFlowEditPolicy());
-		// allow editing of the associated model element		
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
-			protected Command getDirectEditCommand(DirectEditRequest request) {				
-				return new ChangeTextCommand((StickyNote)getModel(), 
-						(String)request.getCellEditor().getValue());
-			}
+  @Override
+  protected IFigure createFigure() {
+    return new StickyNoteFigure();
+  }
 
-			protected void showCurrentEditValue(DirectEditRequest request) {
-				((StickyNoteFigure)getFigure()).setText(
-						(String)request.getCellEditor().getValue());
-				getFigure().getUpdateManager().performUpdate();			
-			}
-		});
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE,
-				new GraphicalNodeEditPolicy() {
+  private StickyNote getCastedModel() {
+    return (StickyNote)getModel();
+  }
 
-			@Override
-			protected Command getReconnectTargetCommand(ReconnectRequest request) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+  protected ConnectionAnchor getConnectionAnchor() {
+    if (anchor == null) {
+      if (getModel() instanceof StickyNote) {
+        anchor = new ChopboxAnchor(getFigure());
+      } else {
+        throw new IllegalArgumentException("unexpected model");
+      }
+    }
+    return anchor;
+  }
 
-			@Override
-			protected Command getReconnectSourceCommand(ReconnectRequest request) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+  public IFigure getDirectEditFigure() {
+    return getFigure();
+  }
 
-			@Override
-			protected Command getConnectionCreateCommand(CreateConnectionRequest request) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+  public String getDirectEditText() {
+    return getCastedModel().getText();
+  }
 
-			@Override
+  @Override
+  protected Vector<Link> getModelTargetConnections() {
+    return getCastedModel().getTargetLinks();
+  }
 
-			protected Command getConnectionCompleteCommand(
-					CreateConnectionRequest request) {
-				if (request.getStartCommand() instanceof LinkCreateCommand){
-					LinkCreateCommand cmd = (LinkCreateCommand)request.getStartCommand();
-					cmd.setTarget((StickyNote)getHost().getModel());
-					return cmd;
-				}
-				return null;
-			}
-		});
-	}
+  @Override
+  public ConnectionAnchor getSourceConnectionAnchor(ConnectionEditPart arg0) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-	private StickyNote getCastedModel() {
-		return (StickyNote) getModel();
-	}
+  @Override
+  public ConnectionAnchor getSourceConnectionAnchor(Request arg0) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {		
-		String prop = evt.getPropertyName();
-		//System.out.println("prop="+prop);
-		if ((StickyNote.SIZE_PROP.equals(prop)) || (StickyNote.LOCATION_PROP.equals(prop))){			
-			size = getCastedModel().getSize();
-			refreshVisuals();
-		}
-		if (StickyNote.TEXT_PROP.equals(prop)) {
-			size = ((StickyNoteFigure)getFigure()).getTextSize();
-			size.height += 20;
-			size.width += 20;
-			refreshVisuals();
-		}
-		if (StickyNote.TARGET_LINKS_PROP.equals(prop)) {			
-			refreshTargetConnections();
-		}
+  @Override
+  public ConnectionAnchor getTargetConnectionAnchor(ConnectionEditPart arg0) {
+    return getConnectionAnchor();
+  }
 
-	}
+  @Override
+  public ConnectionAnchor getTargetConnectionAnchor(Request arg0) {
+    return getConnectionAnchor();
+  }
 
-	@Override
-	protected Vector<Link> getModelTargetConnections() {		
-		return getCastedModel().getTargetLinks();		
-	}
+  protected void performDirectEdit() {
+    if (manager == null) {
+      manager = new LabelDirectEditManager(this, new LabelCellEditorLocator(
+          getDirectEditFigure()));
+    }
+    manager.show();
+  }
 
-	protected void performDirectEdit() {
-		if(manager == null)
-			manager = new LabelDirectEditManager(this,
-					new LabelCellEditorLocator(getDirectEditFigure()));
-		manager.show();
-	}
+  @Override
+  public void performRequest(Request request) {
+    if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
+      performDirectEdit();
+      refreshVisuals();
+      // getEditPolicy(EditPolicy.DIRECT_EDIT_ROLE).getCommand(request).execute();
+    } else {
+      super.performRequest(request);
+    }
+  }
 
-	public void performRequest(Request request){
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT){
-			performDirectEdit();
-			refreshVisuals();
-			//getEditPolicy(EditPolicy.DIRECT_EDIT_ROLE).getCommand(request).execute();
-		}
-		else
-			super.performRequest(request);
-	}
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    String prop = evt.getPropertyName();
+    // System.out.println("prop="+prop);
+    if (StickyNote.SIZE_PROP.equals(prop) ||
+        StickyNote.LOCATION_PROP.equals(prop)) {
+      size = getCastedModel().getSize();
+      refreshVisuals();
+    }
+    if (StickyNote.TEXT_PROP.equals(prop)) {
+      size = ((StickyNoteFigure)getFigure()).getTextSize();
+      size.height += 20;
+      size.width += 20;
+      refreshVisuals();
+    }
+    if (StickyNote.TARGET_LINKS_PROP.equals(prop)) {
+      refreshTargetConnections();
+    }
 
-	protected void refreshVisuals() {		
-		if (size == null){
-			size = getCastedModel().getSize();
-		}
-		Rectangle bounds = new Rectangle(getCastedModel().getLocation(), size);		
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
-		((StickyNoteFigure)getFigure()).setText(getCastedModel().getText());
-		((StickyNoteFigure)getFigure()).repaint();
-		super.refreshVisuals();		
-	}
+  }
 
-	public IFigure getDirectEditFigure() {
-		return getFigure();
-	}
-
-	public String getDirectEditText() {
-		return getCastedModel().getText();
-	}
+  @Override
+  protected void refreshVisuals() {
+    if (size == null) {
+      size = getCastedModel().getSize();
+    }
+    Rectangle bounds = new Rectangle(getCastedModel().getLocation(), size);
+    ((GraphicalEditPart)getParent()).setLayoutConstraint(this, getFigure(),
+        bounds);
+    ((StickyNoteFigure)getFigure()).setText(getCastedModel().getText());
+    ((StickyNoteFigure)getFigure()).repaint();
+    super.refreshVisuals();
+  }
 
 }

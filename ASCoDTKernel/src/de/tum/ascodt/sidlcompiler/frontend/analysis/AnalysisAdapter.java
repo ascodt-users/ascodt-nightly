@@ -2,375 +2,431 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.analysis;
 
-import java.util.*;
-import de.tum.ascodt.sidlcompiler.frontend.node.*;
-
-public class AnalysisAdapter implements Analysis
-{
-    private Hashtable<Node,Object> in;
-    private Hashtable<Node,Object> out;
-
-    public Object getIn(Node node)
-    {
-        if(this.in == null)
-        {
-            return null;
-        }
-
-        return this.in.get(node);
-    }
-
-    public void setIn(Node node, Object o)
-    {
-        if(this.in == null)
-        {
-            this.in = new Hashtable<Node,Object>(1);
-        }
-
-        if(o != null)
-        {
-            this.in.put(node, o);
-        }
-        else
-        {
-            this.in.remove(node);
-        }
-    }
-
-    public Object getOut(Node node)
-    {
-        if(this.out == null)
-        {
-            return null;
-        }
-
-        return this.out.get(node);
-    }
-
-    public void setOut(Node node, Object o)
-    {
-        if(this.out == null)
-        {
-            this.out = new Hashtable<Node,Object>(1);
-        }
-
-        if(o != null)
-        {
-            this.out.put(node, o);
-        }
-        else
-        {
-            this.out.remove(node);
-        }
-    }
-
-    public void caseStart(Start node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseADeclaration(ADeclaration node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAPackage(APackage node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseASubpackagePackageElement(ASubpackagePackageElement node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAClassPackageElement(AClassPackageElement node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAInterfacePackageElement(AInterfacePackageElement node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAUses(AUses node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAUserDefinedType(AUserDefinedType node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAIntBuiltInType(AIntBuiltInType node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseADoubleBuiltInType(ADoubleBuiltInType node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseABoolBuiltInType(ABoolBuiltInType node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAOpaqueBuiltInType(AOpaqueBuiltInType node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAStringBuiltInType(AStringBuiltInType node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAOperation(AOperation node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAParameterInParameter(AParameterInParameter node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAParameterArrayInParameter(AParameterArrayInParameter node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAParameterOutParameter(AParameterOutParameter node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAParameterArrayOutParameter(AParameterArrayOutParameter node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAParameterInEnumParameter(AParameterInEnumParameter node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAParameterOutEnumParameter(AParameterOutEnumParameter node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAParameterArrayInEnumParameter(AParameterArrayInEnumParameter node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAAutoEnumeratorEnumerator(AAutoEnumeratorEnumerator node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTLAngleBracket(TLAngleBracket node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTRAngleBracket(TRAngleBracket node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTComma(TComma node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTDot(TDot node)
-    {
-        defaultCase(node);
-    }
 
-    public void caseTSemicolon(TSemicolon node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTLBrace(TLBrace node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTRBrace(TRBrace node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTLBracket(TLBracket node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTRBracket(TRBracket node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTEquals(TEquals node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTIntToken(TIntToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTDoubleToken(TDoubleToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTBoolToken(TBoolToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTOpaqueToken(TOpaqueToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTStringToken(TStringToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTArrayToken(TArrayToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTInToken(TInToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTInoutToken(TInoutToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTPackageToken(TPackageToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTClassToken(TClassToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTTargetToken(TTargetToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTInterfaceToken(TInterfaceToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTExtendsToken(TExtendsToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTImplementsToken(TImplementsToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTUsesToken(TUsesToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTAsToken(TAsToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTEnumToken(TEnumToken node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTBlank(TBlank node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTDecimalConstant(TDecimalConstant node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTSignedDecimalNumber(TSignedDecimalNumber node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTIdentifier(TIdentifier node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTTraditionalComment(TTraditionalComment node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTDocumentationComment(TDocumentationComment node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTEndOfLineComment(TEndOfLineComment node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTConstant(TConstant node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseEOF(EOF node)
-    {
-        defaultCase(node);
-    }
-
-    public void defaultCase(@SuppressWarnings("unused") Node node)
-    {
-        // do nothing
-    }
+import java.util.Hashtable;
+
+import de.tum.ascodt.sidlcompiler.frontend.node.AAutoEnumeratorEnumerator;
+import de.tum.ascodt.sidlcompiler.frontend.node.ABoolBuiltInType;
+import de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement;
+import de.tum.ascodt.sidlcompiler.frontend.node.ADeclaration;
+import de.tum.ascodt.sidlcompiler.frontend.node.ADoubleBuiltInType;
+import de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement;
+import de.tum.ascodt.sidlcompiler.frontend.node.AIntBuiltInType;
+import de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement;
+import de.tum.ascodt.sidlcompiler.frontend.node.AOpaqueBuiltInType;
+import de.tum.ascodt.sidlcompiler.frontend.node.AOperation;
+import de.tum.ascodt.sidlcompiler.frontend.node.APackage;
+import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayInEnumParameter;
+import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayInParameter;
+import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayOutEnumParameter;
+import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayOutParameter;
+import de.tum.ascodt.sidlcompiler.frontend.node.AParameterInEnumParameter;
+import de.tum.ascodt.sidlcompiler.frontend.node.AParameterInParameter;
+import de.tum.ascodt.sidlcompiler.frontend.node.AParameterOutEnumParameter;
+import de.tum.ascodt.sidlcompiler.frontend.node.AParameterOutParameter;
+import de.tum.ascodt.sidlcompiler.frontend.node.ASpecificEnumeratorEnumerator;
+import de.tum.ascodt.sidlcompiler.frontend.node.AStringBuiltInType;
+import de.tum.ascodt.sidlcompiler.frontend.node.ASubpackagePackageElement;
+import de.tum.ascodt.sidlcompiler.frontend.node.AUserDefinedType;
+import de.tum.ascodt.sidlcompiler.frontend.node.AUses;
+import de.tum.ascodt.sidlcompiler.frontend.node.EOF;
+import de.tum.ascodt.sidlcompiler.frontend.node.Node;
+import de.tum.ascodt.sidlcompiler.frontend.node.Start;
+import de.tum.ascodt.sidlcompiler.frontend.node.TArrayToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TAsToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TBlank;
+import de.tum.ascodt.sidlcompiler.frontend.node.TBoolToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TClassToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TComma;
+import de.tum.ascodt.sidlcompiler.frontend.node.TConstant;
+import de.tum.ascodt.sidlcompiler.frontend.node.TDecimalConstant;
+import de.tum.ascodt.sidlcompiler.frontend.node.TDocumentationComment;
+import de.tum.ascodt.sidlcompiler.frontend.node.TDot;
+import de.tum.ascodt.sidlcompiler.frontend.node.TDoubleToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TEndOfLineComment;
+import de.tum.ascodt.sidlcompiler.frontend.node.TEnumToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TEquals;
+import de.tum.ascodt.sidlcompiler.frontend.node.TExtendsToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TIdentifier;
+import de.tum.ascodt.sidlcompiler.frontend.node.TImplementsToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TInToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TInoutToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TIntToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TInterfaceToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TLAngleBracket;
+import de.tum.ascodt.sidlcompiler.frontend.node.TLBrace;
+import de.tum.ascodt.sidlcompiler.frontend.node.TLBracket;
+import de.tum.ascodt.sidlcompiler.frontend.node.TOpaqueToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TPackageToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TRAngleBracket;
+import de.tum.ascodt.sidlcompiler.frontend.node.TRBrace;
+import de.tum.ascodt.sidlcompiler.frontend.node.TRBracket;
+import de.tum.ascodt.sidlcompiler.frontend.node.TSemicolon;
+import de.tum.ascodt.sidlcompiler.frontend.node.TSignedDecimalNumber;
+import de.tum.ascodt.sidlcompiler.frontend.node.TStringToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TTargetToken;
+import de.tum.ascodt.sidlcompiler.frontend.node.TTraditionalComment;
+import de.tum.ascodt.sidlcompiler.frontend.node.TUsesToken;
+
+
+public class AnalysisAdapter implements Analysis {
+  private Hashtable<Node, Object> in;
+  private Hashtable<Node, Object> out;
+
+  @Override
+  public void caseAAutoEnumeratorEnumerator(AAutoEnumeratorEnumerator node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseABoolBuiltInType(ABoolBuiltInType node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAClassPackageElement(AClassPackageElement node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseADeclaration(ADeclaration node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseADoubleBuiltInType(ADoubleBuiltInType node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAEnumDeclarationPackageElement(
+      AEnumDeclarationPackageElement node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAIntBuiltInType(AIntBuiltInType node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAInterfacePackageElement(AInterfacePackageElement node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAOpaqueBuiltInType(AOpaqueBuiltInType node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAOperation(AOperation node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAPackage(APackage node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAParameterArrayInEnumParameter(
+      AParameterArrayInEnumParameter node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAParameterArrayInParameter(AParameterArrayInParameter node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAParameterArrayOutEnumParameter(
+      AParameterArrayOutEnumParameter node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAParameterArrayOutParameter(AParameterArrayOutParameter node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAParameterInEnumParameter(AParameterInEnumParameter node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAParameterInParameter(AParameterInParameter node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAParameterOutEnumParameter(AParameterOutEnumParameter node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAParameterOutParameter(AParameterOutParameter node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseASpecificEnumeratorEnumerator(
+      ASpecificEnumeratorEnumerator node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAStringBuiltInType(AStringBuiltInType node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseASubpackagePackageElement(ASubpackagePackageElement node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAUserDefinedType(AUserDefinedType node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseAUses(AUses node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseEOF(EOF node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseStart(Start node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTArrayToken(TArrayToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTAsToken(TAsToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTBlank(TBlank node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTBoolToken(TBoolToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTClassToken(TClassToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTComma(TComma node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTConstant(TConstant node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTDecimalConstant(TDecimalConstant node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTDocumentationComment(TDocumentationComment node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTDot(TDot node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTDoubleToken(TDoubleToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTEndOfLineComment(TEndOfLineComment node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTEnumToken(TEnumToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTEquals(TEquals node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTExtendsToken(TExtendsToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTIdentifier(TIdentifier node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTImplementsToken(TImplementsToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTInoutToken(TInoutToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTInterfaceToken(TInterfaceToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTInToken(TInToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTIntToken(TIntToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTLAngleBracket(TLAngleBracket node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTLBrace(TLBrace node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTLBracket(TLBracket node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTOpaqueToken(TOpaqueToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTPackageToken(TPackageToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTRAngleBracket(TRAngleBracket node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTRBrace(TRBrace node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTRBracket(TRBracket node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTSemicolon(TSemicolon node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTSignedDecimalNumber(TSignedDecimalNumber node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTStringToken(TStringToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTTargetToken(TTargetToken node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTTraditionalComment(TTraditionalComment node) {
+    defaultCase(node);
+  }
+
+  @Override
+  public void caseTUsesToken(TUsesToken node) {
+    defaultCase(node);
+  }
+
+  public void defaultCase(@SuppressWarnings("unused") Node node) {
+    // do nothing
+  }
+
+  @Override
+  public Object getIn(Node node) {
+    if (in == null) {
+      return null;
+    }
+
+    return in.get(node);
+  }
+
+  @Override
+  public Object getOut(Node node) {
+    if (out == null) {
+      return null;
+    }
+
+    return out.get(node);
+  }
+
+  @Override
+  public void setIn(Node node, Object o) {
+    if (in == null) {
+      in = new Hashtable<Node, Object>(1);
+    }
+
+    if (o != null) {
+      in.put(node, o);
+    } else {
+      in.remove(node);
+    }
+  }
+
+  @Override
+  public void setOut(Node node, Object o) {
+    if (out == null) {
+      out = new Hashtable<Node, Object>(1);
+    }
+
+    if (o != null) {
+      out.put(node, o);
+    } else {
+      out.remove(node);
+    }
+  }
 }

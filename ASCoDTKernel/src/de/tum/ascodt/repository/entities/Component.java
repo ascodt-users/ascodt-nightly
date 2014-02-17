@@ -1,7 +1,9 @@
 package de.tum.ascodt.repository.entities;
 
+
 import de.tum.ascodt.repository.Target;
 import de.tum.ascodt.repository.TargetParameters;
+
 
 /**
  * Represents one component
@@ -9,52 +11,55 @@ import de.tum.ascodt.repository.TargetParameters;
  * @author Tobias Weinzierl
  */
 public interface Component {
+  void closeGUI();
+
+  void destroy();
+
+  String getInstanceName();
+
   /**
-   * Before anybody invokes an operation on an component object, he has to call 
-    lock. Only after lock() returns you may do something with the object. Do 
-    not forget to call unlock() afterwards.  
-   */
-  void lock();
- 
-  /**
-   * Unlock component.
-   *
-   * This is the counterpart of lock(). 
+   * Yields the target object, i.e. a description about the location and mode
+   * in which this component is running.
    * 
-   * @see lock() 
+   * @return
    */
-  void unlock();
-  
+  Target getTarget();
+
+  TargetParameters getTargetParameters();
+
   /**
-   * Self-explaining. 
+   * If this field is set, the workbench provides an open button for the GUI.
+   * 
+   * @return
+   */
+  boolean hasGUI();
+
+  /**
+   * Self-explaining.
    * 
    * @return
    */
   boolean isValid();
 
   /**
-   * If this field is set, the workbench provides an open button for the GUI. 
-   * 
-   * @return
+   * Before anybody invokes an operation on an component object, he has to call
+   * lock. Only after lock() returns you may do something with the object. Do
+   * not forget to call unlock() afterwards.
    */
-  boolean hasGUI();
-  
+  void lock();
+
   void openGUI();
-  void closeGUI();
-  void setProjectLocation(String location);
-  /**
-   * Yields the target object, i.e. a description about the location and mode 
-   * in which this component is running.
-   * 
-   * @return
-   */
-  Target getTarget();
-  
-  String getInstanceName();
-  
+
   void setInstanceName(String instanceName);
 
-	void destroy();
+  void setProjectLocation(String location);
 
-	TargetParameters getTargetParameters();
+  /**
+   * Unlock component.
+   * 
+   * This is the counterpart of lock().
+   * 
+   * @see lock()
+   */
+  void unlock();
 }

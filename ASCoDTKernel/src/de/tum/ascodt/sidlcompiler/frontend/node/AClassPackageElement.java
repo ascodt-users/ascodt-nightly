@@ -2,235 +2,198 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import java.util.*;
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class AClassPackageElement extends PPackageElement
-{
-    private TIdentifier _target_;
-    private TIdentifier _name_;
-    private final LinkedList<PUserDefinedType> _provides_ = new LinkedList<PUserDefinedType>();
-    private final LinkedList<PUses> _uses_ = new LinkedList<PUses>();
+public final class AClassPackageElement extends PPackageElement {
+  private TIdentifier _target_;
+  private TIdentifier _name_;
+  private final LinkedList<PUserDefinedType> _provides_ = new LinkedList<PUserDefinedType>();
+  private final LinkedList<PUses> _uses_ = new LinkedList<PUses>();
 
-    public AClassPackageElement()
-    {
-        // Constructor
+  public AClassPackageElement() {
+    // Constructor
+  }
+
+  public AClassPackageElement(@SuppressWarnings("hiding") TIdentifier _target_,
+      @SuppressWarnings("hiding") TIdentifier _name_,
+      @SuppressWarnings("hiding") List<PUserDefinedType> _provides_,
+      @SuppressWarnings("hiding") List<PUses> _uses_) {
+    // Constructor
+    setTarget(_target_);
+
+    setName(_name_);
+
+    setProvides(_provides_);
+
+    setUses(_uses_);
+
+  }
+
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseAClassPackageElement(this);
+  }
+
+  @Override
+  public Object clone() {
+    return new AClassPackageElement(cloneNode(_target_), cloneNode(_name_),
+        cloneList(_provides_), cloneList(_uses_));
+  }
+
+  public TIdentifier getName() {
+    return _name_;
+  }
+
+  public LinkedList<PUserDefinedType> getProvides() {
+    return _provides_;
+  }
+
+  public TIdentifier getTarget() {
+    return _target_;
+  }
+
+  public LinkedList<PUses> getUses() {
+    return _uses_;
+  }
+
+  @Override
+  void removeChild(@SuppressWarnings("unused") Node child) {
+    // Remove child
+    if (_target_ == child) {
+      _target_ = null;
+      return;
     }
 
-    public AClassPackageElement(
-        @SuppressWarnings("hiding") TIdentifier _target_,
-        @SuppressWarnings("hiding") TIdentifier _name_,
-        @SuppressWarnings("hiding") List<PUserDefinedType> _provides_,
-        @SuppressWarnings("hiding") List<PUses> _uses_)
-    {
-        // Constructor
-        setTarget(_target_);
-
-        setName(_name_);
-
-        setProvides(_provides_);
-
-        setUses(_uses_);
-
+    if (_name_ == child) {
+      _name_ = null;
+      return;
     }
 
-    @Override
-    public Object clone()
-    {
-        return new AClassPackageElement(
-            cloneNode(this._target_),
-            cloneNode(this._name_),
-            cloneList(this._provides_),
-            cloneList(this._uses_));
+    if (_provides_.remove(child)) {
+      return;
     }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseAClassPackageElement(this);
+    if (_uses_.remove(child)) {
+      return;
     }
 
-    public TIdentifier getTarget()
-    {
-        return this._target_;
+    throw new RuntimeException("Not a child.");
+  }
+
+  @Override
+  void replaceChild(@SuppressWarnings("unused") Node oldChild,
+      @SuppressWarnings("unused") Node newChild) {
+    // Replace child
+    if (_target_ == oldChild) {
+      setTarget((TIdentifier)newChild);
+      return;
     }
 
-    public void setTarget(TIdentifier node)
-    {
-        if(this._target_ != null)
-        {
-            this._target_.parent(null);
+    if (_name_ == oldChild) {
+      setName((TIdentifier)newChild);
+      return;
+    }
+
+    for (ListIterator<PUserDefinedType> i = _provides_.listIterator(); i
+        .hasNext();) {
+      if (i.next() == oldChild) {
+        if (newChild != null) {
+          i.set((PUserDefinedType)newChild);
+          newChild.parent(this);
+          oldChild.parent(null);
+          return;
         }
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._target_ = node;
+        i.remove();
+        oldChild.parent(null);
+        return;
+      }
     }
 
-    public TIdentifier getName()
-    {
-        return this._name_;
+    for (ListIterator<PUses> i = _uses_.listIterator(); i.hasNext();) {
+      if (i.next() == oldChild) {
+        if (newChild != null) {
+          i.set((PUses)newChild);
+          newChild.parent(this);
+          oldChild.parent(null);
+          return;
+        }
+
+        i.remove();
+        oldChild.parent(null);
+        return;
+      }
     }
 
-    public void setName(TIdentifier node)
-    {
-        if(this._name_ != null)
-        {
-            this._name_.parent(null);
-        }
+    throw new RuntimeException("Not a child.");
+  }
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._name_ = node;
+  public void setName(TIdentifier node) {
+    if (_name_ != null) {
+      _name_.parent(null);
     }
 
-    public LinkedList<PUserDefinedType> getProvides()
-    {
-        return this._provides_;
+    if (node != null) {
+      if (node.parent() != null) {
+        node.parent().removeChild(node);
+      }
+
+      node.parent(this);
     }
 
-    public void setProvides(List<PUserDefinedType> list)
-    {
-        this._provides_.clear();
-        this._provides_.addAll(list);
-        for(PUserDefinedType e : list)
-        {
-            if(e.parent() != null)
-            {
-                e.parent().removeChild(e);
-            }
+    _name_ = node;
+  }
 
-            e.parent(this);
-        }
+  public void setProvides(List<PUserDefinedType> list) {
+    _provides_.clear();
+    _provides_.addAll(list);
+    for (PUserDefinedType e : list) {
+      if (e.parent() != null) {
+        e.parent().removeChild(e);
+      }
+
+      e.parent(this);
+    }
+  }
+
+  public void setTarget(TIdentifier node) {
+    if (_target_ != null) {
+      _target_.parent(null);
     }
 
-    public LinkedList<PUses> getUses()
-    {
-        return this._uses_;
+    if (node != null) {
+      if (node.parent() != null) {
+        node.parent().removeChild(node);
+      }
+
+      node.parent(this);
     }
 
-    public void setUses(List<PUses> list)
-    {
-        this._uses_.clear();
-        this._uses_.addAll(list);
-        for(PUses e : list)
-        {
-            if(e.parent() != null)
-            {
-                e.parent().removeChild(e);
-            }
+    _target_ = node;
+  }
 
-            e.parent(this);
-        }
+  public void setUses(List<PUses> list) {
+    _uses_.clear();
+    _uses_.addAll(list);
+    for (PUses e : list) {
+      if (e.parent() != null) {
+        e.parent().removeChild(e);
+      }
+
+      e.parent(this);
     }
+  }
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._target_)
-            + toString(this._name_)
-            + toString(this._provides_)
-            + toString(this._uses_);
-    }
-
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._target_ == child)
-        {
-            this._target_ = null;
-            return;
-        }
-
-        if(this._name_ == child)
-        {
-            this._name_ = null;
-            return;
-        }
-
-        if(this._provides_.remove(child))
-        {
-            return;
-        }
-
-        if(this._uses_.remove(child))
-        {
-            return;
-        }
-
-        throw new RuntimeException("Not a child.");
-    }
-
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._target_ == oldChild)
-        {
-            setTarget((TIdentifier) newChild);
-            return;
-        }
-
-        if(this._name_ == oldChild)
-        {
-            setName((TIdentifier) newChild);
-            return;
-        }
-
-        for(ListIterator<PUserDefinedType> i = this._provides_.listIterator(); i.hasNext();)
-        {
-            if(i.next() == oldChild)
-            {
-                if(newChild != null)
-                {
-                    i.set((PUserDefinedType) newChild);
-                    newChild.parent(this);
-                    oldChild.parent(null);
-                    return;
-                }
-
-                i.remove();
-                oldChild.parent(null);
-                return;
-            }
-        }
-
-        for(ListIterator<PUses> i = this._uses_.listIterator(); i.hasNext();)
-        {
-            if(i.next() == oldChild)
-            {
-                if(newChild != null)
-                {
-                    i.set((PUses) newChild);
-                    newChild.parent(this);
-                    oldChild.parent(null);
-                    return;
-                }
-
-                i.remove();
-                oldChild.parent(null);
-                return;
-            }
-        }
-
-        throw new RuntimeException("Not a child.");
-    }
+  @Override
+  public String toString() {
+    return "" + toString(_target_) + toString(_name_) + toString(_provides_) +
+        toString(_uses_);
+  }
 }

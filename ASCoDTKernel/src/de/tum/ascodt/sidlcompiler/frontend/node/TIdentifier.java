@@ -2,31 +2,29 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class TIdentifier extends Token
-{
-    public TIdentifier(String text)
-    {
-        setText(text);
-    }
+public final class TIdentifier extends Token {
+  public TIdentifier(String text) {
+    setText(text);
+  }
 
-    public TIdentifier(String text, int line, int pos)
-    {
-        setText(text);
-        setLine(line);
-        setPos(pos);
-    }
+  public TIdentifier(String text, int line, int pos) {
+    setText(text);
+    setLine(line);
+    setPos(pos);
+  }
 
-    @Override
-    public Object clone()
-    {
-      return new TIdentifier(getText(), getLine(), getPos());
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseTIdentifier(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTIdentifier(this);
-    }
+  @Override
+  public Object clone() {
+    return new TIdentifier(getText(), getLine(), getPos());
+  }
 }

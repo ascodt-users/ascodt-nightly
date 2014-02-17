@@ -19,78 +19,68 @@ import de.tum.ascodt.sidlcompiler.frontend.node.Start;
  * @author Tobias Weinzierl
  */
 public class BuildSymbolTable extends DepthFirstAdapter {
-	public enum Mode{
-		APPEND,
-		MODIFIED,
-		REMOVE
-	};
-	/**
+  public enum Mode {
+    APPEND, MODIFIED, REMOVE
+  };
+
+  /**
    * Symbol table reference.
    */
   SymbolTable _table;
-  
-  
+
   private String _inputFileName;
- 
- 
-  public BuildSymbolTable(
-      SymbolTable  table,
-      String       inputFileName
-    ) {
-      _table         = table;    
-      _inputFileName = inputFileName;
-      
-      
-    }
-  
-  public void inStart(Start node) {
-    _table.setScope(node, _table.getGlobalScope() );    
-  }
-  
 
-  public void inAPackage(APackage node) {
-    String identifier = node.getName().getText();
-    Scope  superScope = _table.getScope(node.parent());
+  public BuildSymbolTable(SymbolTable table, String inputFileName) {
+    _table = table;
+    _inputFileName = inputFileName;
 
-    Scope  subScope;
-    if ( superScope.containsSubScope(identifier) ) {
-      subScope = superScope.getSubScope(identifier);
-    }
-    else {
-      subScope = new Scope( identifier,_inputFileName,superScope );
-    }
-    _table.setScope(
-      node,
-      subScope
-    );
   }
-  
-  
+
+  @Override
+  public void defaultIn(Node node) {
+    if (_table.getScope(node.parent()) != null) {
+      _table.setScope(node, _table.getScope(node.parent()));
+    }
+  }
+
+  @Override
   public void inAClassPackageElement(AClassPackageElement node) {
     defaultIn(node);
     _table.getScope(node).addSymbol(node, _inputFileName);
-    
+
   }
-  
-  public void inAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node){
-  	 defaultIn(node);
-  	 _table.getScope(node).addSymbol(node, _inputFileName);
-  	
+
+  @Override
+  public void inAEnumDeclarationPackageElement(
+      AEnumDeclarationPackageElement node) {
+    defaultIn(node);
+    _table.getScope(node).addSymbol(node, _inputFileName);
+
   }
-  
-  
+
+  @Override
   public void inAInterfacePackageElement(AInterfacePackageElement node) {
     defaultIn(node);
     _table.getScope(node).addSymbol(node, _inputFileName);
-   
+
   }
-  
-  
-  public void defaultIn(Node node) {
-    if( _table.getScope(node.parent())!=null)
-	  	_table.setScope(
-	      node, 
-	      _table.getScope(node.parent())
-	    );
+
+  @Override
+  public void inAPackage(APackage node) {
+    String identifier = node.getName().getText();
+    Scope superScope = _table.getScope(node.parent());
+
+    Scope subScope;
+    if (superScope.containsSubScope(identifier)) {
+      subScope = superScope.getSubScope(identifier);
+    } else {
+      subScope = new Scope(identifier, _inputFileName, superScope);
+    }
+    _table.setScope(node, subScope);
+  }
+
+  @Override
+  public void inStart(Start node) {
+    _table.setScope(node, _table.getGlobalScope());
   }
 }

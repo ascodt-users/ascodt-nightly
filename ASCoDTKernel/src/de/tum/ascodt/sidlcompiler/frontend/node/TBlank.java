@@ -2,31 +2,29 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class TBlank extends Token
-{
-    public TBlank(String text)
-    {
-        setText(text);
-    }
+public final class TBlank extends Token {
+  public TBlank(String text) {
+    setText(text);
+  }
 
-    public TBlank(String text, int line, int pos)
-    {
-        setText(text);
-        setLine(line);
-        setPos(pos);
-    }
+  public TBlank(String text, int line, int pos) {
+    setText(text);
+    setLine(line);
+    setPos(pos);
+  }
 
-    @Override
-    public Object clone()
-    {
-      return new TBlank(getText(), getLine(), getPos());
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseTBlank(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTBlank(this);
-    }
+  @Override
+  public Object clone() {
+    return new TBlank(getText(), getLine(), getPos());
+  }
 }

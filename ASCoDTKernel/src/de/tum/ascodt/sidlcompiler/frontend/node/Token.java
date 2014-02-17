@@ -2,58 +2,50 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
+
 @SuppressWarnings("nls")
-public abstract class Token extends Node
-{
-    private String text;
-    private int line;
-    private int pos;
+public abstract class Token extends Node {
+  private String text;
+  private int line;
+  private int pos;
 
-    public String getText()
-    {
-        return this.text;
-    }
+  public int getLine() {
+    return line;
+  }
 
-    public void setText(@SuppressWarnings("hiding") String text)
-    {
-        this.text = text;
-    }
+  public int getPos() {
+    return pos;
+  }
 
-    public int getLine()
-    {
-        return this.line;
-    }
+  public String getText() {
+    return text;
+  }
 
-    public void setLine(@SuppressWarnings("hiding") int line)
-    {
-        this.line = line;
-    }
+  @Override
+  void removeChild(@SuppressWarnings("unused") Node child) {
+    throw new RuntimeException("Not a child.");
+  }
 
-    public int getPos()
-    {
-        return this.pos;
-    }
+  @Override
+  void replaceChild(@SuppressWarnings("unused") Node oldChild,
+      @SuppressWarnings("unused") Node newChild) {
+    throw new RuntimeException("Not a child.");
+  }
 
-    public void setPos(@SuppressWarnings("hiding") int pos)
-    {
-        this.pos = pos;
-    }
+  public void setLine(@SuppressWarnings("hiding") int line) {
+    this.line = line;
+  }
 
-    @Override
-    public String toString()
-    {
-        return this.text + " ";
-    }
+  public void setPos(@SuppressWarnings("hiding") int pos) {
+    this.pos = pos;
+  }
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        throw new RuntimeException("Not a child.");
-    }
+  public void setText(@SuppressWarnings("hiding") String text) {
+    this.text = text;
+  }
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        throw new RuntimeException("Not a child.");
-    }
+  @Override
+  public String toString() {
+    return text + " ";
+  }
 }

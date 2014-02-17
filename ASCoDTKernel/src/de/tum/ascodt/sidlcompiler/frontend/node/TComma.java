@@ -2,37 +2,34 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class TComma extends Token
-{
-    public TComma()
-    {
-        super.setText(",");
-    }
+public final class TComma extends Token {
+  public TComma() {
+    super.setText(",");
+  }
 
-    public TComma(int line, int pos)
-    {
-        super.setText(",");
-        setLine(line);
-        setPos(pos);
-    }
+  public TComma(int line, int pos) {
+    super.setText(",");
+    setLine(line);
+    setPos(pos);
+  }
 
-    @Override
-    public Object clone()
-    {
-      return new TComma(getLine(), getPos());
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseTComma(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTComma(this);
-    }
+  @Override
+  public Object clone() {
+    return new TComma(getLine(), getPos());
+  }
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TComma text.");
-    }
+  @Override
+  public void setText(@SuppressWarnings("unused") String text) {
+    throw new RuntimeException("Cannot change TComma text.");
+  }
 }

@@ -2,37 +2,34 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class TImplementsToken extends Token
-{
-    public TImplementsToken()
-    {
-        super.setText("implements-all");
-    }
+public final class TImplementsToken extends Token {
+  public TImplementsToken() {
+    super.setText("implements-all");
+  }
 
-    public TImplementsToken(int line, int pos)
-    {
-        super.setText("implements-all");
-        setLine(line);
-        setPos(pos);
-    }
+  public TImplementsToken(int line, int pos) {
+    super.setText("implements-all");
+    setLine(line);
+    setPos(pos);
+  }
 
-    @Override
-    public Object clone()
-    {
-      return new TImplementsToken(getLine(), getPos());
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseTImplementsToken(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTImplementsToken(this);
-    }
+  @Override
+  public Object clone() {
+    return new TImplementsToken(getLine(), getPos());
+  }
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TImplementsToken text.");
-    }
+  @Override
+  public void setText(@SuppressWarnings("unused") String text) {
+    throw new RuntimeException("Cannot change TImplementsToken text.");
+  }
 }

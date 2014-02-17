@@ -18,6 +18,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
@@ -39,238 +40,252 @@ import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
 import de.tum.ascodt.repository.RepositoryListener;
 import de.tum.ascodt.utils.exceptions.ASCoDTException;
 
-import org.eclipse.jface.viewers.LabelProvider;
+
 /**
  * 
- * The palette view: This a View class for the static ASCoDT model. The view is a listener
+ * The palette view: This a View class for the static ASCoDT model. The view is
+ * a listener
  * to the static model.
+ * 
  * @author Atanas Atanasov
  * 
- *
+ * 
  */
-public class Palette extends ViewPart implements RepositoryListener{
-	public static String ID = Palette.class.getCanonicalName();
+public class Palette extends ViewPart implements RepositoryListener {
+  public static String ID = Palette.class.getCanonicalName();
 
-	/**
-	 * reference to the gef palette viewer component
-	 */
-	private PaletteViewer _paletteViewer;
+  /**
+   * reference to the gef palette viewer component
+   */
+  private PaletteViewer _paletteViewer;
 
-	/**
-	 * the palette model reference
-	 */
-	private PaletteRoot _palette_model;
+  /**
+   * the palette model reference
+   */
+  private PaletteRoot _palette_model;
 
+  private ComboViewer combo;
+  private ProjectContentProvider _projectContentProvider;
+  private Project _lastSelection;
 
+  /**
+   * here the view should remove all entries from the palette
+   */
+  @Override
+  public void begin() {
 
+    Display.getDefault().syncExec(new Runnable() {
+      @Override
+      public void run() {
+        Vector<PaletteEntry> entries = new Vector<PaletteEntry>();
+        for (Object paletteEntry : getComponentsGroupFromPalette()
+            .getChildren()) {
+          if (paletteEntry instanceof PaletteEntry) {
+            entries.add((PaletteEntry)paletteEntry);
+          }
+        }
+        for (PaletteEntry entry : entries) {
+          getComponentsGroupFromPalette().remove(entry);
+        }
+      }
+    });
 
-	private ComboViewer combo;
-	private ProjectContentProvider _projectContentProvider;
-	private Project _lastSelection;
+  }
 
-	/**
-	 * creates the user interface for the palette view
-	 */
-	@Override
-	public void createPartControl(Composite parent) {
-		_projectContentProvider = new ProjectContentProvider();
-		_paletteViewer = new PaletteViewer();
-		_paletteViewer.createControl(parent);
+  /**
+   * - >this method adds some of the default tools and menus to the palette:
+   * ->selection tools, connection tools, etc..
+   * ->standart action menus and ASCoDT menus
+   */
+  protected void configurePaletteViewer() {
+    PaletteFactory paletteFactory = new PaletteFactory();
+    _palette_model = paletteFactory.createPalette();
+    _paletteViewer.setPaletteRoot(_palette_model);
+    // setup the context menus
+    _paletteViewer.setContextMenu(new ContextMenuProvider(this));
+    GEFActionConstants.addStandardActionGroups(_paletteViewer.getContextMenu());
+  }
 
-		configurePaletteViewer();
-		initializePaletteViewer();
-		createToolbar();
+  /**
+   * creates the user interface for the palette view
+   */
+  @Override
+  public void createPartControl(Composite parent) {
+    _projectContentProvider = new ProjectContentProvider();
+    _paletteViewer = new PaletteViewer();
+    _paletteViewer.createControl(parent);
 
-	}
+    configurePaletteViewer();
+    initializePaletteViewer();
+    createToolbar();
 
+  }
 
-	private void initializePaletteViewer() {
-		_paletteViewer.addDragSourceListener(
-				new TemplateTransferDragSourceListener(_paletteViewer));
-	}
+  /**
+   * Create toolbar with some buttons to create, insert or remove components.
+   */
+  private void createToolbar() {
+    IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
+    ControlContribution projectsControl = new ControlContribution("Projects:") {
 
+      @Override
+      protected Control createControl(Composite parent) {
+        combo = new ComboViewer(parent, SWT.None);
+        combo.setContentProvider(_projectContentProvider);
+        combo.setInput(ProjectBuilder.getInstance().getProjects());
+        combo.setLabelProvider(new LabelProvider() {
+          @Override
+          public String getText(Object element) {
+            if (element instanceof Project) {
+              Project project = (Project)element;
+              return project.getName();
+            }
+            return super.getText(element);
+          }
+        });
+        combo.addSelectionChangedListener(new ISelectionChangedListener() {
+          @Override
+          public void selectionChanged(SelectionChangedEvent event) {
+            IStructuredSelection selection = (IStructuredSelection)event
+                .getSelection();
+            if (selection.getFirstElement() instanceof Project) {
+              if (_lastSelection != null) {
+                _lastSelection.getStaticRepository().removeListener(
+                    Palette.this);
+              }
+              _lastSelection = (Project)selection.getFirstElement();
+              _lastSelection.getStaticRepository().addListener(Palette.this);
+            }
+          }
+        });
+        if (ProjectBuilder.getInstance().getProjects().size() > 0) {
+          combo.setSelection(new StructuredSelection(ProjectBuilder
+              .getInstance().getProjects().iterator().next()));
+        }
+        return combo.getControl();
+      }
 
-	/**
-	 * Create toolbar with some buttons to create, insert or remove components.
-	 */
-	private void createToolbar() {
-		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
-		ControlContribution projectsControl = new ControlContribution("Projects:"){
+    };
+    mgr.add(projectsControl);
+    mgr.add(new Action("New component...") {
+      @Override
+      public void run() {
+        IWizardDescriptor descriptor = PlatformUI.getWorkbench()
+            .getNewWizardRegistry().findWizard(NewComponentWizard.ID);
+        try {
+          // Then if we have a wizard, open it.
+          if (descriptor != null) {
+            IWizard wizard = descriptor.createWizard();
+            WizardDialog wd = new WizardDialog(Display.getDefault()
+                .getActiveShell(), wizard);
+            wd.setTitle(wizard.getWindowTitle());
+            wd.open();
+          }
+        } catch (CoreException e) {
+          e.printStackTrace();
+        }
+      }
+    });
+  }
 
-			@Override
-			protected Control createControl(Composite parent) {
-				combo = new ComboViewer(parent,SWT.None);
-				combo.setContentProvider(_projectContentProvider);
-				combo.setInput(ProjectBuilder.getInstance().getProjects());
-				combo.setLabelProvider(new LabelProvider(){
-					@Override
-					public String getText(Object element) {
-						if (element instanceof Project) {
-							Project project = (Project) element;
-							return project.getName();
-						}
-						return super.getText(element);
-					}
-				});
-				combo.addSelectionChangedListener(new ISelectionChangedListener() {
-					@Override
-					public void selectionChanged(SelectionChangedEvent event) {
-						IStructuredSelection selection = (IStructuredSelection) event
-								.getSelection();
-						if(selection.getFirstElement() instanceof Project){
-							if(_lastSelection!=null)
-								_lastSelection.getStaticRepository().removeListener(Palette.this);
-							_lastSelection=(Project) selection.getFirstElement();
-							_lastSelection.getStaticRepository().addListener(Palette.this);
-						}
-					}
-				});
-				if(ProjectBuilder.getInstance().getProjects().size()>0)
-					combo.setSelection(new StructuredSelection(ProjectBuilder.getInstance().getProjects().iterator().next()));
-				return combo.getControl();
-			}
+  public void deleteSelectedItem() {
+    if (_paletteViewer.getSelection() instanceof StructuredSelection &&
+        ((StructuredSelection)_paletteViewer.getSelection()).getFirstElement() instanceof ToolEntryEditPart &&
+        ((ToolEntryEditPart)((StructuredSelection)_paletteViewer.getSelection())
+            .getFirstElement()).getModel() instanceof CombinedTemplateCreationEntry) {
+      String componentName = ((CombinedTemplateCreationEntry)((ToolEntryEditPart)((StructuredSelection)_paletteViewer
+          .getSelection()).getFirstElement()).getModel()).getLabel();
+      try {
+        getProject().removeComponent(componentName);
+      } catch (ASCoDTException e) {
+        ErrorWriterDevice.getInstance().showError(getClass().getName(),
+            "deleteSelectedItem()", "Cannot add component to palette", e);
 
-		};
-		mgr.add(projectsControl);
-		mgr.add(new Action("New component..."){
-			public void run() {
-				IWizardDescriptor descriptor = PlatformUI.getWorkbench()
-						.getNewWizardRegistry().findWizard(NewComponentWizard.ID);
-				try {
-					// Then if we have a wizard, open it.
-					if (descriptor != null) {
-						IWizard wizard = descriptor.createWizard();
-						WizardDialog wd = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
-						wd.setTitle(wizard.getWindowTitle());
-						wd.open();
-					}
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+      }
+    }
+  }
 
-	/**
-	 * - >this method adds some of the default tools and menus to the palette:
-	 * ->selection tools, connection tools, etc..
-	 * ->standart action menus and ASCoDT menus
-	 */
-	protected void configurePaletteViewer(){
-		PaletteFactory paletteFactory = new PaletteFactory(); 
-		_palette_model = paletteFactory.createPalette();
-		_paletteViewer.setPaletteRoot(_palette_model);
-		//setup the context menus
-		_paletteViewer.setContextMenu(new ContextMenuProvider(this));
-		GEFActionConstants.addStandardActionGroups( _paletteViewer.getContextMenu() );
-	}
+  @Override
+  public void end() {
+    Display.getDefault().asyncExec(new Runnable() {
+      @Override
+      public void run() {
+        _paletteViewer.getControl().redraw();
+      }
 
-	@Override
-	public void setFocus() {
-		// TODO Auto-generated method stub
+    });
+    _projectContentProvider.inputChanged(combo, null, null);
+  }
 
-	}
+  /**
+   * @return
+   */
+  private PaletteContainer getComponentsGroupFromPalette() {
+    for (Object item : _palette_model.getChildren()) {
+      if (item instanceof PaletteContainer &&
+          ((PaletteContainer)item).getLabel().equals("Available components")) {
+        return (PaletteContainer)item;
+      }
+    }
+    return null;
+  }
 
-	/**
-	 * @return
-	 */
-	private PaletteContainer getComponentsGroupFromPalette() {
-		for(Object item:_palette_model.getChildren())
-			if(item instanceof PaletteContainer&&((PaletteContainer)item).getLabel().equals("Available components"))
-				return ((PaletteContainer)item);
-		return null;
-	}
+  /**
+   * Getter for the current palette project
+   * 
+   * @return
+   */
+  public Project getProject() {
+    return (Project)((StructuredSelection)combo.getSelection())
+        .getFirstElement();
+  }
 
-	/**
-	 * here the view should remove all entries from the palette
-	 */
-	@Override
-	public void begin() {
+  public PaletteViewer getViewer() {
+    return _paletteViewer;
+  }
 
-		Display.getDefault().syncExec(new Runnable(){
-			@Override
-			public void run() {
-				Vector<PaletteEntry> entries=new Vector<PaletteEntry>();
-				for(Object paletteEntry:getComponentsGroupFromPalette().getChildren()){
-					if(paletteEntry instanceof PaletteEntry)
-						entries.add((PaletteEntry)paletteEntry);
-				}
-				for(PaletteEntry entry:entries)
-					getComponentsGroupFromPalette().remove(entry);
-			}
-		});
+  private void initializePaletteViewer() {
+    _paletteViewer
+        .addDragSourceListener(new TemplateTransferDragSourceListener(
+            _paletteViewer));
+  }
 
-	}
+  /**
+   * the view is notified for an existing configuration
+   */
+  @Override
+  public void notify(final String componentInterface, final String target) {
+    Display.getDefault().syncExec(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          getComponentsGroupFromPalette().add(
+              new CombinedTemplateCreationEntry(componentInterface, "",
+                  ProjectBuilder.getInstance().getNewInstanceFactory(
+                      Palette.this.getProject(), componentInterface, target),
+                  null, null));
+        } catch (ASCoDTException e) {
+          ErrorWriterDevice.getInstance().showError(getClass().getName(),
+              "notify()", "Cannot add component to palette", e);
 
+        }
+      }
 
-	@Override
-	public void end() {
-		Display.getDefault().asyncExec(new Runnable(){
-			@Override
-			public void run() {
-				_paletteViewer.getControl().redraw();
-			}
+    });
 
-		});
-		this._projectContentProvider.inputChanged(combo, null, null);
-	}
+  }
 
-	public void deleteSelectedItem(){
-		if(_paletteViewer.getSelection() instanceof StructuredSelection &&
-				((StructuredSelection)_paletteViewer.getSelection()).getFirstElement() instanceof ToolEntryEditPart
-				&& 	((ToolEntryEditPart)((StructuredSelection)_paletteViewer.getSelection()).getFirstElement()).getModel() instanceof CombinedTemplateCreationEntry){
-			String componentName=((CombinedTemplateCreationEntry)	((ToolEntryEditPart)((StructuredSelection)_paletteViewer.getSelection()).getFirstElement()).getModel()).getLabel();
-			try{
-				getProject().removeComponent(componentName);
-			} catch (ASCoDTException e) {
-				ErrorWriterDevice.getInstance().showError( getClass().getName(), "deleteSelectedItem()",  "Cannot add component to palette", e );
+  @Override
+  public void setFocus() {
+    // TODO Auto-generated method stub
 
-			}
-		}
-	}
-	/**
-	 * the view is notified for an existing configuration
-	 */
-	@Override
-	public void notify(final String componentInterface,final String target) {
-		Display.getDefault().syncExec(new Runnable(){
-			@Override
-			public void run() {
-				try {
-					getComponentsGroupFromPalette().add(new CombinedTemplateCreationEntry(componentInterface,"",
-							ProjectBuilder.getInstance().getNewInstanceFactory(Palette.this.getProject(),componentInterface,target),
-							null,null));
-				} catch (ASCoDTException e) {
-					ErrorWriterDevice.getInstance().showError( getClass().getName(), "notify()",  "Cannot add component to palette", e );
+  }
 
-				}
-			}
+  public void setProject(Project project) {
+    if (project != null) {
+      combo.setSelection(new StructuredSelection(project));
+    }
 
-		});
-
-
-	}
-
-
-
-	public void setProject(Project project){
-		if(project!=null)
-			combo.setSelection(new StructuredSelection(project));
-
-	}
-
-	/**
-	 * Getter for the current palette project
-	 * @return
-	 */
-	public Project getProject(){
-		return (Project)((StructuredSelection)combo.getSelection()).getFirstElement();
-	}
-
-	public PaletteViewer getViewer() {
-		return _paletteViewer;
-	}
-
-
+  }
 
 }

@@ -2,77 +2,70 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import java.util.*;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 
 @SuppressWarnings("nls")
-public abstract class Node implements Switchable, Cloneable
-{
-    private Node parent;
+public abstract class Node implements Switchable, Cloneable {
+  private Node parent;
 
-    @Override
-    public abstract Object clone();
+  @Override
+  public abstract Object clone();
 
-    public Node parent()
-    {
-        return this.parent;
+  @SuppressWarnings("unchecked")
+  protected <T extends Node> List<T> cloneList(List<T> list) {
+    List<T> clone = new LinkedList<T>();
+
+    for (T n : list) {
+      clone.add((T)n.clone());
     }
 
-    void parent(@SuppressWarnings("hiding") Node parent)
-    {
-        this.parent = parent;
+    return clone;
+  }
+
+  @SuppressWarnings("unchecked")
+  protected <T extends Node> T cloneNode(T node) {
+    if (node != null) {
+      return (T)node.clone();
     }
 
-    abstract void removeChild(Node child);
-    abstract void replaceChild(Node oldChild, Node newChild);
+    return null;
+  }
 
-    public void replaceBy(Node node)
-    {
-        this.parent.replaceChild(this, node);
+  public Node parent() {
+    return parent;
+  }
+
+  void parent(@SuppressWarnings("hiding") Node parent) {
+    this.parent = parent;
+  }
+
+  abstract void removeChild(Node child);
+
+  public void replaceBy(Node node) {
+    parent.replaceChild(this, node);
+  }
+
+  abstract void replaceChild(Node oldChild, Node newChild);
+
+  protected String toString(List list) {
+    StringBuffer s = new StringBuffer();
+
+    for (Iterator i = list.iterator(); i.hasNext();) {
+      s.append(i.next());
     }
 
-    protected String toString(Node node)
-    {
-        if(node != null)
-        {
-            return node.toString();
-        }
+    return s.toString();
+  }
 
-        return "";
+  protected String toString(Node node) {
+    if (node != null) {
+      return node.toString();
     }
 
-    protected String toString(List list)
-    {
-        StringBuffer s = new StringBuffer();
-
-        for(Iterator i = list.iterator(); i.hasNext();)
-        {
-            s.append(i.next());
-        }
-
-        return s.toString();
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <T extends Node> T cloneNode(T node)
-    {
-        if(node != null)
-        {
-            return (T) node.clone();
-        }
-
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <T extends Node> List<T> cloneList(List<T> list)
-    {
-        List<T> clone = new LinkedList<T>();
-
-        for(T n : list)
-        {
-            clone.add((T) n.clone());
-        }
-
-        return clone;
-    }
+    return "";
+  }
 }

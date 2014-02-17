@@ -2,45 +2,42 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class AOpaqueBuiltInType extends PBuiltInType
-{
+public final class AOpaqueBuiltInType extends PBuiltInType {
 
-    public AOpaqueBuiltInType()
-    {
-        // Constructor
-    }
+  public AOpaqueBuiltInType() {
+    // Constructor
+  }
 
-    @Override
-    public Object clone()
-    {
-        return new AOpaqueBuiltInType();
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseAOpaqueBuiltInType(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseAOpaqueBuiltInType(this);
-    }
+  @Override
+  public Object clone() {
+    return new AOpaqueBuiltInType();
+  }
 
-    @Override
-    public String toString()
-    {
-        return "";
-    }
+  @Override
+  void removeChild(@SuppressWarnings("unused") Node child) {
+    // Remove child
+    throw new RuntimeException("Not a child.");
+  }
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        throw new RuntimeException("Not a child.");
-    }
+  @Override
+  void replaceChild(@SuppressWarnings("unused") Node oldChild,
+      @SuppressWarnings("unused") Node newChild) {
+    // Replace child
+    throw new RuntimeException("Not a child.");
+  }
 
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        throw new RuntimeException("Not a child.");
-    }
+  @Override
+  public String toString() {
+    return "";
+  }
 }

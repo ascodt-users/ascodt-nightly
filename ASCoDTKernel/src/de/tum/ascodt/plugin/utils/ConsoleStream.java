@@ -1,5 +1,6 @@
 package de.tum.ascodt.plugin.utils;
 
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.eclipse.ui.console.MessageConsole;
@@ -13,60 +14,61 @@ import de.tum.ascodt.utils.OutputDevice;
  * 
  * Do not use this class directly but instead use the ConsoleDevice.
  * 
- * @author Atanas Atanasov, Tobias Weinzierl 
+ * @author Atanas Atanasov, Tobias Weinzierl
  */
-public class ConsoleStream extends MessageConsole implements OutputDevice{
+public class ConsoleStream extends MessageConsole implements OutputDevice {
+  class ConsolveStreamThread extends Thread {
+    private ConcurrentLinkedQueue<String> _consoleMessages;
+    private MessageConsoleStream _consoleStream;
+
+    public ConsolveStreamThread(ConcurrentLinkedQueue<String> consoleMessages) {
+      _consoleMessages = consoleMessages;
+      _consoleStream = newMessageStream();
+    }
+
+    @Override
+    public void run() {
+      while (true) {
+        if (_consoleMessages.isEmpty()) {
+          synchronized (ConsoleStream.this) {
+            try {
+              ConsoleStream.this.wait();
+            } catch (InterruptedException e) {
+
+            }
+          }
+        }
+        while (!_consoleMessages.isEmpty()) {
+          _consoleStream.println(_consoleMessages.poll());
+
+        }
+      }
+    }
+  }
+
   /**
    * This is a queue filled with the messages that are to be displayed.
    */
-	private ConcurrentLinkedQueue<String>   _consoleMessages;
-	
-	/**
-	 * This is the thread permanently 
-	 */
-  private ConsolveStreamThread            _printStreamThread;
-  
-  
+  private ConcurrentLinkedQueue<String> _consoleMessages;
+
+  /**
+   * This is the thread permanently
+   */
+  private ConsolveStreamThread _printStreamThread;
+
   public ConsoleStream(String name) {
     super(name, null, null, true);
-    
-    _consoleMessages   = new ConcurrentLinkedQueue <String>();
+
+    _consoleMessages = new ConcurrentLinkedQueue<String>();
     _printStreamThread = new ConsolveStreamThread(_consoleMessages);
     _printStreamThread.start();
   }
 
-	class ConsolveStreamThread extends Thread  {
-		private ConcurrentLinkedQueue<String> _consoleMessages;
-		private MessageConsoleStream          _consoleStream;
-		 
-		public ConsolveStreamThread(ConcurrentLinkedQueue<String> consoleMessages){
-			_consoleMessages = consoleMessages;
-			_consoleStream   = newMessageStream();
-		}
-		
-		public void run(){
-			while(true){
-				if(_consoleMessages.isEmpty())
-					synchronized(ConsoleStream.this){
-						try {
-							ConsoleStream.this.wait();
-						} catch (InterruptedException e) {
-							
-						}
-					}
-				while (!_consoleMessages.isEmpty()){
-				  _consoleStream.println(_consoleMessages.poll());
-				 
-				}
-			}
-		}
-	}
-
-
-	public void println(String line){
+  @Override
+  public void println(String line) {
     _consoleMessages.add(line);
-    synchronized(ConsoleStream.this){
-    	ConsoleStream.this.notifyAll();
+    synchronized (ConsoleStream.this) {
+      ConsoleStream.this.notifyAll();
     }
-	}
+  }
 }

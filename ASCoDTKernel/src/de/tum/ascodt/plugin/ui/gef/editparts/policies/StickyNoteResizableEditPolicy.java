@@ -13,79 +13,85 @@ import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 
 import de.tum.ascodt.plugin.ui.gef.editparts.StickyNoteEditPart;
 
-public class StickyNoteResizableEditPolicy extends ResizableEditPolicy
-{
-	public	StickyNoteResizableEditPolicy(){
-		super();
-		this.setDragAllowed(true);
-	}
-	/**
-	 * Creates the figure used for feedback.
-	 * @return the new feedback figure
-	 */
-	protected IFigure createDragSourceFeedbackFigure() {
-		IFigure figure = createFigure((GraphicalEditPart)getHost(), null);
 
-		figure.setBounds(getInitialFeedbackBounds());
-		addFeedback(figure);
-		return figure;
-	}
+public class StickyNoteResizableEditPolicy extends ResizableEditPolicy {
+  public StickyNoteResizableEditPolicy() {
+    super();
+    setDragAllowed(true);
+  }
 
-	protected IFigure createFigure(GraphicalEditPart part, IFigure parent) {
-		IFigure child = getCustomFeedbackFigure(part.getModel());
+  /**
+   * Creates the figure used for feedback.
+   * 
+   * @return the new feedback figure
+   */
+  @Override
+  protected IFigure createDragSourceFeedbackFigure() {
+    IFigure figure = createFigure((GraphicalEditPart)getHost(), null);
 
-		if (parent != null)
-			parent.add(child);
-		EditPart note_parent=part.getParent();
-		while(!(note_parent instanceof StickyNoteEditPart))
-			note_parent=note_parent.getParent();
-		Rectangle childBounds = null;
-		childBounds = ((StickyNoteEditPart)note_parent).getFigure().getBounds().getCopy();
+    figure.setBounds(getInitialFeedbackBounds());
+    addFeedback(figure);
+    return figure;
+  }
 
-		IFigure walker = part.getFigure().getParent();
+  protected IFigure createFigure(GraphicalEditPart part, IFigure parent) {
+    IFigure child = getCustomFeedbackFigure(part.getModel());
 
-		while (walker != ((GraphicalEditPart)note_parent).getFigure()) {
-			walker.translateToParent(childBounds);
-			walker = walker.getParent();
-		}
+    if (parent != null) {
+      parent.add(child);
+    }
+    EditPart note_parent = part.getParent();
+    while (!(note_parent instanceof StickyNoteEditPart)) {
+      note_parent = note_parent.getParent();
+    }
+    Rectangle childBounds = null;
+    childBounds = ((StickyNoteEditPart)note_parent).getFigure().getBounds()
+        .getCopy();
 
-		child.setBounds(childBounds);
+    IFigure walker = part.getFigure().getParent();
 
-		return child;
-	}
+    while (walker != ((GraphicalEditPart)note_parent).getFigure()) {
+      walker.translateToParent(childBounds);
+      walker = walker.getParent();
+    }
 
-	protected IFigure getCustomFeedbackFigure(Object modelPart) {
-		IFigure figure; 
+    child.setBounds(childBounds);
 
+    return child;
+  }
 
-		figure = new RectangleFigure();
-		((RectangleFigure)figure).setXOR(true);
-		((RectangleFigure)figure).setFill(true);
-		//figure.setBackgroundColor(LogicColorConstants.ghostFillColor);
-		figure.setForegroundColor(ColorConstants.black);
+  protected IFigure getCustomFeedbackFigure(Object modelPart) {
+    IFigure figure;
 
+    figure = new RectangleFigure();
+    ((RectangleFigure)figure).setXOR(true);
+    ((RectangleFigure)figure).setFill(true);
+    // figure.setBackgroundColor(LogicColorConstants.ghostFillColor);
+    figure.setForegroundColor(ColorConstants.black);
 
-		return figure;
-	}
+    return figure;
+  }
 
-	/**
-	 * Returns the layer used for displaying feedback.
-	 *  
-	 * @return the feedback layer
-	 */
-	protected IFigure getFeedbackLayer() {
-		return getLayer(LayerConstants.SCALED_FEEDBACK_LAYER);
-	}
+  /**
+   * Returns the layer used for displaying feedback.
+   * 
+   * @return the feedback layer
+   */
+  @Override
+  protected IFigure getFeedbackLayer() {
+    return getLayer(LayerConstants.SCALED_FEEDBACK_LAYER);
+  }
 
-	/**
-	 * @see org.eclipse.gef.editpolicies.NonResizableEditPolicy#getInitialFeedbackBounds()
-	 */
-	protected Rectangle getInitialFeedbackBounds() {
-		EditPart parent=this.getHost().getParent();
-		while(!(parent instanceof StickyNoteEditPart))
-			parent=parent.getParent();
-		return ((AbstractGraphicalEditPart)parent).getFigure().getBounds();	
-	}
+  /**
+   * @see org.eclipse.gef.editpolicies.NonResizableEditPolicy#getInitialFeedbackBounds()
+   */
+  @Override
+  protected Rectangle getInitialFeedbackBounds() {
+    EditPart parent = getHost().getParent();
+    while (!(parent instanceof StickyNoteEditPart)) {
+      parent = parent.getParent();
+    }
+    return ((AbstractGraphicalEditPart)parent).getFigure().getBounds();
+  }
 
 }
-

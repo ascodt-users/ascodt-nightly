@@ -1,5 +1,6 @@
 package de.tum.ascodt.plugin.ui;
 
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -26,118 +27,132 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
 /**
  * 
  * @author atanasoa
- *
- *A property page allowing the easy configuration of the ascodt compiler
- *The following options of the compiler can be configured:
- *->includes: dependet sidl files
+ * 
+ *         A property page allowing the easy configuration of the ascodt
+ *         compiler
+ *         The following options of the compiler can be configured:
+ *         ->includes: dependet sidl files
  */
 public class ASCoDTBuilderPropertyPage extends PropertyPage implements
-IWorkbenchPropertyPage {
-	
-	/**
-	 * holds all included sidl files
-	 */
-	private List _includes;
+    IWorkbenchPropertyPage {
 
-	/**
-	 * a flag if the compiler configuration has changed
-	 */
-	private boolean _isDirty;
-	
-	private int _compiledSIDLFiles; 
-	
-	private IProject _project;
-	public ASCoDTBuilderPropertyPage() {
-		_includes=null;
-		_isDirty=false;
-		_compiledSIDLFiles=0;
-		_project=null;
-	}
+  /**
+   * holds all included sidl files
+   */
+  private List _includes;
 
-	
-	/**
-	 * creates all controls for the compiler property page
-	 */
-	@Override
-	protected Control createContents(Composite parent) {
-		if(getElement() instanceof IResource)
-			_project=((IResource) getElement()).getProject();
-	
-			
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		Label includesLabel = new Label(composite, SWT.FILL|SWT.SEPARATOR | SWT.HORIZONTAL);
-		includesLabel.setText("Included sidl files:");
-		_includes = new List(composite, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
-		try {
-			for(String dep:ProjectBuilder.getInstance().getProject(_project).getSIDLDependencies())
-				_includes.add(dep);
-		} catch (CoreException e) {
-			ErrorWriterDevice.getInstance().showError( getClass().getName(), "createContents()",  "Compiler not configured correctly", e );
-		}
-		Button importSidlButton = new Button(composite, SWT.BORDER );
-		importSidlButton.setText("Import SIDL");
-		importSidlButton.addSelectionListener(new SelectionListener(){
+  /**
+   * a flag if the compiler configuration has changed
+   */
+  private boolean _isDirty;
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-				FileDialog fileDialog =new FileDialog(shell,SWT.MULTI);
-				fileDialog.setFilterExtensions(new String[]{"*.sidl"});
-				String res=fileDialog.open();
-				if(res!=null){
-					for(String file:fileDialog.getFileNames()){
-						includeSidlFile(fileDialog.getFilterPath()+"/"+file);
-					}
-				}
+  private int _compiledSIDLFiles;
 
-			}
+  private IProject _project;
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
+  public ASCoDTBuilderPropertyPage() {
+    _includes = null;
+    _isDirty = false;
+    _compiledSIDLFiles = 0;
+    _project = null;
+  }
 
-			}
+  /**
+   * creates all controls for the compiler property page
+   */
+  @Override
+  protected Control createContents(Composite parent) {
+    if (getElement() instanceof IResource) {
+      _project = ((IResource)getElement()).getProject();
+    }
 
-		});
-		return composite;
-	}
-	
-	/**
-	 * a helper function to add new sidl files in the includes list
-	 * @param path
-	 */
-	private void includeSidlFile(String path){
-		boolean exists=false;
-		for(String include:_includes.getItems())
-			if(include.equals(path))
-				exists=true;
-		if(!exists){
-			_isDirty=true;
-			_includes.add(path);
-		}
-	}
-	
-	/**
-	 * this function is called after accepting the changes done on the property page
-	 */
-	public boolean performOk() {
-		if(_isDirty){
-			for(int i=_compiledSIDLFiles;i<_includes.getItemCount();i++){
-				try {
-					ProjectBuilder.getInstance().getProject(_project).addSIDLDependency(_includes.getItem(i));
-				} catch (CoreException e) {
-					ErrorWriterDevice.getInstance().showError( getClass().getName(), "performOk()",  "Compiler not configured correctly", e );
-					return false;
-				} catch (ASCoDTException e) {
-					ErrorWriterDevice.getInstance().showError( getClass().getName(), "performOk()",  "Compiler not configured correctly", e );
-					return false;
-				}
-			}
-			_compiledSIDLFiles=_includes.getItemCount();
-			_isDirty=false;
-		}
-		return true;
-	}
-	
+    Composite composite = new Composite(parent, SWT.NONE);
+    composite.setLayout(new FillLayout());
+    Label includesLabel = new Label(composite, SWT.FILL | SWT.SEPARATOR |
+        SWT.HORIZONTAL);
+    includesLabel.setText("Included sidl files:");
+    _includes = new List(composite, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+    try {
+      for (String dep : ProjectBuilder.getInstance().getProject(_project)
+          .getSIDLDependencies()) {
+        _includes.add(dep);
+      }
+    } catch (CoreException e) {
+      ErrorWriterDevice.getInstance().showError(getClass().getName(),
+          "createContents()", "Compiler not configured correctly", e);
+    }
+    Button importSidlButton = new Button(composite, SWT.BORDER);
+    importSidlButton.setText("Import SIDL");
+    importSidlButton.addSelectionListener(new SelectionListener() {
+
+      @Override
+      public void widgetDefaultSelected(SelectionEvent e) {
+        // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+            .getShell();
+        FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
+        fileDialog.setFilterExtensions(new String[] {"*.sidl"});
+        String res = fileDialog.open();
+        if (res != null) {
+          for (String file : fileDialog.getFileNames()) {
+            includeSidlFile(fileDialog.getFilterPath() + "/" + file);
+          }
+        }
+
+      }
+
+    });
+    return composite;
+  }
+
+  /**
+   * a helper function to add new sidl files in the includes list
+   * 
+   * @param path
+   */
+  private void includeSidlFile(String path) {
+    boolean exists = false;
+    for (String include : _includes.getItems()) {
+      if (include.equals(path)) {
+        exists = true;
+      }
+    }
+    if (!exists) {
+      _isDirty = true;
+      _includes.add(path);
+    }
+  }
+
+  /**
+   * this function is called after accepting the changes done on the property
+   * page
+   */
+  @Override
+  public boolean performOk() {
+    if (_isDirty) {
+      for (int i = _compiledSIDLFiles; i < _includes.getItemCount(); i++) {
+        try {
+          ProjectBuilder.getInstance().getProject(_project)
+              .addSIDLDependency(_includes.getItem(i));
+        } catch (CoreException e) {
+          ErrorWriterDevice.getInstance().showError(getClass().getName(),
+              "performOk()", "Compiler not configured correctly", e);
+          return false;
+        } catch (ASCoDTException e) {
+          ErrorWriterDevice.getInstance().showError(getClass().getName(),
+              "performOk()", "Compiler not configured correctly", e);
+          return false;
+        }
+      }
+      _compiledSIDLFiles = _includes.getItemCount();
+      _isDirty = false;
+    }
+    return true;
+  }
+
 }

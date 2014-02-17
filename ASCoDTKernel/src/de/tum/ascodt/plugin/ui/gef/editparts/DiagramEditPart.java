@@ -31,160 +31,188 @@ import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.tools.DeselectAllTracker;
 import org.eclipse.gef.tools.MarqueeDragTracker;
-import de.tum.ascodt.plugin.ui.gef.model.ModelElement;
-import de.tum.ascodt.plugin.ui.gef.model.Port;
+
 import de.tum.ascodt.plugin.ui.gef.editparts.policies.XYLayouetEditPolicy;
 import de.tum.ascodt.plugin.ui.gef.model.Diagram;
+import de.tum.ascodt.plugin.ui.gef.model.ModelElement;
+import de.tum.ascodt.plugin.ui.gef.model.Port;
+
 
 /**
  * EditPart for the a ASCoDTDiagramEditPart instance.
- * <p>This edit part server as the main diagram container, the white area where
- * everything else is in. Also responsible for the container's layout (the
- * way the container rearanges is contents) and the container's capabilities
- * (edit policies).
+ * <p>
+ * This edit part server as the main diagram container, the white area where
+ * everything else is in. Also responsible for the container's layout (the way
+ * the container rearanges is contents) and the container's capabilities (edit
+ * policies).
  * </p>
- * <p>This edit part must implement the PropertyChangeListener interface, 
- * so it can be notified of property changes in the corresponding model element.
+ * <p>
+ * This edit part must implement the PropertyChangeListener interface, so it can
+ * be notified of property changes in the corresponding model element.
  * </p>
  * 
  * @autho atanasoa
  */
-public class DiagramEditPart extends AbstractGraphicalEditPart 
-implements PropertyChangeListener  {
+public class DiagramEditPart extends AbstractGraphicalEditPart implements
+    PropertyChangeListener {
 
-	/**
-	 * Upon activation, attach to the model element as a property change listener.
-	 */
-	public void activate() {
-		if (!isActive()) {
-			super.activate();
-			((ModelElement) getModel()).addPropertyChangeListener(this);
+  /**
+   * Upon activation, attach to the model element as a property change listener.
+   */
+  @Override
+  public void activate() {
+    if (!isActive()) {
+      super.activate();
+      ((ModelElement)getModel()).addPropertyChangeListener(this);
 
-		}
-	}
-	
-	/**
-	 * Upon deactivation, detach from the model element as a property change listener.
-	 */
-	public void deactivate() {
-		if (isActive()) {
-			super.deactivate();
-			getCastedModel().removePropertyChangeListener(this);
-		}
-	}
-	
-	/** (non-Javadoc)
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
-	 */
-	protected List<?> getModelChildren() {
-		return getCastedModel().getChildren(); 
-	}
-	
-	/** (non-Javadoc)
-	 * @see java.beans.PropertyChangeListener#propertyChange(PropertyChangeEvent)
-	 */
-	public void propertyChange(PropertyChangeEvent evt) {
-		String prop = evt.getPropertyName();
-		// these properties are fired when Shapes are added into or removed from 
-		// the ASCoDTDiagram instance and must cause a call of refreshChildren()
-		// to update the diagram's contents.
-		if (Diagram.CHILD_ADDED_PROP.equals(prop)
-				|| Diagram.CHILD_REMOVED_PROP.equals(prop)) {
-			refreshChildren();
-		}
-	}
-	
-	/**
-	 * creates the view for this editpart
-	 * @see 
-	 */
-	@Override
-	protected IFigure createFigure() {
-		Figure f = new FreeformLayer();
-		f.setBorder(new MarginBorder(3));
-		f.setLayoutManager(new FreeformLayout());
-		
-		//f.setForegroundColor(ColorConstants.white);
-		//f.setBackgroundColor(ColorConstants.white);
-		// Create the static router for the connection layer
-		ConnectionLayer connLayer = (ConnectionLayer)getLayer(LayerConstants.CONNECTION_LAYER);
-		AutomaticRouter router = new FanRouter();
-		router.setNextRouter(new ManhattanConnectionRouter());
-		connLayer.setConnectionRouter(router);
-		f.setVisible(true);
-		return f;
-	}
+    }
+  }
 
-	@Override
-	protected void createEditPolicies() {
-		// disallows the removal of this edit part from its parent
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayouetEditPolicy());
-		
-		//prevents the root part from providing selection feedback when the user 
-		
-		//clicks on the area of the diagram corresponding to the root of the model
-		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, null);
-		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy());
-	}
-	
-	/**
-	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Object getAdapter(Class adapter) {
-		if (adapter == SnapToHelper.class) {
-			List snapStrategies = new ArrayList();
-			Boolean val = (Boolean)getViewer().getProperty(RulerProvider.PROPERTY_RULER_VISIBILITY);
-			if (val != null && val.booleanValue())
-				snapStrategies.add(new SnapToGuides(this));
-			val = (Boolean)getViewer().getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED);
-			if (val != null && val.booleanValue())
-				snapStrategies.add(new SnapToGeometry(this));
-			val = (Boolean)getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ENABLED);
-			if (val != null && val.booleanValue())
-				snapStrategies.add(new SnapToGrid(this));
-			
-			if (snapStrategies.size() == 0)
-				return null;
-			if (snapStrategies.size() == 1)
-				return snapStrategies.get(0);
+  @Override
+  protected void createEditPolicies() {
+    // disallows the removal of this edit part from its parent
+    installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
+    installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayouetEditPolicy());
 
-			SnapToHelper ss[] = new SnapToHelper[snapStrategies.size()];
-			for (int i = 0; i < snapStrategies.size(); i++)
-				ss[i] = (SnapToHelper)snapStrategies.get(i);
-			return new CompoundSnapToHelper(ss);
-		}
-		return super.getAdapter(adapter);
-	}
+    // prevents the root part from providing selection feedback when the user
 
-	public DragTracker getDragTracker(Request req){
-		if (req instanceof SelectionRequest 
-			&& ((SelectionRequest)req).getLastButtonPressed() == 3)
-				return new DeselectAllTracker(this);
-		return new MarqueeDragTracker();
-	}
-	
-	/**
-	 * 
-	 * @return the model of the edit part
-	 */
-	private Diagram getCastedModel() {
-		return (Diagram) getModel();
-	}
+    // clicks on the area of the diagram corresponding to the root of the model
+    installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, null);
+    installEditPolicy("Snap Feedback", new SnapFeedbackPolicy());
+  }
 
-	public void markCompatibleTargets(
-			Port port,ComponentEditPart component) {
-		for(Object part:this.getChildren())
-			if(part instanceof ComponentEditPart && !part.equals(component))
-				((ComponentEditPart) part).markCompatibleTargets(port);
-		
-	}
+  /**
+   * creates the view for this editpart
+   * 
+   * @see
+   */
+  @Override
+  protected IFigure createFigure() {
+    Figure f = new FreeformLayer();
+    f.setBorder(new MarginBorder(3));
+    f.setLayoutManager(new FreeformLayout());
 
-	public void unmarkCompatibleTargets(Request request) {
-		for(Object part:this.getChildren())
-			if(part instanceof ComponentEditPart )
-				((ComponentEditPart) part).unmarkCompatibleTargets();	
-	}
+    // f.setForegroundColor(ColorConstants.white);
+    // f.setBackgroundColor(ColorConstants.white);
+    // Create the static router for the connection layer
+    ConnectionLayer connLayer = (ConnectionLayer)getLayer(LayerConstants.CONNECTION_LAYER);
+    AutomaticRouter router = new FanRouter();
+    router.setNextRouter(new ManhattanConnectionRouter());
+    connLayer.setConnectionRouter(router);
+    f.setVisible(true);
+    return f;
+  }
+
+  /**
+   * Upon deactivation, detach from the model element as a property change
+   * listener.
+   */
+  @Override
+  public void deactivate() {
+    if (isActive()) {
+      super.deactivate();
+      getCastedModel().removePropertyChangeListener(this);
+    }
+  }
+
+  /**
+   * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
+   */
+  @Override
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public Object getAdapter(Class adapter) {
+    if (adapter == SnapToHelper.class) {
+      List snapStrategies = new ArrayList();
+      Boolean val = (Boolean)getViewer().getProperty(
+          RulerProvider.PROPERTY_RULER_VISIBILITY);
+      if (val != null && val.booleanValue()) {
+        snapStrategies.add(new SnapToGuides(this));
+      }
+      val = (Boolean)getViewer().getProperty(
+          SnapToGeometry.PROPERTY_SNAP_ENABLED);
+      if (val != null && val.booleanValue()) {
+        snapStrategies.add(new SnapToGeometry(this));
+      }
+      val = (Boolean)getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ENABLED);
+      if (val != null && val.booleanValue()) {
+        snapStrategies.add(new SnapToGrid(this));
+      }
+
+      if (snapStrategies.size() == 0) {
+        return null;
+      }
+      if (snapStrategies.size() == 1) {
+        return snapStrategies.get(0);
+      }
+
+      SnapToHelper ss[] = new SnapToHelper[snapStrategies.size()];
+      for (int i = 0; i < snapStrategies.size(); i++) {
+        ss[i] = (SnapToHelper)snapStrategies.get(i);
+      }
+      return new CompoundSnapToHelper(ss);
+    }
+    return super.getAdapter(adapter);
+  }
+
+  /**
+   * 
+   * @return the model of the edit part
+   */
+  private Diagram getCastedModel() {
+    return (Diagram)getModel();
+  }
+
+  @Override
+  public DragTracker getDragTracker(Request req) {
+    if (req instanceof SelectionRequest &&
+        ((SelectionRequest)req).getLastButtonPressed() == 3) {
+      return new DeselectAllTracker(this);
+    }
+    return new MarqueeDragTracker();
+  }
+
+  /**
+   * (non-Javadoc)
+   * 
+   * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
+   */
+  @Override
+  protected List<?> getModelChildren() {
+    return getCastedModel().getChildren();
+  }
+
+  public void markCompatibleTargets(Port port, ComponentEditPart component) {
+    for (Object part : getChildren()) {
+      if (part instanceof ComponentEditPart && !part.equals(component)) {
+        ((ComponentEditPart)part).markCompatibleTargets(port);
+      }
+    }
+
+  }
+
+  /**
+   * (non-Javadoc)
+   * 
+   * @see java.beans.PropertyChangeListener#propertyChange(PropertyChangeEvent)
+   */
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    String prop = evt.getPropertyName();
+    // these properties are fired when Shapes are added into or removed from
+    // the ASCoDTDiagram instance and must cause a call of refreshChildren()
+    // to update the diagram's contents.
+    if (Diagram.CHILD_ADDED_PROP.equals(prop) ||
+        Diagram.CHILD_REMOVED_PROP.equals(prop)) {
+      refreshChildren();
+    }
+  }
+
+  public void unmarkCompatibleTargets(Request request) {
+    for (Object part : getChildren()) {
+      if (part instanceof ComponentEditPart) {
+        ((ComponentEditPart)part).unmarkCompatibleTargets();
+      }
+    }
+  }
 
 }

@@ -2,37 +2,34 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class TRBracket extends Token
-{
-    public TRBracket()
-    {
-        super.setText(")");
-    }
+public final class TRBracket extends Token {
+  public TRBracket() {
+    super.setText(")");
+  }
 
-    public TRBracket(int line, int pos)
-    {
-        super.setText(")");
-        setLine(line);
-        setPos(pos);
-    }
+  public TRBracket(int line, int pos) {
+    super.setText(")");
+    setLine(line);
+    setPos(pos);
+  }
 
-    @Override
-    public Object clone()
-    {
-      return new TRBracket(getLine(), getPos());
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseTRBracket(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTRBracket(this);
-    }
+  @Override
+  public Object clone() {
+    return new TRBracket(getLine(), getPos());
+  }
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TRBracket text.");
-    }
+  @Override
+  public void setText(@SuppressWarnings("unused") String text) {
+    throw new RuntimeException("Cannot change TRBracket text.");
+  }
 }

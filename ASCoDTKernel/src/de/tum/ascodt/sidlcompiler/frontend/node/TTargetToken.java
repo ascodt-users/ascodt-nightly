@@ -2,37 +2,34 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class TTargetToken extends Token
-{
-    public TTargetToken()
-    {
-        super.setText("@target");
-    }
+public final class TTargetToken extends Token {
+  public TTargetToken() {
+    super.setText("@target");
+  }
 
-    public TTargetToken(int line, int pos)
-    {
-        super.setText("@target");
-        setLine(line);
-        setPos(pos);
-    }
+  public TTargetToken(int line, int pos) {
+    super.setText("@target");
+    setLine(line);
+    setPos(pos);
+  }
 
-    @Override
-    public Object clone()
-    {
-      return new TTargetToken(getLine(), getPos());
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseTTargetToken(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTTargetToken(this);
-    }
+  @Override
+  public Object clone() {
+    return new TTargetToken(getLine(), getPos());
+  }
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TTargetToken text.");
-    }
+  @Override
+  public void setText(@SuppressWarnings("unused") String text) {
+    throw new RuntimeException("Cannot change TTargetToken text.");
+  }
 }

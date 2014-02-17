@@ -1,5 +1,6 @@
 package de.tum.ascodt.plugin.ui.wizards;
 
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -18,213 +19,229 @@ import de.tum.ascodt.plugin.project.Project;
 import de.tum.ascodt.plugin.project.ProjectBuilder;
 import de.tum.ascodt.repository.RepositoryListener;
 
-public class NewComponentUIWizardPage extends WizardPage implements RepositoryListener {
-	private String _initialProjectIdentifier;
-	private Project _lastProject;
-	protected NewComponentUIWizardPage(String pageName) {
-		super(pageName);
-		_initialProjectIdentifier=null;
-		setPageComplete(false);
-	}
-	
-	@Override
-	public void dispose(){
-		if(_lastProject!=null)
-			_lastProject.getStaticRepository().removeListener(NewComponentUIWizardPage.this);
-		
-	}
-	
-	protected void  finalize(){
-		if(_lastProject!=null)
-			_lastProject.getStaticRepository().removeListener(NewComponentUIWizardPage.this);
-		
-	}
-	/**
-	 * a listener which tracks for changes on the defined controls
-	 */
-	private Listener _fieldModifyListener = new Listener() {
-		public void handleEvent(Event e) {
-			boolean valid = validatePage();
-			setPageComplete(valid);
 
-		}
-	};
-	private Combo _projectsComboBox;
-	private Combo _componentInterfacesComboBox;
+public class NewComponentUIWizardPage extends WizardPage implements
+    RepositoryListener {
+  private String _initialProjectIdentifier;
+  private Project _lastProject;
 
-	@Override
-	public void createControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NULL);
+  /**
+   * a listener which tracks for changes on the defined controls
+   */
+  private Listener _fieldModifyListener = new Listener() {
+    @Override
+    public void handleEvent(Event e) {
+      boolean valid = validatePage();
+      setPageComplete(valid);
 
+    }
+  };
 
-		initializeDialogUnits(parent);
+  private Combo _projectsComboBox;
 
-		
+  private Combo _componentInterfacesComboBox;
 
-		composite.setLayout(new GridLayout());
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+  protected NewComponentUIWizardPage(String pageName) {
+    super(pageName);
+    _initialProjectIdentifier = null;
+    setPageComplete(false);
+  }
 
-		createComponentUICreationGroup(composite);
+  @Override
+  public void begin() {
+    Display.getDefault().syncExec(new Runnable() {
 
-		setPageComplete(validatePage());
-		// Show description on opening
-		setErrorMessage(null);
-		setMessage(null);
-		setControl(composite);
-		Dialog.applyDialogFont(composite);
-	}
+      @Override
+      public void run() {
+        _componentInterfacesComboBox.removeAll();
+      }
 
-	/**
-	 * Creates the component ui specification controls.
-	 *
-	 * @param parent the parent composite
-	 */
-	private final void createComponentUICreationGroup(Composite parent) {
-		// project specification group
-		Composite projectGroup = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
-		projectGroup.setLayout(layout);
-		projectGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+    });
 
-		// project label
-		Label projectLabel = new Label(projectGroup, SWT.NONE);
-		projectLabel.setText("Project:");
-		projectLabel.setFont(parent.getFont());
+  }
 
-		_projectsComboBox = new Combo(projectGroup, SWT.NONE);
+  /**
+   * Creates the component ui specification controls.
+   * 
+   * @param parent
+   *          the parent composite
+   */
+  private final void createComponentUICreationGroup(Composite parent) {
+    // project specification group
+    Composite projectGroup = new Composite(parent, SWT.NONE);
+    GridLayout layout = new GridLayout();
+    layout.numColumns = 2;
+    projectGroup.setLayout(layout);
+    projectGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Label componentInterfaceLabel = new Label(projectGroup, SWT.NONE);
-		componentInterfaceLabel.setText("Component interface:");
-		componentInterfaceLabel.setFont(parent.getFont());
+    // project label
+    Label projectLabel = new Label(projectGroup, SWT.NONE);
+    projectLabel.setText("Project:");
+    projectLabel.setFont(parent.getFont());
 
-		_componentInterfacesComboBox = new Combo(projectGroup, SWT.NONE);
-		int selectionIndex=0,counter=0;
-		for(String projectId: ProjectBuilder.getInstance().getProjectsIdentifiers()){
-			_projectsComboBox.add(projectId);
-			if(_initialProjectIdentifier!=null&&projectId.equals(_initialProjectIdentifier))
-				selectionIndex=counter;
-			counter++;
-		}
-		_projectsComboBox.select(selectionIndex);
-		_projectsComboBox.setFont(parent.getFont());
-		_projectsComboBox.addListener(SWT.Modify, _fieldModifyListener);
-		_projectsComboBox.addSelectionListener(new SelectionListener(){
+    _projectsComboBox = new Combo(projectGroup, SWT.NONE);
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				onProjectSelected();
-			
-			}
+    Label componentInterfaceLabel = new Label(projectGroup, SWT.NONE);
+    componentInterfaceLabel.setText("Component interface:");
+    componentInterfaceLabel.setFont(parent.getFont());
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-		onProjectSelected();
-		
-		
-	}
+    _componentInterfacesComboBox = new Combo(projectGroup, SWT.NONE);
+    int selectionIndex = 0, counter = 0;
+    for (String projectId : ProjectBuilder.getInstance()
+        .getProjectsIdentifiers()) {
+      _projectsComboBox.add(projectId);
+      if (_initialProjectIdentifier != null &&
+          projectId.equals(_initialProjectIdentifier)) {
+        selectionIndex = counter;
+      }
+      counter++;
+    }
+    _projectsComboBox.select(selectionIndex);
+    _projectsComboBox.setFont(parent.getFont());
+    _projectsComboBox.addListener(SWT.Modify, _fieldModifyListener);
+    _projectsComboBox.addSelectionListener(new SelectionListener() {
 
-	/**
-	 * Returns whether this page's controls currently all contain valid 
-	 * values.
-	 *
-	 * @return <code>true</code> if all controls are valid, and
-	 *   <code>false</code> if at least one is invalid
-	 */
-	protected boolean validatePage() {
-		
-		String projectNameFieldContents = getProjectNameFieldValue();
-		if (projectNameFieldContents.equals("")) { //$NON-NLS-1$
-			setErrorMessage(null);
-			setMessage("Invalid project name:"+projectNameFieldContents);
-			return false;
-		}
-		
-		String componentInterfacesFieldContents = getComponentInterfacesFieldValue();
-		if (componentInterfacesFieldContents.equals("")) { //$NON-NLS-1$
-			setErrorMessage(null);
-			setMessage("Invalid component interface");
-			return false;
-		}
+      @Override
+      public void widgetDefaultSelected(SelectionEvent e) {
+        // TODO Auto-generated method stub
 
-		return true;
-	}
+      }
 
-	/**
-	 * @param _initialProjectIdentifier the initialProjectIdentifier to set
-	 */
-	public void setInitialProjectIdentifier(String initialProjectIdentifier) {
-		this._initialProjectIdentifier = initialProjectIdentifier;
-	}
-	
-	
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        onProjectSelected();
 
-	public String getComponentInterface() {
-		return getComponentInterfacesFieldValue();
-	}
-	
-	public String getProjectName(){
-		if (_projectsComboBox == null) {
-			return _initialProjectIdentifier;
-		}
+      }
 
-		return getProjectNameFieldValue();
-	}
+    });
+    onProjectSelected();
 
-	private String getComponentInterfacesFieldValue() {
-		if (_componentInterfacesComboBox == null) {
-			return ""; //$NON-NLS-1$
-		}
+  }
 
-		return _componentInterfacesComboBox.getText().trim();
-	}
-	
-	private String getProjectNameFieldValue() {
-		if (_projectsComboBox == null) {
-			return ""; //$NON-NLS-1$
-		}
+  @Override
+  public void createControl(Composite parent) {
+    Composite composite = new Composite(parent, SWT.NULL);
 
-		return _projectsComboBox.getText().trim();
-	}
+    initializeDialogUnits(parent);
 
-	@Override
-	public void begin() {
-		Display.getDefault().syncExec(new Runnable(){
+    composite.setLayout(new GridLayout());
+    composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-			@Override
-			public void run() {
-				_componentInterfacesComboBox.removeAll();
-			}
-			
-		});
-	
-	}
+    createComponentUICreationGroup(composite);
 
-	@Override
-	public void end() {
-			
-	}
+    setPageComplete(validatePage());
+    // Show description on opening
+    setErrorMessage(null);
+    setMessage(null);
+    setControl(composite);
+    Dialog.applyDialogFont(composite);
+  }
 
-	@Override
-	public void notify(String componentInterface, String target) {
-		_componentInterfacesComboBox.add(componentInterface);
-		
-	}
+  @Override
+  public void dispose() {
+    if (_lastProject != null) {
+      _lastProject.getStaticRepository().removeListener(
+          NewComponentUIWizardPage.this);
+    }
 
-	/**
+  }
+
+  @Override
+  public void end() {
+
+  }
+
+  @Override
+  protected void finalize() {
+    if (_lastProject != null) {
+      _lastProject.getStaticRepository().removeListener(
+          NewComponentUIWizardPage.this);
+    }
+
+  }
+
+  public String getComponentInterface() {
+    return getComponentInterfacesFieldValue();
+  }
+
+  private String getComponentInterfacesFieldValue() {
+    if (_componentInterfacesComboBox == null) {
+      return ""; //$NON-NLS-1$
+    }
+
+    return _componentInterfacesComboBox.getText().trim();
+  }
+
+  public String getProjectName() {
+    if (_projectsComboBox == null) {
+      return _initialProjectIdentifier;
+    }
+
+    return getProjectNameFieldValue();
+  }
+
+  private String getProjectNameFieldValue() {
+    if (_projectsComboBox == null) {
+      return ""; //$NON-NLS-1$
+    }
+
+    return _projectsComboBox.getText().trim();
+  }
+
+  @Override
+  public void notify(String componentInterface, String target) {
+    _componentInterfacesComboBox.add(componentInterface);
+
+  }
+
+  /**
 	 * 
 	 */
-	public void onProjectSelected() {
-		if(_lastProject!=null)
-			_lastProject.getStaticRepository().removeListener(NewComponentUIWizardPage.this);
-		_lastProject=ProjectBuilder.getInstance().getProject(_projectsComboBox.getItem(_projectsComboBox.getSelectionIndex()));
-		_lastProject.getStaticRepository().addListener(NewComponentUIWizardPage.this);
-		if(_componentInterfacesComboBox.getItemCount()>0)
-			_componentInterfacesComboBox.select(0);
-	}
+  public void onProjectSelected() {
+    if (_lastProject != null) {
+      _lastProject.getStaticRepository().removeListener(
+          NewComponentUIWizardPage.this);
+    }
+    _lastProject = ProjectBuilder.getInstance().getProject(
+        _projectsComboBox.getItem(_projectsComboBox.getSelectionIndex()));
+    _lastProject.getStaticRepository().addListener(
+        NewComponentUIWizardPage.this);
+    if (_componentInterfacesComboBox.getItemCount() > 0) {
+      _componentInterfacesComboBox.select(0);
+    }
+  }
+
+  /**
+   * @param _initialProjectIdentifier
+   *          the initialProjectIdentifier to set
+   */
+  public void setInitialProjectIdentifier(String initialProjectIdentifier) {
+    _initialProjectIdentifier = initialProjectIdentifier;
+  }
+
+  /**
+   * Returns whether this page's controls currently all contain valid
+   * values.
+   * 
+   * @return <code>true</code> if all controls are valid, and <code>false</code>
+   *         if at least one is invalid
+   */
+  protected boolean validatePage() {
+
+    String projectNameFieldContents = getProjectNameFieldValue();
+    if (projectNameFieldContents.equals("")) { //$NON-NLS-1$
+      setErrorMessage(null);
+      setMessage("Invalid project name:" + projectNameFieldContents);
+      return false;
+    }
+
+    String componentInterfacesFieldContents = getComponentInterfacesFieldValue();
+    if (componentInterfacesFieldContents.equals("")) { //$NON-NLS-1$
+      setErrorMessage(null);
+      setMessage("Invalid component interface");
+      return false;
+    }
+
+    return true;
+  }
 }

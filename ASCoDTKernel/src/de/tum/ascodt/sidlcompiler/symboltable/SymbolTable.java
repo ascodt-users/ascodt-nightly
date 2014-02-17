@@ -3,9 +3,8 @@
 // use, please see the copyright notice at www5.in.tum.de/ascodt
 package de.tum.ascodt.sidlcompiler.symboltable;
 
-import java.util.HashMap;
 
-import org.eclipse.core.runtime.Assert;
+import java.util.HashMap;
 
 
 /**
@@ -16,36 +15,40 @@ import org.eclipse.core.runtime.Assert;
  * 
  * !!! Access any identifier
  * 
- * To work with an identifier always follows the same strategy. One takes the 
- * node of the AST and passes it to getScope(). The returned scope then is 
- * able to transfer the identifier into several representations. 
+ * To work with an identifier always follows the same strategy. One takes the
+ * node of the AST and passes it to getScope(). The returned scope then is
+ * able to transfer the identifier into several representations.
  * 
  * @author Tobias Weinzierl
  */
-public class SymbolTable {  
+public class SymbolTable {
   /**
    * Map from the nodes to the scopes.
    */
-  private java.util.Map<String, Scope > _mapping;
-  
+  private java.util.Map<String, Scope> _mapping;
+
   /**
-   * Global scope, i.e. the scope corresponding to the forrest of AST root 
+   * Global scope, i.e. the scope corresponding to the forrest of AST root
    * nodes.
    */
-  private Scope                                                   _globalScope;
-    
+  private Scope _globalScope;
+
   public SymbolTable() {
-    _mapping     = new java.util.HashMap<String, Scope >();
+    _mapping = new java.util.HashMap<String, Scope>();
     _globalScope = new Scope();
-  }  
-  
-  public SymbolTable(SymbolTable old){
-	  this._mapping=new HashMap<String,Scope>(old._mapping);
-	  this._globalScope=new Scope(old._globalScope);
+  }
+
+  public SymbolTable(SymbolTable old) {
+    _mapping = new HashMap<String, Scope>(old._mapping);
+    _globalScope = new Scope(old._globalScope);
+  }
+
+  public Scope getGlobalScope() {
+    return _globalScope;
   }
 
   /**
-   * Returns the scope belonging to a node. 
+   * Returns the scope belonging to a node.
    * 
    * @param node
    * @return
@@ -54,12 +57,9 @@ public class SymbolTable {
     Scope result = _mapping.get(Scope.getSymbol(node));
     return result;
   }
-  
-  public void setScope(de.tum.ascodt.sidlcompiler.frontend.node.Node node,Scope scope) {
-    _mapping.put(Scope.getSymbol(node),scope);
-  }
-  
-  public Scope getGlobalScope() {
-    return _globalScope;
+
+  public void setScope(de.tum.ascodt.sidlcompiler.frontend.node.Node node,
+      Scope scope) {
+    _mapping.put(Scope.getSymbol(node), scope);
   }
 }
