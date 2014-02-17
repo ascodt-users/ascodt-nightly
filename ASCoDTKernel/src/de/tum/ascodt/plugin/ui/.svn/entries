@@ -1,96 +1,0 @@
-10
-
-dir
-665
-svn+ssh://atanasoa@atsccs29.informatik.tu-muenchen.de/home_local/repositories/svn/ascodt/trunk/plugins/ASCoDTKernel/src/de/tum/ascodt/plugin/ui
-svn+ssh://atanasoa@atsccs29.informatik.tu-muenchen.de/home_local/repositories/svn/ascodt
-
-
-
-2012-10-25T18:31:22.540745Z
-662
-atanasoa
-
-
-svn:special svn:externals svn:needs-lock
-
-
-
-
-
-
-
-
-
-
-
-66aa58e2-b016-4fe3-9df9-8a571acc2ad1
-
-
-
-
-
-
-0
-
-ASCoDTBuilderPropertyPage.java
-file
-
-
-
-
-2012-06-21T13:48:47.000000Z
-59087ae440c7e17db62edcdf3c486bd2
-2012-06-28T11:28:59.494391Z
-541
-atanasoa
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-4237
-
-editors
-dir
-
-gef
-dir
-
-navigator
-dir
-
-palette
-dir
-
-perspectives
-dir
-
-resources
-dir
-
-tabs
-dir
-
-views
-dir
-
-wizards
-dir
-
