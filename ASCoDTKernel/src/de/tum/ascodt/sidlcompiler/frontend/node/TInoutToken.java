@@ -2,34 +2,37 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
-
+import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TInoutToken extends Token {
-  public TInoutToken() {
-    super.setText("inout");
-  }
+public final class TInoutToken extends Token
+{
+    public TInoutToken()
+    {
+        super.setText("inout");
+    }
 
-  public TInoutToken(int line, int pos) {
-    super.setText("inout");
-    setLine(line);
-    setPos(pos);
-  }
+    public TInoutToken(int line, int pos)
+    {
+        super.setText("inout");
+        setLine(line);
+        setPos(pos);
+    }
 
-  @Override
-  public void apply(Switch sw) {
-    ((Analysis)sw).caseTInoutToken(this);
-  }
+    @Override
+    public Object clone()
+    {
+      return new TInoutToken(getLine(), getPos());
+    }
 
-  @Override
-  public Object clone() {
-    return new TInoutToken(getLine(), getPos());
-  }
+    public void apply(Switch sw)
+    {
+        ((Analysis) sw).caseTInoutToken(this);
+    }
 
-  @Override
-  public void setText(@SuppressWarnings("unused") String text) {
-    throw new RuntimeException("Cannot change TInoutToken text.");
-  }
+    @Override
+    public void setText(@SuppressWarnings("unused") String text)
+    {
+        throw new RuntimeException("Cannot change TInoutToken text.");
+    }
 }

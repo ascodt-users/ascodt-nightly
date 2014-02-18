@@ -2,124 +2,143 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-
-import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
-
+import java.util.*;
+import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AEnumDeclarationPackageElement extends PPackageElement {
-  private TIdentifier _name_;
-  private final LinkedList<PEnumerator> _enumerator_ = new LinkedList<PEnumerator>();
+public final class AEnumDeclarationPackageElement extends PPackageElement
+{
+    private TIdentifier _name_;
+    private final LinkedList<PEnumerator> _enumerator_ = new LinkedList<PEnumerator>();
 
-  public AEnumDeclarationPackageElement() {
-    // Constructor
-  }
-
-  public AEnumDeclarationPackageElement(
-      @SuppressWarnings("hiding") TIdentifier _name_,
-      @SuppressWarnings("hiding") List<PEnumerator> _enumerator_) {
-    // Constructor
-    setName(_name_);
-
-    setEnumerator(_enumerator_);
-
-  }
-
-  @Override
-  public void apply(Switch sw) {
-    ((Analysis)sw).caseAEnumDeclarationPackageElement(this);
-  }
-
-  @Override
-  public Object clone() {
-    return new AEnumDeclarationPackageElement(cloneNode(_name_),
-        cloneList(_enumerator_));
-  }
-
-  public LinkedList<PEnumerator> getEnumerator() {
-    return _enumerator_;
-  }
-
-  public TIdentifier getName() {
-    return _name_;
-  }
-
-  @Override
-  void removeChild(@SuppressWarnings("unused") Node child) {
-    // Remove child
-    if (_name_ == child) {
-      _name_ = null;
-      return;
+    public AEnumDeclarationPackageElement()
+    {
+        // Constructor
     }
 
-    if (_enumerator_.remove(child)) {
-      return;
+    public AEnumDeclarationPackageElement(
+        @SuppressWarnings("hiding") TIdentifier _name_,
+        @SuppressWarnings("hiding") List<PEnumerator> _enumerator_)
+    {
+        // Constructor
+        setName(_name_);
+
+        setEnumerator(_enumerator_);
+
     }
 
-    throw new RuntimeException("Not a child.");
-  }
-
-  @Override
-  void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
-    // Replace child
-    if (_name_ == oldChild) {
-      setName((TIdentifier)newChild);
-      return;
+    @Override
+    public Object clone()
+    {
+        return new AEnumDeclarationPackageElement(
+            cloneNode(this._name_),
+            cloneList(this._enumerator_));
     }
 
-    for (ListIterator<PEnumerator> i = _enumerator_.listIterator(); i.hasNext();) {
-      if (i.next() == oldChild) {
-        if (newChild != null) {
-          i.set((PEnumerator)newChild);
-          newChild.parent(this);
-          oldChild.parent(null);
-          return;
+    public void apply(Switch sw)
+    {
+        ((Analysis) sw).caseAEnumDeclarationPackageElement(this);
+    }
+
+    public TIdentifier getName()
+    {
+        return this._name_;
+    }
+
+    public void setName(TIdentifier node)
+    {
+        if(this._name_ != null)
+        {
+            this._name_.parent(null);
         }
 
-        i.remove();
-        oldChild.parent(null);
-        return;
-      }
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._name_ = node;
     }
 
-    throw new RuntimeException("Not a child.");
-  }
-
-  public void setEnumerator(List<PEnumerator> list) {
-    _enumerator_.clear();
-    _enumerator_.addAll(list);
-    for (PEnumerator e : list) {
-      if (e.parent() != null) {
-        e.parent().removeChild(e);
-      }
-
-      e.parent(this);
-    }
-  }
-
-  public void setName(TIdentifier node) {
-    if (_name_ != null) {
-      _name_.parent(null);
+    public LinkedList<PEnumerator> getEnumerator()
+    {
+        return this._enumerator_;
     }
 
-    if (node != null) {
-      if (node.parent() != null) {
-        node.parent().removeChild(node);
-      }
+    public void setEnumerator(List<PEnumerator> list)
+    {
+        this._enumerator_.clear();
+        this._enumerator_.addAll(list);
+        for(PEnumerator e : list)
+        {
+            if(e.parent() != null)
+            {
+                e.parent().removeChild(e);
+            }
 
-      node.parent(this);
+            e.parent(this);
+        }
     }
 
-    _name_ = node;
-  }
+    @Override
+    public String toString()
+    {
+        return ""
+            + toString(this._name_)
+            + toString(this._enumerator_);
+    }
 
-  @Override
-  public String toString() {
-    return "" + toString(_name_) + toString(_enumerator_);
-  }
+    @Override
+    void removeChild(@SuppressWarnings("unused") Node child)
+    {
+        // Remove child
+        if(this._name_ == child)
+        {
+            this._name_ = null;
+            return;
+        }
+
+        if(this._enumerator_.remove(child))
+        {
+            return;
+        }
+
+        throw new RuntimeException("Not a child.");
+    }
+
+    @Override
+    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
+    {
+        // Replace child
+        if(this._name_ == oldChild)
+        {
+            setName((TIdentifier) newChild);
+            return;
+        }
+
+        for(ListIterator<PEnumerator> i = this._enumerator_.listIterator(); i.hasNext();)
+        {
+            if(i.next() == oldChild)
+            {
+                if(newChild != null)
+                {
+                    i.set((PEnumerator) newChild);
+                    newChild.parent(this);
+                    oldChild.parent(null);
+                    return;
+                }
+
+                i.remove();
+                oldChild.parent(null);
+                return;
+            }
+        }
+
+        throw new RuntimeException("Not a child.");
+    }
 }

@@ -2,572 +2,633 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.analysis;
 
+import java.util.*;
+import de.tum.ascodt.sidlcompiler.frontend.node.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import de.tum.ascodt.sidlcompiler.frontend.node.AAutoEnumeratorEnumerator;
-import de.tum.ascodt.sidlcompiler.frontend.node.ABoolBuiltInType;
-import de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement;
-import de.tum.ascodt.sidlcompiler.frontend.node.ADeclaration;
-import de.tum.ascodt.sidlcompiler.frontend.node.ADoubleBuiltInType;
-import de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement;
-import de.tum.ascodt.sidlcompiler.frontend.node.AIntBuiltInType;
-import de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement;
-import de.tum.ascodt.sidlcompiler.frontend.node.AOpaqueBuiltInType;
-import de.tum.ascodt.sidlcompiler.frontend.node.AOperation;
-import de.tum.ascodt.sidlcompiler.frontend.node.APackage;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayInEnumParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayInParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayOutEnumParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayOutParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterInEnumParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterInParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterOutEnumParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterOutParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.ASpecificEnumeratorEnumerator;
-import de.tum.ascodt.sidlcompiler.frontend.node.AStringBuiltInType;
-import de.tum.ascodt.sidlcompiler.frontend.node.ASubpackagePackageElement;
-import de.tum.ascodt.sidlcompiler.frontend.node.AUserDefinedType;
-import de.tum.ascodt.sidlcompiler.frontend.node.AUses;
-import de.tum.ascodt.sidlcompiler.frontend.node.Node;
-import de.tum.ascodt.sidlcompiler.frontend.node.PEnumerator;
-import de.tum.ascodt.sidlcompiler.frontend.node.POperation;
-import de.tum.ascodt.sidlcompiler.frontend.node.PPackage;
-import de.tum.ascodt.sidlcompiler.frontend.node.PPackageElement;
-import de.tum.ascodt.sidlcompiler.frontend.node.PParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.PUserDefinedType;
-import de.tum.ascodt.sidlcompiler.frontend.node.PUses;
-import de.tum.ascodt.sidlcompiler.frontend.node.Start;
-import de.tum.ascodt.sidlcompiler.frontend.node.TIdentifier;
-
-
-public class ReversedDepthFirstAdapter extends AnalysisAdapter {
-  @Override
-  public void caseAAutoEnumeratorEnumerator(AAutoEnumeratorEnumerator node) {
-    inAAutoEnumeratorEnumerator(node);
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    outAAutoEnumeratorEnumerator(node);
-  }
-
-  @Override
-  public void caseABoolBuiltInType(ABoolBuiltInType node) {
-    inABoolBuiltInType(node);
-    outABoolBuiltInType(node);
-  }
-
-  @Override
-  public void caseAClassPackageElement(AClassPackageElement node) {
-    inAClassPackageElement(node);
+public class ReversedDepthFirstAdapter extends AnalysisAdapter
+{
+    public void inStart(Start node)
     {
-      List<PUses> copy = new ArrayList<PUses>(node.getUses());
-      Collections.reverse(copy);
-      for (PUses e : copy) {
-        e.apply(this);
-      }
+        defaultIn(node);
     }
+
+    public void outStart(Start node)
     {
-      List<PUserDefinedType> copy = new ArrayList<PUserDefinedType>(
-          node.getProvides());
-      Collections.reverse(copy);
-      for (PUserDefinedType e : copy) {
-        e.apply(this);
-      }
+        defaultOut(node);
     }
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    if (node.getTarget() != null) {
-      node.getTarget().apply(this);
-    }
-    outAClassPackageElement(node);
-  }
 
-  @Override
-  public void caseADeclaration(ADeclaration node) {
-    inADeclaration(node);
+    public void defaultIn(@SuppressWarnings("unused") Node node)
     {
-      List<PPackage> copy = new ArrayList<PPackage>(node.getPackage());
-      Collections.reverse(copy);
-      for (PPackage e : copy) {
-        e.apply(this);
-      }
+        // Do nothing
     }
-    outADeclaration(node);
-  }
 
-  @Override
-  public void caseADoubleBuiltInType(ADoubleBuiltInType node) {
-    inADoubleBuiltInType(node);
-    outADoubleBuiltInType(node);
-  }
-
-  @Override
-  public void caseAEnumDeclarationPackageElement(
-      AEnumDeclarationPackageElement node) {
-    inAEnumDeclarationPackageElement(node);
+    public void defaultOut(@SuppressWarnings("unused") Node node)
     {
-      List<PEnumerator> copy = new ArrayList<PEnumerator>(node.getEnumerator());
-      Collections.reverse(copy);
-      for (PEnumerator e : copy) {
-        e.apply(this);
-      }
+        // Do nothing
     }
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    outAEnumDeclarationPackageElement(node);
-  }
 
-  @Override
-  public void caseAIntBuiltInType(AIntBuiltInType node) {
-    inAIntBuiltInType(node);
-    outAIntBuiltInType(node);
-  }
-
-  @Override
-  public void caseAInterfacePackageElement(AInterfacePackageElement node) {
-    inAInterfacePackageElement(node);
+    @Override
+    public void caseStart(Start node)
     {
-      List<POperation> copy = new ArrayList<POperation>(node.getOperation());
-      Collections.reverse(copy);
-      for (POperation e : copy) {
-        e.apply(this);
-      }
+        inStart(node);
+        node.getEOF().apply(this);
+        node.getPDeclaration().apply(this);
+        outStart(node);
     }
+
+    public void inADeclaration(ADeclaration node)
     {
-      List<PUserDefinedType> copy = new ArrayList<PUserDefinedType>(
-          node.getSupertype());
-      Collections.reverse(copy);
-      for (PUserDefinedType e : copy) {
-        e.apply(this);
-      }
+        defaultIn(node);
     }
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    outAInterfacePackageElement(node);
-  }
 
-  @Override
-  public void caseAOpaqueBuiltInType(AOpaqueBuiltInType node) {
-    inAOpaqueBuiltInType(node);
-    outAOpaqueBuiltInType(node);
-  }
-
-  @Override
-  public void caseAOperation(AOperation node) {
-    inAOperation(node);
+    public void outADeclaration(ADeclaration node)
     {
-      List<PParameter> copy = new ArrayList<PParameter>(node.getParameter());
-      Collections.reverse(copy);
-      for (PParameter e : copy) {
-        e.apply(this);
-      }
+        defaultOut(node);
     }
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    outAOperation(node);
-  }
 
-  @Override
-  public void caseAPackage(APackage node) {
-    inAPackage(node);
+    @Override
+    public void caseADeclaration(ADeclaration node)
     {
-      List<PPackageElement> copy = new ArrayList<PPackageElement>(
-          node.getPackageElement());
-      Collections.reverse(copy);
-      for (PPackageElement e : copy) {
-        e.apply(this);
-      }
+        inADeclaration(node);
+        {
+            List<PPackage> copy = new ArrayList<PPackage>(node.getPackage());
+            Collections.reverse(copy);
+            for(PPackage e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        outADeclaration(node);
     }
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    outAPackage(node);
-  }
 
-  @Override
-  public void caseAParameterArrayInEnumParameter(
-      AParameterArrayInEnumParameter node) {
-    inAParameterArrayInEnumParameter(node);
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    if (node.getType() != null) {
-      node.getType().apply(this);
-    }
-    outAParameterArrayInEnumParameter(node);
-  }
-
-  @Override
-  public void caseAParameterArrayInParameter(AParameterArrayInParameter node) {
-    inAParameterArrayInParameter(node);
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    if (node.getType() != null) {
-      node.getType().apply(this);
-    }
-    outAParameterArrayInParameter(node);
-  }
-
-  @Override
-  public void caseAParameterArrayOutEnumParameter(
-      AParameterArrayOutEnumParameter node) {
-    inAParameterArrayOutEnumParameter(node);
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    if (node.getType() != null) {
-      node.getType().apply(this);
-    }
-    outAParameterArrayOutEnumParameter(node);
-  }
-
-  @Override
-  public void caseAParameterArrayOutParameter(AParameterArrayOutParameter node) {
-    inAParameterArrayOutParameter(node);
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    if (node.getType() != null) {
-      node.getType().apply(this);
-    }
-    outAParameterArrayOutParameter(node);
-  }
-
-  @Override
-  public void caseAParameterInEnumParameter(AParameterInEnumParameter node) {
-    inAParameterInEnumParameter(node);
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    if (node.getType() != null) {
-      node.getType().apply(this);
-    }
-    outAParameterInEnumParameter(node);
-  }
-
-  @Override
-  public void caseAParameterInParameter(AParameterInParameter node) {
-    inAParameterInParameter(node);
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    if (node.getType() != null) {
-      node.getType().apply(this);
-    }
-    outAParameterInParameter(node);
-  }
-
-  @Override
-  public void caseAParameterOutEnumParameter(AParameterOutEnumParameter node) {
-    inAParameterOutEnumParameter(node);
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    if (node.getType() != null) {
-      node.getType().apply(this);
-    }
-    outAParameterOutEnumParameter(node);
-  }
-
-  @Override
-  public void caseAParameterOutParameter(AParameterOutParameter node) {
-    inAParameterOutParameter(node);
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    if (node.getType() != null) {
-      node.getType().apply(this);
-    }
-    outAParameterOutParameter(node);
-  }
-
-  @Override
-  public void caseASpecificEnumeratorEnumerator(
-      ASpecificEnumeratorEnumerator node) {
-    inASpecificEnumeratorEnumerator(node);
-    if (node.getValue() != null) {
-      node.getValue().apply(this);
-    }
-    if (node.getName() != null) {
-      node.getName().apply(this);
-    }
-    outASpecificEnumeratorEnumerator(node);
-  }
-
-  @Override
-  public void caseAStringBuiltInType(AStringBuiltInType node) {
-    inAStringBuiltInType(node);
-    outAStringBuiltInType(node);
-  }
-
-  @Override
-  public void caseASubpackagePackageElement(ASubpackagePackageElement node) {
-    inASubpackagePackageElement(node);
-    if (node.getPackage() != null) {
-      node.getPackage().apply(this);
-    }
-    outASubpackagePackageElement(node);
-  }
-
-  @Override
-  public void caseAUserDefinedType(AUserDefinedType node) {
-    inAUserDefinedType(node);
+    public void inAPackage(APackage node)
     {
-      List<TIdentifier> copy = new ArrayList<TIdentifier>(node.getIdentifier());
-      Collections.reverse(copy);
-      for (TIdentifier e : copy) {
-        e.apply(this);
-      }
+        defaultIn(node);
     }
-    outAUserDefinedType(node);
-  }
 
-  @Override
-  public void caseAUses(AUses node) {
-    inAUses(node);
-    if (node.getAs() != null) {
-      node.getAs().apply(this);
-    }
+    public void outAPackage(APackage node)
     {
-      List<PUserDefinedType> copy = new ArrayList<PUserDefinedType>(
-          node.getType());
-      Collections.reverse(copy);
-      for (PUserDefinedType e : copy) {
-        e.apply(this);
-      }
+        defaultOut(node);
     }
-    outAUses(node);
-  }
 
-  @Override
-  public void caseStart(Start node) {
-    inStart(node);
-    node.getEOF().apply(this);
-    node.getPDeclaration().apply(this);
-    outStart(node);
-  }
+    @Override
+    public void caseAPackage(APackage node)
+    {
+        inAPackage(node);
+        {
+            List<PPackageElement> copy = new ArrayList<PPackageElement>(node.getPackageElement());
+            Collections.reverse(copy);
+            for(PPackageElement e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        outAPackage(node);
+    }
 
-  public void defaultIn(@SuppressWarnings("unused") Node node) {
-    // Do nothing
-  }
+    public void inASubpackagePackageElement(ASubpackagePackageElement node)
+    {
+        defaultIn(node);
+    }
 
-  public void defaultOut(@SuppressWarnings("unused") Node node) {
-    // Do nothing
-  }
+    public void outASubpackagePackageElement(ASubpackagePackageElement node)
+    {
+        defaultOut(node);
+    }
 
-  public void inAAutoEnumeratorEnumerator(AAutoEnumeratorEnumerator node) {
-    defaultIn(node);
-  }
+    @Override
+    public void caseASubpackagePackageElement(ASubpackagePackageElement node)
+    {
+        inASubpackagePackageElement(node);
+        if(node.getPackage() != null)
+        {
+            node.getPackage().apply(this);
+        }
+        outASubpackagePackageElement(node);
+    }
 
-  public void inABoolBuiltInType(ABoolBuiltInType node) {
-    defaultIn(node);
-  }
+    public void inAClassPackageElement(AClassPackageElement node)
+    {
+        defaultIn(node);
+    }
 
-  public void inAClassPackageElement(AClassPackageElement node) {
-    defaultIn(node);
-  }
+    public void outAClassPackageElement(AClassPackageElement node)
+    {
+        defaultOut(node);
+    }
 
-  public void inADeclaration(ADeclaration node) {
-    defaultIn(node);
-  }
+    @Override
+    public void caseAClassPackageElement(AClassPackageElement node)
+    {
+        inAClassPackageElement(node);
+        {
+            List<PUses> copy = new ArrayList<PUses>(node.getUses());
+            Collections.reverse(copy);
+            for(PUses e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        {
+            List<PUserDefinedType> copy = new ArrayList<PUserDefinedType>(node.getProvides());
+            Collections.reverse(copy);
+            for(PUserDefinedType e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        if(node.getTarget() != null)
+        {
+            node.getTarget().apply(this);
+        }
+        outAClassPackageElement(node);
+    }
 
-  public void inADoubleBuiltInType(ADoubleBuiltInType node) {
-    defaultIn(node);
-  }
+    public void inAInterfacePackageElement(AInterfacePackageElement node)
+    {
+        defaultIn(node);
+    }
 
-  public void inAEnumDeclarationPackageElement(
-      AEnumDeclarationPackageElement node) {
-    defaultIn(node);
-  }
+    public void outAInterfacePackageElement(AInterfacePackageElement node)
+    {
+        defaultOut(node);
+    }
 
-  public void inAIntBuiltInType(AIntBuiltInType node) {
-    defaultIn(node);
-  }
+    @Override
+    public void caseAInterfacePackageElement(AInterfacePackageElement node)
+    {
+        inAInterfacePackageElement(node);
+        {
+            List<POperation> copy = new ArrayList<POperation>(node.getOperation());
+            Collections.reverse(copy);
+            for(POperation e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        {
+            List<PUserDefinedType> copy = new ArrayList<PUserDefinedType>(node.getSupertype());
+            Collections.reverse(copy);
+            for(PUserDefinedType e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        outAInterfacePackageElement(node);
+    }
 
-  public void inAInterfacePackageElement(AInterfacePackageElement node) {
-    defaultIn(node);
-  }
+    public void inAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node)
+    {
+        defaultIn(node);
+    }
 
-  public void inAOpaqueBuiltInType(AOpaqueBuiltInType node) {
-    defaultIn(node);
-  }
+    public void outAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node)
+    {
+        defaultOut(node);
+    }
 
-  public void inAOperation(AOperation node) {
-    defaultIn(node);
-  }
+    @Override
+    public void caseAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node)
+    {
+        inAEnumDeclarationPackageElement(node);
+        {
+            List<PEnumerator> copy = new ArrayList<PEnumerator>(node.getEnumerator());
+            Collections.reverse(copy);
+            for(PEnumerator e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        outAEnumDeclarationPackageElement(node);
+    }
 
-  public void inAPackage(APackage node) {
-    defaultIn(node);
-  }
+    public void inAUses(AUses node)
+    {
+        defaultIn(node);
+    }
 
-  public void inAParameterArrayInEnumParameter(
-      AParameterArrayInEnumParameter node) {
-    defaultIn(node);
-  }
+    public void outAUses(AUses node)
+    {
+        defaultOut(node);
+    }
 
-  public void inAParameterArrayInParameter(AParameterArrayInParameter node) {
-    defaultIn(node);
-  }
+    @Override
+    public void caseAUses(AUses node)
+    {
+        inAUses(node);
+        if(node.getAs() != null)
+        {
+            node.getAs().apply(this);
+        }
+        {
+            List<PUserDefinedType> copy = new ArrayList<PUserDefinedType>(node.getType());
+            Collections.reverse(copy);
+            for(PUserDefinedType e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        outAUses(node);
+    }
 
-  public void inAParameterArrayOutEnumParameter(
-      AParameterArrayOutEnumParameter node) {
-    defaultIn(node);
-  }
+    public void inAUserDefinedType(AUserDefinedType node)
+    {
+        defaultIn(node);
+    }
 
-  public void inAParameterArrayOutParameter(AParameterArrayOutParameter node) {
-    defaultIn(node);
-  }
+    public void outAUserDefinedType(AUserDefinedType node)
+    {
+        defaultOut(node);
+    }
 
-  public void inAParameterInEnumParameter(AParameterInEnumParameter node) {
-    defaultIn(node);
-  }
+    @Override
+    public void caseAUserDefinedType(AUserDefinedType node)
+    {
+        inAUserDefinedType(node);
+        {
+            List<TIdentifier> copy = new ArrayList<TIdentifier>(node.getIdentifier());
+            Collections.reverse(copy);
+            for(TIdentifier e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        outAUserDefinedType(node);
+    }
 
-  public void inAParameterInParameter(AParameterInParameter node) {
-    defaultIn(node);
-  }
+    public void inAIntBuiltInType(AIntBuiltInType node)
+    {
+        defaultIn(node);
+    }
 
-  public void inAParameterOutEnumParameter(AParameterOutEnumParameter node) {
-    defaultIn(node);
-  }
+    public void outAIntBuiltInType(AIntBuiltInType node)
+    {
+        defaultOut(node);
+    }
 
-  public void inAParameterOutParameter(AParameterOutParameter node) {
-    defaultIn(node);
-  }
+    @Override
+    public void caseAIntBuiltInType(AIntBuiltInType node)
+    {
+        inAIntBuiltInType(node);
+        outAIntBuiltInType(node);
+    }
 
-  public void
-      inASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node) {
-    defaultIn(node);
-  }
+    public void inADoubleBuiltInType(ADoubleBuiltInType node)
+    {
+        defaultIn(node);
+    }
 
-  public void inAStringBuiltInType(AStringBuiltInType node) {
-    defaultIn(node);
-  }
+    public void outADoubleBuiltInType(ADoubleBuiltInType node)
+    {
+        defaultOut(node);
+    }
 
-  public void inASubpackagePackageElement(ASubpackagePackageElement node) {
-    defaultIn(node);
-  }
+    @Override
+    public void caseADoubleBuiltInType(ADoubleBuiltInType node)
+    {
+        inADoubleBuiltInType(node);
+        outADoubleBuiltInType(node);
+    }
 
-  public void inAUserDefinedType(AUserDefinedType node) {
-    defaultIn(node);
-  }
+    public void inABoolBuiltInType(ABoolBuiltInType node)
+    {
+        defaultIn(node);
+    }
 
-  public void inAUses(AUses node) {
-    defaultIn(node);
-  }
+    public void outABoolBuiltInType(ABoolBuiltInType node)
+    {
+        defaultOut(node);
+    }
 
-  public void inStart(Start node) {
-    defaultIn(node);
-  }
+    @Override
+    public void caseABoolBuiltInType(ABoolBuiltInType node)
+    {
+        inABoolBuiltInType(node);
+        outABoolBuiltInType(node);
+    }
 
-  public void outAAutoEnumeratorEnumerator(AAutoEnumeratorEnumerator node) {
-    defaultOut(node);
-  }
+    public void inAOpaqueBuiltInType(AOpaqueBuiltInType node)
+    {
+        defaultIn(node);
+    }
 
-  public void outABoolBuiltInType(ABoolBuiltInType node) {
-    defaultOut(node);
-  }
+    public void outAOpaqueBuiltInType(AOpaqueBuiltInType node)
+    {
+        defaultOut(node);
+    }
 
-  public void outAClassPackageElement(AClassPackageElement node) {
-    defaultOut(node);
-  }
+    @Override
+    public void caseAOpaqueBuiltInType(AOpaqueBuiltInType node)
+    {
+        inAOpaqueBuiltInType(node);
+        outAOpaqueBuiltInType(node);
+    }
 
-  public void outADeclaration(ADeclaration node) {
-    defaultOut(node);
-  }
+    public void inAStringBuiltInType(AStringBuiltInType node)
+    {
+        defaultIn(node);
+    }
 
-  public void outADoubleBuiltInType(ADoubleBuiltInType node) {
-    defaultOut(node);
-  }
+    public void outAStringBuiltInType(AStringBuiltInType node)
+    {
+        defaultOut(node);
+    }
 
-  public void outAEnumDeclarationPackageElement(
-      AEnumDeclarationPackageElement node) {
-    defaultOut(node);
-  }
+    @Override
+    public void caseAStringBuiltInType(AStringBuiltInType node)
+    {
+        inAStringBuiltInType(node);
+        outAStringBuiltInType(node);
+    }
 
-  public void outAIntBuiltInType(AIntBuiltInType node) {
-    defaultOut(node);
-  }
+    public void inAOperation(AOperation node)
+    {
+        defaultIn(node);
+    }
 
-  public void outAInterfacePackageElement(AInterfacePackageElement node) {
-    defaultOut(node);
-  }
+    public void outAOperation(AOperation node)
+    {
+        defaultOut(node);
+    }
 
-  public void outAOpaqueBuiltInType(AOpaqueBuiltInType node) {
-    defaultOut(node);
-  }
+    @Override
+    public void caseAOperation(AOperation node)
+    {
+        inAOperation(node);
+        {
+            List<PParameter> copy = new ArrayList<PParameter>(node.getParameter());
+            Collections.reverse(copy);
+            for(PParameter e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        outAOperation(node);
+    }
 
-  public void outAOperation(AOperation node) {
-    defaultOut(node);
-  }
+    public void inAParameterInParameter(AParameterInParameter node)
+    {
+        defaultIn(node);
+    }
 
-  public void outAPackage(APackage node) {
-    defaultOut(node);
-  }
+    public void outAParameterInParameter(AParameterInParameter node)
+    {
+        defaultOut(node);
+    }
 
-  public void outAParameterArrayInEnumParameter(
-      AParameterArrayInEnumParameter node) {
-    defaultOut(node);
-  }
+    @Override
+    public void caseAParameterInParameter(AParameterInParameter node)
+    {
+        inAParameterInParameter(node);
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        outAParameterInParameter(node);
+    }
 
-  public void outAParameterArrayInParameter(AParameterArrayInParameter node) {
-    defaultOut(node);
-  }
+    public void inAParameterArrayInParameter(AParameterArrayInParameter node)
+    {
+        defaultIn(node);
+    }
 
-  public void outAParameterArrayOutEnumParameter(
-      AParameterArrayOutEnumParameter node) {
-    defaultOut(node);
-  }
+    public void outAParameterArrayInParameter(AParameterArrayInParameter node)
+    {
+        defaultOut(node);
+    }
 
-  public void outAParameterArrayOutParameter(AParameterArrayOutParameter node) {
-    defaultOut(node);
-  }
+    @Override
+    public void caseAParameterArrayInParameter(AParameterArrayInParameter node)
+    {
+        inAParameterArrayInParameter(node);
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        outAParameterArrayInParameter(node);
+    }
 
-  public void outAParameterInEnumParameter(AParameterInEnumParameter node) {
-    defaultOut(node);
-  }
+    public void inAParameterOutParameter(AParameterOutParameter node)
+    {
+        defaultIn(node);
+    }
 
-  public void outAParameterInParameter(AParameterInParameter node) {
-    defaultOut(node);
-  }
+    public void outAParameterOutParameter(AParameterOutParameter node)
+    {
+        defaultOut(node);
+    }
 
-  public void outAParameterOutEnumParameter(AParameterOutEnumParameter node) {
-    defaultOut(node);
-  }
+    @Override
+    public void caseAParameterOutParameter(AParameterOutParameter node)
+    {
+        inAParameterOutParameter(node);
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        outAParameterOutParameter(node);
+    }
 
-  public void outAParameterOutParameter(AParameterOutParameter node) {
-    defaultOut(node);
-  }
+    public void inAParameterArrayOutParameter(AParameterArrayOutParameter node)
+    {
+        defaultIn(node);
+    }
 
-  public void outASpecificEnumeratorEnumerator(
-      ASpecificEnumeratorEnumerator node) {
-    defaultOut(node);
-  }
+    public void outAParameterArrayOutParameter(AParameterArrayOutParameter node)
+    {
+        defaultOut(node);
+    }
 
-  public void outAStringBuiltInType(AStringBuiltInType node) {
-    defaultOut(node);
-  }
+    @Override
+    public void caseAParameterArrayOutParameter(AParameterArrayOutParameter node)
+    {
+        inAParameterArrayOutParameter(node);
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        outAParameterArrayOutParameter(node);
+    }
 
-  public void outASubpackagePackageElement(ASubpackagePackageElement node) {
-    defaultOut(node);
-  }
+    public void inAParameterInEnumParameter(AParameterInEnumParameter node)
+    {
+        defaultIn(node);
+    }
 
-  public void outAUserDefinedType(AUserDefinedType node) {
-    defaultOut(node);
-  }
+    public void outAParameterInEnumParameter(AParameterInEnumParameter node)
+    {
+        defaultOut(node);
+    }
 
-  public void outAUses(AUses node) {
-    defaultOut(node);
-  }
+    @Override
+    public void caseAParameterInEnumParameter(AParameterInEnumParameter node)
+    {
+        inAParameterInEnumParameter(node);
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        outAParameterInEnumParameter(node);
+    }
 
-  public void outStart(Start node) {
-    defaultOut(node);
-  }
+    public void inAParameterOutEnumParameter(AParameterOutEnumParameter node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAParameterOutEnumParameter(AParameterOutEnumParameter node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAParameterOutEnumParameter(AParameterOutEnumParameter node)
+    {
+        inAParameterOutEnumParameter(node);
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        outAParameterOutEnumParameter(node);
+    }
+
+    public void inAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node)
+    {
+        inAParameterArrayOutEnumParameter(node);
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        outAParameterArrayOutEnumParameter(node);
+    }
+
+    public void inAParameterArrayInEnumParameter(AParameterArrayInEnumParameter node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAParameterArrayInEnumParameter(AParameterArrayInEnumParameter node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAParameterArrayInEnumParameter(AParameterArrayInEnumParameter node)
+    {
+        inAParameterArrayInEnumParameter(node);
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        outAParameterArrayInEnumParameter(node);
+    }
+
+    public void inAAutoEnumeratorEnumerator(AAutoEnumeratorEnumerator node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAAutoEnumeratorEnumerator(AAutoEnumeratorEnumerator node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAAutoEnumeratorEnumerator(AAutoEnumeratorEnumerator node)
+    {
+        inAAutoEnumeratorEnumerator(node);
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        outAAutoEnumeratorEnumerator(node);
+    }
+
+    public void inASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node)
+    {
+        defaultIn(node);
+    }
+
+    public void outASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node)
+    {
+        inASpecificEnumeratorEnumerator(node);
+        if(node.getValue() != null)
+        {
+            node.getValue().apply(this);
+        }
+        if(node.getName() != null)
+        {
+            node.getName().apply(this);
+        }
+        outASpecificEnumeratorEnumerator(node);
+    }
 }

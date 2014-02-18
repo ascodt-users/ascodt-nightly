@@ -2,29 +2,31 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
-
+import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TDecimalConstant extends Token {
-  public TDecimalConstant(String text) {
-    setText(text);
-  }
+public final class TDecimalConstant extends Token
+{
+    public TDecimalConstant(String text)
+    {
+        setText(text);
+    }
 
-  public TDecimalConstant(String text, int line, int pos) {
-    setText(text);
-    setLine(line);
-    setPos(pos);
-  }
+    public TDecimalConstant(String text, int line, int pos)
+    {
+        setText(text);
+        setLine(line);
+        setPos(pos);
+    }
 
-  @Override
-  public void apply(Switch sw) {
-    ((Analysis)sw).caseTDecimalConstant(this);
-  }
+    @Override
+    public Object clone()
+    {
+      return new TDecimalConstant(getText(), getLine(), getPos());
+    }
 
-  @Override
-  public Object clone() {
-    return new TDecimalConstant(getText(), getLine(), getPos());
-  }
+    public void apply(Switch sw)
+    {
+        ((Analysis) sw).caseTDecimalConstant(this);
+    }
 }

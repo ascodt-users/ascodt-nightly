@@ -2,7 +2,7 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-public abstract class PBuiltInType extends Node {
-  // Empty body
+public abstract class PBuiltInType extends Node
+{
+    // Empty body
 }

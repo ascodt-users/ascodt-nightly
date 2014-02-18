@@ -2,80 +2,93 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
-
+import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ASubpackagePackageElement extends PPackageElement {
-  private PPackage _package_;
+public final class ASubpackagePackageElement extends PPackageElement
+{
+    private PPackage _package_;
 
-  public ASubpackagePackageElement() {
-    // Constructor
-  }
-
-  public ASubpackagePackageElement(
-      @SuppressWarnings("hiding") PPackage _package_) {
-    // Constructor
-    setPackage(_package_);
-
-  }
-
-  @Override
-  public void apply(Switch sw) {
-    ((Analysis)sw).caseASubpackagePackageElement(this);
-  }
-
-  @Override
-  public Object clone() {
-    return new ASubpackagePackageElement(cloneNode(_package_));
-  }
-
-  public PPackage getPackage() {
-    return _package_;
-  }
-
-  @Override
-  void removeChild(@SuppressWarnings("unused") Node child) {
-    // Remove child
-    if (_package_ == child) {
-      _package_ = null;
-      return;
+    public ASubpackagePackageElement()
+    {
+        // Constructor
     }
 
-    throw new RuntimeException("Not a child.");
-  }
+    public ASubpackagePackageElement(
+        @SuppressWarnings("hiding") PPackage _package_)
+    {
+        // Constructor
+        setPackage(_package_);
 
-  @Override
-  void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
-    // Replace child
-    if (_package_ == oldChild) {
-      setPackage((PPackage)newChild);
-      return;
     }
 
-    throw new RuntimeException("Not a child.");
-  }
-
-  public void setPackage(PPackage node) {
-    if (_package_ != null) {
-      _package_.parent(null);
+    @Override
+    public Object clone()
+    {
+        return new ASubpackagePackageElement(
+            cloneNode(this._package_));
     }
 
-    if (node != null) {
-      if (node.parent() != null) {
-        node.parent().removeChild(node);
-      }
-
-      node.parent(this);
+    public void apply(Switch sw)
+    {
+        ((Analysis) sw).caseASubpackagePackageElement(this);
     }
 
-    _package_ = node;
-  }
+    public PPackage getPackage()
+    {
+        return this._package_;
+    }
 
-  @Override
-  public String toString() {
-    return "" + toString(_package_);
-  }
+    public void setPackage(PPackage node)
+    {
+        if(this._package_ != null)
+        {
+            this._package_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._package_ = node;
+    }
+
+    @Override
+    public String toString()
+    {
+        return ""
+            + toString(this._package_);
+    }
+
+    @Override
+    void removeChild(@SuppressWarnings("unused") Node child)
+    {
+        // Remove child
+        if(this._package_ == child)
+        {
+            this._package_ = null;
+            return;
+        }
+
+        throw new RuntimeException("Not a child.");
+    }
+
+    @Override
+    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
+    {
+        // Replace child
+        if(this._package_ == oldChild)
+        {
+            setPackage((PPackage) newChild);
+            return;
+        }
+
+        throw new RuntimeException("Not a child.");
+    }
 }

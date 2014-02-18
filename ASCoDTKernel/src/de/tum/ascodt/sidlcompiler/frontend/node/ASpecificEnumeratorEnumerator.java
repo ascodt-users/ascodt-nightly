@@ -2,115 +2,136 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
-
+import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ASpecificEnumeratorEnumerator extends PEnumerator {
-  private TIdentifier _name_;
-  private TConstant _value_;
+public final class ASpecificEnumeratorEnumerator extends PEnumerator
+{
+    private TIdentifier _name_;
+    private TDecimalConstant _value_;
 
-  public ASpecificEnumeratorEnumerator() {
-    // Constructor
-  }
-
-  public ASpecificEnumeratorEnumerator(
-      @SuppressWarnings("hiding") TIdentifier _name_,
-      @SuppressWarnings("hiding") TConstant _value_) {
-    // Constructor
-    setName(_name_);
-
-    setValue(_value_);
-
-  }
-
-  @Override
-  public void apply(Switch sw) {
-    ((Analysis)sw).caseASpecificEnumeratorEnumerator(this);
-  }
-
-  @Override
-  public Object clone() {
-    return new ASpecificEnumeratorEnumerator(cloneNode(_name_),
-        cloneNode(_value_));
-  }
-
-  public TIdentifier getName() {
-    return _name_;
-  }
-
-  public TConstant getValue() {
-    return _value_;
-  }
-
-  @Override
-  void removeChild(@SuppressWarnings("unused") Node child) {
-    // Remove child
-    if (_name_ == child) {
-      _name_ = null;
-      return;
+    public ASpecificEnumeratorEnumerator()
+    {
+        // Constructor
     }
 
-    if (_value_ == child) {
-      _value_ = null;
-      return;
+    public ASpecificEnumeratorEnumerator(
+        @SuppressWarnings("hiding") TIdentifier _name_,
+        @SuppressWarnings("hiding") TDecimalConstant _value_)
+    {
+        // Constructor
+        setName(_name_);
+
+        setValue(_value_);
+
     }
 
-    throw new RuntimeException("Not a child.");
-  }
-
-  @Override
-  void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
-    // Replace child
-    if (_name_ == oldChild) {
-      setName((TIdentifier)newChild);
-      return;
+    @Override
+    public Object clone()
+    {
+        return new ASpecificEnumeratorEnumerator(
+            cloneNode(this._name_),
+            cloneNode(this._value_));
     }
 
-    if (_value_ == oldChild) {
-      setValue((TConstant)newChild);
-      return;
+    public void apply(Switch sw)
+    {
+        ((Analysis) sw).caseASpecificEnumeratorEnumerator(this);
     }
 
-    throw new RuntimeException("Not a child.");
-  }
-
-  public void setName(TIdentifier node) {
-    if (_name_ != null) {
-      _name_.parent(null);
+    public TIdentifier getName()
+    {
+        return this._name_;
     }
 
-    if (node != null) {
-      if (node.parent() != null) {
-        node.parent().removeChild(node);
-      }
+    public void setName(TIdentifier node)
+    {
+        if(this._name_ != null)
+        {
+            this._name_.parent(null);
+        }
 
-      node.parent(this);
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._name_ = node;
     }
 
-    _name_ = node;
-  }
-
-  public void setValue(TConstant node) {
-    if (_value_ != null) {
-      _value_.parent(null);
+    public TDecimalConstant getValue()
+    {
+        return this._value_;
     }
 
-    if (node != null) {
-      if (node.parent() != null) {
-        node.parent().removeChild(node);
-      }
+    public void setValue(TDecimalConstant node)
+    {
+        if(this._value_ != null)
+        {
+            this._value_.parent(null);
+        }
 
-      node.parent(this);
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._value_ = node;
     }
 
-    _value_ = node;
-  }
+    @Override
+    public String toString()
+    {
+        return ""
+            + toString(this._name_)
+            + toString(this._value_);
+    }
 
-  @Override
-  public String toString() {
-    return "" + toString(_name_) + toString(_value_);
-  }
+    @Override
+    void removeChild(@SuppressWarnings("unused") Node child)
+    {
+        // Remove child
+        if(this._name_ == child)
+        {
+            this._name_ = null;
+            return;
+        }
+
+        if(this._value_ == child)
+        {
+            this._value_ = null;
+            return;
+        }
+
+        throw new RuntimeException("Not a child.");
+    }
+
+    @Override
+    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
+    {
+        // Replace child
+        if(this._name_ == oldChild)
+        {
+            setName((TIdentifier) newChild);
+            return;
+        }
+
+        if(this._value_ == oldChild)
+        {
+            setValue((TDecimalConstant) newChild);
+            return;
+        }
+
+        throw new RuntimeException("Not a child.");
+    }
 }

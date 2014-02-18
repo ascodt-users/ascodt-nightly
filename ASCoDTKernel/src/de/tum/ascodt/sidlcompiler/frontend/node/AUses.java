@@ -2,122 +2,143 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-
-import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
-
+import java.util.*;
+import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AUses extends PUses {
-  private final LinkedList<PUserDefinedType> _type_ = new LinkedList<PUserDefinedType>();
-  private TIdentifier _as_;
+public final class AUses extends PUses
+{
+    private final LinkedList<PUserDefinedType> _type_ = new LinkedList<PUserDefinedType>();
+    private TIdentifier _as_;
 
-  public AUses() {
-    // Constructor
-  }
-
-  public AUses(@SuppressWarnings("hiding") List<PUserDefinedType> _type_,
-      @SuppressWarnings("hiding") TIdentifier _as_) {
-    // Constructor
-    setType(_type_);
-
-    setAs(_as_);
-
-  }
-
-  @Override
-  public void apply(Switch sw) {
-    ((Analysis)sw).caseAUses(this);
-  }
-
-  @Override
-  public Object clone() {
-    return new AUses(cloneList(_type_), cloneNode(_as_));
-  }
-
-  public TIdentifier getAs() {
-    return _as_;
-  }
-
-  public LinkedList<PUserDefinedType> getType() {
-    return _type_;
-  }
-
-  @Override
-  void removeChild(@SuppressWarnings("unused") Node child) {
-    // Remove child
-    if (_type_.remove(child)) {
-      return;
+    public AUses()
+    {
+        // Constructor
     }
 
-    if (_as_ == child) {
-      _as_ = null;
-      return;
+    public AUses(
+        @SuppressWarnings("hiding") List<PUserDefinedType> _type_,
+        @SuppressWarnings("hiding") TIdentifier _as_)
+    {
+        // Constructor
+        setType(_type_);
+
+        setAs(_as_);
+
     }
 
-    throw new RuntimeException("Not a child.");
-  }
+    @Override
+    public Object clone()
+    {
+        return new AUses(
+            cloneList(this._type_),
+            cloneNode(this._as_));
+    }
 
-  @Override
-  void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
-    // Replace child
-    for (ListIterator<PUserDefinedType> i = _type_.listIterator(); i.hasNext();) {
-      if (i.next() == oldChild) {
-        if (newChild != null) {
-          i.set((PUserDefinedType)newChild);
-          newChild.parent(this);
-          oldChild.parent(null);
-          return;
+    public void apply(Switch sw)
+    {
+        ((Analysis) sw).caseAUses(this);
+    }
+
+    public LinkedList<PUserDefinedType> getType()
+    {
+        return this._type_;
+    }
+
+    public void setType(List<PUserDefinedType> list)
+    {
+        this._type_.clear();
+        this._type_.addAll(list);
+        for(PUserDefinedType e : list)
+        {
+            if(e.parent() != null)
+            {
+                e.parent().removeChild(e);
+            }
+
+            e.parent(this);
+        }
+    }
+
+    public TIdentifier getAs()
+    {
+        return this._as_;
+    }
+
+    public void setAs(TIdentifier node)
+    {
+        if(this._as_ != null)
+        {
+            this._as_.parent(null);
         }
 
-        i.remove();
-        oldChild.parent(null);
-        return;
-      }
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._as_ = node;
     }
 
-    if (_as_ == oldChild) {
-      setAs((TIdentifier)newChild);
-      return;
+    @Override
+    public String toString()
+    {
+        return ""
+            + toString(this._type_)
+            + toString(this._as_);
     }
 
-    throw new RuntimeException("Not a child.");
-  }
+    @Override
+    void removeChild(@SuppressWarnings("unused") Node child)
+    {
+        // Remove child
+        if(this._type_.remove(child))
+        {
+            return;
+        }
 
-  public void setAs(TIdentifier node) {
-    if (_as_ != null) {
-      _as_.parent(null);
+        if(this._as_ == child)
+        {
+            this._as_ = null;
+            return;
+        }
+
+        throw new RuntimeException("Not a child.");
     }
 
-    if (node != null) {
-      if (node.parent() != null) {
-        node.parent().removeChild(node);
-      }
+    @Override
+    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
+    {
+        // Replace child
+        for(ListIterator<PUserDefinedType> i = this._type_.listIterator(); i.hasNext();)
+        {
+            if(i.next() == oldChild)
+            {
+                if(newChild != null)
+                {
+                    i.set((PUserDefinedType) newChild);
+                    newChild.parent(this);
+                    oldChild.parent(null);
+                    return;
+                }
 
-      node.parent(this);
+                i.remove();
+                oldChild.parent(null);
+                return;
+            }
+        }
+
+        if(this._as_ == oldChild)
+        {
+            setAs((TIdentifier) newChild);
+            return;
+        }
+
+        throw new RuntimeException("Not a child.");
     }
-
-    _as_ = node;
-  }
-
-  public void setType(List<PUserDefinedType> list) {
-    _type_.clear();
-    _type_.addAll(list);
-    for (PUserDefinedType e : list) {
-      if (e.parent() != null) {
-        e.parent().removeChild(e);
-      }
-
-      e.parent(this);
-    }
-  }
-
-  @Override
-  public String toString() {
-    return "" + toString(_type_) + toString(_as_);
-  }
 }

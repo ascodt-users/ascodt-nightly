@@ -2,201 +2,75 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.analysis;
 
-
-import de.tum.ascodt.sidlcompiler.frontend.node.AAutoEnumeratorEnumerator;
-import de.tum.ascodt.sidlcompiler.frontend.node.ABoolBuiltInType;
-import de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement;
-import de.tum.ascodt.sidlcompiler.frontend.node.ADeclaration;
-import de.tum.ascodt.sidlcompiler.frontend.node.ADoubleBuiltInType;
-import de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement;
-import de.tum.ascodt.sidlcompiler.frontend.node.AIntBuiltInType;
-import de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement;
-import de.tum.ascodt.sidlcompiler.frontend.node.AOpaqueBuiltInType;
-import de.tum.ascodt.sidlcompiler.frontend.node.AOperation;
-import de.tum.ascodt.sidlcompiler.frontend.node.APackage;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayInEnumParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayInParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayOutEnumParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterArrayOutParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterInEnumParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterInParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterOutEnumParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.AParameterOutParameter;
-import de.tum.ascodt.sidlcompiler.frontend.node.ASpecificEnumeratorEnumerator;
-import de.tum.ascodt.sidlcompiler.frontend.node.AStringBuiltInType;
-import de.tum.ascodt.sidlcompiler.frontend.node.ASubpackagePackageElement;
-import de.tum.ascodt.sidlcompiler.frontend.node.AUserDefinedType;
-import de.tum.ascodt.sidlcompiler.frontend.node.AUses;
-import de.tum.ascodt.sidlcompiler.frontend.node.EOF;
-import de.tum.ascodt.sidlcompiler.frontend.node.Node;
-import de.tum.ascodt.sidlcompiler.frontend.node.Start;
-import de.tum.ascodt.sidlcompiler.frontend.node.Switch;
-import de.tum.ascodt.sidlcompiler.frontend.node.TArrayToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TAsToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TBlank;
-import de.tum.ascodt.sidlcompiler.frontend.node.TBoolToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TClassToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TComma;
-import de.tum.ascodt.sidlcompiler.frontend.node.TConstant;
-import de.tum.ascodt.sidlcompiler.frontend.node.TDecimalConstant;
-import de.tum.ascodt.sidlcompiler.frontend.node.TDocumentationComment;
-import de.tum.ascodt.sidlcompiler.frontend.node.TDot;
-import de.tum.ascodt.sidlcompiler.frontend.node.TDoubleToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TEndOfLineComment;
-import de.tum.ascodt.sidlcompiler.frontend.node.TEnumToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TEquals;
-import de.tum.ascodt.sidlcompiler.frontend.node.TExtendsToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TIdentifier;
-import de.tum.ascodt.sidlcompiler.frontend.node.TImplementsToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TInToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TInoutToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TIntToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TInterfaceToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TLAngleBracket;
-import de.tum.ascodt.sidlcompiler.frontend.node.TLBrace;
-import de.tum.ascodt.sidlcompiler.frontend.node.TLBracket;
-import de.tum.ascodt.sidlcompiler.frontend.node.TOpaqueToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TPackageToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TRAngleBracket;
-import de.tum.ascodt.sidlcompiler.frontend.node.TRBrace;
-import de.tum.ascodt.sidlcompiler.frontend.node.TRBracket;
-import de.tum.ascodt.sidlcompiler.frontend.node.TSemicolon;
-import de.tum.ascodt.sidlcompiler.frontend.node.TSignedDecimalNumber;
-import de.tum.ascodt.sidlcompiler.frontend.node.TStringToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TTargetToken;
-import de.tum.ascodt.sidlcompiler.frontend.node.TTraditionalComment;
-import de.tum.ascodt.sidlcompiler.frontend.node.TUsesToken;
-
-
-public interface Analysis extends Switch {
-  void caseAAutoEnumeratorEnumerator(AAutoEnumeratorEnumerator node);
-
-  void caseABoolBuiltInType(ABoolBuiltInType node);
-
-  void caseAClassPackageElement(AClassPackageElement node);
-
-  void caseADeclaration(ADeclaration node);
-
-  void caseADoubleBuiltInType(ADoubleBuiltInType node);
-
-  void caseAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node);
-
-  void caseAIntBuiltInType(AIntBuiltInType node);
-
-  void caseAInterfacePackageElement(AInterfacePackageElement node);
-
-  void caseAOpaqueBuiltInType(AOpaqueBuiltInType node);
-
-  void caseAOperation(AOperation node);
-
-  void caseAPackage(APackage node);
-
-  void caseAParameterArrayInEnumParameter(AParameterArrayInEnumParameter node);
-
-  void caseAParameterArrayInParameter(AParameterArrayInParameter node);
-
-  void
-      caseAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node);
-
-  void caseAParameterArrayOutParameter(AParameterArrayOutParameter node);
-
-  void caseAParameterInEnumParameter(AParameterInEnumParameter node);
-
-  void caseAParameterInParameter(AParameterInParameter node);
-
-  void caseAParameterOutEnumParameter(AParameterOutEnumParameter node);
-
-  void caseAParameterOutParameter(AParameterOutParameter node);
-
-  void caseASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node);
-
-  void caseAStringBuiltInType(AStringBuiltInType node);
-
-  void caseASubpackagePackageElement(ASubpackagePackageElement node);
-
-  void caseAUserDefinedType(AUserDefinedType node);
-
-  void caseAUses(AUses node);
-
-  void caseEOF(EOF node);
-
-  void caseStart(Start node);
-
-  void caseTArrayToken(TArrayToken node);
-
-  void caseTAsToken(TAsToken node);
-
-  void caseTBlank(TBlank node);
-
-  void caseTBoolToken(TBoolToken node);
-
-  void caseTClassToken(TClassToken node);
-
-  void caseTComma(TComma node);
-
-  void caseTConstant(TConstant node);
-
-  void caseTDecimalConstant(TDecimalConstant node);
-
-  void caseTDocumentationComment(TDocumentationComment node);
-
-  void caseTDot(TDot node);
-
-  void caseTDoubleToken(TDoubleToken node);
-
-  void caseTEndOfLineComment(TEndOfLineComment node);
-
-  void caseTEnumToken(TEnumToken node);
-
-  void caseTEquals(TEquals node);
-
-  void caseTExtendsToken(TExtendsToken node);
-
-  void caseTIdentifier(TIdentifier node);
-
-  void caseTImplementsToken(TImplementsToken node);
-
-  void caseTInoutToken(TInoutToken node);
-
-  void caseTInterfaceToken(TInterfaceToken node);
-
-  void caseTInToken(TInToken node);
-
-  void caseTIntToken(TIntToken node);
-
-  void caseTLAngleBracket(TLAngleBracket node);
-
-  void caseTLBrace(TLBrace node);
-
-  void caseTLBracket(TLBracket node);
-
-  void caseTOpaqueToken(TOpaqueToken node);
-
-  void caseTPackageToken(TPackageToken node);
-
-  void caseTRAngleBracket(TRAngleBracket node);
-
-  void caseTRBrace(TRBrace node);
-
-  void caseTRBracket(TRBracket node);
-
-  void caseTSemicolon(TSemicolon node);
-
-  void caseTSignedDecimalNumber(TSignedDecimalNumber node);
-
-  void caseTStringToken(TStringToken node);
-
-  void caseTTargetToken(TTargetToken node);
-
-  void caseTTraditionalComment(TTraditionalComment node);
-
-  void caseTUsesToken(TUsesToken node);
-
-  Object getIn(Node node);
-
-  Object getOut(Node node);
-
-  void setIn(Node node, Object o);
-
-  void setOut(Node node, Object o);
+import de.tum.ascodt.sidlcompiler.frontend.node.*;
+
+public interface Analysis extends Switch
+{
+    Object getIn(Node node);
+    void setIn(Node node, Object o);
+    Object getOut(Node node);
+    void setOut(Node node, Object o);
+
+    void caseStart(Start node);
+    void caseADeclaration(ADeclaration node);
+    void caseAPackage(APackage node);
+    void caseASubpackagePackageElement(ASubpackagePackageElement node);
+    void caseAClassPackageElement(AClassPackageElement node);
+    void caseAInterfacePackageElement(AInterfacePackageElement node);
+    void caseAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node);
+    void caseAUses(AUses node);
+    void caseAUserDefinedType(AUserDefinedType node);
+    void caseAIntBuiltInType(AIntBuiltInType node);
+    void caseADoubleBuiltInType(ADoubleBuiltInType node);
+    void caseABoolBuiltInType(ABoolBuiltInType node);
+    void caseAOpaqueBuiltInType(AOpaqueBuiltInType node);
+    void caseAStringBuiltInType(AStringBuiltInType node);
+    void caseAOperation(AOperation node);
+    void caseAParameterInParameter(AParameterInParameter node);
+    void caseAParameterArrayInParameter(AParameterArrayInParameter node);
+    void caseAParameterOutParameter(AParameterOutParameter node);
+    void caseAParameterArrayOutParameter(AParameterArrayOutParameter node);
+    void caseAParameterInEnumParameter(AParameterInEnumParameter node);
+    void caseAParameterOutEnumParameter(AParameterOutEnumParameter node);
+    void caseAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node);
+    void caseAParameterArrayInEnumParameter(AParameterArrayInEnumParameter node);
+    void caseAAutoEnumeratorEnumerator(AAutoEnumeratorEnumerator node);
+    void caseASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node);
+
+    void caseTLAngleBracket(TLAngleBracket node);
+    void caseTRAngleBracket(TRAngleBracket node);
+    void caseTComma(TComma node);
+    void caseTDot(TDot node);
+    void caseTSemicolon(TSemicolon node);
+    void caseTLBrace(TLBrace node);
+    void caseTRBrace(TRBrace node);
+    void caseTLBracket(TLBracket node);
+    void caseTRBracket(TRBracket node);
+    void caseTEquals(TEquals node);
+    void caseTIntToken(TIntToken node);
+    void caseTDoubleToken(TDoubleToken node);
+    void caseTBoolToken(TBoolToken node);
+    void caseTOpaqueToken(TOpaqueToken node);
+    void caseTStringToken(TStringToken node);
+    void caseTArrayToken(TArrayToken node);
+    void caseTInToken(TInToken node);
+    void caseTInoutToken(TInoutToken node);
+    void caseTPackageToken(TPackageToken node);
+    void caseTClassToken(TClassToken node);
+    void caseTTargetToken(TTargetToken node);
+    void caseTInterfaceToken(TInterfaceToken node);
+    void caseTExtendsToken(TExtendsToken node);
+    void caseTImplementsToken(TImplementsToken node);
+    void caseTUsesToken(TUsesToken node);
+    void caseTAsToken(TAsToken node);
+    void caseTEnumToken(TEnumToken node);
+    void caseTBlank(TBlank node);
+    void caseTDecimalConstant(TDecimalConstant node);
+    void caseTSignedDecimalNumber(TSignedDecimalNumber node);
+    void caseTIdentifier(TIdentifier node);
+    void caseTTraditionalComment(TTraditionalComment node);
+    void caseTDocumentationComment(TDocumentationComment node);
+    void caseTEndOfLineComment(TEndOfLineComment node);
+    void caseTConstant(TConstant node);
+    void caseEOF(EOF node);
 }

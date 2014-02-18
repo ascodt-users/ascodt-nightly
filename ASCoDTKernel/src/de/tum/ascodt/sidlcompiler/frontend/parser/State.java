@@ -2,17 +2,16 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.parser;
 
-
 import java.util.ArrayList;
 
+final class State
+{
+    int state;
+    ArrayList nodes;
 
-final class State {
-  int state;
-  ArrayList nodes;
-
-  State(@SuppressWarnings("hiding") int state,
-      @SuppressWarnings("hiding") ArrayList nodes) {
-    this.state = state;
-    this.nodes = nodes;
-  }
+    State(@SuppressWarnings("hiding") int state, @SuppressWarnings("hiding") ArrayList nodes)
+    {
+        this.state = state;
+        this.nodes = nodes;
+    }
 }

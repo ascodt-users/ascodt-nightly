@@ -10,7 +10,22 @@ __OPEN_PACKAGE__;
 
 public enum __ENUMERATION_NAME__{
 -- INSERT HERE --
-  
+;
+int _value;
+__ENUMERATION_NAME__(){
+     _value=-1;
+}
+
+__ENUMERATION_NAME__(int v){
+     _value=v;
+} 
+public int value(){
+     return _value<0?ordinal():_value;
+}
+public static __ENUMERATION_NAME__ fromInt(int v){
+    __CONSTUCTORS__
+    __DEFAULT_CONSTUCTOR__
+}  
 }
  
 

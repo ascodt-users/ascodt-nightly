@@ -2,114 +2,136 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
-
+import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AParameterInEnumParameter extends PParameter {
-  private PUserDefinedType _type_;
-  private TIdentifier _name_;
+public final class AParameterInEnumParameter extends PParameter
+{
+    private PUserDefinedType _type_;
+    private TIdentifier _name_;
 
-  public AParameterInEnumParameter() {
-    // Constructor
-  }
-
-  public AParameterInEnumParameter(
-      @SuppressWarnings("hiding") PUserDefinedType _type_,
-      @SuppressWarnings("hiding") TIdentifier _name_) {
-    // Constructor
-    setType(_type_);
-
-    setName(_name_);
-
-  }
-
-  @Override
-  public void apply(Switch sw) {
-    ((Analysis)sw).caseAParameterInEnumParameter(this);
-  }
-
-  @Override
-  public Object clone() {
-    return new AParameterInEnumParameter(cloneNode(_type_), cloneNode(_name_));
-  }
-
-  public TIdentifier getName() {
-    return _name_;
-  }
-
-  public PUserDefinedType getType() {
-    return _type_;
-  }
-
-  @Override
-  void removeChild(@SuppressWarnings("unused") Node child) {
-    // Remove child
-    if (_type_ == child) {
-      _type_ = null;
-      return;
+    public AParameterInEnumParameter()
+    {
+        // Constructor
     }
 
-    if (_name_ == child) {
-      _name_ = null;
-      return;
+    public AParameterInEnumParameter(
+        @SuppressWarnings("hiding") PUserDefinedType _type_,
+        @SuppressWarnings("hiding") TIdentifier _name_)
+    {
+        // Constructor
+        setType(_type_);
+
+        setName(_name_);
+
     }
 
-    throw new RuntimeException("Not a child.");
-  }
-
-  @Override
-  void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
-    // Replace child
-    if (_type_ == oldChild) {
-      setType((PUserDefinedType)newChild);
-      return;
+    @Override
+    public Object clone()
+    {
+        return new AParameterInEnumParameter(
+            cloneNode(this._type_),
+            cloneNode(this._name_));
     }
 
-    if (_name_ == oldChild) {
-      setName((TIdentifier)newChild);
-      return;
+    public void apply(Switch sw)
+    {
+        ((Analysis) sw).caseAParameterInEnumParameter(this);
     }
 
-    throw new RuntimeException("Not a child.");
-  }
-
-  public void setName(TIdentifier node) {
-    if (_name_ != null) {
-      _name_.parent(null);
+    public PUserDefinedType getType()
+    {
+        return this._type_;
     }
 
-    if (node != null) {
-      if (node.parent() != null) {
-        node.parent().removeChild(node);
-      }
+    public void setType(PUserDefinedType node)
+    {
+        if(this._type_ != null)
+        {
+            this._type_.parent(null);
+        }
 
-      node.parent(this);
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._type_ = node;
     }
 
-    _name_ = node;
-  }
-
-  public void setType(PUserDefinedType node) {
-    if (_type_ != null) {
-      _type_.parent(null);
+    public TIdentifier getName()
+    {
+        return this._name_;
     }
 
-    if (node != null) {
-      if (node.parent() != null) {
-        node.parent().removeChild(node);
-      }
+    public void setName(TIdentifier node)
+    {
+        if(this._name_ != null)
+        {
+            this._name_.parent(null);
+        }
 
-      node.parent(this);
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._name_ = node;
     }
 
-    _type_ = node;
-  }
+    @Override
+    public String toString()
+    {
+        return ""
+            + toString(this._type_)
+            + toString(this._name_);
+    }
 
-  @Override
-  public String toString() {
-    return "" + toString(_type_) + toString(_name_);
-  }
+    @Override
+    void removeChild(@SuppressWarnings("unused") Node child)
+    {
+        // Remove child
+        if(this._type_ == child)
+        {
+            this._type_ = null;
+            return;
+        }
+
+        if(this._name_ == child)
+        {
+            this._name_ = null;
+            return;
+        }
+
+        throw new RuntimeException("Not a child.");
+    }
+
+    @Override
+    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
+    {
+        // Replace child
+        if(this._type_ == oldChild)
+        {
+            setType((PUserDefinedType) newChild);
+            return;
+        }
+
+        if(this._name_ == oldChild)
+        {
+            setName((TIdentifier) newChild);
+            return;
+        }
+
+        throw new RuntimeException("Not a child.");
+    }
 }

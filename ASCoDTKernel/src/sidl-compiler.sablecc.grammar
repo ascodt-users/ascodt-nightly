@@ -160,7 +160,7 @@ Productions
           
   enumerator {->enumerator} = 
       {automatic} identifier { -> New enumerator.auto_enumerator(identifier) }
-     |{specific} identifier equals constant { -> New enumerator.specific_enumerator(identifier,constant)};
+     |{specific} identifier equals decimal_constant { -> New enumerator.specific_enumerator(identifier,decimal_constant)};
   
   
  
@@ -204,5 +204,5 @@ Abstract Syntax Tree
   
   enumerator =
       {auto_enumerator} [name]:identifier
-    | {specific_enumerator} [name]:identifier [value]:constant;  
+    | {specific_enumerator} [name]:identifier [value]:decimal_constant;  
   

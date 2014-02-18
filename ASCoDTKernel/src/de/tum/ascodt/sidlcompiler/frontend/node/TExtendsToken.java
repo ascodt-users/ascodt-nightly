@@ -2,34 +2,37 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
-
+import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TExtendsToken extends Token {
-  public TExtendsToken() {
-    super.setText("extends");
-  }
+public final class TExtendsToken extends Token
+{
+    public TExtendsToken()
+    {
+        super.setText("extends");
+    }
 
-  public TExtendsToken(int line, int pos) {
-    super.setText("extends");
-    setLine(line);
-    setPos(pos);
-  }
+    public TExtendsToken(int line, int pos)
+    {
+        super.setText("extends");
+        setLine(line);
+        setPos(pos);
+    }
 
-  @Override
-  public void apply(Switch sw) {
-    ((Analysis)sw).caseTExtendsToken(this);
-  }
+    @Override
+    public Object clone()
+    {
+      return new TExtendsToken(getLine(), getPos());
+    }
 
-  @Override
-  public Object clone() {
-    return new TExtendsToken(getLine(), getPos());
-  }
+    public void apply(Switch sw)
+    {
+        ((Analysis) sw).caseTExtendsToken(this);
+    }
 
-  @Override
-  public void setText(@SuppressWarnings("unused") String text) {
-    throw new RuntimeException("Cannot change TExtendsToken text.");
-  }
+    @Override
+    public void setText(@SuppressWarnings("unused") String text)
+    {
+        throw new RuntimeException("Cannot change TExtendsToken text.");
+    }
 }

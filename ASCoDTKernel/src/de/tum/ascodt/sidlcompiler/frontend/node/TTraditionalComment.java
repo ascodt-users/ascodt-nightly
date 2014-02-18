@@ -2,29 +2,31 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
-
+import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TTraditionalComment extends Token {
-  public TTraditionalComment(String text) {
-    setText(text);
-  }
+public final class TTraditionalComment extends Token
+{
+    public TTraditionalComment(String text)
+    {
+        setText(text);
+    }
 
-  public TTraditionalComment(String text, int line, int pos) {
-    setText(text);
-    setLine(line);
-    setPos(pos);
-  }
+    public TTraditionalComment(String text, int line, int pos)
+    {
+        setText(text);
+        setLine(line);
+        setPos(pos);
+    }
 
-  @Override
-  public void apply(Switch sw) {
-    ((Analysis)sw).caseTTraditionalComment(this);
-  }
+    @Override
+    public Object clone()
+    {
+      return new TTraditionalComment(getText(), getLine(), getPos());
+    }
 
-  @Override
-  public Object clone() {
-    return new TTraditionalComment(getText(), getLine(), getPos());
-  }
+    public void apply(Switch sw)
+    {
+        ((Analysis) sw).caseTTraditionalComment(this);
+    }
 }

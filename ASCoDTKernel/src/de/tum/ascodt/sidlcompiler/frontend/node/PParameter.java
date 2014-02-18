@@ -2,7 +2,7 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-public abstract class PParameter extends Node {
-  // Empty body
+public abstract class PParameter extends Node
+{
+    // Empty body
 }

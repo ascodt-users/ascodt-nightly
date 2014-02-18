@@ -2,7 +2,7 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-public abstract class PUses extends Node {
-  // Empty body
+public abstract class PUses extends Node
+{
+    // Empty body
 }

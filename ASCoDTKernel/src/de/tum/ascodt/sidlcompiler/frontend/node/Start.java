@@ -2,107 +2,131 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-
-import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
-
+import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
 
 @SuppressWarnings("nls")
-public final class Start extends Node {
-  private PDeclaration _pDeclaration_;
-  private EOF _eof_;
+public final class Start extends Node
+{
+    private PDeclaration _pDeclaration_;
+    private EOF _eof_;
 
-  public Start() {
-    // Empty body
-  }
-
-  public Start(@SuppressWarnings("hiding") PDeclaration _pDeclaration_,
-      @SuppressWarnings("hiding") EOF _eof_) {
-    setPDeclaration(_pDeclaration_);
-    setEOF(_eof_);
-  }
-
-  @Override
-  public void apply(Switch sw) {
-    ((Analysis)sw).caseStart(this);
-  }
-
-  @Override
-  public Object clone() {
-    return new Start(cloneNode(_pDeclaration_), cloneNode(_eof_));
-  }
-
-  public EOF getEOF() {
-    return _eof_;
-  }
-
-  public PDeclaration getPDeclaration() {
-    return _pDeclaration_;
-  }
-
-  @Override
-  void removeChild(Node child) {
-    if (_pDeclaration_ == child) {
-      _pDeclaration_ = null;
-      return;
+    public Start()
+    {
+        // Empty body
     }
 
-    if (_eof_ == child) {
-      _eof_ = null;
-      return;
+    public Start(
+        @SuppressWarnings("hiding") PDeclaration _pDeclaration_,
+        @SuppressWarnings("hiding") EOF _eof_)
+    {
+        setPDeclaration(_pDeclaration_);
+        setEOF(_eof_);
     }
 
-    throw new RuntimeException("Not a child.");
-  }
-
-  @Override
-  void replaceChild(Node oldChild, Node newChild) {
-    if (_pDeclaration_ == oldChild) {
-      setPDeclaration((PDeclaration)newChild);
-      return;
+    @Override
+    public Object clone()
+    {
+        return new Start(
+            cloneNode(this._pDeclaration_),
+            cloneNode(this._eof_));
     }
 
-    if (_eof_ == oldChild) {
-      setEOF((EOF)newChild);
-      return;
+    public void apply(Switch sw)
+    {
+        ((Analysis) sw).caseStart(this);
     }
 
-    throw new RuntimeException("Not a child.");
-  }
-
-  public void setEOF(EOF node) {
-    if (_eof_ != null) {
-      _eof_.parent(null);
+    public PDeclaration getPDeclaration()
+    {
+        return this._pDeclaration_;
     }
 
-    if (node != null) {
-      if (node.parent() != null) {
-        node.parent().removeChild(node);
-      }
+    public void setPDeclaration(PDeclaration node)
+    {
+        if(this._pDeclaration_ != null)
+        {
+            this._pDeclaration_.parent(null);
+        }
 
-      node.parent(this);
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._pDeclaration_ = node;
     }
 
-    _eof_ = node;
-  }
-
-  public void setPDeclaration(PDeclaration node) {
-    if (_pDeclaration_ != null) {
-      _pDeclaration_.parent(null);
+    public EOF getEOF()
+    {
+        return this._eof_;
     }
 
-    if (node != null) {
-      if (node.parent() != null) {
-        node.parent().removeChild(node);
-      }
+    public void setEOF(EOF node)
+    {
+        if(this._eof_ != null)
+        {
+            this._eof_.parent(null);
+        }
 
-      node.parent(this);
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._eof_ = node;
     }
 
-    _pDeclaration_ = node;
-  }
+    @Override
+    void removeChild(Node child)
+    {
+        if(this._pDeclaration_ == child)
+        {
+            this._pDeclaration_ = null;
+            return;
+        }
 
-  @Override
-  public String toString() {
-    return "" + toString(_pDeclaration_) + toString(_eof_);
-  }
+        if(this._eof_ == child)
+        {
+            this._eof_ = null;
+            return;
+        }
+
+        throw new RuntimeException("Not a child.");
+    }
+
+    @Override
+    void replaceChild(Node oldChild, Node newChild)
+    {
+        if(this._pDeclaration_ == oldChild)
+        {
+            setPDeclaration((PDeclaration) newChild);
+            return;
+        }
+
+        if(this._eof_ == oldChild)
+        {
+            setEOF((EOF) newChild);
+            return;
+        }
+
+        throw new RuntimeException("Not a child.");
+    }
+
+    @Override
+    public String toString()
+    {
+        return "" +
+            toString(this._pDeclaration_) +
+            toString(this._eof_);
+    }
 }
