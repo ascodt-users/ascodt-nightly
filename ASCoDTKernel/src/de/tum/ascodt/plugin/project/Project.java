@@ -256,7 +256,10 @@ public class Project {
           .newLibraryEntry(
               new Path(ResourceManager.getResourceAsPath("", ASCoDTKernel.ID)
                   .getPath()), null, null, false));
-      IClasspathEntry entry = JavaCore.newSourceEntry(new Path(entryPath));
+      IClasspathEntry entry = JavaCore.newSourceEntry(new Path(entryPath), new Path[]{new Path("*.java"),new Path("**/*.java")}
+      ,new Path[]{new Path("cmake*/")}, null);
+      //.newSourceEntry(new Path(entryPath));
+     
       if (!entries.contains(entry)) {
         entries.add(entry);
       }

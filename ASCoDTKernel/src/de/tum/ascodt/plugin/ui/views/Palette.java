@@ -33,6 +33,7 @@ import org.eclipse.ui.wizards.IWizardDescriptor;
 
 import de.tum.ascodt.plugin.project.Project;
 import de.tum.ascodt.plugin.project.ProjectBuilder;
+import de.tum.ascodt.plugin.project.ProjectsListener;
 import de.tum.ascodt.plugin.ui.palette.ContextMenuProvider;
 import de.tum.ascodt.plugin.ui.palette.PaletteFactory;
 import de.tum.ascodt.plugin.ui.wizards.NewComponentWizard;
@@ -51,7 +52,7 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * 
  * 
  */
-public class Palette extends ViewPart implements RepositoryListener {
+public class Palette extends ViewPart implements RepositoryListener,ProjectsListener {
   public static String ID = Palette.class.getCanonicalName();
 
   /**
@@ -277,7 +278,7 @@ public class Palette extends ViewPart implements RepositoryListener {
 
   @Override
   public void setFocus() {
-    // TODO Auto-generated method stub
+    getViewer().getControl().setFocus();
 
   }
 
@@ -286,6 +287,13 @@ public class Palette extends ViewPart implements RepositoryListener {
       combo.setSelection(new StructuredSelection(project));
     }
 
+  }
+
+  @Override
+  public void projectsChanged() {
+    setFocus();
+    end();
+    combo.refresh();
   }
 
 }

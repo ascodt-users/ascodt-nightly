@@ -3,6 +3,7 @@ package de.tum.ascodt.plugin.project;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class ProjectBuilder extends PlatformObject {
   public static final String ASCODT_FILE_EXTENSION = ".ascodt";
 
   static private ProjectBuilder _singleton = new ProjectBuilder();
-
+  private ArrayList<ProjectsListener> _listeners;
   /**
    * setup the project nature, so that the ascodt project can be identified as
    * such one. We add an additiona
@@ -163,7 +164,7 @@ public class ProjectBuilder extends PlatformObject {
   private ProjectBuilder() {
     _eclipseProjectToProjectMap = new HashMap<IProject, Project>();
     _nameToProjectEntitiesMap = new HashMap<String, Project>();
-
+    _listeners=new ArrayList<ProjectsListener>();
   }
 
   /**
@@ -188,9 +189,24 @@ public class ProjectBuilder extends PlatformObject {
     _nameToProjectEntitiesMap.put(eclipseProject.getName(), newProject);
     _eclipseProjectToProjectMap.put(eclipseProject, newProject);
     newProject.buildProjectSources();
+    notiflyAllListeners();
     trace.out("createProject(...)");
   }
 
+  public void registerListener(ProjectsListener listener){
+    Assert.isTrue(!_listeners.contains(listener)); 
+    _listeners.add(listener);
+  }
+  
+  public void removeListener(ProjectsListener listener){
+    Assert.isTrue(_listeners.contains(listener));
+    _listeners.remove(listener);
+  }
+  private void notiflyAllListeners(){
+    for(ProjectsListener listner:_listeners )
+      listner.projectsChanged();
+  }
+  
   /**
    * This method creates an ASCoDT project, and setups the main file structure
    * and natures setup of the project.
@@ -310,7 +326,7 @@ public class ProjectBuilder extends PlatformObject {
 
       _nameToProjectEntitiesMap.remove(project.getName());
     }
-
+    notiflyAllListeners();
   }
 
 }
