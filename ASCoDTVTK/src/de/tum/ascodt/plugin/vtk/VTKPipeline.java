@@ -23,7 +23,7 @@ public abstract class VTKPipeline {
 	/**
 	 * reference to pipeline
 	 */
-	private vtkProp _pipeline;
+	protected vtkProp _pipeline;
 	private Trace _trace=new Trace(VTKPipeline.class.getCanonicalName());
 	protected VTKPipeline(){
 		
