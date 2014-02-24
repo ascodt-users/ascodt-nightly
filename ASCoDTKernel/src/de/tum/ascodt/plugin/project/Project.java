@@ -25,10 +25,13 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -212,8 +215,8 @@ public class Project {
       if (!entries.contains(JavaRuntime.getDefaultJREContainerEntry())) {
         entries.add(JavaRuntime.getDefaultJREContainerEntry());
       }
-      // IExtensionRegistry reg = RegistryFactory.getRegistry();
-      // evaluateContributions(reg,entries);
+       IExtensionRegistry reg = RegistryFactory.getRegistry();
+       evaluateContributions(reg,entries);
       javaProject.setRawClasspath(
           entries.toArray(new IClasspathEntry[entries.size()]), null);
     } catch (JavaModelException e) {
@@ -221,6 +224,10 @@ public class Project {
           "adding default classpath entries to project " +
               _eclipseProjectHandle.getLocation().toString() + " failed", e);
     } catch (IOException e) {
+      throw new ASCoDTException(getClass().getName(), "addClasspathEntries()",
+          "adding default classpath entries to project " +
+              _eclipseProjectHandle.getLocation().toString() + " failed", e);
+    } catch (CoreException e) {
       throw new ASCoDTException(getClass().getName(), "addClasspathEntries()",
           "adding default classpath entries to project " +
               _eclipseProjectHandle.getLocation().toString() + " failed", e);
@@ -278,6 +285,21 @@ public class Project {
     }
   }
 
+  private void evaluateContributions(IExtensionRegistry registry, Set<IClasspathEntry> classpathEntries) throws CoreException, ASCoDTException{
+    IConfigurationElement[] config =
+            registry.getConfigurationElementsFor(de.tum.ascodt.plugin.extensions.Project.ID);
+
+    for (IConfigurationElement e : config) {
+
+        final Object o =
+                e.createExecutableExtension("class");
+        if (o!=null&&o instanceof de.tum.ascodt.plugin.extensions.Project) {
+            _trace.debug("evaluateContributions()","executing a contribution");
+            ((de.tum.ascodt.plugin.extensions.Project)o).addClasspathEntries(classpathEntries);
+        }
+    }
+
+}
   /**
    * adds a new dependency to the project. The add operation has two phases:
    * 1. code generation with the sidl compiler

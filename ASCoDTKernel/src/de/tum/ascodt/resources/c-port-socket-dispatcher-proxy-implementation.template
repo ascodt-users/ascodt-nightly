@@ -3,6 +3,7 @@
 #include "__PATH_FULL_QUALIFIED_NAME__.h"
 #include <stdio.h>
 #include <string.h>
+__ENUM_INCLUDES__
 extern "C" {
 
 #ifdef _WIN32

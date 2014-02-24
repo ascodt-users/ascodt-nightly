@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+__ENUM_INCLUDES__
 
 extern "C" {
 #ifdef _WIN32
