@@ -319,6 +319,7 @@ public class Project {
         dependency, _symbolTable)).equals("")) {
       SiDLBuilder.extendSymbolTable(startNode, _symbolTable, dependency);
       SiDLBuilder.generateBlueprints(_eclipseProjectHandle);
+      SiDLBuilder.generateBuildScripts(_eclipseProjectHandle);
       String oldDependencies = _eclipseProjectHandle
           .getPersistentProperty(new QualifiedName(
               "de.tum.ascodt.plugin.ASCoDTKernel", DEPENDENCIES));
@@ -372,6 +373,7 @@ public class Project {
       _symbolTable = null;
       _symbolTable = symbolTable;
       SiDLBuilder.generateBlueprints(_eclipseProjectHandle);
+      SiDLBuilder.generateBuildScripts(_eclipseProjectHandle);
 
     } catch (CoreException e) {
       throw new ASCoDTException(getClass().getName(), "buildProjectSources()",

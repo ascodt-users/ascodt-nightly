@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 
 import de.tum.ascodt.sidlcompiler.backend.CreateComponentsAndInterfaces;
+import de.tum.ascodt.sidlcompiler.backend.CreateGlobalBuildScripts;
 import de.tum.ascodt.sidlcompiler.frontend.node.Start;
 import de.tum.ascodt.sidlcompiler.symboltable.ASTValidator;
 import de.tum.ascodt.utils.exceptions.ASCoDTException;
@@ -64,6 +65,7 @@ public class Compiler {
       compiler.buildSymbolTable(startSymbol, compiler._sourceSIDLFile);
       compiler.validate(startSymbol, compiler._sourceSIDLFile);
       compiler.generateBluePrints();
+      compiler.generateBuildScripts();
       if (compiler._verbose) {
         System.out.println("finished successfully");
       }
@@ -173,6 +175,20 @@ public class Compiler {
 
   }
 
+  private void generateBuildScripts() throws ASCoDTException {
+    CreateGlobalBuildScripts buildScripts = new CreateGlobalBuildScripts(
+        _symbolTable);
+    try {
+      buildScripts.create(new File(_outputDirectoryForStubs).toURI().toURL(),
+          new File(_outputDirectoryForUserImplementation).toURI().toURL(),
+          new File(_outputDirectoryForStubs).toURI().toURL());
+    } catch (Exception e) {
+      _isValid = false;
+      throw new ASCoDTException(Compiler.class.getCanonicalName(),
+          "generateBuildScripts()", e.getLocalizedMessage(), e);
+    }
+
+  }
   /**
    * @return Is the compiler state valid, i.e. was the compiler workflow
    *         successful.
