@@ -1,1 +1,0 @@
-ADD_LIBRARY(FGausSeidel SHARED ${SRC_COMP} )

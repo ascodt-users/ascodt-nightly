@@ -1,1 +1,0 @@
-ADD_LIBRARY(Jacobi SHARED ${SRC_COMP} )
