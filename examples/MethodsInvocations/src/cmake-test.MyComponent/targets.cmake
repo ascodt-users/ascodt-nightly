@@ -1,1 +1,0 @@
-ADD_LIBRARY(MyComponent SHARED ${SRC_COMP} )

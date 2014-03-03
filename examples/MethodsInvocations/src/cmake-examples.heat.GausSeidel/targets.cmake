@@ -1,1 +1,0 @@
-ADD_LIBRARY(GausSeidel SHARED ${SRC_COMP} )

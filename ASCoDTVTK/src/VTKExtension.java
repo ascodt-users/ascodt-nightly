@@ -12,18 +12,22 @@ import de.tum.ascodt.resources.ResourceManager;
 
 public class VTKExtension implements Project {
 
-	public VTKExtension() {
-		// TODO Auto-generated constructor stub
-	}
+  public VTKExtension() {
+    // TODO Auto-generated constructor stub
+  }
 
-	@Override
-	public void addClasspathEntries(Set<IClasspathEntry> classpathEntries) {
-		try {
-		classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("libs/vtk.jar",ASCoDTVTKPlugin.ID).getPath()),null,null,false));
-		classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("",ASCoDTVTKPlugin.ID).getPath()),null,null,false));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+  @Override
+  public void addClasspathEntries(Set<IClasspathEntry> classpathEntries) {
+    try {
+      classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager
+          .getResourceAsPath("share/java/vtk.jar", ASCoDTVTKPlugin.ID)
+          .getPath()), null, null, false));
+      classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager
+          .getResourceAsPath("", ASCoDTVTKPlugin.ID).getPath()), null, null,
+          false));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
 }

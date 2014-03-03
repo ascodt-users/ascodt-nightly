@@ -57,7 +57,7 @@ public class Repository extends NonSerializableRepository implements
     informListenersAboutChangedComponents();
   }
 
-  private void informListenersAboutChangedComponents() {
+  public void informListenersAboutChangedComponents() {
     for (RepositoryListener listener : _myListeners) {
       listener.begin();
       for (Entry<String, String> componentEntry : _componentInterfaces
