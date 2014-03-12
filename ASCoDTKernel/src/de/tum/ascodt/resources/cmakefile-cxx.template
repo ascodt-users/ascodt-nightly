@@ -7,12 +7,12 @@ cmake_minimum_required(VERSION 2.8.6)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 set(CMAKE_DISABLE_SOURCE_CHANGES  ON)
 
-if ("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
   message(SEND_ERROR "In-source builds are not allowed.")
-endif ()
+endif()
 # ------------------------------------------------------------------------------
 # Declare project.
-project("__COMPONENT_NAME__" C CXX)
+project("__FULLY_QUALIFIED_COMPONENT_NAME__" C CXX)
 # ------------------------------------------------------------------------------
 # Issue deprecation errors for macros and functions.
 set(CMAKE_ERROR_DEPRECATED ON)
@@ -25,18 +25,19 @@ set(CMAKE_COLOR_MAKEFILE   ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # ------------------------------------------------------------------------------
 # Remove "lib" prefix for shared libraries (DLLs) on Windows.
-if (WIN32)
+if(WIN32)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
-endif ()
-# ------------------------------------------------------------------------------
-# Perform structured installation.
-set(INSTALL_BINARY_DIR  bin)
-set(INSTALL_INCLUDE_DIR include)
-set(INSTALL_LIBRARY_DIR lib)
-set(INSTALL_SOURCE_DIR  src)
+  set(CMAKE_SHARED_MODULE_PREFIX  "")
+endif()
 # ------------------------------------------------------------------------------
 # Install to the current project by default.
-set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/../../)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/../../"
+                           CACHE
+                           PATH
+                           ""
+                           FORCE)
+endif()
 # ==============================================================================
 # }}} General
 
@@ -56,9 +57,9 @@ set(CMAKE_THREAD_PREFER_PTHREAD ON)
 
 find_package(Threads REQUIRED)
 
-if (NOT CMAKE_USE_PTHREADS_INIT)
+if(NOT CMAKE_USE_PTHREADS_INIT)
   message(FATAL_ERROR "POSIX threads not found.")
-endif ()
+endif()
 
 add_definitions(-DTHREADSAFE -D_REENTRANT)
 
@@ -70,21 +71,21 @@ set(Threads_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
 
 # Compilers {{{
 # ==============================================================================
-if (CMAKE_COMPILER_IS_GNUCC)
+if(CMAKE_COMPILER_IS_GNUCC)
   set(COMPILER_IS_GCC TRUE)
   set(LINKER_IS_LD    TRUE)
-endif ()
+endif()
 # ------------------------------------------------------------------------------
-if (CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
   set(COMPILER_IS_G++ TRUE)
   set(LINKER_IS_LD    TRUE)
-endif ()
+endif()
 # ==============================================================================
 # }}} Compilers
 
 # Flags {{{
 # ==============================================================================
-if (COMPILER_IS_GCC)
+if(COMPILER_IS_GCC)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pipe")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wextra")
@@ -95,9 +96,9 @@ if (COMPILER_IS_GCC)
 
   set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fomit-frame-pointer")
   set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -funroll-loops")
-endif ()
+endif()
 # ------------------------------------------------------------------------------
-if (COMPILER_IS_G++)
+if(COMPILER_IS_G++)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
@@ -110,15 +111,15 @@ if (COMPILER_IS_G++)
 
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fomit-frame-pointer")
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -funroll-loops")
-endif ()
+endif()
 # ------------------------------------------------------------------------------
-if (LINKER_IS_LD)
-  if (WIN32)
-    if (COMPILER_IS_G++)
+if(LINKER_IS_LD)
+  if(WIN32)
+    if(COMPILER_IS_G++)
       set(CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS}    -static-libstdc++")
       set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -static-libstdc++")
       set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static-libstdc++")
-    endif ()
+    endif()
 
     set(CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS}    -static-libgcc")
     set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -static-libgcc")
@@ -127,25 +128,26 @@ if (LINKER_IS_LD)
     set(CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS}    -static")
     set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -static")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static")
-  endif ()
-endif ()
+  endif()
+endif()
 # ==============================================================================
 # }}} Flags
 
 # Targets {{{
 # ==============================================================================
-include_directories(../../src)
-include_directories(../../components/java)
+include_directories("../../src")
+include_directories("../../components/java")
 
-include(${PROJECT_SOURCE_DIR}/sources.cmake)
-include(${PROJECT_SOURCE_DIR}/targets.cmake)
+include("sources.cmake")
+include("targets.cmake")
 
-target_link_libraries(__COMPONENT_NAME__ ${JNI_LIBRARIES}
-                                         ${Threads_LIBRARIES})
+target_link_libraries("__FULLY_QUALIFIED_COMPONENT_NAME__"
+                      ${JNI_LIBRARIES}
+                      ${Threads_LIBRARIES})
 
-install(TARGETS __COMPONENT_NAME__
-        ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
-        LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}
-        RUNTIME DESTINATION ${INSTALL_BINARY_DIR})
+install(TARGETS "__FULLY_QUALIFIED_COMPONENT_NAME__"
+        ARCHIVE DESTINATION "lib"
+        LIBRARY DESTINATION "lib"
+        RUNTIME DESTINATION "bin")
 # ==============================================================================
 # }}} Targets

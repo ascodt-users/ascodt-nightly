@@ -5,10 +5,18 @@ package de.tum.ascodt.sidlcompiler.symboltable;
 
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.core.runtime.Assert;
 
+import de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement;
+import de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement;
 import de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement;
+import de.tum.ascodt.sidlcompiler.frontend.node.AUserDefinedType;
 import de.tum.ascodt.sidlcompiler.frontend.node.Node;
 import de.tum.ascodt.sidlcompiler.frontend.node.TIdentifier;
 
@@ -31,28 +39,21 @@ public class Scope {
   /**
    * @return Unqualified identifier of this symbol.
    */
-  public static String getSymbol(
-      de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement newEntry) {
+  public static String getSymbol(AClassPackageElement newEntry) {
     return newEntry.getName().getText();
   }
 
   /**
    * @return Unqualified identifier of this symbol.
    */
-  public static
-      String
-      getSymbol(
-          de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement newEntry) {
+  public static String getSymbol(AEnumDeclarationPackageElement newEntry) {
     return newEntry.getName().getText();
   }
 
   /**
    * @return Unqualified identifier of this symbol.
    */
-  public static
-      String
-      getSymbol(
-          de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement newEntry) {
+  public static String getSymbol(AInterfacePackageElement newEntry) {
     return newEntry.getName().getText();
   }
 
@@ -62,8 +63,7 @@ public class Scope {
    * @param node
    * @return
    */
-  public static String getSymbol(
-      de.tum.ascodt.sidlcompiler.frontend.node.AUserDefinedType node) {
+  public static String getSymbol(AUserDefinedType node) {
     String fullQualifiedSymbol = "";
     for (TIdentifier id : node.getIdentifier()) {
       fullQualifiedSymbol += ".";
@@ -74,17 +74,17 @@ public class Scope {
   }
 
   public static String getSymbol(Node node) {
-    if (node instanceof de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement) {
-      return getSymbol((de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement)node);
+    if (node instanceof AInterfacePackageElement) {
+      return getSymbol((AInterfacePackageElement)node);
     }
-    if (node instanceof de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement) {
-      return getSymbol((de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement)node);
+    if (node instanceof AEnumDeclarationPackageElement) {
+      return getSymbol((AEnumDeclarationPackageElement)node);
     }
-    if (node instanceof de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement) {
-      return getSymbol((de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement)node);
+    if (node instanceof AClassPackageElement) {
+      return getSymbol((AClassPackageElement)node);
     }
-    if (node instanceof de.tum.ascodt.sidlcompiler.frontend.node.AUserDefinedType) {
-      return getSymbol((de.tum.ascodt.sidlcompiler.frontend.node.AUserDefinedType)node);
+    if (node instanceof AUserDefinedType) {
+      return getSymbol((AUserDefinedType)node);
     }
 
     return node.toString();
@@ -98,7 +98,7 @@ public class Scope {
   /**
    * Pointer to the super scope
    */
-  private java.util.Map<String, Scope> _subScope;
+  private Map<String, Scope> _subScope;
   /**
    * A scope's identifier might not contain a dot and has to start with a
    * character. This thing equals "" for the root node. See getFullIdentifier()
@@ -109,13 +109,13 @@ public class Scope {
   /**
    * The content of the symbol table.
    */
-  private java.util.Map<String, de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement> _classSymbols;
+  private Map<String, AClassPackageElement> _classSymbols;
 
-  private java.util.Map<de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement, String> _classSymbolsFiles;
+  private Map<AClassPackageElement, String> _classSymbolsFiles;
 
-  private java.util.Map<String, de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement> _interfaceSymbols;
+  private Map<String, AInterfacePackageElement> _interfaceSymbols;
 
-  private java.util.Map<String, de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement> _enumSymbols;
+  private Map<String, AEnumDeclarationPackageElement> _enumSymbols;
 
   /**
    * Holds error message corresponding to this scope. If the message equals "",
@@ -129,10 +129,10 @@ public class Scope {
   public Scope() {
     _identifier = "";
     _superScope = null;
-    _classSymbols = new java.util.HashMap<String, de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement>();
-    _interfaceSymbols = new java.util.HashMap<String, de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement>();
-    _enumSymbols = new java.util.HashMap<String, de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement>();
-    _subScope = new java.util.HashMap<String, Scope>();
+    _classSymbols = new HashMap<String, AClassPackageElement>();
+    _interfaceSymbols = new HashMap<String, AInterfacePackageElement>();
+    _enumSymbols = new HashMap<String, AEnumDeclarationPackageElement>();
+    _subScope = new HashMap<String, Scope>();
   }
 
   public Scope(Scope old) {
@@ -140,15 +140,15 @@ public class Scope {
       _identifier = old._identifier;
       _superScope = new Scope(old._superScope);
       _nameOfDefiningFile = old._nameOfDefiningFile;
-      _classSymbols = new java.util.HashMap<String, de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement>(
+      _classSymbols = new HashMap<String, AClassPackageElement>(
           old._classSymbols);
-      _interfaceSymbols = new java.util.HashMap<String, de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement>(
+      _interfaceSymbols = new HashMap<String, AInterfacePackageElement>(
           old._interfaceSymbols);
-      _enumSymbols = new java.util.HashMap<String, de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement>(
+      _enumSymbols = new HashMap<String, AEnumDeclarationPackageElement>(
           old._enumSymbols);
-      _classSymbolsFiles = new java.util.HashMap<de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement, String>(
+      _classSymbolsFiles = new HashMap<AClassPackageElement, String>(
           old._classSymbolsFiles);
-      _subScope = new java.util.HashMap<String, Scope>(old._subScope);
+      _subScope = new HashMap<String, Scope>(old._subScope);
       _errorMessage = old._errorMessage;
 
     } else {
@@ -170,11 +170,11 @@ public class Scope {
     _identifier = identifier;
     _superScope = superScope;
     _nameOfDefiningFile = definingFile;
-    _classSymbols = new java.util.HashMap<String, de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement>();
-    _interfaceSymbols = new java.util.HashMap<String, de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement>();
-    _enumSymbols = new java.util.HashMap<String, de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement>();
-    _classSymbolsFiles = new java.util.HashMap<de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement, String>();
-    _subScope = new java.util.HashMap<String, Scope>();
+    _classSymbols = new HashMap<String, AClassPackageElement>();
+    _interfaceSymbols = new HashMap<String, AInterfacePackageElement>();
+    _enumSymbols = new HashMap<String, AEnumDeclarationPackageElement>();
+    _classSymbolsFiles = new HashMap<AClassPackageElement, String>();
+    _subScope = new HashMap<String, Scope>();
     _errorMessage = "";
     if (superScope != null) {
       superScope._subScope.put(_identifier, this);
@@ -190,9 +190,7 @@ public class Scope {
    * @param newEntry
    * @param fileName
    */
-  public void addSymbol(
-      de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement newEntry,
-      String fileName) {
+  public void addSymbol(AClassPackageElement newEntry, String fileName) {
     String symbolName = getSymbol(newEntry);
 
     if (_interfaceSymbols.containsKey(symbolName)) {
@@ -217,11 +215,8 @@ public class Scope {
    * @param newEntry
    * @param fileName
    */
-  public
-      void
-      addSymbol(
-          de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement newEntry,
-          String fileName) {
+  public void
+      addSymbol(AEnumDeclarationPackageElement newEntry, String fileName) {
     String symbolName = getSymbol(newEntry);
 
     if (_classSymbols.containsKey(symbolName)) {
@@ -246,11 +241,7 @@ public class Scope {
    * @param newEntry
    * @param fileName
    */
-  public
-      void
-      addSymbol(
-          de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement newEntry,
-          String fileName) {
+  public void addSymbol(AInterfacePackageElement newEntry, String fileName) {
     String symbolName = getSymbol(newEntry);
 
     if (_classSymbols.containsKey(symbolName)) {
@@ -304,8 +295,7 @@ public class Scope {
    * @param identifier
    * @return
    */
-  public de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement
-      getClassDefinition(String identifier) {
+  public AClassPackageElement getClassDefinition(String identifier) {
     Scope scope = getDefiningScope(identifier);
     String typeName = identifier.substring(identifier.lastIndexOf(".") + 1);
     if (scope == null) {
@@ -372,9 +362,8 @@ public class Scope {
    * @param identifier
    * @return
    */
-  public
-      de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement
-      getEnumerationDefinition(String identifier) {
+  public AEnumDeclarationPackageElement getEnumerationDefinition(
+      String identifier) {
     Scope scope = getDefiningScope(identifier);
     String typeName = identifier.substring(identifier.lastIndexOf(".") + 1);
     if (scope == null) {
@@ -397,10 +386,8 @@ public class Scope {
    * 
    * @return
    */
-  public
-      java.util.Set<de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement>
-      getFlattenedClassElements() {
-    java.util.Set<de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement> result = new java.util.HashSet<de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement>();
+  public Set<AClassPackageElement> getFlattenedClassElements() {
+    Set<AClassPackageElement> result = new HashSet<AClassPackageElement>();
 
     result.addAll(_classSymbols.values());
     for (String subScopeName : _subScope.keySet()) {
@@ -415,10 +402,8 @@ public class Scope {
    * 
    * @return
    */
-  public
-      java.util.Set<de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement>
-      getFlattenedEnumsElements() {
-    java.util.Set<de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement> result = new java.util.HashSet<de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement>();
+  public Set<AEnumDeclarationPackageElement> getFlattenedEnumsElements() {
+    Set<AEnumDeclarationPackageElement> result = new HashSet<AEnumDeclarationPackageElement>();
 
     result.addAll(_enumSymbols.values());
     for (String subScopeName : _subScope.keySet()) {
@@ -433,12 +418,10 @@ public class Scope {
    * 
    * @return
    */
-  public
-      java.util.Set<de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement>
-      getFlattenedInterfaceElements() {
+  public Set<AInterfacePackageElement> getFlattenedInterfaceElements() {
 
-    java.util.Set<de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement> result = new java.util.TreeSet<de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement>(
-        new Comparator<de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement>() {
+    Set<AInterfacePackageElement> result = new TreeSet<AInterfacePackageElement>(
+        new Comparator<AInterfacePackageElement>() {
 
           @Override
           public int compare(AInterfacePackageElement o1,
@@ -503,7 +486,7 @@ public class Scope {
    * @param identifier
    * @return Full qualified name of identifier which is separated by .
    */
-  public String getFullQualifiedName(String identifier) {
+  public String getFullyQualifiedName(String identifier) {
     Scope scope = getDefiningScope(identifier);
     if (scope == null) {
       return null;
@@ -520,8 +503,7 @@ public class Scope {
    * @param identifier
    * @return
    */
-  public de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement
-      getInterfaceDefinition(String identifier) {
+  public AInterfacePackageElement getInterfaceDefinition(String identifier) {
     Scope scope = getDefiningScope(identifier);
     String typeName = identifier.substring(identifier.lastIndexOf(".") + 1);
     if (scope == null) {
@@ -551,26 +533,19 @@ public class Scope {
     return result;
   }
 
-  public void removeSymbol(
-      de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement classEntry) {
+  public void removeSymbol(AClassPackageElement classEntry) {
     if (_classSymbols.containsKey(classEntry)) {
       _classSymbols.remove(classEntry);
     }
   }
 
-  public
-      void
-      removeSymbol(
-          de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement enumEntry) {
+  public void removeSymbol(AEnumDeclarationPackageElement enumEntry) {
     if (_enumSymbols.containsKey(enumEntry)) {
       _enumSymbols.remove(enumEntry);
     }
   }
 
-  public
-      void
-      removeSymbol(
-          de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement interfaceEntry) {
+  public void removeSymbol(AInterfacePackageElement interfaceEntry) {
     if (_interfaceSymbols.containsKey(interfaceEntry)) {
       _interfaceSymbols.remove(interfaceEntry);
     }

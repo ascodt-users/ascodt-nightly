@@ -2,37 +2,34 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class TInterfaceToken extends Token
-{
-    public TInterfaceToken()
-    {
-        super.setText("interface");
-    }
+public final class TInterfaceToken extends Token {
+  public TInterfaceToken() {
+    super.setText("interface");
+  }
 
-    public TInterfaceToken(int line, int pos)
-    {
-        super.setText("interface");
-        setLine(line);
-        setPos(pos);
-    }
+  public TInterfaceToken(int line, int pos) {
+    super.setText("interface");
+    setLine(line);
+    setPos(pos);
+  }
 
-    @Override
-    public Object clone()
-    {
-      return new TInterfaceToken(getLine(), getPos());
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseTInterfaceToken(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTInterfaceToken(this);
-    }
+  @Override
+  public Object clone() {
+    return new TInterfaceToken(getLine(), getPos());
+  }
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TInterfaceToken text.");
-    }
+  @Override
+  public void setText(@SuppressWarnings("unused") String text) {
+    throw new RuntimeException("Cannot change TInterfaceToken text.");
+  }
 }

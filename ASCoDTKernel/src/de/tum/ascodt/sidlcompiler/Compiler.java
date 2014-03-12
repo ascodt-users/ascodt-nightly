@@ -189,6 +189,7 @@ public class Compiler {
     }
 
   }
+
   /**
    * @return Is the compiler state valid, i.e. was the compiler workflow
    *         successful.

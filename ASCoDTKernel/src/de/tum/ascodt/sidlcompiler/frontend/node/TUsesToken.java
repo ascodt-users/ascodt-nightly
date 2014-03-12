@@ -2,37 +2,34 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class TUsesToken extends Token
-{
-    public TUsesToken()
-    {
-        super.setText("uses");
-    }
+public final class TUsesToken extends Token {
+  public TUsesToken() {
+    super.setText("uses");
+  }
 
-    public TUsesToken(int line, int pos)
-    {
-        super.setText("uses");
-        setLine(line);
-        setPos(pos);
-    }
+  public TUsesToken(int line, int pos) {
+    super.setText("uses");
+    setLine(line);
+    setPos(pos);
+  }
 
-    @Override
-    public Object clone()
-    {
-      return new TUsesToken(getLine(), getPos());
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseTUsesToken(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTUsesToken(this);
-    }
+  @Override
+  public Object clone() {
+    return new TUsesToken(getLine(), getPos());
+  }
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TUsesToken text.");
-    }
+  @Override
+  public void setText(@SuppressWarnings("unused") String text) {
+    throw new RuntimeException("Cannot change TUsesToken text.");
+  }
 }

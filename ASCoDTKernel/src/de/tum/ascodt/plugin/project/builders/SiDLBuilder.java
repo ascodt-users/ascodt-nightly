@@ -118,7 +118,7 @@ public class SiDLBuilder {
    */
   public static void buildStartSymbolsForSIDLResources(
       Vector<SIDLPair<String, Start>> startSymbolsMap, IResource resource)
-          throws ASCoDTException {
+      throws ASCoDTException {
 
     try {
       if (resource instanceof IFolder) {
@@ -140,8 +140,8 @@ public class SiDLBuilder {
         startSymbolsMap.add(new SIDLPair<String, Start>(resource.getLocation()
             .toPortableString(),
             de.tum.ascodt.plugin.project.builders.SiDLBuilder
-            .buildStartSymbolsForSIDLResource(resource.getLocation()
-                .toPortableString())));
+                .buildStartSymbolsForSIDLResource(resource.getLocation()
+                    .toPortableString())));
       }
 
     } catch (CoreException e) {
@@ -180,13 +180,12 @@ public class SiDLBuilder {
 
           new File(eclipseProject.getLocation().toPortableString() +
               project.getJavaProxiesFolder()).toURI().toURL(),
-              new File(eclipseProject.getLocation().toPortableString() +
-                  project.getJavaSourcesFolder()).toURI().toURL(),
-                  new File(eclipseProject.getLocation().toPortableString() +
-                      project.getFolderForExecutables()).toURI().toURL()
+          new File(eclipseProject.getLocation().toPortableString() +
+              project.getJavaSourcesFolder()).toURI().toURL(),
+          new File(eclipseProject.getLocation().toPortableString() +
+              project.getFolderForExecutables()).toURI().toURL()
 
-          );
-
+      );
 
       eclipseProject.refreshLocal(IResource.DEPTH_INFINITE, null);
     } catch (MalformedURLException e) {
@@ -208,20 +207,20 @@ public class SiDLBuilder {
    *          the current eclipse project
    * @throws ASCoDTException
    */
-  public static void generateBuildScripts(IProject eclipseProject) throws ASCoDTException{
+  public static void generateBuildScripts(IProject eclipseProject)
+      throws ASCoDTException {
     Project project = ProjectBuilder.getInstance().getProject(eclipseProject);
     assert project.getSymbolTable() != null;
     CreateGlobalBuildScripts buildScripts = new CreateGlobalBuildScripts(
         project.getSymbolTable());
-    try{
+    try {
       buildScripts.create(
           new File(eclipseProject.getLocation().toPortableString() +
               project.getJavaProxiesFolder()).toURI().toURL(),
           new File(eclipseProject.getLocation().toPortableString() +
               project.getJavaSourcesFolder()).toURI().toURL(),
           new File(eclipseProject.getLocation().toPortableString() +
-              project.getFolderForExecutables()).toURI().toURL()
-          );
+              project.getFolderForExecutables()).toURI().toURL());
       eclipseProject.refreshLocal(IResource.DEPTH_INFINITE, null);
     } catch (MalformedURLException e) {
       throw new ASCoDTException(SiDLBuilder.class.getName(),
@@ -233,6 +232,7 @@ public class SiDLBuilder {
               e.getLocalizedMessage(), e);
     }
   }
+
   /**
    * A routine to validate the global symbol table against specific sidl file
    * 

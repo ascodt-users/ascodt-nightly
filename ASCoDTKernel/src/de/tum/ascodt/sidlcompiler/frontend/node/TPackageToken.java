@@ -2,37 +2,34 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class TPackageToken extends Token
-{
-    public TPackageToken()
-    {
-        super.setText("package");
-    }
+public final class TPackageToken extends Token {
+  public TPackageToken() {
+    super.setText("package");
+  }
 
-    public TPackageToken(int line, int pos)
-    {
-        super.setText("package");
-        setLine(line);
-        setPos(pos);
-    }
+  public TPackageToken(int line, int pos) {
+    super.setText("package");
+    setLine(line);
+    setPos(pos);
+  }
 
-    @Override
-    public Object clone()
-    {
-      return new TPackageToken(getLine(), getPos());
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseTPackageToken(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTPackageToken(this);
-    }
+  @Override
+  public Object clone() {
+    return new TPackageToken(getLine(), getPos());
+  }
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TPackageToken text.");
-    }
+  @Override
+  public void setText(@SuppressWarnings("unused") String text) {
+    throw new RuntimeException("Cannot change TPackageToken text.");
+  }
 }

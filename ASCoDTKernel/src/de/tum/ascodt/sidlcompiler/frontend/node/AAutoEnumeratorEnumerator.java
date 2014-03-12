@@ -2,93 +2,80 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class AAutoEnumeratorEnumerator extends PEnumerator
-{
-    private TIdentifier _name_;
+public final class AAutoEnumeratorEnumerator extends PEnumerator {
+  private TIdentifier _name_;
 
-    public AAutoEnumeratorEnumerator()
-    {
-        // Constructor
+  public AAutoEnumeratorEnumerator() {
+    // Constructor
+  }
+
+  public AAutoEnumeratorEnumerator(
+      @SuppressWarnings("hiding") TIdentifier _name_) {
+    // Constructor
+    setName(_name_);
+
+  }
+
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseAAutoEnumeratorEnumerator(this);
+  }
+
+  @Override
+  public Object clone() {
+    return new AAutoEnumeratorEnumerator(cloneNode(_name_));
+  }
+
+  public TIdentifier getName() {
+    return _name_;
+  }
+
+  @Override
+  void removeChild(@SuppressWarnings("unused") Node child) {
+    // Remove child
+    if (_name_ == child) {
+      _name_ = null;
+      return;
     }
 
-    public AAutoEnumeratorEnumerator(
-        @SuppressWarnings("hiding") TIdentifier _name_)
-    {
-        // Constructor
-        setName(_name_);
+    throw new RuntimeException("Not a child.");
+  }
 
+  @Override
+  void replaceChild(@SuppressWarnings("unused") Node oldChild,
+      @SuppressWarnings("unused") Node newChild) {
+    // Replace child
+    if (_name_ == oldChild) {
+      setName((TIdentifier)newChild);
+      return;
     }
 
-    @Override
-    public Object clone()
-    {
-        return new AAutoEnumeratorEnumerator(
-            cloneNode(this._name_));
+    throw new RuntimeException("Not a child.");
+  }
+
+  public void setName(TIdentifier node) {
+    if (_name_ != null) {
+      _name_.parent(null);
     }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseAAutoEnumeratorEnumerator(this);
+    if (node != null) {
+      if (node.parent() != null) {
+        node.parent().removeChild(node);
+      }
+
+      node.parent(this);
     }
 
-    public TIdentifier getName()
-    {
-        return this._name_;
-    }
+    _name_ = node;
+  }
 
-    public void setName(TIdentifier node)
-    {
-        if(this._name_ != null)
-        {
-            this._name_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._name_ = node;
-    }
-
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._name_);
-    }
-
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._name_ == child)
-        {
-            this._name_ = null;
-            return;
-        }
-
-        throw new RuntimeException("Not a child.");
-    }
-
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._name_ == oldChild)
-        {
-            setName((TIdentifier) newChild);
-            return;
-        }
-
-        throw new RuntimeException("Not a child.");
-    }
+  @Override
+  public String toString() {
+    return "" + toString(_name_);
+  }
 }

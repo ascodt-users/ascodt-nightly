@@ -2,37 +2,34 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class TRAngleBracket extends Token
-{
-    public TRAngleBracket()
-    {
-        super.setText(">");
-    }
+public final class TRAngleBracket extends Token {
+  public TRAngleBracket() {
+    super.setText(">");
+  }
 
-    public TRAngleBracket(int line, int pos)
-    {
-        super.setText(">");
-        setLine(line);
-        setPos(pos);
-    }
+  public TRAngleBracket(int line, int pos) {
+    super.setText(">");
+    setLine(line);
+    setPos(pos);
+  }
 
-    @Override
-    public Object clone()
-    {
-      return new TRAngleBracket(getLine(), getPos());
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseTRAngleBracket(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTRAngleBracket(this);
-    }
+  @Override
+  public Object clone() {
+    return new TRAngleBracket(getLine(), getPos());
+  }
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TRAngleBracket text.");
-    }
+  @Override
+  public void setText(@SuppressWarnings("unused") String text) {
+    throw new RuntimeException("Cannot change TRAngleBracket text.");
+  }
 }

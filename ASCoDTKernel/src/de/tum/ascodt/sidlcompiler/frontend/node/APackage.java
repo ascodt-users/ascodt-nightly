@@ -2,143 +2,123 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import java.util.*;
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class APackage extends PPackage
-{
-    private TIdentifier _name_;
-    private final LinkedList<PPackageElement> _packageElement_ = new LinkedList<PPackageElement>();
+public final class APackage extends PPackage {
+  private TIdentifier _name_;
+  private final LinkedList<PPackageElement> _packageElement_ = new LinkedList<PPackageElement>();
 
-    public APackage()
-    {
-        // Constructor
+  public APackage() {
+    // Constructor
+  }
+
+  public APackage(@SuppressWarnings("hiding") TIdentifier _name_,
+      @SuppressWarnings("hiding") List<PPackageElement> _packageElement_) {
+    // Constructor
+    setName(_name_);
+
+    setPackageElement(_packageElement_);
+
+  }
+
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseAPackage(this);
+  }
+
+  @Override
+  public Object clone() {
+    return new APackage(cloneNode(_name_), cloneList(_packageElement_));
+  }
+
+  public TIdentifier getName() {
+    return _name_;
+  }
+
+  public LinkedList<PPackageElement> getPackageElement() {
+    return _packageElement_;
+  }
+
+  @Override
+  void removeChild(@SuppressWarnings("unused") Node child) {
+    // Remove child
+    if (_name_ == child) {
+      _name_ = null;
+      return;
     }
 
-    public APackage(
-        @SuppressWarnings("hiding") TIdentifier _name_,
-        @SuppressWarnings("hiding") List<PPackageElement> _packageElement_)
-    {
-        // Constructor
-        setName(_name_);
-
-        setPackageElement(_packageElement_);
-
+    if (_packageElement_.remove(child)) {
+      return;
     }
 
-    @Override
-    public Object clone()
-    {
-        return new APackage(
-            cloneNode(this._name_),
-            cloneList(this._packageElement_));
+    throw new RuntimeException("Not a child.");
+  }
+
+  @Override
+  void replaceChild(@SuppressWarnings("unused") Node oldChild,
+      @SuppressWarnings("unused") Node newChild) {
+    // Replace child
+    if (_name_ == oldChild) {
+      setName((TIdentifier)newChild);
+      return;
     }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseAPackage(this);
-    }
-
-    public TIdentifier getName()
-    {
-        return this._name_;
-    }
-
-    public void setName(TIdentifier node)
-    {
-        if(this._name_ != null)
-        {
-            this._name_.parent(null);
+    for (ListIterator<PPackageElement> i = _packageElement_.listIterator(); i
+        .hasNext();) {
+      if (i.next() == oldChild) {
+        if (newChild != null) {
+          i.set((PPackageElement)newChild);
+          newChild.parent(this);
+          oldChild.parent(null);
+          return;
         }
 
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._name_ = node;
+        i.remove();
+        oldChild.parent(null);
+        return;
+      }
     }
 
-    public LinkedList<PPackageElement> getPackageElement()
-    {
-        return this._packageElement_;
+    throw new RuntimeException("Not a child.");
+  }
+
+  public void setName(TIdentifier node) {
+    if (_name_ != null) {
+      _name_.parent(null);
     }
 
-    public void setPackageElement(List<PPackageElement> list)
-    {
-        this._packageElement_.clear();
-        this._packageElement_.addAll(list);
-        for(PPackageElement e : list)
-        {
-            if(e.parent() != null)
-            {
-                e.parent().removeChild(e);
-            }
+    if (node != null) {
+      if (node.parent() != null) {
+        node.parent().removeChild(node);
+      }
 
-            e.parent(this);
-        }
+      node.parent(this);
     }
 
-    @Override
-    public String toString()
-    {
-        return ""
-            + toString(this._name_)
-            + toString(this._packageElement_);
+    _name_ = node;
+  }
+
+  public void setPackageElement(List<PPackageElement> list) {
+    _packageElement_.clear();
+    _packageElement_.addAll(list);
+    for (PPackageElement e : list) {
+      if (e.parent() != null) {
+        e.parent().removeChild(e);
+      }
+
+      e.parent(this);
     }
+  }
 
-    @Override
-    void removeChild(@SuppressWarnings("unused") Node child)
-    {
-        // Remove child
-        if(this._name_ == child)
-        {
-            this._name_ = null;
-            return;
-        }
-
-        if(this._packageElement_.remove(child))
-        {
-            return;
-        }
-
-        throw new RuntimeException("Not a child.");
-    }
-
-    @Override
-    void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
-    {
-        // Replace child
-        if(this._name_ == oldChild)
-        {
-            setName((TIdentifier) newChild);
-            return;
-        }
-
-        for(ListIterator<PPackageElement> i = this._packageElement_.listIterator(); i.hasNext();)
-        {
-            if(i.next() == oldChild)
-            {
-                if(newChild != null)
-                {
-                    i.set((PPackageElement) newChild);
-                    newChild.parent(this);
-                    oldChild.parent(null);
-                    return;
-                }
-
-                i.remove();
-                oldChild.parent(null);
-                return;
-            }
-        }
-
-        throw new RuntimeException("Not a child.");
-    }
+  @Override
+  public String toString() {
+    return "" + toString(_name_) + toString(_packageElement_);
+  }
 }

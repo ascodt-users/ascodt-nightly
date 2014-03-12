@@ -52,7 +52,8 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * 
  * 
  */
-public class Palette extends ViewPart implements RepositoryListener,ProjectsListener {
+public class Palette extends ViewPart implements RepositoryListener,
+    ProjectsListener {
   public static String ID = Palette.class.getCanonicalName();
 
   /**
@@ -277,6 +278,13 @@ public class Palette extends ViewPart implements RepositoryListener,ProjectsList
   }
 
   @Override
+  public void projectsChanged() {
+    setFocus();
+    end();
+    combo.refresh();
+  }
+
+  @Override
   public void setFocus() {
     getViewer().getControl().setFocus();
 
@@ -287,13 +295,6 @@ public class Palette extends ViewPart implements RepositoryListener,ProjectsList
       combo.setSelection(new StructuredSelection(project));
     }
 
-  }
-
-  @Override
-  public void projectsChanged() {
-    setFocus();
-    end();
-    combo.refresh();
   }
 
 }

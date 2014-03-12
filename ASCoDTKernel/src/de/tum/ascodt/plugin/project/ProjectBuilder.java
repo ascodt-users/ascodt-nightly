@@ -56,7 +56,15 @@ public class ProjectBuilder extends PlatformObject {
   public static final String ASCODT_FILE_EXTENSION = ".ascodt";
 
   static private ProjectBuilder _singleton = new ProjectBuilder();
-  private ArrayList<ProjectsListener> _listeners;
+  /**
+   * id of the problem markers of ASCoDT. The problems markers are used to
+   * denote
+   * errors inside of the SIDL files. Such kind of errors can occur by the
+   * compilation of the file.
+   * They show the position in the file, where the error has occurred.
+   */
+  public static final String PROBLEM_MARKER_ID = "de.tum.ascodt.plugin.project.markers.ASCoDTProblemMarker";
+
   /**
    * setup the project nature, so that the ascodt project can be identified as
    * such one. We add an additiona
@@ -142,6 +150,8 @@ public class ProjectBuilder extends PlatformObject {
 
   }
 
+  private ArrayList<ProjectsListener> _listeners;
+
   /**
    * a map with all children projects
    */
@@ -150,21 +160,12 @@ public class ProjectBuilder extends PlatformObject {
   private Map<IProject, Project> _eclipseProjectToProjectMap;
 
   /**
-   * id of the problem markers of ASCoDT. The problems markers are used to
-   * denote
-   * errors inside of the SIDL files. Such kind of errors can occur by the
-   * compilation of the file.
-   * They show the position in the file, where the error has occurred.
-   */
-  public static final String PROBLEM_MARKER_ID = "de.tum.ascodt.plugin.project.markers.ASCoDTProblemMarker";
-
-  /**
    * Class is a singleton. Thus, you are not allowed to create instances of it.
    */
   private ProjectBuilder() {
     _eclipseProjectToProjectMap = new HashMap<IProject, Project>();
     _nameToProjectEntitiesMap = new HashMap<String, Project>();
-    _listeners=new ArrayList<ProjectsListener>();
+    _listeners = new ArrayList<ProjectsListener>();
   }
 
   /**
@@ -193,20 +194,6 @@ public class ProjectBuilder extends PlatformObject {
     trace.out("createProject(...)");
   }
 
-  public void registerListener(ProjectsListener listener){
-    Assert.isTrue(!_listeners.contains(listener)); 
-    _listeners.add(listener);
-  }
-  
-  public void removeListener(ProjectsListener listener){
-    Assert.isTrue(_listeners.contains(listener));
-    _listeners.remove(listener);
-  }
-  private void notiflyAllListeners(){
-    for(ProjectsListener listner:_listeners )
-      listner.projectsChanged();
-  }
-  
   /**
    * This method creates an ASCoDT project, and setups the main file structure
    * and natures setup of the project.
@@ -309,6 +296,22 @@ public class ProjectBuilder extends PlatformObject {
    */
   public boolean hasProject(String projectName) {
     return _nameToProjectEntitiesMap.get(projectName) != null;
+  }
+
+  private void notiflyAllListeners() {
+    for (ProjectsListener listner : _listeners) {
+      listner.projectsChanged();
+    }
+  }
+
+  public void registerListener(ProjectsListener listener) {
+    Assert.isTrue(!_listeners.contains(listener));
+    _listeners.add(listener);
+  }
+
+  public void removeListener(ProjectsListener listener) {
+    Assert.isTrue(_listeners.contains(listener));
+    _listeners.remove(listener);
   }
 
   /**

@@ -50,11 +50,13 @@ public class Trace implements Serializable {
   public void in(String methodName, String parameter0, String parameter1,
       String[] parameter2) {
     String message = "parameter0=" + parameter0 + ", parameter1=" + parameter1;
-    message += ", parameter2=String[" + parameter2.length + "]{ ";
-    for (String element : parameter2) {
-      message += element + " ";
+    if (parameter2 != null) {
+      message += ", parameter2=String[" + parameter2.length + "]{ ";
+      for (String element : parameter2) {
+        message += element + " ";
+      }
+      message += "}";
     }
-    message += "}";
     TraceDevice.getInstance().traceIn(_className, methodName, message);
   }
 

@@ -2,37 +2,34 @@
 
 package de.tum.ascodt.sidlcompiler.frontend.node;
 
-import de.tum.ascodt.sidlcompiler.frontend.analysis.*;
+
+import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
+
 
 @SuppressWarnings("nls")
-public final class TStringToken extends Token
-{
-    public TStringToken()
-    {
-        super.setText("string");
-    }
+public final class TStringToken extends Token {
+  public TStringToken() {
+    super.setText("string");
+  }
 
-    public TStringToken(int line, int pos)
-    {
-        super.setText("string");
-        setLine(line);
-        setPos(pos);
-    }
+  public TStringToken(int line, int pos) {
+    super.setText("string");
+    setLine(line);
+    setPos(pos);
+  }
 
-    @Override
-    public Object clone()
-    {
-      return new TStringToken(getLine(), getPos());
-    }
+  @Override
+  public void apply(Switch sw) {
+    ((Analysis)sw).caseTStringToken(this);
+  }
 
-    public void apply(Switch sw)
-    {
-        ((Analysis) sw).caseTStringToken(this);
-    }
+  @Override
+  public Object clone() {
+    return new TStringToken(getLine(), getPos());
+  }
 
-    @Override
-    public void setText(@SuppressWarnings("unused") String text)
-    {
-        throw new RuntimeException("Cannot change TStringToken text.");
-    }
+  @Override
+  public void setText(@SuppressWarnings("unused") String text) {
+    throw new RuntimeException("Cannot change TStringToken text.");
+  }
 }

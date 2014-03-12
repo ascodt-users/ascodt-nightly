@@ -215,8 +215,8 @@ public class Project {
       if (!entries.contains(JavaRuntime.getDefaultJREContainerEntry())) {
         entries.add(JavaRuntime.getDefaultJREContainerEntry());
       }
-       IExtensionRegistry reg = RegistryFactory.getRegistry();
-       evaluateContributions(reg,entries);
+      IExtensionRegistry reg = RegistryFactory.getRegistry();
+      evaluateContributions(reg, entries);
       javaProject.setRawClasspath(
           entries.toArray(new IClasspathEntry[entries.size()]), null);
     } catch (JavaModelException e) {
@@ -263,10 +263,11 @@ public class Project {
           .newLibraryEntry(
               new Path(ResourceManager.getResourceAsPath("", ASCoDTKernel.ID)
                   .getPath()), null, null, false));
-      IClasspathEntry entry = JavaCore.newSourceEntry(new Path(entryPath), new Path[]{new Path("*.java"),new Path("**/*.java")}
-      ,new Path[]{new Path("cmake*/")}, null);
-      //.newSourceEntry(new Path(entryPath));
-     
+      IClasspathEntry entry = JavaCore.newSourceEntry(new Path(entryPath),
+          new Path[] {new Path("*.java"), new Path("**/*.java")},
+          new Path[] {new Path("cmake*/")}, null);
+      // .newSourceEntry(new Path(entryPath));
+
       if (!entries.contains(entry)) {
         entries.add(entry);
       }
@@ -285,21 +286,6 @@ public class Project {
     }
   }
 
-  private void evaluateContributions(IExtensionRegistry registry, Set<IClasspathEntry> classpathEntries) throws CoreException, ASCoDTException{
-    IConfigurationElement[] config =
-            registry.getConfigurationElementsFor(de.tum.ascodt.plugin.extensions.Project.ID);
-
-    for (IConfigurationElement e : config) {
-
-        final Object o =
-                e.createExecutableExtension("class");
-        if (o!=null&&o instanceof de.tum.ascodt.plugin.extensions.Project) {
-            _trace.debug("evaluateContributions()","executing a contribution");
-            ((de.tum.ascodt.plugin.extensions.Project)o).addClasspathEntries(classpathEntries);
-        }
-    }
-
-}
   /**
    * adds a new dependency to the project. The add operation has two phases:
    * 1. code generation with the sidl compiler
@@ -829,6 +815,24 @@ public class Project {
     }
   }
 
+  private void evaluateContributions(IExtensionRegistry registry,
+      Set<IClasspathEntry> classpathEntries) throws CoreException,
+      ASCoDTException {
+    IConfigurationElement[] config = registry
+        .getConfigurationElementsFor(de.tum.ascodt.plugin.extensions.Project.ID);
+
+    for (IConfigurationElement e : config) {
+
+      final Object o = e.createExecutableExtension("class");
+      if (o != null && o instanceof de.tum.ascodt.plugin.extensions.Project) {
+        _trace.debug("evaluateContributions()", "executing a contribution");
+        ((de.tum.ascodt.plugin.extensions.Project)o)
+            .addClasspathEntries(classpathEntries);
+      }
+    }
+
+  }
+
   public String getClassOutputFolder() {
     return "/bin";
   }
@@ -1080,7 +1084,7 @@ public class Project {
         .getFlattenedClassElements()) {
 
       _staticRepository.addComponent(_symbolTable.getScope(component)
-          .getFullQualifiedName(component.getName().getText()), component
+          .getFullyQualifiedName(component.getName().getText()), component
           .getTarget().getText());
     }
     writeProjectFile();
