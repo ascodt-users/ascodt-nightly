@@ -68,7 +68,7 @@ public abstract class __COMPONENT_NAME__AbstractJavaImplementation extends Socke
           if(isConnected())
                sendIntData(1);
      }catch(de.tum.ascodt.utils.exceptions.ASCoDTException e){
-          de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().showError(getClass().getName(), "destroy()", e);
+          de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().println(e);
      }
      super.close();
      _appTab.removeListener(this);

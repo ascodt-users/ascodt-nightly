@@ -50,8 +50,7 @@ public class UIService {
             try {
               uiContainer = page.showView(containerID);
             } catch (PartInitException e) {
-              ErrorWriterDevice.getInstance().showError(getClass().getName(),
-                  "performFinish()", e);
+              ErrorWriterDevice.getInstance().println(e);
             }
           };
 

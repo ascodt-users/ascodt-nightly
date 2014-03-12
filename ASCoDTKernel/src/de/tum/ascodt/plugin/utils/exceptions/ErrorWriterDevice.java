@@ -25,15 +25,18 @@ import de.tum.ascodt.utils.ConsoleDevice;
 public class ErrorWriterDevice {
   private static ErrorWriterDevice _singleton = new ErrorWriterDevice();
 
-  static public ErrorWriterDevice getInstance() {
+  public static ErrorWriterDevice getInstance() {
     return _singleton;
   }
 
-  private static String now() {
-    final String DateFormat = "yyyy.MM.dd G 'at' hh:mm:ss z";
-    Calendar cal = Calendar.getInstance();
-    SimpleDateFormat sdf = new SimpleDateFormat(DateFormat);
-    return sdf.format(cal.getTime());
+  private static String date() {
+    return new SimpleDateFormat("yyyy.MM.dd").format(Calendar.getInstance()
+        .getTime());
+  }
+
+  private static String time() {
+    return new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance()
+        .getTime());
   }
 
   private FileWriter _fileWriter;
@@ -49,59 +52,71 @@ public class ErrorWriterDevice {
       errorLogFile.createNewFile();
       _fileWriter = new FileWriter(errorLogFile, true);
       _errorLog = new BufferedWriter(_fileWriter);
-
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  private void displayErrorMessage(final String fullQualifiedClassName,
-      final String methodName, final String errorMessage) {
-    String outputText = fullQualifiedClassName + "." + methodName + "\n" +
-        errorMessage;
+  private void print(String trace, String message) {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("[");
+    sb.append(date());
+    sb.append("]");
+    sb.append("[");
+    sb.append(time());
+    sb.append("]");
+    sb.append("[");
+    sb.append("Error");
+    sb.append("]");
+    sb.append("[");
+    sb.append(trace);
+    sb.append("]");
+    sb.append(":");
+    sb.append(" ");
+    sb.append(message);
+
+    String log = sb.toString();
+
     try {
-      _errorLog.write(now() + "\n");
-      _errorLog.write(outputText + "\n");
+      _errorLog.write(log);
       _errorLog.flush();
     } catch (IOException e) {
       e.printStackTrace();
     }
 
-    ConsoleDevice.getInstance().getConsole("ASCoDT Error").println(outputText);
+    ConsoleDevice.getInstance().getConsole("ASCoDT Error").print(log);
   }
 
-  public void showError(String fullQualifiedClassName, String methodName,
-      String message) {
-    displayErrorMessage(fullQualifiedClassName, methodName, message);
+  private void println(String trace, String message) {
+    print(trace, message + "\n");
   }
 
-  public void showError(String fullQualifiedClassName, String methodName,
-      String message, Throwable e) {
-    displayErrorMessage(fullQualifiedClassName, methodName, message + "\n" +
-        (e != null ? e.getMessage() + "\n" + e.getCause() : ""));
-    PrintWriter writer = new PrintWriter(_fileWriter);
-    if (e != null) {
-      e.printStackTrace(writer);
-      e.printStackTrace();
+  public void print(String message) {
+    print(new Exception().getStackTrace()[1].toString(), message);
+  }
+
+  public void print(Throwable throwable) {
+    print(new Exception().getStackTrace()[1].toString(), throwable != null
+        ? throwable.getMessage() : "");
+
+    if (throwable != null) {
+      throwable.printStackTrace(new PrintWriter(_fileWriter));
+      throwable.printStackTrace();
     }
   }
 
-  /**
-   * 
-   * @param fullQualifiedClassName
-   *          Just insert getClass().getName() here
-   * @param methodName
-   * @param e
-   */
-  public void showError(String fullQualifiedClassName, String methodName,
-      Throwable e) {
-    displayErrorMessage(fullQualifiedClassName, methodName,
-        e != null ? e.getMessage() + "\n" + e.getCause() : "");
-    PrintWriter writer = new PrintWriter(_fileWriter);
-    if (e != null) {
-      e.printStackTrace(writer);
-      e.printStackTrace();
-    }
+  public void println(String message) {
+    println(new Exception().getStackTrace()[1].toString(), message);
   }
 
+  public void println(Throwable throwable) {
+    println(new Exception().getStackTrace()[1].toString(), throwable != null
+        ? throwable.getMessage() : "");
+
+    if (throwable != null) {
+      throwable.printStackTrace(new PrintWriter(_fileWriter));
+      throwable.printStackTrace();
+    }
+  }
 }

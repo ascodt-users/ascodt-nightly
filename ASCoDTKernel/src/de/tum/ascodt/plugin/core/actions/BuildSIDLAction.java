@@ -69,11 +69,7 @@ public class BuildSIDLAction implements IWorkbenchWindowActionDelegate {
           ProjectBuilder.getInstance().getProject(project)
               .buildProjectSources();
         } catch (ASCoDTException e) {
-          ErrorWriterDevice.getInstance().showError(
-              getClass().getName(),
-              "prepareProject()",
-              "Cannot create project representation object due to " +
-                  e.getCause(), e);
+          ErrorWriterDevice.getInstance().println(e);
         }
 
       }
@@ -111,8 +107,7 @@ public class BuildSIDLAction implements IWorkbenchWindowActionDelegate {
                   this.selection.add(((IResource)file_element).getProject());
                 }
               } catch (CoreException e) {
-                ErrorWriterDevice.getInstance().showError(getClass().getName(),
-                    e.getLocalizedMessage(), e);
+                ErrorWriterDevice.getInstance().println(e);
               }
             }
           }
@@ -130,8 +125,7 @@ public class BuildSIDLAction implements IWorkbenchWindowActionDelegate {
             this.selection.add(((IResource)element).getProject());
           }
         } catch (CoreException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              e.getLocalizedMessage(), e);
+          ErrorWriterDevice.getInstance().println(e);
         }
       }
 
@@ -154,8 +148,7 @@ public class BuildSIDLAction implements IWorkbenchWindowActionDelegate {
           this.selection.add(((IResource)element).getProject());
         }
       } catch (CoreException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            e.getLocalizedMessage(), e);
+        ErrorWriterDevice.getInstance().println(e);
       }
     }
 

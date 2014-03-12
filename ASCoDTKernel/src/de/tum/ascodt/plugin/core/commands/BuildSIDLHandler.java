@@ -42,11 +42,9 @@ public class BuildSIDLHandler extends AbstractHandler {
         }
       }
     } catch (CoreException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "execute()", "Cannot compile SIDL", e);
+      ErrorWriterDevice.getInstance().println(e);
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "execute()", "Cannot compile SIDL", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     return null;
 

@@ -73,8 +73,7 @@ public class CreateJavaAndCxxEnumeration extends DepthFirstAdapter {
       templateForCxx.close();
       _multipleEnumerators = true;
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAOperation(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAOperation(...)");
@@ -117,8 +116,7 @@ public class CreateJavaAndCxxEnumeration extends DepthFirstAdapter {
       _templateFilesForCxxEnums.peek().open();
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _trace.out("inAEnumDeclarationPackageElement(...)",
         "close new enumeration ");
@@ -158,8 +156,7 @@ public class CreateJavaAndCxxEnumeration extends DepthFirstAdapter {
       templateForCxx.close();
       _multipleEnumerators = true;
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAOperation(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAOperation(...)");
@@ -178,8 +175,7 @@ public class CreateJavaAndCxxEnumeration extends DepthFirstAdapter {
       _templateFilesForJavaEnums.peek().close();
       _templateFilesForCxxEnums.peek().close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "outAEnumDeclarationPackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _templateFilesForJavaEnums.pop();

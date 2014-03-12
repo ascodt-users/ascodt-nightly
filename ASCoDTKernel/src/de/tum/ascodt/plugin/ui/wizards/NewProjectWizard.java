@@ -69,8 +69,7 @@ public class NewProjectWizard extends Wizard implements INewWizard {
   //
   // IDE.openEditor(page,f, true);
   // } catch (PartInitException e) {
-  // ErrorWriterDevice.getInstance().showError( getClass().getName(),
-  // "performFinish()", e);
+  // ErrorWriterDevice.getInstance().println(e);
   // }
   // }
   // });
@@ -105,20 +104,15 @@ public class NewProjectWizard extends Wizard implements INewWizard {
           .findPerspectiveWithId(ASCoDTPerspective.ID);
       page.setPerspective(perspective);
     } catch (CoreException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()",
-          "Cannot create new project due to " + e.getCause(), e);
+      ErrorWriterDevice.getInstance().println(e);
       trace.out("performFinish()", false);
       return false;
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", "Cannot create new project", e);
+      ErrorWriterDevice.getInstance().println(e);
       trace.out("performFinish()", false);
       return false;
     } catch (MalformedURLException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()",
-          "Cannot create new project due to " + e.getCause(), e);
+      ErrorWriterDevice.getInstance().println(e);
       trace.out("performFinish()", false);
     }
 

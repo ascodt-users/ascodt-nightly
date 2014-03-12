@@ -66,8 +66,7 @@ public class NewWorkbenchWizard extends Wizard implements INewWizard {
           .createWorkbench(workbenchName);
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", "Cannot create new workbench", e);
+      ErrorWriterDevice.getInstance().println(e);
       trace.out("performFinish()", false);
       return false;
     }

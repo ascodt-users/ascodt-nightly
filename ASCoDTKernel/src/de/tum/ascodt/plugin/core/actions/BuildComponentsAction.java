@@ -68,11 +68,7 @@ public class BuildComponentsAction implements IWorkbenchWindowActionDelegate {
           ProjectBuilder.getInstance().createProject(project);
           ProjectBuilder.getInstance().getProject(project).compileComponents();
         } catch (ASCoDTException e) {
-          ErrorWriterDevice.getInstance().showError(
-              getClass().getName(),
-              "prepareProject()",
-              "Cannot create project representation object due to " +
-                  e.getCause(), e);
+          ErrorWriterDevice.getInstance().println(e);
         }
 
       }
@@ -110,8 +106,7 @@ public class BuildComponentsAction implements IWorkbenchWindowActionDelegate {
                   this.selection.add(((IResource)file_element).getProject());
                 }
               } catch (CoreException e) {
-                ErrorWriterDevice.getInstance().showError(getClass().getName(),
-                    e.getLocalizedMessage(), e);
+                ErrorWriterDevice.getInstance().println(e);
               }
             }
           }
@@ -129,8 +124,7 @@ public class BuildComponentsAction implements IWorkbenchWindowActionDelegate {
             this.selection.add(((IResource)element).getProject());
           }
         } catch (CoreException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              e.getLocalizedMessage(), e);
+          ErrorWriterDevice.getInstance().println(e);
         }
       }
 
@@ -153,8 +147,7 @@ public class BuildComponentsAction implements IWorkbenchWindowActionDelegate {
           this.selection.add(((IResource)element).getProject());
         }
       } catch (CoreException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            e.getLocalizedMessage(), e);
+        ErrorWriterDevice.getInstance().println(e);
       }
     }
 

@@ -78,8 +78,7 @@ public class ASCoDTBuilderPropertyPage extends PropertyPage implements
         _includes.add(dep);
       }
     } catch (CoreException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "createContents()", "Compiler not configured correctly", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     Button importSidlButton = new Button(composite, SWT.BORDER);
     importSidlButton.setText("Import SIDL");
@@ -140,12 +139,10 @@ public class ASCoDTBuilderPropertyPage extends PropertyPage implements
           ProjectBuilder.getInstance().getProject(_project)
               .addSIDLDependency(_includes.getItem(i));
         } catch (CoreException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              "performOk()", "Compiler not configured correctly", e);
+          ErrorWriterDevice.getInstance().println(e);
           return false;
         } catch (ASCoDTException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              "performOk()", "Compiler not configured correctly", e);
+          ErrorWriterDevice.getInstance().println(e);
           return false;
         }
       }

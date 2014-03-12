@@ -52,9 +52,9 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
           .get(userImplementationsDestinationDirectory.toURI()).getParent()
           .resolve("cmake").toUri().toURL();
     } catch (MalformedURLException e) {
-      e.printStackTrace();
+      ErrorWriterDevice.getInstance().println(e);
     } catch (URISyntaxException e) {
-      e.printStackTrace();
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _generatedFilesDirectory = generatedFilesDirectory;
@@ -148,8 +148,7 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
 
       _templateFilesOfTargetsCxxCMakefile.peek().open();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -177,8 +176,7 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
       templateCMakefile.open();
       templateCMakefile.close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -200,8 +198,7 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
 
       _templateFilesOfTargetsCxxCMakefile.peek().close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _templateFilesOfCxxMakefile.pop();

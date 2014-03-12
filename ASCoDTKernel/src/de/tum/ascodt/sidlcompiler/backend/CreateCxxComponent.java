@@ -190,8 +190,7 @@ public class CreateCxxComponent extends DepthFirstAdapter {
       }
       _generateProvidesMethods = false;
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAClassPackageElement(...)", "open new port interface");
@@ -247,8 +246,7 @@ public class CreateCxxComponent extends DepthFirstAdapter {
       cxxImplementationTemplate.close();
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -298,8 +296,7 @@ public class CreateCxxComponent extends DepthFirstAdapter {
       templateImplementation.addMapping("__USES_PORT_TYPE__", portType);
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _trace.out("inAUses(AUses)");
   }
@@ -347,8 +344,7 @@ public class CreateCxxComponent extends DepthFirstAdapter {
       _templateFilesOfAbstractCXXImplementation.peek().close();
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _templateFilesOfCXXHeader.pop();

@@ -39,8 +39,7 @@ public class ConsoleStream extends MessageConsole implements OutputDevice {
           }
         }
         while (!_consoleMessages.isEmpty()) {
-          _consoleStream.println(_consoleMessages.poll());
-
+          _consoleStream.print(_consoleMessages.poll());
         }
       }
     }
@@ -65,10 +64,15 @@ public class ConsoleStream extends MessageConsole implements OutputDevice {
   }
 
   @Override
-  public void println(String line) {
-    _consoleMessages.add(line);
+  public void print(String string) {
+    _consoleMessages.add(string);
     synchronized (ConsoleStream.this) {
       ConsoleStream.this.notifyAll();
     }
+  }
+
+  @Override
+  public void println(String line) {
+    print(line + "\n");
   }
 }

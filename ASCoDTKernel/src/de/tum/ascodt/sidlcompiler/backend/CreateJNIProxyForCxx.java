@@ -112,8 +112,7 @@ public class CreateJNIProxyForCxx extends DepthFirstAdapter {
       }
       _generateProvidesMethods = false;
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAClassPackageElement(...)", "open new port interface");
@@ -172,8 +171,7 @@ public class CreateJNIProxyForCxx extends DepthFirstAdapter {
       jniProxyImplementationHeaderTemplate.close();
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -221,8 +219,7 @@ public class CreateJNIProxyForCxx extends DepthFirstAdapter {
       templateHeader.close();
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _trace.out("inAUses(AUses)");
   }
@@ -252,8 +249,7 @@ public class CreateJNIProxyForCxx extends DepthFirstAdapter {
       }
       _templateFilesOfJNIProxyImplementation.peek().close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _templateFilesOfJNIProxyHeader.pop();
     _templateFilesOfJNIProxyImplementation.pop();

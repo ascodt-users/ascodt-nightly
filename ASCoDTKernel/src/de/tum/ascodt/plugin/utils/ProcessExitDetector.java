@@ -34,8 +34,7 @@ public class ProcessExitDetector implements Runnable {
 
       _listeners.clear();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "notifyListeners()", "process finished error!", e);
+      ErrorWriterDevice.getInstance().println(e);
       e.printStackTrace();
     }
   }
@@ -52,8 +51,7 @@ public class ProcessExitDetector implements Runnable {
       notifyListeners(_process.waitFor());
     } catch (InterruptedException e) {
       notifyListeners(-1);
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "ProcessExitDetector", "process waitFor interrupted", e);
+      ErrorWriterDevice.getInstance().println(e);
 
     }
 

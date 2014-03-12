@@ -73,8 +73,7 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
     try {
       _templateFilesOfGlobalCMakeFile.peek().close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "closeOutputStreams(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _templateFilesOfGlobalCMakeFile.pop();
@@ -89,9 +88,9 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
           .get(userImplementedFilesDestinationDirectory.toURI()).getParent()
           .toUri().toURL();
     } catch (MalformedURLException e) {
-      e.printStackTrace();
+      ErrorWriterDevice.getInstance().println(e);
     } catch (URISyntaxException e) {
-      e.printStackTrace();
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     openOutputStreams(generatedFilesDestinationDirectory, projectDirectory,

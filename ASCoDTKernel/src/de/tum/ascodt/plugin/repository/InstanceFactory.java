@@ -147,29 +147,21 @@ public class InstanceFactory implements CreationFactory {
         _trace.out("getNewObject");
         return component;
       } catch (ClassNotFoundException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "getNewObject()", "Cannot load class " + classToLoad, e);
+        ErrorWriterDevice.getInstance().println(e);
       } catch (InstantiationException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "getNewObject()", "Cannot instantiate class " + classToLoad, e);
+        ErrorWriterDevice.getInstance().println(e);
       } catch (IllegalAccessException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "getNewObject()", "Cannot access class instance " + classToLoad, e);
+        ErrorWriterDevice.getInstance().println(e);
       } catch (IllegalArgumentException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "getNewObject()", "Cannot load class " + classToLoad, e);
+        ErrorWriterDevice.getInstance().println(e);
       } catch (SecurityException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "getNewObject()", "Cannot load class " + classToLoad, e);
+        ErrorWriterDevice.getInstance().println(e);
       } catch (InvocationTargetException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "getNewObject()", "Cannot load class " + classToLoad, e);
+        ErrorWriterDevice.getInstance().println(e);
       } catch (NoSuchMethodException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "getNewObject()", "Cannot load class " + classToLoad, e);
+        ErrorWriterDevice.getInstance().println(e);
       } catch (Error e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "getNewObject()", "Cannot load class " + classToLoad, e);
+        ErrorWriterDevice.getInstance().println(e);
         e.printStackTrace();
 
       }
@@ -225,26 +217,19 @@ public class InstanceFactory implements CreationFactory {
           .getLocation().toPortableString());
       gefComponent.setCCAComponent(application);
     } catch (ClassNotFoundException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "loadObject()", "Cannot load class " + classToLoad, e);
+      ErrorWriterDevice.getInstance().println(e);
     } catch (InstantiationException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "loadObject()", "Cannot instantiate class " + classToLoad, e);
+      ErrorWriterDevice.getInstance().println(e);
     } catch (IllegalAccessException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "loadObject()", "Cannot access class instance " + classToLoad, e);
+      ErrorWriterDevice.getInstance().println(e);
     } catch (IllegalArgumentException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "loadObject()", "Cannot load class " + classToLoad, e);
+      ErrorWriterDevice.getInstance().println(e);
     } catch (SecurityException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "loadObject()", "Cannot load class " + classToLoad, e);
+      ErrorWriterDevice.getInstance().println(e);
     } catch (InvocationTargetException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "loadObject()", "Cannot load class " + classToLoad, e);
+      ErrorWriterDevice.getInstance().println(e);
     } catch (NoSuchMethodException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "loadObject()", "Cannot load class " + classToLoad, e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _trace.out("loadObject");
   }

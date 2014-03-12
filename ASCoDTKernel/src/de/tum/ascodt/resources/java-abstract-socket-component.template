@@ -164,7 +164,6 @@ public class SocketComponent
 
      @Override
      public void failed(Throwable exc, Object attachment) {
-          //de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().showError(fullQualifiedClassName, methodName, message) 
      }
 
      protected void sendIntData(int data) throws de.tum.ascodt.utils.exceptions.ASCoDTException {
@@ -533,12 +532,7 @@ public class SocketComponent
                }
                _group.shutdownNow();
           }catch (Exception e) {
-               de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().showError(
-                SocketComponent.class.getCanonicalName(),
-                 "close()",
-                 "close exception()"+e.getMessage()
-                
-               );
+               de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().println(e);
           }
      }
 

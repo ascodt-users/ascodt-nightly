@@ -67,8 +67,7 @@ public class NewComponentUIWizard extends Wizard implements INewWizard {
           .createUserInterface(componentInterface);
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", "Cannot create new component", e);
+      ErrorWriterDevice.getInstance().println(e);
       trace.out("performFinish()", false);
       return false;
     }

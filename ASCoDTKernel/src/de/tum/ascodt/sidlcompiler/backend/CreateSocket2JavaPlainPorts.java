@@ -118,8 +118,7 @@ public class CreateSocket2JavaPlainPorts extends DepthFirstAdapter {
 
       }
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAInterfacePackageElement(...)", "open new port interface");
@@ -169,8 +168,7 @@ public class CreateSocket2JavaPlainPorts extends DepthFirstAdapter {
       // templateJava.open();
       // templateJava.close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAOperation(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAOperation(...)");
@@ -210,8 +208,7 @@ public class CreateSocket2JavaPlainPorts extends DepthFirstAdapter {
         _templateJavaSocket2Socket.peek().close();
         _templateJava2Scoket.peek().close();
       } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "inAInterfacePackageElement(...)", e);
+        ErrorWriterDevice.getInstance().println(e);
       }
       _templateJavaSocket2Socket.pop();
       _templateJava2Scoket.pop();

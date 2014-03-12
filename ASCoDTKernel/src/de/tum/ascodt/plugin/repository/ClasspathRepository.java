@@ -96,11 +96,9 @@ public class ClasspathRepository extends URLClassLoader {
 
       }
     } catch (JavaModelException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", e);
+      ErrorWriterDevice.getInstance().println(e);
     } catch (MalformedURLException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     Class<?> cl = null;
     try {
@@ -110,8 +108,7 @@ public class ClasspathRepository extends URLClassLoader {
 
     } catch (Exception e) {
 
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "findClass()", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     return cl;
   }

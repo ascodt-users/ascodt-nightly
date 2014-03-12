@@ -34,15 +34,11 @@ public class VTKService {
           initView();
           getVTKView().addObserver(event, target, method);
         } catch (PartInitException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              "getVTKView()", "vtk view cannot be initialized", e);
+          ErrorWriterDevice.getInstance().println(e);
         } catch (InterruptedException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              "addPipeline()", "vtk view waitng thread interrupted", e);
+          ErrorWriterDevice.getInstance().println(e);
         } catch (ASCoDTException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              "removePipeline()",
-              "Cannot remove the vtk pipeline from the view", e);
+          ErrorWriterDevice.getInstance().println(e);
         }
       }
 
@@ -66,14 +62,11 @@ public class VTKService {
           getVTKView().addPipeline(pipeline);
           repaint();
         } catch (PartInitException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              "getVTKView()", "vtk view cannot be initialized", e);
+          ErrorWriterDevice.getInstance().println(e);
         } catch (InterruptedException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              "addPipeline()", "vtk view waitng thread interrupted", e);
+          ErrorWriterDevice.getInstance().println(e);
         } catch (ASCoDTException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              "addPipeline()", "Cannot add new pipeline", e);
+          ErrorWriterDevice.getInstance().println(e);
         }
       }
 
@@ -143,15 +136,11 @@ public class VTKService {
   }
 
   public void lock() {
-
     try {
       getVTKView().lock();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance()
-          .showError(getClass().getName(), "removePipeline()",
-              "Cannot remove the vtk pipeline from the view", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
-
   }
 
   public void registerPipelineForPicking(final VTKPipeline pipe) {
@@ -164,9 +153,7 @@ public class VTKService {
 
           getVTKView().registerPipelineForPicking(pipe);
         } catch (ASCoDTException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              "removePipeline()",
-              "Cannot remove the vtk pipeline from the view", e);
+          ErrorWriterDevice.getInstance().println(e);
         } catch (PartInitException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
@@ -184,30 +171,22 @@ public class VTKService {
    * @param vtkProp
    */
   public void removePipeline(final vtkProp vtkProp) {
-
     try {
       getVTKView().removePipeline(vtkProp);
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance()
-          .showError(getClass().getName(), "removePipeline()",
-              "Cannot remove the vtk pipeline from the view", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
-
   }
 
   /**
    * repaint a specific vtk view
    */
   public void repaint() {
-
     try {
       getVTKView().render();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance()
-          .showError(getClass().getName(), "removePipeline()",
-              "Cannot remove the vtk pipeline from the view", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
-
   }
 
   public void setView(VTKView view) {
@@ -215,24 +194,18 @@ public class VTKService {
   }
 
   public void unlock() {
-
     try {
       getVTKView().unlock();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance()
-          .showError(getClass().getName(), "removePipeline()",
-              "Cannot remove the vtk pipeline from the view", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
-
   }
 
   public void unregisterPipelineForPicking(VTKPipeline pipe) {
     try {
       getVTKView().unregisterPipelineForPicking(pipe);
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance()
-          .showError(getClass().getName(), "removePipeline()",
-              "Cannot remove the vtk pipeline from the view", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 }

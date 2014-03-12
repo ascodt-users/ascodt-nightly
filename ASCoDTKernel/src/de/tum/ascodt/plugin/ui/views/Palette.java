@@ -200,8 +200,7 @@ public class Palette extends ViewPart implements RepositoryListener,
       try {
         getProject().removeComponent(componentName);
       } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "deleteSelectedItem()", "Cannot add component to palette", e);
+        ErrorWriterDevice.getInstance().println(e);
 
       }
     }
@@ -267,8 +266,7 @@ public class Palette extends ViewPart implements RepositoryListener,
                       Palette.this.getProject(), componentInterface, target),
                   null, null));
         } catch (ASCoDTException e) {
-          ErrorWriterDevice.getInstance().showError(getClass().getName(),
-              "notify()", "Cannot add component to palette", e);
+          ErrorWriterDevice.getInstance().println(e);
 
         }
       }

@@ -149,8 +149,7 @@ public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
         _templateFilesImplementation.peek().open();
       }
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAInterfacePackageElement(...)", "open new port interface");
@@ -207,8 +206,7 @@ public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
       templateJava.open();
       templateJava.close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAOperation(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAOperation(...)");
@@ -237,8 +235,7 @@ public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
         _templateFilesHeader.peek().close();
         _templateFilesImplementation.peek().close();
       } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "inAInterfacePackageElement(...)", e);
+        ErrorWriterDevice.getInstance().println(e);
       }
 
       _templateJava.pop();

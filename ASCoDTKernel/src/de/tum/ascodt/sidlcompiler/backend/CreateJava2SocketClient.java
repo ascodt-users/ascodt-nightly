@@ -151,8 +151,7 @@ public class CreateJava2SocketClient extends DepthFirstAdapter {
       _generateProvidesMethods = false;
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAClassPackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAClassPackageElement(...)", "open new port interface");
@@ -189,8 +188,7 @@ public class CreateJava2SocketClient extends DepthFirstAdapter {
       javaImplementationTemplate.close();
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -241,8 +239,7 @@ public class CreateJava2SocketClient extends DepthFirstAdapter {
       template.open();
       template.close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _trace.out("inAUses(AUses)");
   }
@@ -260,8 +257,7 @@ public class CreateJava2SocketClient extends DepthFirstAdapter {
       _templateFilesForJavaImplementation.peek().close();
       _templateFilesForJavaBasisImplementation.peek().close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _templateFilesForAbstractComponent.pop();

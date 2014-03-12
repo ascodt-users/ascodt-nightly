@@ -265,22 +265,16 @@ public class Component extends Geometry implements IPropertySource {
         }
         _connections.put(connection, usePort);
       } else {
-        ErrorWriterDevice.getInstance().showError(
-            getClass().getName(),
-            "handleConnect()",
-            "Cannot create connection between " + source.getReference() + ":" +
-                source.getComponentName() + " and " + target.getReference() +
-                ":" + target.getComponentName() +
-                "!\nTarget not specified in sidl", null);
+        ErrorWriterDevice.getInstance().println(
+            "Cannot create connection between" + " " + "`" +
+                source.getReference() + ":" + source.getComponentName() + "'" +
+                " " + "and" + " " + "`" + target.getReference() + ":" +
+                target.getComponentName() + "'" + "!" + " " +
+                "Target is not specified in SIDL.");
         return false;
       }
     } catch (Exception e) {
-      ErrorWriterDevice.getInstance().showError(
-          getClass().getName(),
-          "handleConnect()",
-          "Cannot create connection between " + source.getReference() + ":" +
-              source.getComponentName() + " and " + target.getReference() +
-              ":" + target.getComponentName(), e);
+      ErrorWriterDevice.getInstance().println(e);
       return false;
 
     }
@@ -327,12 +321,11 @@ public class Component extends Geometry implements IPropertySource {
         }
         _connections.remove(connection);
       } catch (Exception e) {
-        ErrorWriterDevice.getInstance().showError(
-            getClass().getName(),
-            "handleDisconnect()",
-            "Cannot delete connection between " + source.getReference() + ":" +
-                source.getComponentName() + " and " + target.getReference() +
-                ":" + target.getComponentName(), e);
+        ErrorWriterDevice.getInstance().println(
+            "Cannot delete connection between" + " " + "`" +
+                source.getReference() + ":" + source.getComponentName() + "'" +
+                " " + "and" + " " + "`" + target.getReference() + ":" +
+                target.getComponentName() + "'" + "!");
         return false;
       }
 

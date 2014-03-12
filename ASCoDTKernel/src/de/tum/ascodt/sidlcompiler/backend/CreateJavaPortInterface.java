@@ -173,8 +173,7 @@ public class CreateJavaPortInterface extends DepthFirstAdapter {
         _templateDispatcherSocketFiles.peek().open();
       }
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAInterfacePackageElement(...)", "open new port interface");
@@ -233,8 +232,7 @@ public class CreateJavaPortInterface extends DepthFirstAdapter {
       templateDispatcherOpertion.open();
       templateDispatcherOpertion.close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAOperation(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAOperation(...)");
@@ -263,8 +261,7 @@ public class CreateJavaPortInterface extends DepthFirstAdapter {
         _templateDispatcherNativeFiles.peek().close();
         _templateDispatcherSocketFiles.peek().close();
       } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "inAInterfacePackageElement(...)", e);
+        ErrorWriterDevice.getInstance().println(e);
       }
       _templateDispatcherFiles.pop();
       _templateInterfaceFiles.pop();

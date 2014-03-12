@@ -81,11 +81,7 @@ public class ProjectResourceDeltaListener implements IResourceDeltaVisitor {
 
       }
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(
-          getClass().getName(),
-          "visit(..)",
-          "Cannot compile resource " +
-              delta.getResource().getLocation().toPortableString(), e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _trace.out("visit()", delta.toString());
     return true;

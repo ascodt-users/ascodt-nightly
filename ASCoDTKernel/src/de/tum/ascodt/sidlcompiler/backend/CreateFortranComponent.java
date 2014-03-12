@@ -124,8 +124,7 @@ public class CreateFortranComponent extends DepthFirstAdapter {
       }
       _generateProvidesMethods = false;
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAClassPackageElement(...)", "open new port interface");
@@ -157,8 +156,7 @@ public class CreateFortranComponent extends DepthFirstAdapter {
       _subTemplates.push(template);
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -211,8 +209,7 @@ public class CreateFortranComponent extends DepthFirstAdapter {
           .addMapping("__USES_PORT_TYPE__", portType.replaceAll("\\.", "_"));
       _templateFilesForAbstractUsesPorts.add(template);
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _trace.out("inAUses(AUses)");
   }
@@ -255,8 +252,7 @@ public class CreateFortranComponent extends DepthFirstAdapter {
       _templateFilesOfFortranImplementation.peek().close();
       _templateFilesOfAbstractFortranImplementation.peek().close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _templateFilesOfFortranImplementation.pop();

@@ -120,8 +120,7 @@ public class CreateJavaFortranNativeComponent extends DepthFirstAdapter {
       }
       _generateProvidesMethods = false;
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAClassPackageElement(...)", "open new port interface");
@@ -168,8 +167,7 @@ public class CreateJavaFortranNativeComponent extends DepthFirstAdapter {
       javaImplementationTemplate.close();
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -209,8 +207,7 @@ public class CreateJavaFortranNativeComponent extends DepthFirstAdapter {
       template.open();
       template.close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _trace.out("inAUses(AUses)");
   }
@@ -226,8 +223,7 @@ public class CreateJavaFortranNativeComponent extends DepthFirstAdapter {
       _templateFilesOfAbstractImplementation.peek().close();
       _templateFilesOfPlainImplementation.peek().close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _templateFilesOfAbstractImplementation.pop();

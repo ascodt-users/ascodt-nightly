@@ -83,8 +83,7 @@ public class WorkbenchEditor extends GraphicalEditor {
       System.out.println("closing editor");
 
     } catch (Exception e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "initializeGraphicalViewer()", "Cannot open palette view", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -372,11 +371,9 @@ public class WorkbenchEditor extends GraphicalEditor {
       file.refreshLocal(0, null);
       loadComponents(file);
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "setInput()", e.getLocalizedMessage(), e);
+      ErrorWriterDevice.getInstance().println(e);
     } catch (CoreException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "setInput()", e.getLocalizedMessage(), e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     if (_diagram == null) {
       _diagram = new Diagram();

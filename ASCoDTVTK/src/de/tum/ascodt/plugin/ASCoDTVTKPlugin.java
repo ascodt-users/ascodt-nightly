@@ -53,8 +53,7 @@ public class ASCoDTVTKPlugin extends AbstractUIPlugin {
         method.invoke(clazz, emptyObject);
       }
     } catch (Throwable e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 

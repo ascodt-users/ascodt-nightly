@@ -115,8 +115,7 @@ public class CreateJavaComponentInterface extends DepthFirstAdapter {
 
       _templateFiles.peek().open();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAClassPackageElement(...)");
@@ -146,8 +145,7 @@ public class CreateJavaComponentInterface extends DepthFirstAdapter {
       template.open();
       template.close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _trace.out("inAUses(AUses)");
   }
@@ -162,8 +160,7 @@ public class CreateJavaComponentInterface extends DepthFirstAdapter {
     try {
       _templateFiles.peek().close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "outAClassPackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _templateFiles.pop();

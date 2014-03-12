@@ -41,8 +41,7 @@ public class BuildComponentsHandler extends AbstractHandler {
         }
       }
     } catch (CoreException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "execute()", "Cannot compile components", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     return null;
 

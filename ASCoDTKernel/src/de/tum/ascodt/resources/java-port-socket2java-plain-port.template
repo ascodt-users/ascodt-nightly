@@ -93,14 +93,7 @@ public class __PORT_NAME__Socket2JavaPlainPort extends __PORT_NAME__AbstractSock
           }
          
      }catch(Exception e){
-          
-          
-          de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().showError(
-            __PORT_NAME__Socket2JavaPlainPort.class.getCanonicalName(),
-            "run()",
-            "Operation fetching error:"+e.getMessage()
-           
-          );
+          de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().println(e);
      }
      super.close();
   }

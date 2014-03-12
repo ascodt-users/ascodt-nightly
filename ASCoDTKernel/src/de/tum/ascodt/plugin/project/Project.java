@@ -440,8 +440,7 @@ public class Project {
       jProject.getProject().build(IncrementalProjectBuilder.FULL_BUILD,
           "org.eclipse.jdt.core.javabuilder", null, null);
     } catch (CoreException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "compileComponents()", e.getLocalizedMessage(), e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
   }

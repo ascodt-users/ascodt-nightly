@@ -68,8 +68,7 @@ public class CreatePlainJavaPorts extends DepthFirstAdapter {
         _templateFiles.peek().open();
       }
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAInterfacePackageElement(...)", "open new port interface");
@@ -111,8 +110,7 @@ public class CreatePlainJavaPorts extends DepthFirstAdapter {
       template.open();
       template.close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAOperation(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAOperation(...)");
@@ -139,8 +137,7 @@ public class CreatePlainJavaPorts extends DepthFirstAdapter {
 
         _templateFiles.peek().close();
       } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "inAInterfacePackageElement(...)", e);
+        ErrorWriterDevice.getInstance().println(e);
       }
 
       _templateFiles.pop();

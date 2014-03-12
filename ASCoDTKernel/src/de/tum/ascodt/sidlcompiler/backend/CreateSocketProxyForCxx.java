@@ -120,8 +120,7 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
       }
       _generateProvidesMethods = false;
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAClassPackageElement(...)", "open new port interface");
@@ -174,8 +173,7 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
       _templateFilesProvidesPorts.add(c2CxxProxyImplementationTemplate);
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -235,8 +233,7 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
           _offset_map.get(fullQualifiedpPortType + "disconnectPort") +
           "]=invoker_disconnect_client_dispatcher_" + portName + ";\n");
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAUses(AUses)");
@@ -284,8 +281,7 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
       _templateFilesOfC2CxxProxyImplementation.peek().close();
       _templateFilesOfC2CxxProxyHeader.peek().close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _templateFilesOfC2CxxProxyImplementation.pop();
     _templateFilesOfC2CxxProxyHeader.pop();

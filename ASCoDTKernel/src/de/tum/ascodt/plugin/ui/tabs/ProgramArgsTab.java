@@ -210,8 +210,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
             }
             reader.close();
           } catch (IOException e) {
-            ErrorWriterDevice.getInstance().showError(getClass().getName(),
-                e.getLocalizedMessage(), e);
+            ErrorWriterDevice.getInstance().println(e);
           }
 
         }
@@ -230,8 +229,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
             }
             reader.close();
           } catch (IOException e) {
-            ErrorWriterDevice.getInstance().showError(getClass().getName(),
-                e.getLocalizedMessage(), e);
+            ErrorWriterDevice.getInstance().println(e);
           }
 
         }
@@ -243,8 +241,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
       if (_process != null) {
         _process.destroy();
       }
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          e.getLocalizedMessage(), e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 

@@ -322,8 +322,7 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
         _templateFilesCProxy4SocketDispatcher.peek().open();
         // _templateFilesFortranSocketDispatcher.peek().open();
       } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "inAInterfacePackageElement(...)", e);
+        ErrorWriterDevice.getInstance().println(e);
       }
 
       _trace.out("inAInterfacePackageElement(...)", "open new port interface");
@@ -456,8 +455,7 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
       // _fortranOperationsTemplateFiles
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAOperation(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAOperation(...)");
@@ -512,8 +510,7 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
         _templateFilesFortranProxy4SocketDispatcher.peek().close();
         _templateFilesCProxy4SocketDispatcher.peek().close();
       } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "inAInterfacePackageElement(...)", e);
+        ErrorWriterDevice.getInstance().println(e);
       }
 
       _templateFilesInterface.pop();

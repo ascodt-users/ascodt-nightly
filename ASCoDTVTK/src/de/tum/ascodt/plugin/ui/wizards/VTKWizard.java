@@ -94,20 +94,16 @@ public class VTKWizard extends Wizard implements INewWizard {
       templateFile.close();
 
     } catch (CoreException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", "Cannot create new vtk pipeline", e);
+      ErrorWriterDevice.getInstance().println(e);
       trace.out("performFinish()", false);
     } catch (MalformedURLException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", "Cannot create new vtk pipeline", e);
+      ErrorWriterDevice.getInstance().println(e);
       trace.out("performFinish()", false);
     } catch (IOException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", "Cannot create new vtk pipeline", e);
+      ErrorWriterDevice.getInstance().println(e);
       trace.out("performFinish()", false);
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", "Cannot create new vtk pipeline", e);
+      ErrorWriterDevice.getInstance().println(e);
       trace.out("performFinish()", false);
       return false;
     }

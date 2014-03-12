@@ -123,8 +123,7 @@ public class CreateSocketProxyForFortran extends DepthFirstAdapter {
       }
       _generateProvidesMethods = false;
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAClassPackageElement(...)", "open new port interface");
@@ -237,8 +236,7 @@ public class CreateSocketProxyForFortran extends DepthFirstAdapter {
       _templateFilesProvidesPorts.add(c2FProxyImplementationTemplate);
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -308,8 +306,7 @@ public class CreateSocketProxyForFortran extends DepthFirstAdapter {
           _offset_map.get(fullQualifiedpPortType + "disconnectPort") +
           "]=invoker_disconnect_client_dispatcher_" + portName + ";\n");
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAUses(AUses)");
@@ -365,8 +362,7 @@ public class CreateSocketProxyForFortran extends DepthFirstAdapter {
       _templateFilesOfFortranProxyImplementation.peek().close();
 
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     _templateFilesOfFortranProxyImplementation.pop();
     _templateFilesOfC2FProxyImplementation.pop();

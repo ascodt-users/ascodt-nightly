@@ -276,8 +276,7 @@ public class CreateNative2SocketPlainPorts extends DepthFirstAdapter {
         _templateFPortProxy.peek().open();
       }
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAInterfacePackageElement(...)", "open new port interface");
@@ -425,8 +424,7 @@ public class CreateNative2SocketPlainPorts extends DepthFirstAdapter {
       // templateJava.open();
       // templateJava.close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAOperation(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _trace.out("inAOperation(...)");
@@ -466,8 +464,7 @@ public class CreateNative2SocketPlainPorts extends DepthFirstAdapter {
         _templateFPort.peek().close();
         _templateFPortProxy.peek().close();
       } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().showError(getClass().getName(),
-            "inAInterfacePackageElement(...)", e);
+        ErrorWriterDevice.getInstance().println(e);
       }
 
       _templateCxxFilesHeader.pop();

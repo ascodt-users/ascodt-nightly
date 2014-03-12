@@ -84,15 +84,10 @@ public class ASCoDTKernel extends AbstractUIPlugin {
     initializeProjects();
     // for uncaught exceptions
     Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-
       @Override
       public void uncaughtException(Thread t, Throwable e) {
-        ErrorWriterDevice.getInstance().showError(
-            UncaughtExceptionHandler.class.getCanonicalName(),
-            "uncaughtException(Thread,Throwable", e);
-
+        ErrorWriterDevice.getInstance().println(e);
       }
-
     });
 
   }
@@ -116,8 +111,7 @@ public class ASCoDTKernel extends AbstractUIPlugin {
           FileLocator.find(Platform.getBundle(ASCoDTKernel.ID), new Path(
               hasBinFolder ? "bin" : ""), null)).getPath();
     } catch (IOException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
     return "";
   }
@@ -183,12 +177,7 @@ public class ASCoDTKernel extends AbstractUIPlugin {
                 try {
                   prepareProject((IProject)event.resource);
                 } catch (ASCoDTException e) {
-                  ErrorWriterDevice.getInstance().showError(
-                      getClass().getName(),
-                      "prepareProject()",
-                      "Cannot create project representation object due to " +
-                          e.getCause(), e);
-
+                  ErrorWriterDevice.getInstance().println(e);
                 }
               } else if (event.kind == LifecycleEvent.PRE_PROJECT_CLOSE) {
                 ProjectBuilder.getInstance()
@@ -226,9 +215,7 @@ public class ASCoDTKernel extends AbstractUIPlugin {
       }
       // return Status.OK_STATUS;
     } catch (CoreException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "initializeProjects()",
-          "Cannot initialize an existing project:" + e.getCause(), e);
+      ErrorWriterDevice.getInstance().println(e);
       // return Status.CANCEL_STATUS;
     }
     // }
@@ -238,17 +225,11 @@ public class ASCoDTKernel extends AbstractUIPlugin {
     // try {
     // job.wait();
     // } catch (InterruptedException e) {
-    // ErrorWriterDevice.getInstance().showError( getClass().getName(),
-    // "initializeProjects()", "Cannot initialize an existing project:" +
-    // e.getCause(), e );
+    // ErrorWriterDevice.getInstance().println(e);
     //
     // }
     catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "initializeProjects()",
-          "Cannot create project representation object due to " + e.getCause(),
-          e);
-
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -273,8 +254,7 @@ public class ASCoDTKernel extends AbstractUIPlugin {
         method.invoke(clazz, emptyObject);
       }
     } catch (Throwable e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "performFinish()", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
   }

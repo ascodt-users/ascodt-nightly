@@ -137,8 +137,7 @@ public class CreateFortranBuildScripts extends DepthFirstAdapter {
       _templateFilesOfSourcesFortranCMakefile.peek().open();
       _templateFilesOfTargetsFortranCMakefile.peek().open();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -166,8 +165,7 @@ public class CreateFortranBuildScripts extends DepthFirstAdapter {
       templateCMakefile.open();
       templateCMakefile.close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -188,8 +186,7 @@ public class CreateFortranBuildScripts extends DepthFirstAdapter {
       _templateFilesOfSourcesFortranCMakefile.peek().close();
       _templateFilesOfTargetsFortranCMakefile.peek().close();
     } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().showError(getClass().getName(),
-          "inAInterfacePackageElement(...)", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
     _templateFilesOfFortranMakefile.pop();

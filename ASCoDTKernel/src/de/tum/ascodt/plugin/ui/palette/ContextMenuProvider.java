@@ -114,9 +114,7 @@ public class ContextMenuProvider extends PaletteContextMenuProvider {
                   Exporter.exportBinary(selectedEntry.getLabel(), destination,
                       _palette.getProject().getEclipseProjectHandle());
                 } catch (ASCoDTException e) {
-                  ErrorWriterDevice.getInstance().showError(
-                      getClass().getName(), "createExportComponentAction()",
-                      "Cannot export component binaries", e);
+                  ErrorWriterDevice.getInstance().println(e);
 
                 }
 
@@ -154,9 +152,7 @@ public class ContextMenuProvider extends PaletteContextMenuProvider {
             Importer.importBinary(source, _palette.getProject()
                 .getEclipseProjectHandle());
           } catch (ASCoDTException e) {
-            ErrorWriterDevice.getInstance().showError(getClass().getName(),
-                "createExportComponentAction()",
-                "Cannot export component binaries", e);
+            ErrorWriterDevice.getInstance().println(e);
 
           }
         }
