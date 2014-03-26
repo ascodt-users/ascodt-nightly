@@ -56,6 +56,9 @@ public class ProjectBuilder extends PlatformObject {
   public static final String ASCODT_FILE_EXTENSION = ".ascodt";
 
   static private ProjectBuilder _singleton = new ProjectBuilder();
+<<<<<<< HEAD
+  private ArrayList<ProjectsListener> _listeners;
+=======
   /**
    * id of the problem markers of ASCoDT. The problems markers are used to
    * denote
@@ -64,6 +67,7 @@ public class ProjectBuilder extends PlatformObject {
    * They show the position in the file, where the error has occurred.
    */
   public static final String PROBLEM_MARKER_ID = "de.tum.ascodt.plugin.project.markers.ASCoDTProblemMarker";
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
 
   /**
    * setup the project nature, so that the ascodt project can be identified as
@@ -191,10 +195,27 @@ public class ProjectBuilder extends PlatformObject {
     _eclipseProjectToProjectMap.put(eclipseProject, newProject);
     newProject.buildProjectSources();
     notiflyAllListeners();
-    newProject.resetStaticRepository();
     trace.out("createProject(...)");
   }
 
+<<<<<<< HEAD
+  public void registerListener(ProjectsListener listener) {
+    Assert.isTrue(!_listeners.contains(listener));
+    _listeners.add(listener);
+  }
+
+  public void removeListener(ProjectsListener listener) {
+    Assert.isTrue(_listeners.contains(listener));
+    _listeners.remove(listener);
+  }
+
+  private void notiflyAllListeners() {
+    for (ProjectsListener listner : _listeners)
+      listner.projectsChanged();
+  }
+
+=======
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
   /**
    * This method creates an ASCoDT project, and setups the main file structure
    * and natures setup of the project.

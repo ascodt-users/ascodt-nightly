@@ -41,8 +41,13 @@ public class CreateComponentsAndInterfaces {
       URL userImplementedFilesDestinationDirectory,
       URL nativeDestinationDirectory) {
     _trace.in("create(...)", generatedFilesDestinationDirectory.toString());
+<<<<<<< HEAD
+    java.util.HashMap<String, Integer> offset_map = new java.util.HashMap<String, Integer>();
+    for (de.tum.ascodt.sidlcompiler.frontend.node.AEnumDeclarationPackageElement enumeration : _symbolTable
+=======
     HashMap<String, Integer> offset_map = new HashMap<String, Integer>();
     for (AEnumDeclarationPackageElement enumeration : _symbolTable
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
         .getGlobalScope().getFlattenedEnumsElements()) {
       CreateJavaAndCxxEnumeration createJavaEnumeration = new CreateJavaAndCxxEnumeration(
           _symbolTable,
@@ -56,8 +61,13 @@ public class CreateComponentsAndInterfaces {
 
     generatePorts(generatedFilesDestinationDirectory, offset_map);
     try {
+<<<<<<< HEAD
+      for (de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement component : _symbolTable
+          .getGlobalScope().getFlattenedClassElements()) {
+=======
       for (AClassPackageElement component : _symbolTable.getGlobalScope()
           .getFlattenedClassElements()) {
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
         CreateSocketComponent socketComponent = new CreateSocketComponent(
             generatedFilesDestinationDirectory, _symbolTable
                 .getScope(component).getFullIdentifierOfPackage());
@@ -127,6 +137,32 @@ public class CreateComponentsAndInterfaces {
               .getFullQualifiedNameOfTheComponentImplementation();
         } else if (component.getTarget() != null &&
             Target.isCxxRemoteSocket(component.getTarget().getText())) {
+          CreateJava2SocketServer createJave2SocketServer = new CreateJava2SocketServer(
+              _symbolTable, userImplementedFilesDestinationDirectory,
+              generatedFilesDestinationDirectory, nativeDestinationDirectory,
+              _symbolTable.getScope(component).getFullIdentifierOfPackage(),
+              offset_map);
+          CreateCxxComponent createCxxComponent = new CreateCxxComponent(
+              _symbolTable, userImplementedFilesDestinationDirectory,
+              generatedFilesDestinationDirectory, _symbolTable.getScope(
+                  component).getFullIdentifierOfPackage());
+          CreateSocketProxyForCxx createSocketServerProxy = new CreateSocketProxyForCxx(
+              _symbolTable, userImplementedFilesDestinationDirectory,
+              generatedFilesDestinationDirectory, _symbolTable.getScope(
+                  component).getFullIdentifierOfPackage(), offset_map);
+          // CreateSocketProxyForCxx createCxxSocketServerComponent = new
+          // CreateSocketServerProxyForCxx(
+          // _symbolTable,
+          // userImplementedFilesDestinationDirectory,
+          // generatedFilesDestinationDirectory,
+          // _symbolTable.getScope(component).getFullIdentifierOfPackage(),
+          // offset_map
+          // );
+          // component.apply( createCxxSocketServerComponent );
+          component.apply(createCxxComponent);
+          implementationClassName = "TBD";
+        } else if (component.getTarget() != null &&
+            Target.isReverseCxxRemoteSocket(component.getTarget().getText())) {
           CreateJava2SocketClient createJave2SocketClient = new CreateJava2SocketClient(
               _symbolTable, userImplementedFilesDestinationDirectory,
               generatedFilesDestinationDirectory, nativeDestinationDirectory,
@@ -151,7 +187,33 @@ public class CreateComponentsAndInterfaces {
           component.apply(createMakefile);
 
         } else if (component.getTarget() != null &&
-          Target.isFortranRemoteSocket(component.getTarget().getText())) {
+            Target.isFortranRemoteSocket(component.getTarget().getText())) {
+          CreateJava2SocketClient createJave2SocketClient = new CreateJava2SocketClient(
+              _symbolTable, userImplementedFilesDestinationDirectory,
+              generatedFilesDestinationDirectory, nativeDestinationDirectory,
+              _symbolTable.getScope(component).getFullIdentifierOfPackage(),
+              offset_map, "Fortran");
+          CreateFortranComponent createFortranComponent = new CreateFortranComponent(
+              _symbolTable, userImplementedFilesDestinationDirectory,
+              generatedFilesDestinationDirectory, _symbolTable.getScope(
+                  component).getFullIdentifierOfPackage());
+          CreateSocketProxyForFortran createSocketServerProxy = new CreateSocketProxyForFortran(
+              _symbolTable, userImplementedFilesDestinationDirectory,
+              generatedFilesDestinationDirectory, _symbolTable.getScope(
+                  component).getFullIdentifierOfPackage(), offset_map);
+          CreateFortranBuildScripts createBuildscripts = new CreateFortranBuildScripts(
+              Target.createTarget(component.getTarget().getText()),
+              _symbolTable, userImplementedFilesDestinationDirectory,
+              generatedFilesDestinationDirectory, nativeDestinationDirectory,
+              _symbolTable.getScope(component).getFullIdentifierOfPackage());
+          component.apply(createJave2SocketClient);
+          component.apply(createSocketServerProxy);
+          component.apply(createFortranComponent);
+          component.apply(createBuildscripts);
+          implementationClassName = "TBD";
+        } else if (component.getTarget() != null &&
+            Target
+                .isReverseFortranRemoteSocket(component.getTarget().getText())) {
           CreateJava2SocketClient createJave2SocketClient = new CreateJava2SocketClient(
               _symbolTable, userImplementedFilesDestinationDirectory,
               generatedFilesDestinationDirectory, nativeDestinationDirectory,
@@ -198,9 +260,15 @@ public class CreateComponentsAndInterfaces {
    * @param offset_map
    */
   public void generatePorts(URL generatedFilesDestinationDirectory,
+<<<<<<< HEAD
+      java.util.HashMap<String, Integer> offset_map) {
+    for (de.tum.ascodt.sidlcompiler.frontend.node.AInterfacePackageElement port : _symbolTable
+        .getGlobalScope().getFlattenedInterfaceElements()) {
+=======
       HashMap<String, Integer> offset_map) {
     for (AInterfacePackageElement port : _symbolTable.getGlobalScope()
         .getFlattenedInterfaceElements()) {
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
       // 1. java interfaces for the ports
       CreateJavaPortInterface createJavaPortInterfaces = new CreateJavaPortInterface(
           _symbolTable, generatedFilesDestinationDirectory, _symbolTable

@@ -176,7 +176,7 @@ public class Project {
     createWorkspace();
     createJavaFolders();
     readProjectFile();
-    resetStaticRepository(); 
+
     _trace.out("Project(...)", eclipseProjectHandle.getName());
   }
 
@@ -286,6 +286,27 @@ public class Project {
     }
   }
 
+<<<<<<< HEAD
+  private void evaluateContributions(IExtensionRegistry registry,
+      Set<IClasspathEntry> classpathEntries) throws CoreException,
+      ASCoDTException {
+    IConfigurationElement[] config = registry
+        .getConfigurationElementsFor(de.tum.ascodt.plugin.extensions.Project.ID);
+
+    for (IConfigurationElement e : config) {
+
+      final Object o = e.createExecutableExtension("class");
+      if (o != null && o instanceof de.tum.ascodt.plugin.extensions.Project) {
+        _trace.debug("evaluateContributions()", "executing a contribution");
+        ((de.tum.ascodt.plugin.extensions.Project)o)
+            .addClasspathEntries(classpathEntries);
+      }
+    }
+
+  }
+
+=======
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
   /**
    * adds a new dependency to the project. The add operation has two phases:
    * 1. code generation with the sidl compiler
@@ -676,9 +697,8 @@ public class Project {
    */
   private void createSource() throws ASCoDTException {
     IFolder srcFolder = _eclipseProjectHandle.getFolder(getSourcesFolder());
-   
+
     try {
-      srcFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
       if (!srcFolder.exists()) {
         createParentFolders(srcFolder);
       }
@@ -793,9 +813,7 @@ public class Project {
     IFolder workspaceFolder = _eclipseProjectHandle
         .getFolder(getWorkspaceFolder());
     try {
-      workspaceFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
-      if(!workspaceFolder.exists())
-        createParentFolders(workspaceFolder);
+      createParentFolders(workspaceFolder);
       _folders.add(workspaceFolder);
     } catch (CoreException e) {
       throw new ASCoDTException(getClass().getName(), "createWorkspace()",

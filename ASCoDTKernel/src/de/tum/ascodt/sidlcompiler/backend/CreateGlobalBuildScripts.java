@@ -13,6 +13,7 @@ import java.util.Stack;
 import org.eclipse.core.runtime.Assert;
 
 import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
+import de.tum.ascodt.repository.Target;
 import de.tum.ascodt.sidlcompiler.frontend.analysis.DepthFirstAdapter;
 import de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement;
 import de.tum.ascodt.sidlcompiler.frontend.node.AUses;
@@ -39,10 +40,11 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
    * output stack for a global cmake file
    */
   private Stack<TemplateFile> _templateFilesOfGlobalCMakeFile;
-
+  private Stack<TemplateFile> _templateFilesOfComponent;
   public CreateGlobalBuildScripts(SymbolTable symbolTable) {
     _symbolTable = symbolTable;
     _templateFilesOfGlobalCMakeFile = new Stack<TemplateFile>();
+    _templateFilesOfComponent = new Stack<TemplateFile>();
     _fullyQualifiedComponentNames = new LinkedList<String>();
   }
 
@@ -110,7 +112,9 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
     String componentName = node.getName().getText();
     String fullyQualifiedComponentName = _symbolTable.getScope(node)
         .getFullyQualifiedName(componentName);
-    _fullyQualifiedComponentNames.add(fullyQualifiedComponentName);
+    if(!Target.isJavaLocal(node.getTarget().getText()))
+      _fullyQualifiedComponentNames.add(fullyQualifiedComponentName);
+   
   }
 
   /**
@@ -134,12 +138,20 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
     _fullyQualifiedComponentNames.clear();
 
     String templateFileForGlobalCmake = "cmakefile-cxx-global.template";
+    String templateFileForGlobalComponentHeader = "component.template";
     String destinationFileForGlobalCmake = projectDirectory.toString() +
         File.separatorChar + "CMakeLists.txt";
-
+    String destinationFileForGlobalComponentHeader= generatedFilesDestinationDirectory.toString() +
+        File.separatorChar + "Component.h";
     _templateFilesOfGlobalCMakeFile.push(new TemplateFile(
         templateFileForGlobalCmake, destinationFileForGlobalCmake, null,
         TemplateFile.getLanguageConfigurationForCPP(), true));
+    _templateFilesOfComponent.push(new TemplateFile(
+        templateFileForGlobalComponentHeader, destinationFileForGlobalComponentHeader, null,
+        TemplateFile.getLanguageConfigurationForCPP(), true));
+    _templateFilesOfComponent.peek().open();
+    _templateFilesOfComponent.peek().close();
+    _templateFilesOfComponent.pop();
   }
 
   /**

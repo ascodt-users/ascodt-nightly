@@ -1,7 +1,7 @@
-SET(SRC_COMP
-     ../../components/java/__PATH_FULL_QUALIFIED_NAME__AbstractImplementation.cpp
-     ../../src/__PATH_FULL_QUALIFIED_NAME__Implementation.cpp
-     ../../components/java/__PATH_FULL_QUALIFIED_NAME__C2CxxProxy.cpp 
+SET(CPP_FILES
+     ../../components/java/__FULLY_QUALIFIED_COMPONENT_PATH__AbstractImplementation.cpp
+     ../../src/__FULLY_QUALIFIED_COMPONENT_PATH__Implementation.cpp
+     ../../components/java/__FULLY_QUALIFIED_COMPONENT_PATH__C2CxxProxy.cpp 
      
 )
 

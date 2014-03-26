@@ -314,14 +314,11 @@
    </extension>
    <extension
          point="org.eclipse.ui.actionSets">
-      <filter
-         name="projectNature"
-         value="de.tum.ascodt.plugin.project.natures.ASCoDTNature">
-      </filter>
       <actionSet
             description="Components tools"
             id="de.tum.ascodt.plugin.actions.BuildComponentsActionSet"
-            label="Components tools">
+            label="Components tools"
+            visible="true">
          <action
                class="de.tum.ascodt.plugin.core.actions.BuildComponentsAction"
                id="de.tum.ascodt.plugin.actions.BuildComponentsAction"

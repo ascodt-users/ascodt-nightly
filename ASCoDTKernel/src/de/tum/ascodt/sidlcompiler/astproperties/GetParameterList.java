@@ -2447,12 +2447,12 @@ public class GetParameterList extends DepthFirstAdapter {
       }
       if (parameter.type == Parameter.Type.String && !parameter.isArray) {
         result += "int " + parameter.name + "_data_size=" + parameter.name +
-            ".size();\n";
+            ".size()+1;\n";
 
         result += "sendData((char*)&" + parameter.name +
             "_data_size,sizeof(int),_sendBuffer,_newsockfd,_buffer_size);\n";
         result += "sendData((char*)" + parameter.name + ".c_str()," +
-            parameter.name + ".size(),_sendBuffer,_newsockfd,_buffer_size);\n";
+            parameter.name + ".size()+1,_sendBuffer,_newsockfd,_buffer_size);\n";
       }
       if (parameter.type == Parameter.Type.UserDefined && !parameter.isArray) {
         result += "int " + parameter.name + "_enum2int=" + parameter.name +

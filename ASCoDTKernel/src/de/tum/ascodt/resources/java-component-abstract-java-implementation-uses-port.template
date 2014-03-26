@@ -28,29 +28,26 @@
      de.tum.ascodt.repository.TargetParameters targetParameters
   ) throws de.tum.ascodt.utils.exceptions.ASCoDTException{
     __USES_PORT_TYPE__ result = null;
-        
-    if (target.getType() == de.tum.ascodt.repository.Target.TargetType.JavaLocal) {
+     result = new __USES_PORT_TYPE__PlainJavaPort();     
+    /*if (target.getType() == de.tum.ascodt.repository.Target.TargetType.JavaLocal) {
       result = new __USES_PORT_TYPE__PlainJavaPort();
     }
     
     if (target.getType() == de.tum.ascodt.repository.Target.TargetType.JavaNative) {
       result = new __USES_PORT_TYPE__PlainJavaPort();
     }
-    
-    if (target.getType() == de.tum.ascodt.repository.Target.TargetType.ReverseFortranRemoteSocket) {
+    if (target.getType() == de.tum.ascodt.repository.Target.TargetType.FortranNative) {
+      result = new __USES_PORT_TYPE__PlainJavaPort();
+    }
+    if (target.getType() == de.tum.ascodt.repository.Target.TargetType.CxxRemoteSocket) {
         result = new __USES_PORT_TYPE__PlainJavaPort();
     }
     
     if (target.getType() == de.tum.ascodt.repository.Target.TargetType.FortranRemoteSocket) {
         result = new __USES_PORT_TYPE__PlainJavaPort();
-    }
+    }*/
     
-    /*if (target.getType() == de.tum.ascodt.repository.Target.TargetType.CxxRemoteSocket){
-      result = new __USES_PORT_TYPE__Java2CxxRemoteSocketPort();
-    }
-    if (target.getType() == de.tum.ascodt.repository.Target.TargetType.CxxRemoteSocket){
-      result = new __USES_PORT_TYPE__ReverseJava2CxxRemoteSocketPort();
-    }*/ 
+    
     assert(result!=null);
     
     return result;

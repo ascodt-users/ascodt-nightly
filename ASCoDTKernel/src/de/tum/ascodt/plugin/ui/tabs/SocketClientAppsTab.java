@@ -92,12 +92,12 @@ public class SocketClientAppsTab extends ProgramArgsTab {
   @Override
   public String[] getEnv() {
     return new String[] {
-      _label.toUpperCase() + "_BUFFER_SIZE=" +
+      _label.toUpperCase().replaceAll("[.]", "_") + "_BUFFER_SIZE=" +
           SocketService.getDefault().getBufferSize(),
-      _label.toUpperCase() + "_DAEMON_PORT=" + _daemonPort,
-      _label.toUpperCase() + "_HOSTNAME=" + textHostname.getText(),
-      _label.toUpperCase() + "_PORT=" + textPort.getText(),
-      _label.toUpperCase() + "_JAVA=on",};
+          _label.toUpperCase().replaceAll("[.]", "_") + "_DAEMON_PORT=" + _daemonPort,
+          _label.toUpperCase().replaceAll("[.]", "_") + "_HOSTNAME=" + textHostname.getText(),
+          _label.toUpperCase().replaceAll("[.]", "_") + "_PORT=" + textPort.getText(),
+          _label.toUpperCase().replaceAll("[.]", "_") + "_JAVA=on",};
   }
 
   public String getHost() {

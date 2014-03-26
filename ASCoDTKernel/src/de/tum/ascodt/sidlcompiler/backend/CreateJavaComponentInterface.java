@@ -93,14 +93,10 @@ public class CreateJavaComponentInterface extends DepthFirstAdapter {
       case JavaLocal:
         extendingInterfaces += Component.class.getCanonicalName();
         break;
-      case CxxRemoteSocket:
-        extendingInterfaces += CxxRemoteSocketComponent.class
-            .getCanonicalName();
-        break;
       case JavaNative:
         extendingInterfaces += NativeComponent.class.getCanonicalName();
         break;
-      case ReverseCxxRemoteSocket:
+      case CxxRemoteSocket:
         extendingInterfaces += CxxReverseRemoteSocketComponent.class
             .getCanonicalName();
         break;

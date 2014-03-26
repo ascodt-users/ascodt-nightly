@@ -27,12 +27,22 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * @author Atanas Atanasov
  * 
  */
+<<<<<<< HEAD
+public class CreateCxxBuildScripts extends
+    de.tum.ascodt.sidlcompiler.frontend.analysis.DepthFirstAdapter {
+  private java.util.Stack<TemplateFile> _templateFilesOfCxxMakefile;
+  private java.util.Stack<TemplateFile> _templateFilesOfCxxCMakefile;
+  private java.util.Stack<TemplateFile> _templateFilesOfSourcesCxxCMakefile;
+  private java.util.Stack<TemplateFile> _templateFilesOfTargetsCxxCMakefile;
+  private URL _userImplementationsDestinationDirectory;
+=======
 public class CreateCxxBuildScripts extends DepthFirstAdapter {
   private Stack<TemplateFile> _templateFilesOfCxxMakefile;
   private Stack<TemplateFile> _templateFilesOfCxxCMakefile;
   private Stack<TemplateFile> _templateFilesOfSourcesCxxCMakefile;
   private Stack<TemplateFile> _templateFilesOfTargetsCxxCMakefile;
   private URL _cmakeDirectory;
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
   private URL _generatedFilesDirectory;
 
   private String[] _namespace;
@@ -42,6 +52,13 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
   CreateCxxBuildScripts(Target target, SymbolTable symbolTable,
       URL userImplementationsDestinationDirectory, URL generatedFilesDirectory,
       URL nativeDirectory, String[] namespace) {
+<<<<<<< HEAD
+    _templateFilesOfCxxMakefile = new java.util.Stack<TemplateFile>();
+    _templateFilesOfCxxCMakefile = new java.util.Stack<TemplateFile>();
+    _templateFilesOfSourcesCxxCMakefile = new java.util.Stack<TemplateFile>();
+    _templateFilesOfTargetsCxxCMakefile = new java.util.Stack<TemplateFile>();
+    _userImplementationsDestinationDirectory = userImplementationsDestinationDirectory;
+=======
     _templateFilesOfCxxMakefile = new Stack<TemplateFile>();
     _templateFilesOfCxxCMakefile = new Stack<TemplateFile>();
     _templateFilesOfSourcesCxxCMakefile = new Stack<TemplateFile>();
@@ -57,12 +74,24 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
       ErrorWriterDevice.getInstance().println(e);
     }
 
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
     _generatedFilesDirectory = generatedFilesDirectory;
     _namespace = namespace;
     _symbolTable = symbolTable;
     _target = target;
   }
 
+<<<<<<< HEAD
+  public void inAClassPackageElement(AClassPackageElement node) {
+    try {
+      String componentName = node.getName().getText();
+      String fullQualifiedName = _symbolTable.getScope(node)
+          .getFullQualifiedName(componentName);
+
+      String templateFileForCxxMakefile = "makefile-cxx.template";
+      String destinationFileForCxxMakefile = _userImplementationsDestinationDirectory
+          .toString() + File.separatorChar + "Makefile." + componentName;
+=======
   private void createComponentMappings(String componentName,
       String fullyQualifiedComponentName, Stack<TemplateFile> template) {
     template.peek().addMapping("__COMPONENT_NAME__", componentName);
@@ -86,6 +115,7 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
       String templateFileForCxxMakefile = "makefile-cxx.template";
       String destinationFileForCxxMakefile = _cmakeDirectory.toString() +
           File.separatorChar + "Makefile." + componentName;
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
 
       String templateFileForCxxCMakefile = "cmakefile-cxx.template";
       String templateFileForSourcesCmakefile = "";
@@ -96,12 +126,37 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
         templateFileForTargetsCmakefile = "cmakefile-targets-native-cxx.template";
 
         break;
+<<<<<<< HEAD
+=======
 
-      case CxxRemoteSocket:
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
+      case ReverseCxxRemoteSocket:
         templateFileForSourcesCmakefile = "cmakefile-sources-remote-cxx.template";
         templateFileForTargetsCmakefile = "cmakefile-targets-remote-cxx.template";
 
         break;
+<<<<<<< HEAD
+      default:
+        break;
+      }
+      String destinationFileForCxxCMakefile = _userImplementationsDestinationDirectory
+          .toString() +
+          File.separatorChar +
+          "cmake-" +
+          fullQualifiedName +
+          File.separatorChar + "CMakeLists.txt";
+      String destinationFileForSourcesCxxCMakefile = _userImplementationsDestinationDirectory
+          .toString() +
+          File.separatorChar +
+          "cmake-" +
+          fullQualifiedName +
+          File.separatorChar + "sources.cmake";
+      String destinationFileForTargetsCxxCMakefile = _userImplementationsDestinationDirectory
+          .toString() +
+          File.separatorChar +
+          "cmake-" +
+          fullQualifiedName +
+=======
 
       default:
         break;
@@ -116,6 +171,7 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
       String destinationFileForTargetsCxxCMakefile = _cmakeDirectory.toString() +
           File.separatorChar +
           fullyQualifiedComponentName +
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
           File.separatorChar + "targets.cmake";
 
       _templateFilesOfCxxMakefile.push(new TemplateFile(
@@ -131,7 +187,17 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
       _templateFilesOfTargetsCxxCMakefile.push(new TemplateFile(
           templateFileForTargetsCmakefile,
           destinationFileForTargetsCxxCMakefile, _namespace, TemplateFile
-              .getLanguageConfigurationForCPP(), true));
+              .getLanguageConfigurationForCPP(), false));
+<<<<<<< HEAD
+      createComponentMappings(componentName, fullQualifiedName,
+          _templateFilesOfCxxMakefile);
+      createComponentMappings(componentName, fullQualifiedName,
+          _templateFilesOfCxxCMakefile);
+      createComponentMappings(componentName, fullQualifiedName,
+          _templateFilesOfSourcesCxxCMakefile);
+
+      createComponentMappings(componentName, fullQualifiedName,
+=======
       createComponentMappings(componentName, fullyQualifiedComponentName,
           _templateFilesOfCxxMakefile);
       createComponentMappings(componentName, fullyQualifiedComponentName,
@@ -140,6 +206,7 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
           _templateFilesOfSourcesCxxCMakefile);
 
       createComponentMappings(componentName, fullyQualifiedComponentName,
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
           _templateFilesOfTargetsCxxCMakefile);
       _templateFilesOfCxxMakefile.peek().addMapping("__TAB__", "\t");
       _templateFilesOfCxxMakefile.peek().open();
@@ -148,6 +215,22 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
 
       _templateFilesOfTargetsCxxCMakefile.peek().open();
     } catch (ASCoDTException e) {
+<<<<<<< HEAD
+      ErrorWriterDevice.getInstance().showError(getClass().getName(),
+          "inAInterfacePackageElement(...)", e);
+    }
+  }
+
+  private void createComponentMappings(String componentName,
+      String fullQualifiedName, java.util.Stack<TemplateFile> template) {
+    template.peek().addMapping("__COMPONENT_NAME__", componentName);
+    template.peek().addMapping("__PATH_FULL_QUALIFIED_NAME__",
+        fullQualifiedName.replaceAll("[.]", "/"));
+    template.peek().addMapping("__GENERATED_OUTPUT__",
+        _generatedFilesDirectory.getPath().toString());
+    template.peek().addMapping("__SRC_OUTPUT__",
+        _userImplementationsDestinationDirectory.getPath().toString());
+=======
       ErrorWriterDevice.getInstance().println(e);
     }
   }
@@ -178,12 +261,16 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
     } catch (ASCoDTException e) {
       ErrorWriterDevice.getInstance().println(e);
     }
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
   }
 
   /**
    * Close the output streams.
    */
+<<<<<<< HEAD
+=======
   @Override
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
   public void outAClassPackageElement(AClassPackageElement node) {
     Assert.isTrue(_templateFilesOfCxxMakefile.size() == 1);
     Assert.isTrue(_templateFilesOfCxxCMakefile.size() == 1);
@@ -198,7 +285,12 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
 
       _templateFilesOfTargetsCxxCMakefile.peek().close();
     } catch (ASCoDTException e) {
+<<<<<<< HEAD
+      ErrorWriterDevice.getInstance().showError(getClass().getName(),
+          "inAInterfacePackageElement(...)", e);
+=======
       ErrorWriterDevice.getInstance().println(e);
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
     }
 
     _templateFilesOfCxxMakefile.pop();
@@ -207,4 +299,35 @@ public class CreateCxxBuildScripts extends DepthFirstAdapter {
 
     _templateFilesOfTargetsCxxCMakefile.pop();
   }
+<<<<<<< HEAD
+
+  /**
+   * For each uses relation, we have to generate all the connection
+   * operations.
+   */
+  public void inAUses(AUses node) {
+    try {
+      GetProvidesAndUsesPortsOfComponent getPorts = new GetProvidesAndUsesPortsOfComponent();
+      node.apply(getPorts);
+      String templateMakefileName = "makefile-cxx-uses-port.template";
+      String templateCMakefileName = "cmakefile-cxx-uses-port.template";
+      String portTypePath = getPorts.getUsesPorts("", "/");
+
+      TemplateFile templateMakefile = new TemplateFile(
+          _templateFilesOfCxxMakefile.peek(), templateMakefileName);
+      templateMakefile.addMapping("__USES_PORT_PATH__", portTypePath);
+      templateMakefile.open();
+      templateMakefile.close();
+      TemplateFile templateCMakefile = new TemplateFile(
+          _templateFilesOfSourcesCxxCMakefile.peek(), templateCMakefileName);
+      templateCMakefile.addMapping("__USES_PORT_PATH__", portTypePath);
+      templateCMakefile.open();
+      templateCMakefile.close();
+    } catch (ASCoDTException e) {
+      ErrorWriterDevice.getInstance().showError(getClass().getName(),
+          "inAInterfacePackageElement(...)", e);
+    }
+  }
+=======
+>>>>>>> 0ab87ec0dfc45cf8ebe10aea2df82ba565c0af4f
 }

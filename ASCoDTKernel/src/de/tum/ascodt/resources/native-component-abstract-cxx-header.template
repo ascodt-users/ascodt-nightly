@@ -10,13 +10,14 @@
 //
 __INCLUDE_USES_PORTS__
 __INCLUDE_PROVIDE_PORTS__
+#include "Component.h"
 __OPEN_PACKAGE__
      class __COMPONENT_NAME__AbstractImplementation;
 __CLOSE_PACKAGE__
 
 
 
-class __CXX_FULL_QUALIFIED_NAME__AbstractImplementation __IMPLEMENTS__ __PROVIDE_PORTS__{
+class __CXX_FULL_QUALIFIED_NAME__AbstractImplementation: public Component __PROVIDE_PORTS__{
      protected:
        __USES_PORTS_VARS__   
      public:

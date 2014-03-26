@@ -19,13 +19,14 @@
     __USES_PORT_TYPE__SocketPort result = null;
     if (
       target.getType()==de.tum.ascodt.repository.Target.TargetType.JavaLocal||
-      target.getType()==de.tum.ascodt.repository.Target.TargetType.JavaNative
+      target.getType()==de.tum.ascodt.repository.Target.TargetType.JavaNative||
+      target.getType()==de.tum.ascodt.repository.Target.TargetType.FortranNative
     ) {
       result = new __USES_PORT_TYPE__Socket2JavaPlainPort();
      
     }else if(
-      target.getType()==de.tum.ascodt.repository.Target.TargetType.ReverseFortranRemoteSocket||
-      target.getType()==de.tum.ascodt.repository.Target.TargetType.ReverseCxxRemoteSocket
+      target.getType()==de.tum.ascodt.repository.Target.TargetType.FortranRemoteSocket||
+      target.getType()==de.tum.ascodt.repository.Target.TargetType.CxxRemoteSocket
     ){
           result = new __USES_PORT_TYPE__Socket2SocketPlainPort(
                targetParameters.getStringParameter("host"),

@@ -1,8 +1,8 @@
 SET(SRC_COMP
-     ../../components/java/__PATH_FULL_QUALIFIED_NAME__AbstractImplementation.f90
+     ../../components/java/__FULLY_QUALIFIED_COMPONENT_PATH__AbstractImplementation.f90
      ../../src/__PATH_FULL_QUALIFIED_NAME__Implementation.f90 
-     ../../components/java/__PATH_FULL_QUALIFIED_NAME__FProxy.f90
-     ../../components/java/__PATH_FULL_QUALIFIED_NAME__C2FProxy.cpp 
+     ../../components/java/__FULLY_QUALIFIED_COMPONENT_PATH__FProxy.f90
+     ../../components/java/__FULLY_QUALIFIED_COMPONENT_PATH__C2FProxy.cpp 
      
 )
 

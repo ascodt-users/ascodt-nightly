@@ -14,7 +14,7 @@ public abstract class __COMPONENT_NAME__AbstractJavaImplementation extends Socke
   protected String _projectLocation;
   public __COMPONENT_NAME__AbstractJavaImplementation( String instanceName ) throws de.tum.ascodt.utils.exceptions.ASCoDTException {
     _instanceName = instanceName;
-    _appTab = new __SOCKET_CLIENT_UI__("__COMPONENT_NAME__",this, __APPS_CONTAINER__.ID);
+    _appTab = new __SOCKET_CLIENT_UI__("__FULLY_QUALIFIED_COMPONENT_NAME__",this, __APPS_CONTAINER__.ID);
     _appTab.setVisible(true);
     _appTab.addListener(this);
     
@@ -22,7 +22,7 @@ public abstract class __COMPONENT_NAME__AbstractJavaImplementation extends Socke
   }
   
   public de.tum.ascodt.repository.Target getTarget() {
-     return de.tum.ascodt.repository.Target.createReverse__LANG__RemoteSocketTarget();
+     return de.tum.ascodt.repository.Target.create__LANG__RemoteSocketTarget();
   }
   
   public de.tum.ascodt.repository.TargetParameters getTargetParameters(){

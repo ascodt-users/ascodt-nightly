@@ -129,6 +129,8 @@ public class CreateJava2SocketClient extends DepthFirstAdapter {
       _templateFilesForAbstractComponent.peek().addMapping(
           "__COMPONENT_NAME__", componentName);
       _templateFilesForAbstractComponent.peek().addMapping(
+          "__FULLY_QUALIFIED_COMPONENT_NAME__", _fullQualifiedName);
+      _templateFilesForAbstractComponent.peek().addMapping(
           "__SOCKET_CLIENT_UI__", SocketClientAppsTab.class.getCanonicalName());
       _templateFilesForAbstractComponent.peek().addMapping(
           "__APPS_CONTAINER__", AppsViewContainer.class.getCanonicalName());

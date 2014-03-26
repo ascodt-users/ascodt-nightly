@@ -25,6 +25,7 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * 
  */
 public class CreateFortranBuildScripts extends DepthFirstAdapter {
+  
   private Stack<TemplateFile> _templateFilesOfFortranMakefile;
   private Stack<TemplateFile> _templateFilesOfFortranCMakefile;
 
@@ -40,6 +41,7 @@ public class CreateFortranBuildScripts extends DepthFirstAdapter {
   CreateFortranBuildScripts(Target target, SymbolTable symbolTable,
       URL userImplementationsDestinationDirectory, URL generatedFilesDirectory,
       URL nativeDirectory, String[] namespace) {
+    
     _templateFilesOfFortranMakefile = new Stack<TemplateFile>();
     _templateFilesOfFortranCMakefile = new Stack<TemplateFile>();
     _templateFilesOfSourcesFortranCMakefile = new Stack<TemplateFile>();
@@ -87,7 +89,7 @@ public class CreateFortranBuildScripts extends DepthFirstAdapter {
         templateFileForTargetsCmakefile = "cmakefile-targets-native-fortran.template";
 
         break;
-      case ReverseFortranRemoteSocket:
+      case FortranRemoteSocket:
         templateFileForSourcesCmakefile = "cmakefile-sources-remote-fortran.template";
         templateFileForTargetsCmakefile = "cmakefile-targets-remote-fortran.template";
 
@@ -113,7 +115,7 @@ public class CreateFortranBuildScripts extends DepthFirstAdapter {
           _namespace, TemplateFile.getLanguageConfigurationForCPP(), true));
       _templateFilesOfFortranCMakefile.push(new TemplateFile(
           templateFileForFortranCMakefile, destinationFileForFortranCMakefile,
-          _namespace, TemplateFile.getLanguageConfigurationForCPP(), false));
+          _namespace, TemplateFile.getLanguageConfigurationForCPP(), true));
       _templateFilesOfSourcesFortranCMakefile.push(new TemplateFile(
           templateFileForSourcesCmakefile,
           destinationFileForSourcesFortranCMakefile, _namespace, TemplateFile
