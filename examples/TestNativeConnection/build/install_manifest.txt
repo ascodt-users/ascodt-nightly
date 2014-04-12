@@ -1,2 +1,0 @@
-/work_fast/atanasoa/Programme/runtime-HelloSocketFortran/TestNativeConnection/cmake/test.B/../../lib/libtest.A.so
-/work_fast/atanasoa/Programme/runtime-HelloSocketFortran/TestNativeConnection/cmake/test.B/../../lib/libtest.B.so

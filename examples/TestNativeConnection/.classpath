@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="cmake*/" including="*.java|**/*.java" kind="src" path="components/java"/>
+	<classpathentry kind="lib" path="D:/Users/Haroogan/Projects/TUM/ASCoDT/ASCoDTKernel/debug/third-party-libs/swt.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Haroogan/Projects/TUM/ASCoDT/ASCoDTVTK/debug/vtk.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Haroogan/Projects/TUM/ASCoDT/ASCoDTKernel/debug/"/>
 	<classpathentry excluding="cmake*/" including="*.java|**/*.java" kind="src" path="src"/>
-	<classpathentry kind="lib" path="/import/home/atanasoa/git/ascodt-nightly/ASCoDTKernel/debug/"/>
+	<classpathentry kind="lib" path="D:/Users/Haroogan/Projects/TUM/ASCoDT/ASCoDTVTK/debug/"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/import/home/atanasoa/git/ascodt-nightly/ASCoDTKernel/debug/third-party-libs/swt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
