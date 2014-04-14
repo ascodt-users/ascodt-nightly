@@ -176,7 +176,7 @@ public class Project {
     createWorkspace();
     createJavaFolders();
     readProjectFile();
-    resetStaticRepository(); 
+    resetStaticRepository();
     _trace.out("Project(...)", eclipseProjectHandle.getName());
   }
 
@@ -676,7 +676,7 @@ public class Project {
    */
   private void createSource() throws ASCoDTException {
     IFolder srcFolder = _eclipseProjectHandle.getFolder(getSourcesFolder());
-   
+
     try {
       srcFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
       if (!srcFolder.exists()) {
@@ -794,8 +794,9 @@ public class Project {
         .getFolder(getWorkspaceFolder());
     try {
       workspaceFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
-      if(!workspaceFolder.exists())
+      if (!workspaceFolder.exists()) {
         createParentFolders(workspaceFolder);
+      }
       _folders.add(workspaceFolder);
     } catch (CoreException e) {
       throw new ASCoDTException(getClass().getName(), "createWorkspace()",

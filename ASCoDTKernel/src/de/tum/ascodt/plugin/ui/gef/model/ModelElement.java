@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
@@ -29,6 +31,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
  * 
  * @author atanasoa
  */
+@XmlTransient
 public abstract class ModelElement implements IPropertySource, Serializable {
   /**
 	 * 

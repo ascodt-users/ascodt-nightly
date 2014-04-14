@@ -106,7 +106,8 @@ public class CreateSocketProxyForFortran extends DepthFirstAdapter {
       _templateFilesOfC2FProxyImplementation.peek().addMapping(
           "__COMPONENT_NAME_4WIN__", componentName.toUpperCase());
       _templateFilesOfC2FProxyImplementation.peek().addMapping(
-          "__COMPONENT_NAME_ENV__", _fullQualifiedName.replaceAll("[.]", "_").toUpperCase());
+          "__COMPONENT_NAME_ENV__",
+          _fullQualifiedName.replaceAll("[.]", "_").toUpperCase());
       _templateFilesOfFortranProxyImplementation.peek().addMapping(
           "__COMPONENT_NAME__", componentName);
       _templateFilesOfFortranProxyImplementation.peek().addMapping(

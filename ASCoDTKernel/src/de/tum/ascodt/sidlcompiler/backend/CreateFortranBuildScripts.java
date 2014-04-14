@@ -25,7 +25,7 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * 
  */
 public class CreateFortranBuildScripts extends DepthFirstAdapter {
-  
+
   private Stack<TemplateFile> _templateFilesOfFortranMakefile;
   private Stack<TemplateFile> _templateFilesOfFortranCMakefile;
 
@@ -41,7 +41,7 @@ public class CreateFortranBuildScripts extends DepthFirstAdapter {
   CreateFortranBuildScripts(Target target, SymbolTable symbolTable,
       URL userImplementationsDestinationDirectory, URL generatedFilesDirectory,
       URL nativeDirectory, String[] namespace) {
-    
+
     _templateFilesOfFortranMakefile = new Stack<TemplateFile>();
     _templateFilesOfFortranCMakefile = new Stack<TemplateFile>();
     _templateFilesOfSourcesFortranCMakefile = new Stack<TemplateFile>();

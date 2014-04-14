@@ -32,7 +32,7 @@ public class ConnectionCommand extends Command {
       if (target.equals(source)) {
         return false;
       }
-      Vector<Connection> conns = target.getConnections();
+      Vector<Connection> conns = target.getOutputConnections();
       Iterator<Connection> i = conns.iterator();
 
       while (i.hasNext()) {

@@ -1,6 +1,8 @@
 package de.tum.ascodt.plugin.ui.gef.model;
 
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 
@@ -12,6 +14,7 @@ import org.eclipse.draw2d.geometry.Point;
  * and outgoing connections. Use subclasses to instantiate a specific geometry.
  * 
  */
+@XmlTransient
 public abstract class Geometry extends ModelElement {
 
   /**
@@ -85,6 +88,7 @@ public abstract class Geometry extends ModelElement {
    * 
    * @return a non-null location instance
    */
+  @XmlTransient
   public Point getLocation() {
     return location.getCopy();
   }
@@ -121,6 +125,7 @@ public abstract class Geometry extends ModelElement {
    * 
    * @return a non-null Dimension instance
    */
+  @XmlTransient
   public Dimension getSize() {
     return size.getCopy();
   }

@@ -11,7 +11,6 @@ import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
 import de.tum.ascodt.plugin.utils.tracing.Trace;
 import de.tum.ascodt.repository.Target;
 import de.tum.ascodt.repository.entities.Component;
-import de.tum.ascodt.repository.entities.CxxRemoteSocketComponent;
 import de.tum.ascodt.repository.entities.CxxReverseRemoteSocketComponent;
 import de.tum.ascodt.repository.entities.NativeComponent;
 import de.tum.ascodt.sidlcompiler.astproperties.GetProvidesAndUsesPortsOfComponent;
