@@ -66,6 +66,16 @@ add_definitions(-DTHREADSAFE -D_REENTRANT)
 set(Threads_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
 # ==============================================================================
 # }}} Threads
+
+# Sockets {{{
+# ==============================================================================
+if(WIN32)
+  set(Sockets_LIBRARIES ws2_32)
+else()
+  set(Sockets_LIBRARIES)
+endif()
+# ==============================================================================
+# }}} Sockets
 # ==============================================================================
 # }}} Packages
 
@@ -143,7 +153,8 @@ include("targets.cmake")
 
 target_link_libraries("__FULLY_QUALIFIED_COMPONENT_NAME__"
                       ${JNI_LIBRARIES}
-                      ${Threads_LIBRARIES})
+                      ${Threads_LIBRARIES}
+                      ${Sockets_LIBRARIES})
 
 install(TARGETS "__FULLY_QUALIFIED_COMPONENT_NAME__"
         ARCHIVE DESTINATION "lib"

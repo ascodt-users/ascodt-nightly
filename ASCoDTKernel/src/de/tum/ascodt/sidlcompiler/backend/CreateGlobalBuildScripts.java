@@ -41,6 +41,7 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
    */
   private Stack<TemplateFile> _templateFilesOfGlobalCMakeFile;
   private Stack<TemplateFile> _templateFilesOfComponent;
+
   public CreateGlobalBuildScripts(SymbolTable symbolTable) {
     _symbolTable = symbolTable;
     _templateFilesOfGlobalCMakeFile = new Stack<TemplateFile>();
@@ -112,9 +113,10 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
     String componentName = node.getName().getText();
     String fullyQualifiedComponentName = _symbolTable.getScope(node)
         .getFullyQualifiedName(componentName);
-    if(!Target.isJavaLocal(node.getTarget().getText()))
+    if (!Target.isJavaLocal(node.getTarget().getText())) {
       _fullyQualifiedComponentNames.add(fullyQualifiedComponentName);
-   
+    }
+
   }
 
   /**
@@ -141,14 +143,15 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
     String templateFileForGlobalComponentHeader = "component.template";
     String destinationFileForGlobalCmake = projectDirectory.toString() +
         File.separatorChar + "CMakeLists.txt";
-    String destinationFileForGlobalComponentHeader= generatedFilesDestinationDirectory.toString() +
-        File.separatorChar + "Component.h";
+    String destinationFileForGlobalComponentHeader = generatedFilesDestinationDirectory
+        .toString() + File.separatorChar + "Component.h";
     _templateFilesOfGlobalCMakeFile.push(new TemplateFile(
         templateFileForGlobalCmake, destinationFileForGlobalCmake, null,
         TemplateFile.getLanguageConfigurationForCPP(), true));
     _templateFilesOfComponent.push(new TemplateFile(
-        templateFileForGlobalComponentHeader, destinationFileForGlobalComponentHeader, null,
-        TemplateFile.getLanguageConfigurationForCPP(), true));
+        templateFileForGlobalComponentHeader,
+        destinationFileForGlobalComponentHeader, null, TemplateFile
+            .getLanguageConfigurationForCPP(), true));
     _templateFilesOfComponent.peek().open();
     _templateFilesOfComponent.peek().close();
     _templateFilesOfComponent.pop();

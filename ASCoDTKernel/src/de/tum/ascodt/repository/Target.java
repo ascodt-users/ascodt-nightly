@@ -29,15 +29,13 @@ public class Target {
       public String toString() {
         return "cxx_remote_socket";
       }
-    }
-    ,
+    },
     FortranRemoteSocket {
       @Override
       public String toString() {
         return "fortran_remote_socket";
       }
-    }
-    ,
+    },
 
     FortranNative {
       @Override
@@ -54,7 +52,11 @@ public class Target {
     return result;
   }
 
- 
+  public static Target createCxxRemoteSocketTarget() {
+    Target result = new Target();
+    result._targetType = TargetType.CxxRemoteSocket;
+    return result;
+  }
 
   public static Target createFortranNativeTarget() {
     Target result = new Target();
@@ -62,6 +64,11 @@ public class Target {
     return result;
   }
 
+  public static Target createFortranRemoteSocketTarget() {
+    Target result = new Target();
+    result._targetType = TargetType.FortranRemoteSocket;
+    return result;
+  }
 
   /**
    * Factory mechanism
@@ -69,18 +76,6 @@ public class Target {
   public static Target createJavaLocalTarget() {
     Target result = new Target();
     result._targetType = TargetType.JavaLocal;
-    return result;
-  }
-
-  public static Target createCxxRemoteSocketTarget() {
-    Target result = new Target();
-    result._targetType = TargetType.CxxRemoteSocket;
-    return result;
-  }
-
-  public static Target createFortranRemoteSocketTarget() {
-    Target result = new Target();
-    result._targetType = TargetType.FortranRemoteSocket;
     return result;
   }
 
@@ -94,8 +89,7 @@ public class Target {
       result = createCxxRemoteSocketTarget();
     } else if (identifier.equals(TargetType.FortranNative.toString())) {
       result = createFortranNativeTarget();
-    }  else if (identifier.equals(TargetType.FortranRemoteSocket
-        .toString())) {
+    } else if (identifier.equals(TargetType.FortranRemoteSocket.toString())) {
       result = createFortranRemoteSocketTarget();
     }
     return result;
@@ -117,22 +111,20 @@ public class Target {
     return identifier.equals(TargetType.JavaNative.toString());
   }
 
- 
-  public static boolean isFortranNative(String identifier) {
-    return identifier.equals(TargetType.FortranNative.toString());
-  }
-
- 
-  public static boolean isJavaLocal(String identifier) {
-    return identifier.equals(TargetType.JavaLocal.toString());
-  }
-
   public static boolean isCxxRemoteSocket(String identifier) {
     return identifier.equals(TargetType.CxxRemoteSocket.toString());
   }
 
+  public static boolean isFortranNative(String identifier) {
+    return identifier.equals(TargetType.FortranNative.toString());
+  }
+
   public static boolean isFortranRemoteSocket(String identifier) {
     return identifier.equals(TargetType.FortranRemoteSocket.toString());
+  }
+
+  public static boolean isJavaLocal(String identifier) {
+    return identifier.equals(TargetType.JavaLocal.toString());
   }
 
   /**
@@ -142,12 +134,9 @@ public class Target {
    * @return
    */
   public static boolean isValidTarget(String identifier) {
-    return 
-        isJavaLocal(identifier) || 
-        isCxxNative(identifier) ||
-        isFortranRemoteSocket(identifier) ||
-        isCxxRemoteSocket(identifier) ||
-        isFortranNative(identifier); 
+    return isJavaLocal(identifier) || isCxxNative(identifier) ||
+        isFortranRemoteSocket(identifier) || isCxxRemoteSocket(identifier) ||
+        isFortranNative(identifier);
   }
 
   private TargetType _targetType;

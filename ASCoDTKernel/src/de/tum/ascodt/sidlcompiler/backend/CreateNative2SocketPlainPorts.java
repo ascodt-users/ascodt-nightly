@@ -373,10 +373,10 @@ public class CreateNative2SocketPlainPorts extends DepthFirstAdapter {
         switchSyncAsync += "#ifdef _WIN32\n";
         switchSyncAsync += "#else\n";
 
-         switchSyncAsync+="int flags;\n";
-         switchSyncAsync+="flags = fcntl(_newsockfd, F_GETFL, 0);\n";
-         switchSyncAsync+="flags |= O_NONBLOCK;\n";
-         switchSyncAsync+="fcntl(_newsockfd, F_SETFL, flags);\n";
+        switchSyncAsync += "int flags;\n";
+        switchSyncAsync += "flags = fcntl(_newsockfd, F_GETFL, 0);\n";
+        switchSyncAsync += "flags |= O_NONBLOCK;\n";
+        switchSyncAsync += "fcntl(_newsockfd, F_SETFL, flags);\n";
         switchSyncAsync += "#endif\n";
 
         templateCxxImplementation.addMapping("__SWITCH_SYNC_ASYNC__",
@@ -384,10 +384,10 @@ public class CreateNative2SocketPlainPorts extends DepthFirstAdapter {
       } else {
         switchSyncAsync += "#ifdef _WIN32\n";
         switchSyncAsync += "#else\n";
-         switchSyncAsync+="int flags;\n";
-         switchSyncAsync+="flags = fcntl(_newsockfd, F_GETFL, 0);\n";
-         switchSyncAsync+="flags ^= O_NONBLOCK;\n";
-         switchSyncAsync+="fcntl(_newsockfd, F_SETFL, flags);\n";
+        switchSyncAsync += "int flags;\n";
+        switchSyncAsync += "flags = fcntl(_newsockfd, F_GETFL, 0);\n";
+        switchSyncAsync += "flags ^= O_NONBLOCK;\n";
+        switchSyncAsync += "fcntl(_newsockfd, F_SETFL, flags);\n";
         switchSyncAsync += "#endif\n";
         templateCxxImplementation.addMapping("__SWITCH_SYNC_ASYNC__",
             switchSyncAsync);

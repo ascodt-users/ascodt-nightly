@@ -25,13 +25,13 @@ import de.tum.ascodt.utils.ConsoleDevice;
 public class ErrorWriterDevice {
   private static ErrorWriterDevice _singleton = new ErrorWriterDevice();
 
-  public static ErrorWriterDevice getInstance() {
-    return _singleton;
-  }
-
   private static String date() {
     return new SimpleDateFormat("yyyy.MM.dd").format(Calendar.getInstance()
         .getTime());
+  }
+
+  public static ErrorWriterDevice getInstance() {
+    return _singleton;
   }
 
   private static String time() {
@@ -55,6 +55,10 @@ public class ErrorWriterDevice {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void print(String message) {
+    print(new Exception().getStackTrace()[1].toString(), message);
   }
 
   private void print(String trace, String message) {
@@ -88,14 +92,6 @@ public class ErrorWriterDevice {
     ConsoleDevice.getInstance().getConsole("ASCoDT Error").print(log);
   }
 
-  private void println(String trace, String message) {
-    print(trace, message + "\n");
-  }
-
-  public void print(String message) {
-    print(new Exception().getStackTrace()[1].toString(), message);
-  }
-
   public void print(Throwable throwable) {
     print(new Exception().getStackTrace()[1].toString(), throwable != null
         ? throwable.getMessage() : "");
@@ -108,6 +104,10 @@ public class ErrorWriterDevice {
 
   public void println(String message) {
     println(new Exception().getStackTrace()[1].toString(), message);
+  }
+
+  private void println(String trace, String message) {
+    print(trace, message + "\n");
   }
 
   public void println(Throwable throwable) {

@@ -3,15 +3,21 @@ package de.tum.ascodt.plugin.ui.editors.gef;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 import java.util.Vector;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -53,6 +59,7 @@ import de.tum.ascodt.plugin.ui.gef.model.Component;
 import de.tum.ascodt.plugin.ui.gef.model.Connection;
 import de.tum.ascodt.plugin.ui.gef.model.Diagram;
 import de.tum.ascodt.plugin.ui.gef.model.Geometry;
+import de.tum.ascodt.plugin.ui.gef.model.Port;
 import de.tum.ascodt.plugin.ui.views.Palette;
 import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
 import de.tum.ascodt.utils.exceptions.ASCoDTException;
@@ -81,7 +88,6 @@ public class WorkbenchEditor extends GraphicalEditor {
   public void close() {
     try {
       System.out.println("closing editor");
-
     } catch (Exception e) {
       ErrorWriterDevice.getInstance().println(e);
     }
@@ -92,7 +98,6 @@ public class WorkbenchEditor extends GraphicalEditor {
    */
   @Override
   public void commandStackChanged(EventObject event) {
-
     firePropertyChange(IEditorPart.PROP_DIRTY);
     super.commandStackChanged(event);
   }
@@ -160,18 +165,21 @@ public class WorkbenchEditor extends GraphicalEditor {
 
     /** * Snap To Geometry ** */
     getGraphicalViewer().setProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED,
-        new Boolean(false/*
-                          * getProcess().
-                          * isSnapToGeometryEnabled
-                          * ()
-                          */));
+        new Boolean(false /*
+                           * getProcess().
+                           * 
+                           * 
+                           * 
+                           * isSnapToGeometryEnabled
+                           * ()
+                           */
+        ));
     IAction snapAction = new ToggleSnapToGeometryAction(getGraphicalViewer());
     getActionRegistry().registerAction(snapAction);
 
     ContextMenuProvider cmProvider = new ASCoDTContextMenuProvider(viewer,
         getActionRegistry());
     viewer.setContextMenu(cmProvider);
-
   }
 
   @Override
@@ -185,11 +193,10 @@ public class WorkbenchEditor extends GraphicalEditor {
         Vector<ComponentDeleteCommand> commands = new Vector<ComponentDeleteCommand>();
         Vector<ConnectionCommand> connectionCommands = new Vector<ConnectionCommand>();
         for (Geometry geometry : _diagram.getChildren()) {
-
           if (geometry instanceof Component) {
             Component component = (Component)geometry;
 
-            for (Connection con : component.getConnections()) {
+            for (Connection con : component.getOutputConnections()) {
               ConnectionCommand connCmd = new ConnectionCommand();
               connCmd.setConnection(con);
               connCmd.setSource(null);
@@ -222,7 +229,6 @@ public class WorkbenchEditor extends GraphicalEditor {
         Palette pallette = (Palette)PlatformUI.getWorkbench()
             .getActiveWorkbenchWindow().getActivePage().showView(Palette.ID);
         getEditDomain().removeViewer(pallette.getViewer());
-
       } catch (PartInitException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
@@ -246,8 +252,26 @@ public class WorkbenchEditor extends GraphicalEditor {
         // saveComponents();
         getCommandStack().markSaveLocation();
 
-      }
+        String path = file.getRawLocation().makeAbsolute()
+            .removeFileExtension().toString() +
+            ".xml";
+        FileOutputStream fos = new FileOutputStream(path);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+        JAXBContext context;
 
+        try {
+          context = JAXBContext.newInstance(Diagram.class, Component.class,
+              Connection.class, Port.class);
+          Marshaller marshaller = context.createMarshaller();
+          marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+          marshaller.marshal(_diagram, osw);
+        } catch (JAXBException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+
+        osw.close();
+      }
     });
   }
 
@@ -273,7 +297,6 @@ public class WorkbenchEditor extends GraphicalEditor {
     getGraphicalViewer().addDropTargetListener(_templateDropListener);
 
     getGraphicalViewer().setContents(_diagram);
-
   }
 
   /**
@@ -285,7 +308,6 @@ public class WorkbenchEditor extends GraphicalEditor {
    * @throws CoreException
    */
   private void loadComponents(IFile file) throws ASCoDTException {
-
     try {
       InputStream in = file.getContents(true);
 
@@ -308,7 +330,6 @@ public class WorkbenchEditor extends GraphicalEditor {
                     component.getClassName(), component.getTarget())
                 .loadObject(component);
           }
-
         }
 
         for (Geometry geometry : _diagram.getChildren()) {
@@ -317,7 +338,6 @@ public class WorkbenchEditor extends GraphicalEditor {
 
             component.reconnect();
           }
-
         }
       }
     } catch (CoreException e) {
@@ -330,7 +350,6 @@ public class WorkbenchEditor extends GraphicalEditor {
       throw new ASCoDTException(WorkbenchEditor.class.getCanonicalName(),
           "loadComponents()", e.getMessage() + "\n" + e.getCause(), e);
     }
-
   }
 
   /**
@@ -353,7 +372,6 @@ public class WorkbenchEditor extends GraphicalEditor {
     //
     // };
     // job.schedule();
-
   }
 
   /**
@@ -363,7 +381,6 @@ public class WorkbenchEditor extends GraphicalEditor {
    */
   @Override
   protected void setInput(IEditorInput input) {
-
     super.setInput(input);
     IFile file = ((IFileEditorInput)input).getFile();
 
@@ -375,11 +392,10 @@ public class WorkbenchEditor extends GraphicalEditor {
     } catch (CoreException e) {
       ErrorWriterDevice.getInstance().println(e);
     }
+
     if (_diagram == null) {
       _diagram = new Diagram();
-
     }
-
   }
 
   /**

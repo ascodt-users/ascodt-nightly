@@ -182,7 +182,7 @@ public class CreateCxxComponent extends DepthFirstAdapter {
       _templateFilesOfCXXImplementation.peek().open();
 
       _generateProvidesMethods = true;
-     
+
       for (PUserDefinedType definedType : node.getProvides()) {
         definedType.apply(this);
       }
@@ -196,16 +196,16 @@ public class CreateCxxComponent extends DepthFirstAdapter {
 
   @Override
   public void inAInterfacePackageElement(AInterfacePackageElement node) {
-    //if (_generateProvidesMethods) {
-    _delimiter = ",public ";  
+    // if (_generateProvidesMethods) {
+    _delimiter = ",public ";
     String fullQualifiedSymbolName = _symbolTable.getScope(node)
-          .getFullyQualifiedName(Scope.getSymbol(node));
-      _providePortsIncludes += "#include \"" +
-          fullQualifiedSymbolName.replaceAll("[.]", "/") + ".h\"\n";
-      _providePortsInterfaces += _delimiter +
-          fullQualifiedSymbolName.replaceAll("[.]", "::");
-      
-    //}
+        .getFullyQualifiedName(Scope.getSymbol(node));
+    _providePortsIncludes += "#include \"" +
+        fullQualifiedSymbolName.replaceAll("[.]", "/") + ".h\"\n";
+    _providePortsInterfaces += _delimiter +
+        fullQualifiedSymbolName.replaceAll("[.]", "::");
+
+    // }
   }
 
   @Override
@@ -281,7 +281,7 @@ public class CreateCxxComponent extends DepthFirstAdapter {
       if (interfaceNode != null) {
         interfaceNode.apply(this);
       }
-     
+
     }
   }
 

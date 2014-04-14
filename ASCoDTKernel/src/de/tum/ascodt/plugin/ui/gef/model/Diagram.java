@@ -1,6 +1,14 @@
 package de.tum.ascodt.plugin.ui.gef.model;
 
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+
 /**
  * This class represents the model of the ASCoDT diagram. This is the root
  * object
@@ -9,9 +17,10 @@ package de.tum.ascodt.plugin.ui.gef.model;
  * @author Atanas Atansov
  * 
  */
+@XmlRootElement
 public class Diagram extends ModelElement {
   /**
-	 * 
+	 *
 	 */
   private static final long serialVersionUID = 1L;
   /** Property ID to use when a child is added to this diagram. */
@@ -38,9 +47,44 @@ public class Diagram extends ModelElement {
     return false;
   }
 
+  @XmlElement(name = "component")
+  public Set<Component> getComponents() {
+    Set<Component> components = new HashSet<Component>();
+
+    for (Geometry geometry : getChildren()) {
+      if (!(geometry instanceof Component)) {
+        continue;
+      }
+
+      Component component = (Component)geometry;
+
+      components.add(component);
+    }
+
+    return components;
+  }
+
+  @XmlElement(name = "connection")
+  public Set<Connection> getConnections() {
+    Set<Connection> connections = new HashSet<Connection>();
+
+    for (Component component : getComponents()) {
+      for (Connection connection : component.getOutputConnections()) {
+        connections.add(connection);
+      }
+
+      for (Connection connection : component.getInputConnections()) {
+        connections.add(connection);
+      }
+    }
+
+    return connections;
+  }
+
   /**
    * @return the zoom
    */
+  @XmlTransient
   public double getZoom() {
     return zoom;
   }

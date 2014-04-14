@@ -98,10 +98,13 @@ public class SocketClientAppsTab extends ProgramArgsTab {
     return new String[] {
       _label.toUpperCase().replaceAll("[.]", "_") + "_BUFFER_SIZE=" +
           SocketService.getDefault().getBufferSize(),
-          _label.toUpperCase().replaceAll("[.]", "_") + "_DAEMON_PORT=" + _daemonPort,
-          _label.toUpperCase().replaceAll("[.]", "_") + "_HOSTNAME=" + textHostname.getText(),
-          _label.toUpperCase().replaceAll("[.]", "_") + "_PORT=" + textPort.getText(),
-          _label.toUpperCase().replaceAll("[.]", "_") + "_JAVA=on",};
+      _label.toUpperCase().replaceAll("[.]", "_") + "_DAEMON_PORT=" +
+          _daemonPort,
+      _label.toUpperCase().replaceAll("[.]", "_") + "_HOSTNAME=" +
+          textHostname.getText(),
+      _label.toUpperCase().replaceAll("[.]", "_") + "_PORT=" +
+          textPort.getText(),
+      _label.toUpperCase().replaceAll("[.]", "_") + "_JAVA=on",};
   }
 
   

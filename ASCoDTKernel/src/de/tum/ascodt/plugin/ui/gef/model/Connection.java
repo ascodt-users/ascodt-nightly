@@ -1,6 +1,11 @@
 package de.tum.ascodt.plugin.ui.gef.model;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlIDREF;
+import javax.xml.bind.annotation.XmlTransient;
+
+
 /**
  * This class represents the ui model of connection between ports
  * 
@@ -55,18 +60,24 @@ public class Connection extends ModelElement {
     getTarget().disconnectInput(this);
   }
 
+  @XmlTransient
   public Component getSource() {
     return source;
   }
 
+  @XmlAttribute(name = "source")
+  @XmlIDREF
   public Port getSourcePort() {
     return sourcePort;
   }
 
+  @XmlTransient
   public Component getTarget() {
     return target;
   }
 
+  @XmlAttribute(name = "destination")
+  @XmlIDREF
   public Port getTargetPort() {
     return targetPort;
   }

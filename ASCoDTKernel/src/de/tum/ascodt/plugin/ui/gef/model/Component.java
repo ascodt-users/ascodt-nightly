@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -166,54 +170,71 @@ public class Component extends Geometry implements IPropertySource {
     firePropertyChange(OUTPUT_CONNECTIONS, false, connection);
   }
 
+  @XmlTransient
   public de.tum.ascodt.repository.entities.Component getCCAComponent() {
     return _component;
   }
 
+  @XmlAttribute(name = "name")
   public String getClassName() {
     return className;
   }
 
+  @XmlTransient
   public String getComponentName() {
     return className.substring(className.lastIndexOf(".") + 1);
   }
 
-  public Vector<Connection> getConnections() {
+  @XmlTransient
+  public Vector<Connection> getInputConnections() {
+    return inputConnections;
+  }
+
+  @XmlTransient
+  public Vector<Connection> getOutputConnections() {
     return outputConnections;
   }
 
+  @XmlElement(name = "inputPort")
   public Vector<Port> getProvidePorts() {
     return providePorts;
   }
 
+  @XmlAttribute(name = "reference")
   public String getReference() {
     return _reference;
   }
 
+  @XmlTransient
   @SuppressWarnings("unchecked")
   public Vector<Connection> getSourceConnections() {
     return (Vector<Connection>)outputConnections.clone();
   }
 
+  @XmlTransient
   @SuppressWarnings("unchecked")
   public Vector<Link> getSourceLinks() {
     return (Vector<Link>)sourceLinks.clone();
   }
 
+  @XmlTransient
   public String getTarget() {
     return _target;
   }
 
+  @XmlTransient
   @SuppressWarnings("unchecked")
   public Vector<Connection> getTargetConnections() {
     return (Vector<Connection>)inputConnections.clone();
 
   }
 
+  @XmlTransient
   public boolean getUIEnabled() {
     return uiEnabled;
   }
 
+  @XmlElement(name = "outputPort")
   public Vector<Port> getUsePorts() {
     return usePorts;
   }
@@ -345,6 +366,7 @@ public class Component extends Geometry implements IPropertySource {
     return _component.hasGUI();
   }
 
+  @XmlTransient
   public boolean isRemote() {
     return isRemote;
   }

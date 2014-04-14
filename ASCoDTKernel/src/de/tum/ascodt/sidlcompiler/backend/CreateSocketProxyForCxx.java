@@ -100,7 +100,8 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
           "__COMPONENT_NAME_4WIN__", componentName.toUpperCase());
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
-          "__COMPONENT_NAME_ENV__",  _fullQualifiedName.replaceAll("[.]", "_").toUpperCase());
+          "__COMPONENT_NAME_ENV__",
+          _fullQualifiedName.replaceAll("[.]", "_").toUpperCase());
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
           "__CXX_FULL_QUALIFIED_NAME__",
           _fullQualifiedName.replaceAll("[.]", "::"));
@@ -111,7 +112,8 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
           "__PATH_FULL_QUALIFIED_NAME__",
           _fullQualifiedName.replaceAll("[.]", "/"));
       _templateFilesOfC2CxxProxyHeader.peek().addMapping(
-          "__COMPONENT_NAME_ENV__", _fullQualifiedName.replaceAll("[.]", "_").toUpperCase());
+          "__COMPONENT_NAME_ENV__",
+          _fullQualifiedName.replaceAll("[.]", "_").toUpperCase());
       _templateFilesOfC2CxxProxyHeader.peek().open();
       _generateProvidesMethods = true;
 

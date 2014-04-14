@@ -151,7 +151,7 @@ public class CreateComponentsAndInterfaces {
           component.apply(createMakefile);
 
         } else if (component.getTarget() != null &&
-          Target.isFortranRemoteSocket(component.getTarget().getText())) {
+            Target.isFortranRemoteSocket(component.getTarget().getText())) {
           CreateJava2SocketClient createJave2SocketClient = new CreateJava2SocketClient(
               _symbolTable, userImplementedFilesDestinationDirectory,
               generatedFilesDestinationDirectory, nativeDestinationDirectory,
