@@ -203,6 +203,9 @@ public class CreateJavaPortInterface extends DepthFirstAdapter {
       node.apply(onlyInParameters);
       _portsHashmap.put(_fullQualifiedComponentName + node.getName().getText(),
           2 + _portsHashmap.size());
+      _portsHashmap.put(_fullQualifiedComponentName + node.getName().getText()+"Parallel",
+          2 + _portsHashmap.size());
+      
       template.addMapping("__OPERATION_NAME__", node.getName().getText());
       template.addMapping("__OPERATION_PARAMETERS_LIST__", parameterList
           .getParameterListInJava(onlyInParameters

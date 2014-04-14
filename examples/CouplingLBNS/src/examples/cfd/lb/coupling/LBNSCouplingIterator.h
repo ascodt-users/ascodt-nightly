@@ -3,18 +3,18 @@
 
 #include "../LBField.h"
 #include "Parameters.h"
-#include "LBNSInterpolator.h"
+#include "LBNSRemoteInterpolator.h"
 #include <vector>
 
 // This class exists because it was not trivial to use the already existing iterator to perform
 // this operation.
-
+class LBNSCommunicator;
 class LBNSCouplingIterator {
 
     private:
         LBField & _lbField;
         const Parameters & _parameters;
-        LBNSInterpolator _interpolator;
+        LBNSRemoteInterpolator _interpolator;
         const int _offset;  // How many cells away from the boundary
 
         const int _lowerX;
@@ -66,6 +66,7 @@ class LBNSCouplingIterator {
         double* getVelocityX();
         double* getVelocityY();
         double* getVelocityZ();
+        void registerNSRegion(LBNSCommunicator* com);
 };
 
 #endif

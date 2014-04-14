@@ -21,6 +21,14 @@
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <net/if.h>
+#include <sys/ioctl.h>
+#include <sstream>
+#ifdef Parallel
+#include <mpi.h>
+#endif
 	
 #include "__PATH_FULL_QUALIFIED_NAME__Implementation.h"
 
@@ -73,7 +81,8 @@ SOCKET
 #else
 int
 #endif 
-&sockfd
+&sockfd,
+const int numberOfWorkers
 ){
 
 
@@ -97,7 +106,7 @@ int
           assert (sockfd>=0);
           bind(sockfd, result->ai_addr, (int)result->ai_addrlen);
 		  
-          listen(sockfd,5);
+          listen(sockfd,numberOfWorkers);
          
         
 }
@@ -165,6 +174,13 @@ newsockfd,int bufferSize){
 
 }
 
+#ifdef Parallel
+void broadcastParallelData(char* data,size_t size_of_data,MPI_Comm newsockfd){
+          MPI_Status status;
+           MPI_Bcast(data, size_of_data, MPI_BYTE, 0, newsockfd);
+          
+}
+#endif
 
 void readData(char* data,size_t size_of_data,char* readBuffer,
 #ifdef _WIN32
@@ -210,11 +226,19 @@ newsockfd, int bufferSize){
 
 }
 
-void invoker_create_instance(void** ref,int,int,char*,char*){
+void invoker_create_instance(void** ref,int,int,char*,char*
+#ifdef Parallel
+	 ,MPI_Comm communicator,int methodID
+#endif  
+){
      *ref = new __CXX_FULL_QUALIFIED_NAME__Implementation();
 }
 
-void invoker_destroy_instance(void** ref,int,int,char*,char*){
+void invoker_destroy_instance(void** ref,int,int,char*,char*
+#ifdef Parallel
+	 ,MPI_Comm communicator,int methodID
+#endif  
+){
       delete ((__CXX_FULL_QUALIFIED_NAME__Implementation*)*ref);
   
 }
@@ -248,7 +272,43 @@ int
 }
 
 
-
+std::string retrieveSocketAddress(){
+	std::stringstream res;
+	int rank=0;
+#ifdef Parallel
+	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+#endif
+	int _sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	assert(_sockfd>=0);
+	const char* daemon_port = getenv("__COMPONENT_NAME_ENV___DAEMON_PORT");
+	const char* network_interface = getenv("__COMPONENT_NAME_ENV___NET_INTERFACE");
+	if(network_interface==NULL)
+		network_interface="lo";	
+	assert(daemon_port!=NULL);
+	struct if_nameindex *curif, *ifs;
+	struct ifreq req;
+	ifs = if_nameindex();
+	if(ifs) {
+		for(curif = ifs; curif && curif->if_name; curif++) {
+			strncpy(req.ifr_name, curif->if_name, IFNAMSIZ);
+			req.ifr_name[IFNAMSIZ] = 0;
+			if (ioctl(_sockfd, SIOCGIFADDR, &req) < 0)
+				perror("ioctl");
+			else{
+				printf("%s: [%s]\n", curif->if_name,
+                                                        inet_ntoa(((struct sockaddr_in*) &req.ifr_addr)->sin_addr));
+				if(strcmp(curif->if_name,network_interface)==0)
+				{
+					res<<std::string(inet_ntoa(((struct sockaddr_in*) &req.ifr_addr)->sin_addr))<<":"<<(atoi(daemon_port)+rank);
+					
+				}
+			}
+		}
+		if_freenameindex(ifs);
+	}
+	close(_sockfd);
+	return res.str();
+}
 
 
 void socket_worker_loop(void* ref,
@@ -257,17 +317,29 @@ SOCKET
 #else
 int
 #endif
-clientfd,int bufferSize){
+clientfd,int bufferSize
+#ifdef Parallel
+,MPI_Comm communicator
+#endif
+){
      char *sendBuffer=new char[bufferSize];
      char *rcvBuffer=new char[bufferSize];
-     void (*invokers[__CLIENT_METHODS__])(void**,int,int,char*,char*);
+     void (*invokers[__CLIENT_METHODS__])(void**,int,int,char*,char*
+#ifdef Parallel
+	 ,MPI_Comm,int
+#endif     
+     );
      invokers[0]=invoker_create_instance;
      invokers[1]=invoker_destroy_instance;
      int methodId=0;
      __SET_CLIENT_INVOKERS__
      while(methodId!=1){
           readData((char*)&methodId,sizeof(int),rcvBuffer,clientfd,bufferSize);
-          invokers[methodId](&ref,clientfd,bufferSize,rcvBuffer,sendBuffer);
+          invokers[methodId](&ref,clientfd,bufferSize,rcvBuffer,sendBuffer
+#ifdef Parallel
+	 		,communicator,methodId
+#endif            
+          );
      }
      delete [] sendBuffer;
      delete [] rcvBuffer;
@@ -279,7 +351,28 @@ clientfd,int bufferSize){
      
 }
 
+#ifdef Parallel
+void parallel_worker_loop(void* ref,
+MPI_Comm clientfd){
+     void (*parallel_worker_invokers[__CLIENT_METHODS__])(void**,MPI_Comm);
+     int methodId=0;
+     __SET_PARALLEL_WORKER_INVOKERS__
+     while(methodId!=1){
+          broadcastParallelData((char*)&methodId,sizeof(int),clientfd);
+          parallel_worker_invokers[methodId-1](&ref,clientfd);
+     }
+    
+     
+}
 
+#endif
+
+#ifdef Parallel
+void* parallel_deamon_run(void* daemon_args){
+	parallel_worker_loop(((__COMPONENT_NAME_ENV___arg*)daemon_args)->ref,((__COMPONENT_NAME_ENV___arg*)daemon_args)->communicator);
+}
+#endif
+ 
 #ifdef _WIN32
 DWORD WINAPI server_deamon_run(void* daemon_args){
       SOCKET clientfd;
@@ -290,8 +383,37 @@ void* server_deamon_run(void* daemon_args){
       
       accept_on_server(((__COMPONENT_NAME_ENV___arg*)daemon_args)->daemon_serverfd,clientfd);
       std::cout<<"server accepted"<<std::endl;
-      socket_worker_loop(((__COMPONENT_NAME_ENV___arg*)daemon_args)->ref,clientfd,((__COMPONENT_NAME_ENV___arg*)daemon_args)->buffer_size);
+      socket_worker_loop(
+      	((__COMPONENT_NAME_ENV___arg*)daemon_args)->ref,
+      	clientfd,
+      	((__COMPONENT_NAME_ENV___arg*)daemon_args)->buffer_size
+#ifdef Parallel
+		,((__COMPONENT_NAME_ENV___arg*)daemon_args)->communicator
+#endif      	
+      	);
 }
+void startMPIDaemon(__COMPONENT_NAME_ENV___arg& arg){
+#ifdef Parallel	 
+int rank = -1;
+MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+if(rank>0){
+	 parallel_deamon_run(&arg);
+}
+#endif     
+}
+
+void startSocketDaemons(__COMPONENT_NAME_ENV___arg& arg){
+	 
+   for(int i=0;i<arg.number_of_workers;i++){
+#ifdef _WIN32    
+     CreateThread(NULL, 0,server_deamon_run, &arg, 0, NULL);
+#else     
+     pthread_t task;
+     pthread_create(&task,NULL,server_deamon_run,&arg);
+#endif
+   } 
+}
+
 extern "C"{
 
 #ifdef _WIN32
@@ -304,25 +426,47 @@ void initialise_(__COMPONENT_NAME_ENV___arg& arg){
    const char* buffer_size = getenv("__COMPONENT_NAME_ENV___BUFFER_SIZE");
    const char* hostname = getenv("__COMPONENT_NAME_ENV___HOSTNAME");
    const char* java_client_flag = getenv("__COMPONENT_NAME_ENV___JAVA");
+   const char* number_of_workers = getenv("__COMPONENT_NAME_ENV___WORKERS"); 
    arg.buffer_size = (buffer_size!=NULL)?atoi(buffer_size):4096;
    arg.hostname = (hostname!=NULL)?hostname:"localhost";
    arg.client_port = (client_port!=NULL)?client_port:"50000";
    arg.daemon_port = (daemon_port!=NULL)?daemon_port:"50001";
-   arg.java_client_flag=(java_client_flag!=NULL&&strcmp(java_client_flag,"off")==0)?false:true;
-   
-   invoker_create_instance(&arg.ref,0,0,NULL,NULL);
+   arg.java_client_flag = (java_client_flag!=NULL&&strcmp(java_client_flag,"off")==0)?false:true;
+   arg.number_of_workers = (number_of_workers!=NULL)?atoi(number_of_workers):10;
+#ifdef Parallel
+	int rank = -1 ;
+	int comm_size;
+	std::stringstream st;
+
+	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+	MPI_Comm_size(MPI_COMM_WORLD,&comm_size);
+	int port=atoi(arg.daemon_port)+rank;
+	st<<port<<'\0';
+	std::vector<char> daemon_str(st.str().size()+1);
+	strncpy(&daemon_str[0],st.str().c_str(),st.str().size());
+	daemon_str[st.str().size()]='\0';
+	arg.communicator = MPI_COMM_WORLD;
+	arg.daemon_port=&daemon_str[0];
+	if(rank>0)
+		arg.java_client_flag=false;
+	 
+#endif
+   invoker_create_instance(&arg.ref,0,0,NULL,NULL
+#ifdef Parallel
+   ,arg.communicator,0 	
+#endif   
+   );
    if(arg.java_client_flag)         
      open_client(arg.hostname,client_port,arg.java_serverfd,arg.java_clientfd);
-   bind_server(arg.daemon_port,arg.daemon_serverfd);
-   for(int i=0;i<10;i++){
-#ifdef _WIN32    
-     CreateThread(NULL, 0,server_deamon_run, &arg, 0, NULL);
-#else     
-     pthread_t task;
-     pthread_create(&task,NULL,server_deamon_run,&arg);
-#endif
-   } 
+   bind_server(arg.daemon_port,arg.daemon_serverfd,arg.number_of_workers);
+   startSocketDaemons(arg);
+   startMPIDaemon(arg);
+   
 }
+
+
+
+
 
 #ifdef _WIN32
 void DESTROY(__COMPONENT_NAME_ENV___arg& arg){
@@ -353,7 +497,11 @@ void SOCKET_LOOP(__COMPONENT_NAME_ENV___arg& arg){
 void socket_loop_(__COMPONENT_NAME_ENV___arg& arg){
 #endif
   if(arg.java_client_flag)       
-     socket_worker_loop(arg.ref,arg.java_clientfd,arg.buffer_size);
+     socket_worker_loop(arg.ref,arg.java_clientfd,arg.buffer_size
+#ifdef Parallel
+     ,arg.communicator
+#endif     
+     );
 }
 
 #ifdef _WIN32
@@ -375,8 +523,9 @@ void main_loop_(){
   
 }
 
-
-
-
 }
+
+
+
+
 

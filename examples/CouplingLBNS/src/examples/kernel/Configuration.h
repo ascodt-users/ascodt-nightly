@@ -3,7 +3,7 @@
 
 #include <string>
 #include <petscksp.h>
-//#include "Definitions.h"
+#include "Definitions.h"
 #include "Parameters.h"
 
 class Configuration{
@@ -16,7 +16,7 @@ class Configuration{
         Configuration(const std::string & filename);
         void setFileName (const std::string & filename);
         void loadParameters(Parameters & parameters,
-                            const MPI_Comm & communicator = PETSC_COMM_WORLD);
+                            const MPI_Comm & communicator = PETSC_COMM_WORLD,std::string parallelTag="parallel-ns");
 };
 
 #endif

@@ -2,7 +2,9 @@
 #define _LB_NS_COUPLING_ITERATOR_H_
 
 #include "../FlowField.h"
+#include "examples/cfd/lb/LBField.h"
 #include "Parameters.h"
+#include "LBNSRemoteInterpolator.h"
 #include <vector>
 //#include "LBNSInterpolator.h"
 
@@ -13,6 +15,7 @@
 class LBNSCouplingIterator {
 
     private:
+	    LBNSRemoteInterpolator _interpolator;
         FlowField & _flowField;
         const Parameters & _parameters;
         const int _offset;  // How many cells away from the boundary
@@ -26,19 +29,15 @@ class LBNSCouplingIterator {
 
         int _offsets[3], _cell[3], _middle[3];
         int _normalVector[3];
-        std::vector<double> _lbVelocityX;
-        std::vector<double> _lbVelocityY;
-        std::vector<double> _lbVelocityZ;
         /** Interpolates the component for the given NS cell.
          * @param i Index of the NS cell in the X direction
          * @param j Index of the NS cell in the Y direction
          * @param k Index of the NS cell in the Z direction
          * @param component Component to be interpolated. Pressure is the component of index 4.
          */
-        inline void interpolateComponentX (int i, int j, int k, int component,int velocityCounter);
-        inline void interpolateComponentY (int i, int j, int k, int component,int velocityCounter);
-        inline void interpolateComponentZ (int i, int j, int k, int component,int velocityCounter);
+        inline void interpolateComponent (int i, int j, int k, int component);
 
+        inline bool toLocalIndex(const int i,const int j, const int k,int& i_out,int& j_out, int& k_out) const;
         /** Sets the unitary normal vector pointing outside of the LB box
          * @parmaeter nx Component in x
          * @parameter ny Component in y
@@ -53,10 +52,19 @@ class LBNSCouplingIterator {
          * @parameter flowField Reference to the NS flow field
          * @parameter lbField Reference to the LB field
          */
-        LBNSCouplingIterator (const Parameters & parameters,
-                              FlowField & flowField);
-
+        LBNSCouplingIterator (const Parameters & parameters,FlowField & flowField);
+        void setVelocity(
+        		const int key,
+        		const int offsetX,
+        		const int offsetY,
+        		const int offsetZ,
+        		const int flipsX,
+        		const int flipsY,
+        		const int flipsZ,
+        		const int component,
+        		const double value);
         void iterateInner();
+        void clear();
         /** Performs the interpolation of values from the LB to the NS field
          */
         void iterateBoundary();

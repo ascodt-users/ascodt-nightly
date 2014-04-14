@@ -28,7 +28,7 @@ class LBNSInitFlagsIterator {
         const int _lowerZ;
         const int _upperZ;
 
-
+        inline bool toLocalIndex(const int i,const int j, const int k,int& i_out,int& j_out, int& k_out) const;
 
     public:
 

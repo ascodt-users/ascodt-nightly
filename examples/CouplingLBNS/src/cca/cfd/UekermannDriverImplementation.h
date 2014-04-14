@@ -8,7 +8,7 @@
 //
 // Authors: Tobias Weinzierl, Atanas Atanasov   
 //
-
+#include <mpi.h>
 #include "cca/cfd/UekermannDriverAbstractImplementation.h"
 #include <string>
 #include <vector>

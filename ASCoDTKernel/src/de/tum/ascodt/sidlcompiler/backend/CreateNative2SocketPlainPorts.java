@@ -356,6 +356,11 @@ public class CreateNative2SocketPlainPorts extends DepthFirstAdapter {
           "" +
               _operationsMap.get(_fullQualifiedComponentName +
                   node.getName().getText()));
+      templateCxxImplementation.addMapping(
+          "__PARALLEL_OPERATION_ID__",
+          "" +
+              _operationsMap.get(_fullQualifiedComponentName +
+                  node.getName().getText()+"Parallel"));
       templateCxxImplementation.addMapping("__OPERATION_NAME__", node.getName()
           .getText());
       templateCxxImplementation.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",

@@ -37,7 +37,7 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
 
   private Stack<String> _serverInvokers;
   private Stack<String> _clientInvokers;
-
+  private Stack<String> _parallelWorkerInvokers;
   private URL _generatedFilesDirectory;
   private String[] _namespace;
   private SymbolTable _symbolTable;
@@ -58,6 +58,7 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
     _templateFilesUsesPortsForC2Cxx = new Stack<TemplateFile>();
     _serverInvokers = new Stack<String>();
     _clientInvokers = new Stack<String>();
+    _parallelWorkerInvokers = new Stack<String>();
     _generatedFilesDirectory = generatedFilesDirectory;
     _namespace = namespace;
     _symbolTable = symbolTable;
@@ -136,7 +137,13 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
       _clientInvokers.push("invokers[" +
           _offset_map.get(_fullQualifiedPortName + node.getName().getText()) +
           "]=invoker_" + node.getName().getText() + ";\n");
-
+      _clientInvokers.push("invokers[" +
+          _offset_map.get(_fullQualifiedPortName + node.getName().getText()+"Parallel") +
+          "]=parallel_master_invoker_" + node.getName().getText() + ";\n");
+      _parallelWorkerInvokers.push("parallel_worker_invokers[" +
+          _offset_map.get(_fullQualifiedPortName + node.getName().getText()) +
+          "]=parallel_worker_invoker_" + node.getName().getText() + ";\n");
+     
       String templateC2CxxProxyImplementationFile = "native-component-c2cxx-socket-implementation-provides-port.template";
 
       TemplateFile c2CxxProxyImplementationTemplate = new TemplateFile(
@@ -151,6 +158,12 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
       node.apply(parameterList);
       c2CxxProxyImplementationTemplate.addMapping("__SOCKET_PULL__",
           parameterList.pullInFromSocketForCxx());
+      
+      c2CxxProxyImplementationTemplate.addMapping("__PARALLEL_WORKER_PULL__",
+          parameterList.pullInFromParallelWorkerForCxx());
+
+      c2CxxProxyImplementationTemplate.addMapping("__PARALLEL_MASTER_PULL__",
+          parameterList.pullInFromParallelMasterForCxx());
 
       c2CxxProxyImplementationTemplate.addMapping("__SOCKET_PUSH__",
           parameterList.pushOutToSocketForCxx());
@@ -168,7 +181,7 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
           parameterList.getParameterListInC2F());
       c2CxxProxyImplementationTemplate.addMapping(
           "__FUNCTION_CALL_PARAMETERS_LIST__",
-          parameterList.getFunctionCallListInCxx());
+          parameterList.getFunctionCallListInCxxSocket());
 
       _templateFilesProvidesPorts.add(c2CxxProxyImplementationTemplate);
 
@@ -249,6 +262,7 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
     try {
       String serverInvokers = "";
       String clientInvokers = "";
+      String parallelInvokers = "";
       while (!_serverInvokers.isEmpty()) {
         serverInvokers += _serverInvokers.peek();
         _serverInvokers.pop();
@@ -257,10 +271,16 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
         clientInvokers += _clientInvokers.peek();
         _clientInvokers.pop();
       }
+      while (!_parallelWorkerInvokers.isEmpty()) {
+        parallelInvokers += _parallelWorkerInvokers.peek();
+        _parallelWorkerInvokers.pop();
+      }
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
           "__SET_SERVER_INVOKERS__", serverInvokers);
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
           "__SET_CLIENT_INVOKERS__", clientInvokers);
+      _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
+          "__SET_PARALLEL_WORKER_INVOKERS__", parallelInvokers);
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
           "__CLIENT_METHODS__", "" + (2 + _offset_map.size()));
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(

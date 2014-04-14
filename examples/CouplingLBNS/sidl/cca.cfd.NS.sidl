@@ -9,7 +9,8 @@ package cca {
 package cfd { 
   
   @target = cxx_remote_socket
-  class NS implements-all cca.cfd.NSSolver,cca.cfd.NS2LB{
+  class NS implements-all cca.cfd.NSSolver,cca.cfd.NS2LB
+  uses cca.cfd.LBSolver as lb{
   }
   
 

@@ -1,6 +1,10 @@
 #include "__PATH_FULL_QUALIFIED_PORT_TYPE__NativeSocketDispatcher.h"
 #include "__PATH_FULL_QUALIFIED_PORT_TYPE__Cxx2SocketPlainPort.h"
-void invoker_create_client_port_for___USES_PORT_AS__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer){
+void invoker_create_client_port_for___USES_PORT_AS__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer
+#ifdef Parallel
+,MPI_Comm communicator, int methodId
+#endif
+){
   long long portref=0;
   int port;
   int hostname_len=0;
@@ -20,7 +24,11 @@ void invoker_create_client_port_for___USES_PORT_AS__(void** ref,int newsockfd, i
 }
   
 
-void invoker_connect_client_dispatcher___USES_PORT_AS__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer){
+void invoker_connect_client_dispatcher___USES_PORT_AS__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer
+#ifdef Parallel
+,MPI_Comm communicator, int methodId
+#endif
+){
   long long portref=0;
   int port;
   int hostname_len=0;
@@ -43,7 +51,11 @@ void invoker_connect_client_dispatcher___USES_PORT_AS__(void** ref,int newsockfd
 
 
 
-void invoker_disconnect_client_dispatcher___USES_PORT_AS__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer){
+void invoker_disconnect_client_dispatcher___USES_PORT_AS__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer
+#ifdef Parallel
+,MPI_Comm communicator, int methodId
+#endif
+){
  ((__CXX_FULL_QUALIFIED_NAME__Implementation*)*ref)->disconnect__USES_PORT_AS__();
 }
 

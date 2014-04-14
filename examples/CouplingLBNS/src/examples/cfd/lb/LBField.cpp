@@ -129,6 +129,52 @@ void LBField::getVelocity (const FLOAT density, FLOAT * const velocity, const FL
 #endif
 }
 
+void LBField::getVelocityComponent (const FLOAT density, FLOAT & velocity, const FLOAT* const f, int i, int j, int k,int component) const {
+
+#ifdef D3Q19
+	// Assume that the lattice velocities are indexed such that C_{i} = -C_{Q-i-1}, and C_{9} = 0,
+	// then, rho * u = sum_1^Q f_i C_i = sum_1^8 (f_i - f_{Q-i-1}) C_i. There shouldn't be
+	// ADDITIONAL conditioning problems, since this subtraction of close values is done anyway if
+	// performing the complete sum. This should help performance a little.
+   if(component==0)
+	velocity = (f[getIndexF(17, i, j, k)] - f[getIndexF(1, i, j, k)] +
+			f[getIndexF(3, i, j, k)] - f[getIndexF(15, i, j, k)] +
+			f[getIndexF(13, i, j, k)] - f[getIndexF(5, i, j, k)] +
+			f[getIndexF(7, i, j, k)] - f[getIndexF(11, i, j, k)] +
+			f[getIndexF(10, i, j, k)] - f[getIndexF(8, i, j, k)]) / density;
+   else if(component==1)
+	velocity = (f[getIndexF(18, i, j, k)] - f[getIndexF(0, i, j, k)] +
+			f[getIndexF(4, i, j, k)] - f[getIndexF(14, i, j, k)] +
+			f[getIndexF(13, i, j, k)] - f[getIndexF(5, i, j, k)] +
+			f[getIndexF(12, i, j, k)] - f[getIndexF(6, i, j, k)] +
+			f[getIndexF(11, i, j, k)] - f[getIndexF(7, i, j, k)]) / density;
+   else
+	velocity = (f[getIndexF(18, i, j, k)] - f[getIndexF(0, i, j, k)] +
+			f[getIndexF(17, i, j, k)] - f[getIndexF(1, i, j, k)] +
+			f[getIndexF(16, i, j, k)] - f[getIndexF(2, i, j, k)] +
+			f[getIndexF(15, i, j, k)] - f[getIndexF(3, i, j, k)] +
+			f[getIndexF(14, i, j, k)] - f[getIndexF(4, i, j, k)]) / density;
+
+	// All these modifications make harder to select 2D or 3D mode without using macros.
+#endif
+/*
+#if (defined (D3Q15)) or (defined (D3Q27))  // All the sets that don't have an optimization
+	velocity[0] = 0.0;
+	velocity[1] = 0.0;
+	velocity[2] = 0.0;
+	for (int l = 0; l < _Q; l++){
+		velocity[0] += _latticeVelocities[l][0] * f[getIndexF(l, i, j, k)];
+		velocity[1] += _latticeVelocities[l][1] * f[getIndexF(l, i, j, k)];
+		velocity[2] += _latticeVelocities[l][2] * f[getIndexF(l, i, j, k)];
+	}
+	velocity[0] /= density;
+	velocity[1] /= density;
+	velocity[2] /= density;
+#endif
+*/
+}
+
+
 void LBField::getPressureAndVelocity(FLOAT & pressure, FLOAT* const velocity, int i, int j) const {
 	pressure = getDensity(_fOut, i, j);
 	getVelocity(pressure, velocity, _fOut, i, j);

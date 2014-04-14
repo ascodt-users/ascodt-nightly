@@ -118,7 +118,27 @@ public class GetParameterList extends DepthFirstAdapter {
 
       result += delim + parameter.name + "";
       if (parameter.isArray) {
-        result += "," + parameter.name + "_len";
+       
+          result += "," + parameter.name + "_len";
+      }
+      delim = ",";
+    }
+
+    return result;
+  }
+  
+
+  public String getFunctionCallListInCxxSocket() {
+    String result = "";
+    String delim = "";
+    for (Parameter parameter : _parameters) {
+
+      result += delim + parameter.name + "";
+      if (parameter.isArray) {
+        if(parameter.type == Parameter.Type.String)
+          result += "_data," + parameter.name + "_len";
+        else
+          result += "," + parameter.name + "_len";
       }
       delim = ",";
     }
@@ -1946,7 +1966,230 @@ public class GetParameterList extends DepthFirstAdapter {
     _trace.out("prepareJNIParametersForCxxCall()");
     return result;
   }
+  public String pullInFromParallelWorkerForCxx() {
+    String result = "";
+    for (Parameter parameter : _parameters) {
+      if (parameter.type == Parameter.Type.Boolean && parameter.isArray) {
+        result += "int " + parameter.name + "_len=0;\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_len,sizeof(int),newsockfd);\n";
 
+        result += "bool* " + parameter.name + "=new bool[" + parameter.name +
+            "_len];\n";
+
+        result += "broadcastParallelData((char*)" + parameter.name + ",sizeof(bool)*" +
+            parameter.name + "_len,newsockfd);\n";
+      }
+      if (parameter.type == Parameter.Type.Double && parameter.isArray) {
+        result += "int " + parameter.name + "_len=0;\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_len,sizeof(int),newsockfd);\n";
+
+        result += "double* " + parameter.name + "=new double[" +
+            parameter.name + "_len];\n";
+        result += "broadcastParallelData((char*)" + parameter.name + ",sizeof(double)*" +
+            parameter.name + "_len,newsockfd);\n";
+      }
+      if (parameter.type == Parameter.Type.Integer && parameter.isArray) {
+        result += "int " + parameter.name + "_len=0;\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_len,sizeof(int),newsockfd);\n";
+
+        result += "int* " + parameter.name + "=new int[" + parameter.name +
+            "_len];\n";
+
+        result += "broadcastParallelData((char*)" + parameter.name + ",sizeof(int)*" +
+            parameter.name + "_len,newsockfd);\n";
+      }
+      if (parameter.type == Parameter.Type.String && parameter.isArray) {
+        result += "int " + parameter.name + "_len=0;\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_len,sizeof(int),newsockfd);\n";
+        result += "char (* " + parameter.name + ")[255]=new char[" +
+            parameter.name + "_len][255];\n";
+        result += "std::string * " + parameter.name + "_data = new std::string[" +
+            parameter.name + "_len];\n";
+        // result+="std::string* "+parameter.name+"=new std::string["+parameter.name+"_len];\n";
+
+        result += "for(int i=0;i<" + parameter.name + "_len;i++){\n";
+        result += "\tint " + parameter.name + "_data_len=0;\n";
+        result += "\tbroadcastParallelData((char*)&" + parameter.name +
+            "_data_len,sizeof(int),newsockfd);\n";
+        result += "\tbroadcastParallelData((char*)" + parameter.name + "[i]," +
+            parameter.name + "_data_len<255?" + parameter.name +
+            "_data_len:255,newsockfd);\n";
+        result += "\t" + parameter.name + "[i][" + parameter.name +
+            "_data_len]='\\\\0';\n";
+        result += "\t" + parameter.name + "_data[i]="+parameter.name+"[i];\n";
+
+        result += "}\n";
+
+      }
+      if (parameter.type == Parameter.Type.UserDefined && parameter.isArray) {
+
+      }
+      if (parameter.type == Parameter.Type.Opaque && parameter.isArray) {
+        result += "int " + parameter.name + "_parallel_len=0;\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_len,sizeof(int),newsockfd);\n";
+
+        result += "long long* " + parameter.name + "=new long long[" +
+            parameter.name + "_len];\n";
+
+        result += "broadcastParallelData((char*)" + parameter.name + "_parallel,sizeof(long long)*" +
+            parameter.name + "_len,newsockfd);\n";
+      }
+
+      if (parameter.type == Parameter.Type.Boolean && !parameter.isArray) {
+        result += "bool " + parameter.name + ";\n";
+        result += "int " + parameter.name + "_as_int;\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_as_int,sizeof(int),newsockfd);\n";
+        result += parameter.name + "=" + parameter.name +
+            "_as_int==1?true:false;\n";
+      }
+      if (parameter.type == Parameter.Type.Double && !parameter.isArray) {
+        result += "double " + parameter.name + ";\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            ",sizeof(double),newsockfd);\n";
+      }
+      if (parameter.type == Parameter.Type.Integer && !parameter.isArray) {
+        result += "int " + parameter.name + ";\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            ",sizeof(int),newsockfd);\n";
+      }
+      if (parameter.type == Parameter.Type.String && !parameter.isArray) {
+        result += "int " + parameter.name + "_str_len=0;\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_str_len,sizeof(int),newsockfd);\n";
+        result += "char* " + parameter.name + "=new char[" + parameter.name +
+            "_str_len];\n";
+        result += "broadcastParallelData((char*)" + parameter.name + "," + parameter.name +
+            "_str_len,newsockfd);\n";
+      }
+      if (parameter.type == Parameter.Type.UserDefined && !parameter.isArray) {
+        AEnumDeclarationPackageElement enumDecl = _scope
+            .getEnumerationDefinition(parameter.userDefinedTypeIdentifier);
+        assert enumDecl != null;
+        String fullQuualifiedTypeName = _scope
+            .getFullyQualifiedName(parameter.userDefinedTypeIdentifier);
+
+        result += fullQuualifiedTypeName.replaceAll("[.]", "::") + " " +
+            parameter.name + "_parallel;\n";
+        result += "int " + parameter.name + "_int2enum;\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_int2enum,sizeof(int),newsockfd);\n";
+        result += parameter.name + "=(" +
+            fullQuualifiedTypeName.replaceAll("[.]", "::") + ")" +
+            parameter.name + "_int2enum;\n";
+      }
+      if (parameter.type == Parameter.Type.Opaque && !parameter.isArray) {
+        result += "int " + parameter.name + ";\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            ",sizeof(long long),newsockfd);\n";
+      }
+
+    }
+    return result;
+  }
+  
+  public String pullInFromParallelMasterForCxx() {
+    String result = "";
+    for (Parameter parameter : _parameters) {
+      if (parameter.type == Parameter.Type.Boolean && parameter.isArray) {
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_len,sizeof(int),communicator);\n";
+
+        
+        result += "broadcastParallelData((char*)" + parameter.name + ",sizeof(bool)*" +
+            parameter.name + "_len,communicator);\n";
+      }
+      if (parameter.type == Parameter.Type.Double && parameter.isArray) {
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_len,sizeof(int),communicator);\n";
+
+        result += "broadcastParallelData((char*)" + parameter.name + ",sizeof(double)*" +
+            parameter.name + "_len,communicator);\n";
+      }
+      if (parameter.type == Parameter.Type.Integer && parameter.isArray) {
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_len,sizeof(int),communicator);\n";
+
+        
+
+        result += "broadcastParallelData((char*)" + parameter.name + ",sizeof(int)*" +
+            parameter.name + "_len,communicator);\n";
+      }
+      if (parameter.type == Parameter.Type.String && parameter.isArray) {
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_len,sizeof(int),communicator);\n";
+                // result+="std::string* "+parameter.name+"=new std::string["+parameter.name+"_len];\n";
+
+        result += "for(int i=0;i<" + parameter.name + "_len;i++){\n";
+        result += "\tint " + parameter.name + "_data_len="+parameter.name+"_data[i].size();\n";
+        result += "\tbroadcastParallelData((char*)&" + parameter.name +
+            "_data_len,sizeof(int),communicator);\n";
+        result += "\tbroadcastParallelData((char*)" + parameter.name + "[i]," +
+            parameter.name + "_data_len<255?" + parameter.name +
+            "_data_len:255,communicator);\n";
+       
+
+        result += "}\n";
+
+      }
+      if (parameter.type == Parameter.Type.UserDefined && parameter.isArray) {
+
+      }
+      if (parameter.type == Parameter.Type.Opaque && parameter.isArray) {
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_len,sizeof(int),communicator);\n";
+
+        
+        result += "broadcastParallelData((char*)" + parameter.name + ",sizeof(long long)*" +
+            parameter.name + "_len,communicator);\n";
+      }
+
+      if (parameter.type == Parameter.Type.Boolean && !parameter.isArray) {
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_as_int,sizeof(int),communicator);\n";
+        
+      }
+      if (parameter.type == Parameter.Type.Double && !parameter.isArray) {
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            ",sizeof(double),communicator);\n";
+      }
+      if (parameter.type == Parameter.Type.Integer && !parameter.isArray) {
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            ",sizeof(int),communicator);\n";
+      }
+      if (parameter.type == Parameter.Type.String && !parameter.isArray) {
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_str_len,sizeof(int),communicator);\n";
+        result += "broadcastParallelData((char*)" + parameter.name + "," + parameter.name +
+            "_str_len,communicator);\n";
+      }
+      if (parameter.type == Parameter.Type.UserDefined && !parameter.isArray) {
+        AEnumDeclarationPackageElement enumDecl = _scope
+            .getEnumerationDefinition(parameter.userDefinedTypeIdentifier);
+        assert enumDecl != null;
+        String fullQuualifiedTypeName = _scope
+            .getFullyQualifiedName(parameter.userDefinedTypeIdentifier);
+
+        result += fullQuualifiedTypeName.replaceAll("[.]", "::") + " " +
+            parameter.name + ";\n";
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            "_int2enum,sizeof(int),communicator);\n";
+      
+      }
+      if (parameter.type == Parameter.Type.Opaque && !parameter.isArray) {
+        result += "broadcastParallelData((char*)&" + parameter.name +
+            ",sizeof(long long),communicator);\n";
+      }
+
+    }
+    return result;
+  }
+  
   public String pullInFromSocketForCxx() {
     String result = "";
     for (Parameter parameter : _parameters) {
@@ -1988,7 +2231,7 @@ public class GetParameterList extends DepthFirstAdapter {
             "_len,sizeof(int),rcvBuffer,newsockfd,buffer_size);\n";
         result += "char (* " + parameter.name + ")[255]=new char[" +
             parameter.name + "_len][255];\n";
-        // result+="std::string* "+parameter.name+"=new std::string["+parameter.name+"_len];\n";
+        result+="std::string* "+parameter.name+"_data=new std::string["+parameter.name+"_len];\n";
 
         result += "for(int i=0;i<" + parameter.name + "_len;i++){\n";
         result += "\tint " + parameter.name + "_data_len=0;\n";
@@ -1998,8 +2241,8 @@ public class GetParameterList extends DepthFirstAdapter {
             parameter.name + "_data_len<255?" + parameter.name +
             "_data_len:255,rcvBuffer,newsockfd,buffer_size);\n";
         result += "\t" + parameter.name + "[i][" + parameter.name +
-            "_data_len]='\\0';";
-
+            "_data_len]='\\\\0';\n";
+        result += "\t" + parameter.name + "_data[i]="+parameter.name+"[i];\n";
         result += "}\n";
 
       }
@@ -2071,6 +2314,7 @@ public class GetParameterList extends DepthFirstAdapter {
     return result;
   }
 
+ 
   public String pullInFromSocketForJava() {
     String result = "";
     for (Parameter parameter : _parameters) {
@@ -2219,7 +2463,7 @@ public class GetParameterList extends DepthFirstAdapter {
               parameter.name + "_data_len<255?" + parameter.name +
               "_data_len:255,_rcvBuffer,_newsockfd,_buffer_size);\n";
           result += "\t" + parameter.name + "[i][" + parameter.name +
-              "_data_len]='\\0';";
+              "_data_len]='\\\\0';";
 
           result += "}\n";
 
@@ -2572,7 +2816,7 @@ public class GetParameterList extends DepthFirstAdapter {
               "[i].size(),sendBuffer,newsockfd,buffer_size);\n";
           result += "}\n";
         }
-        result += "delete [] " + parameter.name + "_data;\n";
+        //result += "delete [] " + parameter.name + "_data;\n";
         result += "delete [] " + parameter.name + ";\n";
       }
       if (parameter.type == Parameter.Type.UserDefined && parameter.isArray) {

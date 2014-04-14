@@ -28,11 +28,13 @@ import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 import de.tum.ascodt.plugin.project.Project;
 import de.tum.ascodt.plugin.project.ProjectBuilder;
+import de.tum.ascodt.plugin.services.SocketService;
 import de.tum.ascodt.plugin.utils.ProcessExitDetector;
 import de.tum.ascodt.plugin.utils.ProcessListener;
 import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
@@ -49,6 +51,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
   private String _projectLocation;
   private Process _process;
   private ExecutorService _executionService;
+  protected Spinner numberOfProcesses;
 
   protected ProgramArgsTab(String label, String containerId) {
     super(label, containerId);
@@ -61,6 +64,33 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
     _exitDetector.addListener(processListner);
   }
 
+  protected void createParallelControlItems(ExpandBar bar){
+    GridLayout gridLayout = new GridLayout();
+    gridLayout.numColumns = 2;
+
+    Composite parallelComp = new Composite(bar, SWT.NONE);
+    parallelComp.setLayout(gridLayout);
+    GridData textGridData = new GridData();
+    textGridData.horizontalAlignment = GridData.FILL;
+    textGridData.grabExcessHorizontalSpace = true;
+    
+    Label labelProcessesExecutable = new Label(parallelComp, SWT.LEFT);
+    labelProcessesExecutable.setText("Number of processes:");
+    labelProcessesExecutable.setLayoutData(textGridData);
+    
+    numberOfProcesses = new org.eclipse.swt.widgets.Spinner(parallelComp, SWT.RIGHT);
+    numberOfProcesses.setMinimum(1);
+    numberOfProcesses.setMaximum(1024);
+    numberOfProcesses.setSelection(1);
+    numberOfProcesses.setLayoutData(textGridData);
+    
+    final ExpandItem parallelItemData = new ExpandItem(bar, SWT.NONE, 0);
+    bar.setSize(parallelComp.computeSize(SWT.DEFAULT, SWT.DEFAULT).x, SWT.DEFAULT);
+    parallelItemData.setText("Parallel settings");
+    parallelItemData.setHeight(parallelComp.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+    parallelItemData.setControl(parallelComp);
+    parallelItemData.setExpanded(true);
+  }
   protected void createArgsCotrolItems(ExpandBar bar) {
     GridLayout gridLayout = new GridLayout();
     gridLayout.numColumns = 2;
@@ -70,6 +100,8 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
     GridData textGridData = new GridData();
     textGridData.horizontalAlignment = GridData.FILL;
     textGridData.grabExcessHorizontalSpace = true;
+
+    
 
     Label labelProgramExecutable = new Label(argsComp, SWT.LEFT);
     labelProgramExecutable.setText("Executable:");
@@ -135,6 +167,8 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
     itemData.setHeight(argsComp.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
     itemData.setControl(argsComp);
     itemData.setExpanded(true);
+    
+   
   }
 
   @Override
@@ -159,6 +193,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
   protected void createControlGroup(ExpandBar bar) {
 
     createArgsCotrolItems(bar);
+    createParallelControlItems(bar);
   }
 
   /**
@@ -182,7 +217,11 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
 	 */
   public void execute() {
     try {
+      for(int i=1;i<this.numberOfProcesses.getSelection();i++){
+        SocketService.getDefault().getFreePort();
+      }
       String cmd = getCommandForExecution();
+    
       ProcessBuilder pb = new ProcessBuilder(cmd.split(" "));
       Map<String, String> env = pb.environment();
       if (env != null) {
@@ -278,8 +317,10 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
         while ((line = reader.readLine()) != null) {
           if (counter == 0) {
             textProgramExecutable.setText(line);
-          } else {
+          } else if(counter==1){
             textProgramArguments.setText(line);
+          } else if(counter==2){
+            numberOfProcesses.setSelection(Integer.parseInt(line));
           }
           counter++;
         }
@@ -326,6 +367,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
       BufferedWriter writer = new BufferedWriter(fwriter);
       writer.write(textProgramExecutable.getText() + "\n");
       writer.write(textProgramArguments.getText() + "\n");
+      writer.write(numberOfProcesses.getText() + "\n");
       writer.close();
       Project project = ProjectBuilder.getInstance().getProject(
           new Path(_projectLocation).lastSegment());

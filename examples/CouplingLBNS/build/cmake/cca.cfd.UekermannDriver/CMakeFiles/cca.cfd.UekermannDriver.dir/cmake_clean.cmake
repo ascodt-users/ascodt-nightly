@@ -1,0 +1,42 @@
+FILE(REMOVE_RECURSE
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/UekermannDriverAbstractImplementation.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/src/cca/cfd/UekermannDriverImplementation.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/UekermannDriverC2CxxProxy.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LBSolverNative2JavaPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LBSolverNative2NativePlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LBSolverCxx2SocketPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LBSolverC2CxxSocketPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LBSolverNativeDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LBSolverNativeSocketDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LBSolverCProxyNativeSocketDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LB2NSNative2JavaPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LB2NSNative2NativePlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LB2NSCxx2SocketPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LB2NSC2CxxSocketPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LB2NSNativeDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LB2NSNativeSocketDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LB2NSCProxyNativeSocketDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NS2LBNative2JavaPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NS2LBNative2NativePlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NS2LBCxx2SocketPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NS2LBC2CxxSocketPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NS2LBNativeDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NS2LBNativeSocketDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NS2LBCProxyNativeSocketDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o"
+  "cca.cfd.UekermannDriver.pdb"
+  "cca.cfd.UekermannDriver"
+  "cca.cfd.UekermannDriver.pdb"
+  "CMakeFiles/CMakeRelink.dir/cca.cfd.UekermannDriver"
+)
+
+# Per-language clean rules from dependency scanning.
+FOREACH(lang CXX)
+  INCLUDE(CMakeFiles/cca.cfd.UekermannDriver.dir/cmake_clean_${lang}.cmake OPTIONAL)
+ENDFOREACH(lang)

@@ -1,5 +1,9 @@
 #ifndef __INCLUDE_GUARD_FULL_QUALIFIED_NAME__C2CXXPROXY_H_
 #define __INCLUDE_GUARD_FULL_QUALIFIED_NAME__C2CXXPROXY_H_ 
+#ifdef Parallel
+#include <mpi.h>
+#endif
+
 extern "C"{
 #ifdef _WIN32
 void SOCKET_CLIENT_LOOP();
@@ -45,6 +49,10 @@ struct __COMPONENT_NAME_ENV___arg{
      const char* client_port;
      const char* daemon_port;
      bool java_client_flag;
+     int number_of_workers;
+#ifdef Parallel
+	 MPI_Comm communicator;
+#endif     
 };
 }
 #endif

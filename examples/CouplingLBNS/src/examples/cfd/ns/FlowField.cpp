@@ -9,6 +9,9 @@ FlowField::FlowField ( int Nx, int Ny ) :
     // positions with the same iterator for both pressures and velocities.
     _pressure ( ScalarField ( Nx + 3, Ny + 3 ) ),
     _velocity ( VectorField ( Nx + 3, Ny + 3 ) ), _flags ( IntScalarField ( Nx + 3, Ny + 3 ) ),
+    _cellIdsX ( IntScalarField ( Nx + 3, Ny + 3 ) ),
+    _cellIdsY ( IntScalarField ( Nx + 3, Ny + 3 ) ),
+    _cellIdsZ ( IntScalarField ( Nx + 3, Ny + 3 ) ),
     _FGH ( VectorField ( Nx + 3, Ny + 3 ) ), _RHS ( ScalarField (Nx + 3, Ny + 3) ) {
 
     assertion ( Nx > 0 );
@@ -23,6 +26,9 @@ FlowField::FlowField ( int Nx, int Ny, int Nz ) :
     _pressure ( ScalarField ( Nx + 3, Ny + 3, Nz + 3 ) ),
     _velocity  ( VectorField ( Nx + 3, Ny + 3, Nz + 3 ) ),
     _flags  ( IntScalarField ( Nx + 3, Ny + 3, Nz +3 ) ),
+    _cellIdsX(IntScalarField ( Nx + 3, Ny + 3, Nz +3 ) ),
+    _cellIdsY(IntScalarField ( Nx + 3, Ny + 3, Nz +3 ) ),
+    _cellIdsZ(IntScalarField ( Nx + 3, Ny + 3, Nz +3 ) ),
     _FGH ( VectorField ( Nx + 3, Ny + 3, Nz + 3 ) ),
     _RHS ( ScalarField ( Nx + 3, Ny + 3, Nz + 3 ) ) {
 
@@ -49,15 +55,17 @@ FlowField::FlowField (const Parameters & parameters):
                       VectorField(_size_x + 3, _size_y + 3, _size_z + 3)),
     _flags(_dim==2?IntScalarField(_size_x + 3, _size_y + 3):
                    IntScalarField(_size_x + 3, _size_y + 3, _size_z + 3)),
+    _cellIdsX(_dim==2?IntScalarField(_size_x + 3, _size_y + 3):
+    IntScalarField(_size_x + 3, _size_y + 3, _size_z + 3)),
+    _cellIdsY(_dim==2?IntScalarField(_size_x + 3, _size_y + 3):
+	IntScalarField(_size_x + 3, _size_y + 3, _size_z + 3)),
+	_cellIdsZ(_dim==2?IntScalarField(_size_x + 3, _size_y + 3):
+    IntScalarField(_size_x + 3, _size_y + 3, _size_z + 3)),
     _FGH(_dim==2?VectorField(_size_x + 3, _size_y + 3):
                  VectorField(_size_x + 3, _size_y + 3, _size_z + 3)),
     _RHS(_dim==2?ScalarField(_size_x + 3, _size_y + 3):
                  ScalarField(_size_x + 3, _size_y + 3, _size_z + 3))
-{
-	assertion(_size_x>0);
-	assertion(_size_y>0);
-	assertion(_size_z>0);
-}
+{}
 
 void FlowField::copyToField(FlowField & dest){
     FLOAT *vDest, *vSource;
@@ -147,7 +155,16 @@ VectorField & FlowField::getVelocity () {
 IntScalarField & FlowField::getFlags () {
     return _flags;
 }
+IntScalarField & FlowField::getCellIdsX () {
+    return _cellIdsX;
+}
 
+IntScalarField & FlowField::getCellIdsY () {
+    return _cellIdsY;
+}
+IntScalarField & FlowField::getCellIdsZ () {
+    return _cellIdsZ;
+}
 
 VectorField & FlowField::getFGH () {
     return _FGH;

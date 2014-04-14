@@ -36,6 +36,7 @@ class LBNSFGHCorrectionIterator {
          * @param component The component to be set (0, 1 or 2 for x, y or z respectivelly)
          */
         void setComponent (int i, int j, int k, int component);
+        inline bool toLocalIndex(const int i,const int j, const int k,int& i_out,int& j_out, int& k_out) const;
 
     public:
 

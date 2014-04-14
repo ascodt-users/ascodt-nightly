@@ -23,7 +23,9 @@ class VTKStencil : public FieldStencil<FlowField> {
 
         std::stringstream pressureStream;   //! Stream for the pressure data
         std::stringstream velocityStream;   //! Stream for the velocity data
-
+        std::stringstream cellIdStreamX;
+        std::stringstream cellIdStreamY;
+        std::stringstream cellIdStreamZ;
     public:
 
         /** Constructor

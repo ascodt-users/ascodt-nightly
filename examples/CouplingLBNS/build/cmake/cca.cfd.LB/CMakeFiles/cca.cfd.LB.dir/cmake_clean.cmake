@@ -1,0 +1,43 @@
+FILE(REMOVE_RECURSE
+  "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o"
+  "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o"
+  "cca.cfd.LB.pdb"
+  "cca.cfd.LB"
+  "cca.cfd.LB.pdb"
+  "CMakeFiles/CMakeRelink.dir/cca.cfd.LB"
+)
+
+# Per-language clean rules from dependency scanning.
+FOREACH(lang CXX)
+  INCLUDE(CMakeFiles/cca.cfd.LB.dir/cmake_clean_${lang}.cmake OPTIONAL)
+ENDFOREACH(lang)

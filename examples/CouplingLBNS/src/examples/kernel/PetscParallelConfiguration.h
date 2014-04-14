@@ -35,7 +35,7 @@ class PetscParallelConfiguration {
         /** Compute local sizes and sizes in all directions. Requires deallocation of sizes
          */
         void computeSizes();
-
+        void resetCoupling();
         /** Deletes the arrays allocated in the parameters. To be called in the destructor of this
          * class
          */

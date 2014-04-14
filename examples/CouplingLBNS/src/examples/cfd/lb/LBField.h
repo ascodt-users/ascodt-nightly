@@ -50,6 +50,7 @@ public:
 
 	const FLOAT getDensity (const FLOAT* const f, int i, int j, int k = 0) const;
 	void getVelocity (const FLOAT density, FLOAT* const velocity, const FLOAT* const f, int i, int j, int k = 0) const;
+	void getVelocityComponent (const FLOAT density, FLOAT& velocity, const FLOAT* const f, int i, int j, int k ,int component) const;
 
 	virtual void getPressureAndVelocity(FLOAT & pressure, FLOAT* const velocity, int i, int j) const;
 

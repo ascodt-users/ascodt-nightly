@@ -157,6 +157,15 @@ public class CreateSocket2JavaPlainPorts extends DepthFirstAdapter {
           "();\n";
       _operationInvokers += "\t\t}\n";
       _operationInvokers += "\t};\n";
+      _operationInvokers += "\t_invokers[" +
+          _operationsMap.get(_fullQualifiedPortName + "" +
+              node.getName().getText()+"Parallel") + "]= new " + _portName +
+          "SocketInvoker(){\n";
+      _operationInvokers += "\t\tpublic void invoke() throws de.tum.ascodt.utils.exceptions.ASCoDTException{\n";
+      _operationInvokers += "\t\t\tinvoke_" + node.getName().getText() +
+          "Parallel();\n";
+      _operationInvokers += "\t\t}\n";
+      _operationInvokers += "\t};\n";
       templateJava.addMapping("__OPERATION_PARAMETERS_LIST__", parameterList
           .getParameterListInJava(onlyInParameters
               .areAllParametersInParameters()));

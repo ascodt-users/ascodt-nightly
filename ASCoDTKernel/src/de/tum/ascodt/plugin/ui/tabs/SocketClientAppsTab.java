@@ -85,7 +85,11 @@ public class SocketClientAppsTab extends ProgramArgsTab {
 
   @Override
   public String getCommandForExecution() {
-    return textProgramExecutable.getText() + " " +
+    String mpiPrefix="";
+    if(numberOfProcesses.getSelection()>1){
+      mpiPrefix="/opt/intel/impi/4.1.3.049/intel64/bin/mpiexec -np "+numberOfProcesses.getSelection()+" ";
+    }
+    return mpiPrefix+textProgramExecutable.getText() + " " +
         textProgramArguments.getText();
   }
 
@@ -100,6 +104,7 @@ public class SocketClientAppsTab extends ProgramArgsTab {
           _label.toUpperCase().replaceAll("[.]", "_") + "_JAVA=on",};
   }
 
+  
   public String getHost() {
     return textHostname.getText();
   }

@@ -13,12 +13,13 @@
 #include <vector>
 /** Stencil to copy information from the NS to the LB domain.
  */
-
+class NSLBCommunicator;
 class NSLBCouplingStencil : public GlobalBoundaryStencil<LBField> {
 private:
-	std::vector<double>* _velocities[3];
-	std::vector<double>& _pressure;
-	std::vector<double>& _jacobian;
+	//std::vector<double>* _velocities[3];
+	//std::vector<double>& _pressure;
+	//std::vector<double>& _jacobian;
+	std::vector<NSLBCommunicator*> _communicators;
 public:
 
 	/** Constructor of the class with the position of the LB subdomain defined in independent
@@ -42,12 +43,7 @@ public:
 	NSLBCouplingStencil (const Parameters & parameters,LBField & lbField, FlowField & nsField,
 			int nsLowX, int nsHighX,
 			int nsLowY, int nsHighY,
-			int nsLowZ, int nsHighZ,
-			std::vector<double>& velocityX,
-			std::vector<double>& velocityY,
-			std::vector<double>& velocityZ,
-			std::vector<double>& jacobian,
-			std::vector<double>& pressure);
+			int nsLowZ, int nsHighZ);
 
 	/** Constructor of the transfer class where the position of the LB subdomain is defined
 	 * inside the parameter structure.
@@ -56,12 +52,7 @@ public:
 	 * @param nsField Reference to the NS flow field.
 	 */
 	NSLBCouplingStencil (const Parameters & parameters,LBField & lbField,
-			FlowField & nsField,
-			std::vector<double>& velocityX,
-			std::vector<double>& velocityY,
-			std::vector<double>& velocityZ,
-			std::vector<double>& jacobian,
-			std::vector<double>& pressure);
+			FlowField & nsField);
 
 	/** Destructor. Currently does nothing
 	 */
@@ -156,7 +147,8 @@ public:
 	void applyFrontWall  ( LBField & lbField, int i, int j, int k );
 	void applyBackWall   ( LBField & lbField, int i, int j, int k );
 	/** @} */
-
+	void registerLBRegion(NSLBCommunicator* com);
+	void flush();
 private:
 
 	LBField & _lbField;
@@ -188,7 +180,17 @@ private:
 	FLOAT _meanPressure;    //! Average pressure in the boundary cells
 
 	int _flip[3];
+	inline bool convertToLocalCoordinates(
+			const int i_in,
+			const int j_in,
+			const int k_in,
+			int& i_out,
+			int& j_out,
+			int& k_out) const;
 
+	void getCommunicators(
+			const int i,const int j, const int k,
+			std::vector<NSLBCommunicator*>& coms);
 	/** Loads the requested velocity components in the points of the stencil into the private
 	 * values array.
 	 * @param i Position of the NS cell containing the point in the X direction.
@@ -198,7 +200,14 @@ private:
 	 * @param offset Array with offsets to translate the interpolation stencil.
 	 * @param flip Array stating in which directions the stencil has been flipped.
 	 */
-	void loadVelocity(int i, int j, int k, int component,
+	void loadVelocity(
+			const int ins,
+			const int jns,
+			const int kns,
+			const int ilb,
+			const int jlb,
+			const int klb,
+			const int component,
 			const int *  const offset, const int * const flip);
 
 	/** Loads values of the pressure from the NS field at the points of the stencil into the
@@ -209,7 +218,13 @@ private:
 	 * @param offset Array with offsets to translate the interpolation stencil.
 	 * @param flip Array stating in which directions the stencil has been flipped.
 	 */
-	void loadPressure(int i, int j, int k,
+	void loadPressure(
+			const int ins,
+			const int jns,
+			const int kns,
+			const int ilb,
+			const int jlb,
+			const int klb,
 			const int *  const offset, const int * const flip);
 
 	/** From the indexes of a cell in the LB grid, get the indexes and position in the NS grid

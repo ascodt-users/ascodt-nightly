@@ -10,20 +10,25 @@ package cfd {
   
 		interface NSSolver{
 		  	 setup(in string inputScenario);
+		  	 setupCommForLBRegion(in int startOfRegion[],in int endOfRegion[],in string commids[]);
 		     solve();
 		     solveOneTimestepPhaseOne();
 		     solveOneTimestepPhaseTwo();
 		     setVelocities(in double velocitiesX [],in double velocitiesY [],in double velocitiesZ []);
-		  	 retrieveTimestep(inout double timestep);
 		  	 printNSPressure();
 		  	 printNSProfiles();
 		  	 closeNSProfiles();
 		  	 iterateBoundary();
 		  	 iterateInner();
+		  	 forwardVelocities(in int keys[],
+		  		 in int offsets[],in int flips[],
+		  		 in double values[],in int componentSize [],inout int ackn);
 		  	 plot();
+		  	 syncr(inout int value);
 		}
 		interface LBSolver{
 		  	 setup(in string inputScenario);
+		     setupCommForNSRegion(in int startOfRegion[],in int endOfRegion[],in string commids[]);
 		     solve();
 		     solveOneTimestep();
 		     setVelocities(in double velocitiesX [],in double velocitiesY [],in double velocitiesZ []);
@@ -32,21 +37,26 @@ package cfd {
 		  	 closeLBProfiles();
           	 printLBDensity();
              printLBProfiles();
+             forwardVelocities(in int keys[],in int offsets[],in int flips[],in double values[],in int componentSize [],inout int ackn);
+		  	 forwardPressure(in int keys[],in int offsets[],in int flips[],in double values[],inout int ackn);
+		  	 syncr(inout int value);
 		  	 plot();
 		}
 		  interface LB2NS {
 		  	iterateBoundary();
 		  	iterateInner();
+		  	retrieveTimestep(inout double dt);
 		  	retrieveVelocitiesSize(inout int memoryX,inout int memoryY,inout int memoryZ);
 		  	retrieveVelocitiesCopy(
 		  		inout double velocityX[],
 		  		inout double velocityY[],
 		  		inout double velocityZ[]
 		  		);
-		  	
+		  	 	
 		  }
 		  interface NS2LB{
 		  	iterate();
+		  	retrieveTimestep(inout double timestep);
 		  	retrieveVelocitiesSize(inout int memory);
 		  	retrieveVelocitiesCopy(
 		  		inout double velocityX[],

@@ -39,7 +39,9 @@ public class CreateCxxComponent extends DepthFirstAdapter {
   private Stack<TemplateFile> _templateFilesOfAbstractCXXHeader;
   private Stack<TemplateFile> _templateFilesOfAbstractCXXImplementation;
   private Stack<TemplateFile> _templateFilesHeaderUsesPorts;
+  private Stack<TemplateFile> _templateFilesHeaderProvidesPorts;
   private Stack<TemplateFile> _templateFilesImplementationUsesPorts;
+  private Stack<TemplateFile> _templateFilesImplementationProvidesPorts;
   private URL _userImplementationsDestinationDirectory;
   private URL _generatedFilesDirectory;
   private String[] _namespace;
@@ -67,7 +69,9 @@ public class CreateCxxComponent extends DepthFirstAdapter {
     _templateFilesOfAbstractCXXHeader = new Stack<TemplateFile>();
     _templateFilesOfAbstractCXXImplementation = new Stack<TemplateFile>();
     _templateFilesHeaderUsesPorts = new Stack<TemplateFile>();
+    _templateFilesHeaderProvidesPorts = new Stack<TemplateFile>();
     _templateFilesImplementationUsesPorts = new Stack<TemplateFile>();
+    _templateFilesImplementationProvidesPorts = new Stack<TemplateFile>();
     _userImplementationsDestinationDirectory = userImplementationsDestinationDirectory;
     _generatedFilesDirectory = generatedFilesDirectory;
     _namespace = namespace;
@@ -210,13 +214,19 @@ public class CreateCxxComponent extends DepthFirstAdapter {
     try {
       String templateCxxImplementationFile = "native-component-cxx-implementation-provides-port.template";
       String templateCxxImplementationHeaderFile = "native-component-cxx-header-provides-port.template";
+      String templateCxxImplementationAbstractHeaderFile = "native-component-abstract-cxx-header-provides-port.template";
+      String templateCxxImplementationAbstractFile = "native-component-abstract-cxx-implementation-provides-port.template";
 
       TemplateFile cxxImplementationHeaderTemplate = new TemplateFile(
           _templateFilesOfCXXHeader.peek(), templateCxxImplementationHeaderFile);
       TemplateFile cxxImplementationTemplate = new TemplateFile(
           _templateFilesOfCXXImplementation.peek(),
           templateCxxImplementationFile);
-
+      TemplateFile cxxImplementationAbstractHeaderTemplate = new TemplateFile(
+          _templateFilesOfAbstractCXXHeader.peek(), templateCxxImplementationAbstractHeaderFile);
+      TemplateFile cxxImplementationAbstractTemplate = new TemplateFile(
+          _templateFilesOfAbstractCXXImplementation.peek(),
+          templateCxxImplementationAbstractFile);
       ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
       node.apply(onlyInParameters);
 
@@ -226,19 +236,36 @@ public class CreateCxxComponent extends DepthFirstAdapter {
 
       cxxImplementationHeaderTemplate.addMapping("__OPERATION_NAME__", node
           .getName().getText());
+      cxxImplementationAbstractHeaderTemplate.addMapping("__OPERATION_NAME__", node
+          .getName().getText());
       cxxImplementationTemplate.addMapping("__OPERATION_NAME__", node.getName()
+          .getText());
+      cxxImplementationAbstractTemplate.addMapping("__OPERATION_NAME__", node.getName()
           .getText());
       cxxImplementationHeaderTemplate.addMapping(
           "__OPERATION_PARAMETERS_LIST__",
           parameterList.getParameterListInCxx());
+      cxxImplementationAbstractHeaderTemplate.addMapping(
+          "__OPERATION_PARAMETERS_LIST__",
+          parameterList.getParameterListInCxx());
+      
       cxxImplementationTemplate.addMapping("__OPERATION_PARAMETERS_LIST__",
           parameterList.getParameterListInCxx());
       cxxImplementationTemplate.addMapping("__CXX_FULL_QUALIFIED_NAME__",
           _fullQualifiedName.replaceAll("[.]", "::"));
+      
+      cxxImplementationAbstractTemplate.addMapping("__OPERATION_PARAMETERS_LIST__",
+          parameterList.getParameterListInCxx());
+      cxxImplementationAbstractTemplate.addMapping("__CXX_FULL_QUALIFIED_NAME__",
+          _fullQualifiedName.replaceAll("[.]", "::"));
+      
       cxxImplementationHeaderTemplate.open();
       cxxImplementationHeaderTemplate.close();
       cxxImplementationTemplate.open();
       cxxImplementationTemplate.close();
+      _templateFilesHeaderProvidesPorts.add(cxxImplementationAbstractHeaderTemplate);
+      _templateFilesImplementationProvidesPorts.add(cxxImplementationAbstractTemplate);
+      
 
     } catch (ASCoDTException e) {
       ErrorWriterDevice.getInstance().println(e);
@@ -322,7 +349,13 @@ public class CreateCxxComponent extends DepthFirstAdapter {
         _templateFilesHeaderUsesPorts.peek().close();
         _templateFilesHeaderUsesPorts.pop();
       }
-
+      
+      while (!_templateFilesHeaderProvidesPorts.isEmpty()) {
+        _templateFilesHeaderProvidesPorts.peek().open();
+        _templateFilesHeaderProvidesPorts.peek().close();
+        _templateFilesHeaderProvidesPorts.pop();
+      }
+      
       _templateFilesOfCXXHeader.peek().close();
       _templateFilesOfCXXImplementation.peek().close();
       _templateFilesOfAbstractCXXHeader.peek().close();
@@ -336,6 +369,11 @@ public class CreateCxxComponent extends DepthFirstAdapter {
         _templateFilesImplementationUsesPorts.peek().open();
         _templateFilesImplementationUsesPorts.peek().close();
         _templateFilesImplementationUsesPorts.pop();
+      }
+      while (!_templateFilesImplementationProvidesPorts.isEmpty()) {
+        _templateFilesImplementationProvidesPorts.peek().open();
+        _templateFilesImplementationProvidesPorts.peek().close();
+        _templateFilesImplementationProvidesPorts.pop();
       }
       _templateFilesOfAbstractCXXImplementation.peek().close();
 
