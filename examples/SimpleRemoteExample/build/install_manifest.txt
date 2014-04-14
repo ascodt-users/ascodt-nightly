@@ -1,0 +1,2 @@
+/work_fast/atanasoa/Programme/runtime-HelloSocketFortran/SimpleRemoteExample/cmake/examples.B/../../bin/examples.B
+/work_fast/atanasoa/Programme/runtime-HelloSocketFortran/SimpleRemoteExample/cmake/examples.B/../../bin/examples.A

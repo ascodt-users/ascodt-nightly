@@ -1,0 +1,1 @@
+ADD_EXECUTABLE("examples.B" ${CPP_FILES} )
