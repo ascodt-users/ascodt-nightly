@@ -1,0 +1,4 @@
+export CCA_CFD_LB_JAVA=off
+export CCA_CFD_LB_WORKERS=10
+export CCA_CFD_LB_XML=StandaloneWorkbench.xml
+/home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiexec -np 2 ../bin/cca.cfd.LB

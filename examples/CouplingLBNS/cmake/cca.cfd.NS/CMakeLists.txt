@@ -17,10 +17,10 @@ project("cca.cfd.NS" C CXX)
 OPTION (Parallel "Enable parallel" off)
 
 if(Parallel)
-	set(CMAKE_CXX_COMPILER "/opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc")
+	set(CMAKE_CXX_COMPILER "/home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc")
 	#set(CMAKE_C_COMPILER "mpicxx.openmpi")
 	
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DParallel -mt_mpi -std=c++11")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DParallel -mt_mpi ")
 	
 endif(Parallel)
 
@@ -165,7 +165,6 @@ file(GLOB PARALLEL_SOURCES  ../../src/examples/cfd/ns/parallelManagers/*.cpp)
 file(GLOB NS_SOURCES  ../../src/examples/cfd/ns/*.cpp)
 file(GLOB COUPLING_SOURCES  ../../src/examples/cfd/ns/coupling/*.cpp)
 file(GLOB KERNEL_SOURCES  ../../src/examples/kernel/*.cpp)
-file(GLOB XML_SOURCES  ../../src/examples/kernel/3rdparty/tinyxml2/*.cpp)
 file(GLOB LB_STENCIL_SOURCES ../../src/examples/cfd/lb/stencils/*.cpp)
 file(GLOB LB_SOURCES  ../../src/examples/cfd/lb/*.cpp)
 include("sources.cmake")
@@ -174,7 +173,6 @@ set(CPP_FILES
 #    ${PETSC_LIBRARIES}
     ${CPP_FILES}
     ${KERNEL_SOURCES}
-    ${XML_SOURCES}
     ${NS_SOURCES}
     ${COUPLING_SOURCES}
    	${STENCIL_SOURCES}

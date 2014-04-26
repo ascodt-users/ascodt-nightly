@@ -79,8 +79,9 @@ class cca::cfd::DriverCxx2SocketPlainPort: public cca::cfd::Driver{
     //int getSockfd();
     //int getNewsockfd();
     
-    void go(const std::string configFile);
-	void goParallel(const std::string configFile);
+    void go(const std::string configFile);  
+    void goParallel(const std::string configFile);
+   
 };
 
 #endif

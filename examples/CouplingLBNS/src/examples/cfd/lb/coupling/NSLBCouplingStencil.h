@@ -10,7 +10,7 @@
 #include "Parameters.h"
 #include "../LBField.h"
 #include <vector>
-#include <unordered_map>
+#include <hash_map>
 #include <fstream>
 /** Stencil to copy information from the NS to the LB domain.
  */
@@ -199,11 +199,11 @@ private:
 	FLOAT _meanPressure;    //! Average pressure in the boundary cells
 
 	int _flip[3];
-	std::unordered_map<int,int> _velocityCounter;
-	std::unordered_map<int,int> _pressureCounter;
+	__gnu_cxx::hash_map<int,int> _velocityCounter;
+	__gnu_cxx::hash_map<int,int> _pressureCounter;
 
-	std::unordered_map<int,std::vector<NSLBData>> _velocities[3];
-	std::unordered_map<int,std::vector<NSLBData>> _pressure;
+	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _velocities[3];
+	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _pressure;
 //	std::ofstream _logComm;
 //	bool _open;
 	/** Loads the requested velocity components in the points of the stencil into the private

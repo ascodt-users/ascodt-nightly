@@ -33,6 +33,20 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.UekermannDriver/CMakeFiles/CMakeRelink.dir/cca.cfd.UekermannDriver")
+  IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/cca.cfd.UekermannDriver" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/cca.cfd.UekermannDriver")
+    FILE(RPATH_CHECK
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/cca.cfd.UekermannDriver"
+         RPATH "")
+  ENDIF()
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.UekermannDriver/cca.cfd.UekermannDriver")
+  IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/cca.cfd.UekermannDriver" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/cca.cfd.UekermannDriver")
+    FILE(RPATH_REMOVE
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/cca.cfd.UekermannDriver")
+    IF(CMAKE_INSTALL_DO_STRIP)
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/cca.cfd.UekermannDriver")
+    ENDIF(CMAKE_INSTALL_DO_STRIP)
+  ENDIF()
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

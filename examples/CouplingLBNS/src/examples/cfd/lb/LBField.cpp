@@ -2,6 +2,7 @@
 #include "stencils/LBFunctions.h"
 
 LBField::LBField(const Parameters & parameters):
+_parameters(parameters),
 _dim (parameters.geometry.dim),
 _Q (_dim==2 ? Q2D : Q3D),
 _Nx (parameters.coupling.set ? parameters.coupling.sizeNS[0] * parameters.coupling.ratio - 1 :
@@ -46,6 +47,9 @@ void LBField::allocate(){
 //
 //					_flags[getIndexCell( i, j, k)]= 1;
 //				}else
+				if(isInside(i,j,k))
+					_flags[getIndexCell( i, j, k)]= 1;
+				else
 					_flags[getIndexCell( i, j, k)]= 0;
 				for (int a = 0; a < _Q; a++){
 					_fIn[getIndexF(a, i, j, k)] = _latticeWeights[a];
@@ -57,26 +61,53 @@ void LBField::allocate(){
 	}
 }
 
-LBField::LBField(int cellsX, int cellsY, int cellsZ):
-    						_dim (3),
-    						_Q (Q),
-    						_Nx (cellsX - 2),
-    						_Ny (cellsY - 2),
-    						_Nz (cellsZ - 2),
-    						_cellsX (cellsX),
-    						_cellsY (cellsY),
-    						_cellsZ (cellsZ),
-    						_nofCellsWithBoundaries (_cellsX * _cellsY * _cellsZ),
-    						_latticeVelocities (latticeVelocities3D),
-    						_latticeWeights (latticeWeights3D),
-    						_fIn(NULL),
-    						_fOut(NULL),
-    						_flags(NULL)
-{
+//LBField::LBField(int cellsX, int cellsY, int cellsZ):
+//    						_dim (3),
+//    						_Q (Q),
+//    						_Nx (cellsX - 2),
+//    						_Ny (cellsY - 2),
+//    						_Nz (cellsZ - 2),
+//    						_cellsX (cellsX),
+//    						_cellsY (cellsY),
+//    						_cellsZ (cellsZ),
+//    						_nofCellsWithBoundaries (_cellsX * _cellsY * _cellsZ),
+//    						_latticeVelocities (latticeVelocities3D),
+//    						_latticeWeights (latticeWeights3D),
+//    						_fIn(NULL),
+//    						_fOut(NULL),
+//    						_flags(NULL)
+//{
+//
+//}
 
+const bool LBField::isInside(int i,int j,int k) const{
+	double dist=0.0;
+	double pos[3];
+//	if(	i==0||j==0||k==0||
+//			i==_cellsX-1||j==_cellsY-1||k==_cellsZ-1)
+//		return false;
+	double dx=1.0/(double)(_parameters.coupling.sizeNS[0] * _parameters.coupling.ratio - 1);
+	double dy=1.0/(double)(_parameters.coupling.sizeNS[1] * _parameters.coupling.ratio - 1);
+	double dz=1.0/(double)(_parameters.coupling.sizeNS[2] * _parameters.coupling.ratio - 1);
+
+	pos[0]= ((_parameters.parallel.firstCorner[0]+(i-1))
+					*dx)+dx/2.0;
+
+	pos[1]= ((_parameters.parallel.firstCorner[1]+(j-1))
+					*dy)+dy/2.0;
+
+	pos[2]= ((_parameters.parallel.firstCorner[2]+(k-1))
+					*dz)+dz/2.0;
+	for(unsigned int g_i=0;g_i<_geometries.size();g_i++){
+		//_parameters.parallel.firstCorner*parameters.geometry.dx
+		if(
+			((-pos[0]+_geometries[g_i].x)*(-pos[0]+_geometries[g_i].x))+
+			((-pos[1]+_geometries[g_i].y)*(-pos[1]+_geometries[g_i].y))+
+			((-pos[2]+_geometries[g_i].z)*(-pos[2]+_geometries[g_i].z))<=_geometries[g_i].r*_geometries[g_i].r)
+				return true;
+	}
+	return false;
 }
-
-
 const FLOAT LBField::getDensity (const FLOAT* const f, int i, int j, int k) const{
 	FLOAT density = 0;
 	for (int a = 0; a < _Q; a++){
@@ -288,6 +319,15 @@ const int LBField::getQ() const {
 
 const int LBField::getIndexCell(int i, int j, int k) const {
 	return getIndexF(0, i, j, k);
+}
+void LBField::registerSphere(double x,double y,double z,double r){
+	Sphere s;
+	s.x=x;
+	s.y=y;
+	s.z=z;
+	s.r=r;
+	std::cout<<"sphere reg:"<<x<<","<<y<<","<<z<<std::endl;
+	_geometries.push_back(s);
 }
 
 void LBField::swap(){

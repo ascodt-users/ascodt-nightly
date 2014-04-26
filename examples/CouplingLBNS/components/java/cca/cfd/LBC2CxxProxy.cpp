@@ -26,12 +26,15 @@
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <sstream>
+#include "tinyxml2.h"
+#include <hash_map>
+#include <vector>
 #ifdef Parallel
 #include <mpi.h>
 #endif
 	
 #include "cca/cfd/LBImplementation.h"
-
+CCA_CFD_LB_arg daemon_args;
 void open_client(const char* hostname,const char* port,
 #ifdef _WIN32
 SOCKET
@@ -91,22 +94,36 @@ const int numberOfWorkers
 		 int iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
 	     assert (iResult == 0);
 #endif
-          struct addrinfo hints;
-	      struct addrinfo *result = NULL;
-         
+        
+     int sockd, sockd2;
+       int addrlen;
+       struct sockaddr_in my_name, peer_name;
+       int status;
 
-          bzero(&hints, sizeof(hints));
-          hints.ai_family = AF_INET;
-          hints.ai_socktype = SOCK_STREAM;
-		  hints.ai_protocol = IPPROTO_TCP;
-		  hints.ai_flags = AI_PASSIVE;
-          getaddrinfo(NULL, port, &hints, &result);
-		  
-		  sockfd = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
-          assert (sockfd>=0);
-          bind(sockfd, result->ai_addr, (int)result->ai_addrlen);
-		  
-          listen(sockfd,numberOfWorkers);
+       /* create a socket */
+       sockd = socket(AF_INET, SOCK_STREAM, 0);
+       if (sockd == -1)
+       {
+         perror("Socket creation error");
+         exit(1);
+       }
+
+
+       /* server address  */
+       my_name.sin_family = AF_INET;
+       my_name.sin_addr.s_addr = INADDR_ANY;
+       my_name.sin_port = htons(atoi(port));
+       int yes=1;
+       setsockopt(sockd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
+       status = bind(sockd, (struct sockaddr*)&my_name, sizeof(my_name));
+       if (status == -1)
+       {
+         perror("Binding error");
+         exit(1);
+       }
+
+       status = listen(sockd, numberOfWorkers);
+       sockfd=sockd;
          
         
 }
@@ -267,7 +284,15 @@ void invoker_create_client_port_for_ns(void** ref,int newsockfd, int buffer_size
  
 }
   
-
+void invoker_create_client_port_for_ns(void** ref, void** dispatcherRef, void** portRef, char* host,int port,int buffer_size){
+  
+  *portRef=new cca::cfd::NSSolverCxx2SocketPlainPort(
+        host,
+        port,
+        buffer_size
+   );
+  
+}
 void invoker_connect_client_dispatcher_ns(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer
 #ifdef Parallel
 ,MPI_Comm communicator, int methodId
@@ -292,6 +317,14 @@ void invoker_connect_client_dispatcher_ns(void** ref,int newsockfd, int buffer_s
   sendData((char*)&portref,sizeof(long long),sendBuffer,newsockfd,buffer_size);
 }
 
+void invoker_connect_client_dispatcher_ns(void** ref,void** dispatcherRef, void** portRef, char* host,int port,int buffer_size){
+  if(*dispatcherRef==NULL){
+     *dispatcherRef=new cca::cfd::NSSolverNativeDispatcher();
+     ((cca::cfd::LBImplementation*)(*ref))->connectns((cca::cfd::NSSolverNativeDispatcher*) *dispatcherRef);   
+  }
+  ((cca::cfd::NSSolverNativeDispatcher*) (*dispatcherRef))->connect((cca::cfd::NSSolver*)(*portRef));
+}
+
 
 
 
@@ -301,6 +334,10 @@ void invoker_disconnect_client_dispatcher_ns(void** ref,int newsockfd, int buffe
 #endif
 ){
  ((cca::cfd::LBImplementation*)*ref)->disconnectns();
+}
+
+void invoker_disconnect_client_dispatcher_ns(void** ref,void** dispatcherRef, void** portRef, char* host,int port,int buffer_size){
+ ((cca::cfd::NSSolverNativeDispatcher*)*dispatcherRef)->disconnect((cca::cfd::NSSolver*)(*portRef));
 }
 
 void invoker_retrieveVelocitiesCopy(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer
@@ -1419,17 +1456,16 @@ int
 
 std::string retrieveSocketAddress(){
 	std::stringstream res;
-	int rank=0;
+	  int rank = 0 ;
 #ifdef Parallel
-	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+  
+     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 #endif
 	int _sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	assert(_sockfd>=0);
-	const char* daemon_port = getenv("CCA_CFD_LB_DAEMON_PORT");
 	const char* network_interface = getenv("CCA_CFD_LB_NET_INTERFACE");
 	if(network_interface==NULL)
 		network_interface="lo";	
-	assert(daemon_port!=NULL);
 	struct if_nameindex *curif, *ifs;
 	struct ifreq req;
 	ifs = if_nameindex();
@@ -1444,7 +1480,7 @@ std::string retrieveSocketAddress(){
                                                         inet_ntoa(((struct sockaddr_in*) &req.ifr_addr)->sin_addr));
 				if(strcmp(curif->if_name,network_interface)==0)
 				{
-					res<<std::string(inet_ntoa(((struct sockaddr_in*) &req.ifr_addr)->sin_addr))<<":"<<(atoi(daemon_port)+rank);
+					res<<std::string(inet_ntoa(((struct sockaddr_in*) &req.ifr_addr)->sin_addr))<<":"<<(atoi(daemon_args.daemon_port.c_str())+rank);
 					
 				}
 			}
@@ -1585,7 +1621,6 @@ DWORD WINAPI server_deamon_run(void* daemon_args){
 void* server_deamon_run(void* daemon_args){
       int clientfd=0;
 #endif
-      
       accept_on_server(((CCA_CFD_LB_arg*)daemon_args)->daemon_serverfd,clientfd);
       std::cout<<"server accepted"<<std::endl;
       socket_worker_loop(
@@ -1608,65 +1643,263 @@ if(rank>0){
 }
 
 void startSocketDaemons(CCA_CFD_LB_arg& arg){
-	 
-   for(int i=0;i<arg.number_of_workers;i++){
-#ifdef _WIN32    
-     CreateThread(NULL, 0,server_deamon_run, &arg, 0, NULL);
-#else     
-     pthread_t task;
-     pthread_create(&task,NULL,server_deamon_run,&arg);
-#endif
-   } 
+     std::vector<pthread_t> tasks;
+  
+     for(int i=0;i<arg.number_of_workers;i++){
+     #ifdef _WIN32    
+          CreateThread(NULL, 0,server_deamon_run, &arg, 0, NULL);
+     #else     
+          pthread_t task;
+          tasks.push_back(task);
+          pthread_create(&task,NULL,server_deamon_run,&arg);
+     #endif
+     }
+   
 }
 
+void initialiseENV(CCA_CFD_LB_arg& arg){
+          const char* client_port = getenv("CCA_CFD_LB_PORT");
+          const char* daemon_port = getenv("CCA_CFD_LB_DAEMON_PORT");
+          const char* buffer_size = getenv("CCA_CFD_LB_BUFFER_SIZE");
+          const char* hostname = getenv("CCA_CFD_LB_HOSTNAME");
+          const char* java_client_flag = getenv("CCA_CFD_LB_JAVA");
+          const char* number_of_workers = getenv("CCA_CFD_LB_WORKERS");
+          const char* xmlFile = getenv("CCA_CFD_LB_XML");
+          if(buffer_size!=NULL)
+               arg.buffer_size = atoi(buffer_size);
+          if(hostname!=NULL)
+               arg.hostname = hostname;
+          if(client_port!=NULL)
+               arg.client_port = client_port;
+          if(daemon_port!=NULL)
+               arg.daemon_port = daemon_port;
+          if(java_client_flag!=NULL)
+               arg.java_client_flag = (strcmp(java_client_flag,"off")==0)?false:true;
+          if(number_of_workers!=NULL)
+               arg.number_of_workers = atoi(number_of_workers);
+          if(xmlFile!=NULL)
+               arg.xml=xmlFile;
+               
+}
+
+void initialiseXMLDaemons(CCA_CFD_LB_arg& arg){
+    int rank=0;
+   
+    if(arg.xml!=NULL){
+          tinyxml2::XMLDocument confFile;
+          confFile.LoadFile(arg.xml);
+          tinyxml2::XMLElement* root = confFile.FirstChildElement("diagram");
+          __gnu_cxx::hash_map<int,std::vector<int> > connections;
+          __gnu_cxx::hash_map<int,int> componentPorts;
+          __gnu_cxx::hash_map<int,std::string> componentHosts;
+          __gnu_cxx::hash_map<int,void*> dispatchers;
+          void (*invokers[97])(void**,void**,void**,char* host,int port,int buffer_size);
+          
+           invokers[68]=invoker_disconnect_client_dispatcher_ns;
+invokers[67]=invoker_connect_client_dispatcher_ns;
+invokers[66]=invoker_create_client_port_for_ns;
+
+          for(tinyxml2::XMLElement* e = root->FirstChildElement("component"); e != NULL; e = e->NextSiblingElement("component"))
+          {
+            if(strcmp(e->Attribute("name"),"cca.cfd.LB")==0){
+                 int port;
+                 std::stringstream str;
+                 e->QueryIntAttribute("port",&port);
+                 str<<(port+1);
+                 arg.daemon_port=str.str();
+                 for(
+                           tinyxml2::XMLElement* conElement = e->FirstChildElement("outputPort");
+                           conElement != NULL;
+                           conElement = conElement->NextSiblingElement("outputPort"))
+                 {
+                      int key=0;
+                      int createId=0,connectId=0,disconnectId=0;
+
+                      conElement->QueryIntAttribute("index",&key);
+                      conElement->QueryIntAttribute("createId",&createId);
+                      conElement->QueryIntAttribute("connectId",&connectId);
+                      conElement->QueryIntAttribute("disconnectId",&disconnectId);
+                      connections[key].resize(3);
+                      connections[key][0]=createId;
+                      connections[key][1]=connectId;
+                      connections[key][2]=disconnectId;
+
+                 }
+            }else{
+                 int port=0;
+                 e->QueryIntAttribute("port",&port);
+                 const char* hostname=e->Attribute("host");
+                 for(
+                           tinyxml2::XMLElement* conElement = e->FirstChildElement("inputPort");
+                           conElement != NULL;
+                           conElement = conElement->NextSiblingElement("inputPort"))
+                 {
+                     int key=0;
+                     conElement->QueryIntAttribute("index",&key);
+                     componentPorts[key]=port+1;
+                     componentHosts[key]=hostname;
+                 }
+            }
+          }
+      
+     }
+}
+void initialiseXMLConnections(CCA_CFD_LB_arg& arg){
+    int rank=0;
+   
+    if(arg.xml!=NULL){
+          tinyxml2::XMLDocument confFile;
+          confFile.LoadFile(arg.xml);
+          tinyxml2::XMLElement* root = confFile.FirstChildElement("diagram");
+          __gnu_cxx::hash_map<int,std::vector<int> > connections;
+          __gnu_cxx::hash_map<int,int> componentPorts;
+          __gnu_cxx::hash_map<int,std::string> componentHosts;
+          __gnu_cxx::hash_map<int,void*> dispatchers;
+          void (*invokers[97])(void**,void**,void**,char* host,int port,int buffer_size);
+          
+           invokers[68]=invoker_disconnect_client_dispatcher_ns;
+invokers[67]=invoker_connect_client_dispatcher_ns;
+invokers[66]=invoker_create_client_port_for_ns;
+
+          for(tinyxml2::XMLElement* e = root->FirstChildElement("component"); e != NULL; e = e->NextSiblingElement("component"))
+          {
+            if(strcmp(e->Attribute("name"),"cca.cfd.LB")==0){
+                 int port;
+                 std::stringstream str;
+                 e->QueryIntAttribute("port",&port);
+                 str<<(port+1);
+                 arg.daemon_port=str.str();
+                 for(
+                           tinyxml2::XMLElement* conElement = e->FirstChildElement("outputPort");
+                           conElement != NULL;
+                           conElement = conElement->NextSiblingElement("outputPort"))
+                 {
+                      int key=0;
+                      int createId=0,connectId=0,disconnectId=0;
+
+                      conElement->QueryIntAttribute("index",&key);
+                      conElement->QueryIntAttribute("createId",&createId);
+                      conElement->QueryIntAttribute("connectId",&connectId);
+                      conElement->QueryIntAttribute("disconnectId",&disconnectId);
+                      connections[key].resize(3);
+                      connections[key][0]=createId;
+                      connections[key][1]=connectId;
+                      connections[key][2]=disconnectId;
+
+                 }
+            }else{
+                 int port=0;
+                 e->QueryIntAttribute("port",&port);
+                 const char* hostname=e->Attribute("host");
+                 for(
+                           tinyxml2::XMLElement* conElement = e->FirstChildElement("inputPort");
+                           conElement != NULL;
+                           conElement = conElement->NextSiblingElement("inputPort"))
+                 {
+                     int key=0;
+                     conElement->QueryIntAttribute("index",&key);
+                     componentPorts[key]=port+1;
+                     componentHosts[key]=hostname;
+                 }
+            }
+          }
+       #ifdef Parallel
+    
+       MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+       if(rank==0){
+          #endif
+          for(tinyxml2::XMLElement* e = root->FirstChildElement("connection"); e != NULL; e = e->NextSiblingElement("connection"))
+          {
+            int source=-1;
+            int destination=-1;
+            e->QueryIntAttribute("source",&source);
+            e->QueryIntAttribute("destination",&destination);
+            __gnu_cxx::hash_map<int,std::vector<int> >::iterator itSource = connections.find(source);
+            __gnu_cxx::hash_map<int,std::string >::iterator itDestination = componentHosts.find(destination);
+            if(itSource!=connections.end()&&itDestination!=componentHosts.end()){
+                 std::cout<<"establish connection from xml id:"<< source<<" host:"<<
+                    componentHosts[destination]<<" port:"<<componentPorts[destination]<<std::endl;
+                 if(dispatchers.find(source)==dispatchers.end())
+                     dispatchers[source]=NULL;
+                 void* port =NULL;
+                 invokers[(*itSource).second[0]](
+                          &arg.ref,
+                          NULL,
+                          &port,
+                          (char*)componentHosts[destination].c_str(),
+                          componentPorts[destination],
+                          arg.buffer_size);
+                 invokers[(*itSource).second[1]](
+                               &arg.ref,
+                               &dispatchers[source],
+                               &port,
+                              (char*)componentHosts[destination].c_str(),
+                               componentPorts[destination],
+                               arg.buffer_size);
+            }
+          }
+       #ifdef Parallel
+       }
+       #endif
+     }
+}
+
+void initialiseParallel(CCA_CFD_LB_arg& arg){
+#ifdef Parallel
+     int rank = -1 ;
+     int comm_size;
+     std::stringstream st;
+
+     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+     MPI_Comm_size(MPI_COMM_WORLD,&comm_size);
+     int port=atoi(arg.daemon_port.c_str())+rank;
+     st<<port<<'\0';
+     std::vector<char> daemon_str(st.str().size()+1);
+     strncpy(&daemon_str[0],st.str().c_str(),st.str().size());
+     daemon_str[st.str().size()]='\0';
+     arg.communicator = MPI_COMM_WORLD;
+     arg.daemon_port=std::string(&daemon_str[0]);
+     if(rank>0){
+          arg.java_client_flag=false;
+          arg.joinable=false;
+     }
+      
+#endif
+}
 extern "C"{
 
 #ifdef _WIN32
 void INITIALISE(CCA_CFD_LB_arg& arg){
 #else
-void initialise_(CCA_CFD_LB_arg& arg){
+void initialise_(CCA_CFD_LB_arg& arg,bool joinable){
 #endif
-   const char* client_port = getenv("CCA_CFD_LB_PORT"); 
-   const char* daemon_port = getenv("CCA_CFD_LB_DAEMON_PORT");
-   const char* buffer_size = getenv("CCA_CFD_LB_BUFFER_SIZE");
-   const char* hostname = getenv("CCA_CFD_LB_HOSTNAME");
-   const char* java_client_flag = getenv("CCA_CFD_LB_JAVA");
-   const char* number_of_workers = getenv("CCA_CFD_LB_WORKERS"); 
-   arg.buffer_size = (buffer_size!=NULL)?atoi(buffer_size):4096;
-   arg.hostname = (hostname!=NULL)?hostname:"localhost";
-   arg.client_port = (client_port!=NULL)?client_port:"50000";
-   arg.daemon_port = (daemon_port!=NULL)?daemon_port:"50001";
-   arg.java_client_flag = (java_client_flag!=NULL&&strcmp(java_client_flag,"off")==0)?false:true;
-   arg.number_of_workers = (number_of_workers!=NULL)?atoi(number_of_workers):10;
-#ifdef Parallel
-	int rank = -1 ;
-	int comm_size;
-	std::stringstream st;
+     arg.buffer_size = 4096;
+     arg.hostname = "localhost";
+     arg.client_port = "50000";
+     arg.daemon_port = "50001";
+     arg.java_client_flag = true;
+     arg.number_of_workers = 10;
+     arg.xml=NULL;
+     arg.joinable=joinable;
+     initialiseENV(arg);
+     
 
-	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
-	MPI_Comm_size(MPI_COMM_WORLD,&comm_size);
-	int port=atoi(arg.daemon_port)+rank;
-	st<<port<<'\0';
-	std::vector<char> daemon_str(st.str().size()+1);
-	strncpy(&daemon_str[0],st.str().c_str(),st.str().size());
-	daemon_str[st.str().size()]='\0';
-	arg.communicator = MPI_COMM_WORLD;
-	arg.daemon_port=&daemon_str[0];
-	if(rank>0)
-		arg.java_client_flag=false;
-	 
-#endif
    invoker_create_instance(&arg.ref,0,0,NULL,NULL
 #ifdef Parallel
-   ,arg.communicator,0 	
+   ,MPI_COMM_WORLD,0 	
 #endif   
    );
+   initialiseXMLDaemons(arg);
+   initialiseParallel(arg);
    if(arg.java_client_flag)         
-     open_client(arg.hostname,client_port,arg.java_serverfd,arg.java_clientfd);
-   bind_server(arg.daemon_port,arg.daemon_serverfd,arg.number_of_workers);
-   startSocketDaemons(arg);
-   startMPIDaemon(arg);
+     open_client(arg.hostname.c_str(),arg.client_port.c_str(),arg.java_serverfd,arg.java_clientfd);
    
+   bind_server(arg.daemon_port.c_str(),arg.daemon_serverfd,arg.number_of_workers);
+   startSocketDaemons(arg);
+   initialiseXMLConnections(arg);
+   if(arg.joinable)
+     server_deamon_run(&arg);
+   startMPIDaemon(arg);
 }
 
 
@@ -1699,7 +1932,7 @@ void destroy_(CCA_CFD_LB_arg& arg){
 #ifdef _WIN32
 void SOCKET_LOOP(CCA_CFD_LB_arg& arg){
 #else
-void socket_loop_(CCA_CFD_LB_arg& arg){
+void socket_loop_(CCA_CFD_LB_arg& arg,bool joinable){
 #endif
   if(arg.java_client_flag)       
      socket_worker_loop(arg.ref,arg.java_clientfd,arg.buffer_size
@@ -1712,17 +1945,17 @@ void socket_loop_(CCA_CFD_LB_arg& arg){
 #ifdef _WIN32
 void MAIN_LOOP(){
 #else
-void main_loop_(){
+void main_loop_(bool joinable){
 #endif
   
 
-  CCA_CFD_LB_arg daemon_args;
+  
 #ifdef _WIN32
   INITIALISE(daemon_args);
   DESTROY(daemon_args);     
 #else  
-  initialise_(daemon_args);
-  socket_loop_(daemon_args);
+  initialise_(daemon_args,joinable);
+  socket_loop_(daemon_args,joinable);
   destroy_(daemon_args);  
 #endif
   

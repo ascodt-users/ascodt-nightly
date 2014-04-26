@@ -40,18 +40,24 @@ class cca::cfd::NS2LBNativeDispatcher: public cca::cfd::NS2LB{
     void connect(cca::cfd::NS2LB* ref);
     void disconnect(cca::cfd::NS2LB* ref);
     bool isConnected() const;
-    void iterate();
-	void iterateParallel();
-    void retrieveTimestep(double& timestep);
-	void retrieveTimestepParallel(double& timestep);
-    void retrieveVelocitiesSize(int& memory);
-	void retrieveVelocitiesSizeParallel(int& memory);
-    void retrieveVelocitiesCopy(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
-	void retrieveVelocitiesCopyParallel(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
-    void retrieveJacobianCopy(double* jacobian, const int jacobian_len);
-	void retrieveJacobianCopyParallel(double* jacobian, const int jacobian_len);
-    void retrievePressureCopy(double* pressure, const int pressure_len);
-	void retrievePressureCopyParallel(double* pressure, const int pressure_len);
+    void iterate();  
+    void iterateParallel();
+   
+    void retrieveTimestep(double& timestep);  
+    void retrieveTimestepParallel(double& timestep);
+   
+    void retrieveVelocitiesSize(int& memory);  
+    void retrieveVelocitiesSizeParallel(int& memory);
+   
+    void retrieveVelocitiesCopy(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);  
+    void retrieveVelocitiesCopyParallel(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
+   
+    void retrieveJacobianCopy(double* jacobian, const int jacobian_len);  
+    void retrieveJacobianCopyParallel(double* jacobian, const int jacobian_len);
+   
+    void retrievePressureCopy(double* pressure, const int pressure_len);  
+    void retrievePressureCopyParallel(double* pressure, const int pressure_len);
+   
 };
 
 #endif

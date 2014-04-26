@@ -1,6 +1,7 @@
 #include "LBNSRemoteInterpolator.h"
 #include "math.h"
 #include <sstream>
+#include <hash_map>
 void LBNSRemoteInterpolator::printParameters() {
 	std::cout << "LB -> NS coupling parameters" << std::endl;
 	std::cout << "LowerX: " << _lowerX << std::endl;
@@ -113,7 +114,7 @@ const double  LBNSRemoteInterpolator::getVelocity(
 		const int* offset,
 		const int* flip,
 		const int index){
-	std::unordered_map<int,std::vector<LBNSData>>::iterator it=_velocities[component].find(index);
+	__gnu_cxx::hash_map<int,std::vector<LBNSData> >::iterator it=_velocities[component].find(index);
 	if(it!=_velocities[component].end()){
 
 		for(unsigned int i=0;i<(*it).second.size();i++){

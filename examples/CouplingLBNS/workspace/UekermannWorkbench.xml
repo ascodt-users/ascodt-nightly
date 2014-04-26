@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<diagram>
+    <component name="cca.cfd.NS" reference="oid2">
+        <inputPort className="cca.cfd.NS2LB" classId="0" index="813503580"/>
+        <inputPort className="cca.cfd.NSSolver" classId="1" index="1202048153"/>
+        <outputPort className="lb:cca.cfd.LBSolver" classId="0" index="616753612"/>
+    </component>
+    <component name="cca.cfd.UekermannDriver" reference="oid0">
+        <inputPort className="cca.cfd.Driver" classId="0" index="1172048222"/>
+        <outputPort className="ns:cca.cfd.NSSolver" classId="0" index="1544063668"/>
+        <outputPort className="lb2ns:cca.cfd.LB2NS" classId="1" index="1376417139"/>
+        <outputPort className="lb:cca.cfd.LBSolver" classId="2" index="56704309"/>
+        <outputPort className="ns2lb:cca.cfd.NS2LB" classId="3" index="824733868"/>
+    </component>
+    <component name="cca.cfd.LB" reference="oid1">
+        <inputPort className="cca.cfd.LBSolver" classId="0" index="798511251"/>
+        <inputPort className="cca.cfd.LB2NS" classId="1" index="1640618758"/>
+        <outputPort className="ns:cca.cfd.NSSolver" classId="0" index="1317499528"/>
+    </component>
+    <connection source="1376417139" destination="1640618758"/>
+    <connection source="616753612" destination="798511251"/>
+    <connection source="56704309" destination="798511251"/>
+    <connection source="1544063668" destination="1202048153"/>
+    <connection source="1317499528" destination="1202048153"/>
+    <connection source="824733868" destination="813503580"/>
+</diagram>

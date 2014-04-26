@@ -41,17 +41,23 @@ class cca::cfd::NS2LBNative2JavaPlainPort: public cca::cfd::NS2LB{
   public:
     NS2LBNative2JavaPlainPort(JavaVM* jvm,jobject obj);
     ~NS2LBNative2JavaPlainPort();
-    void iterate();
-	void iterateParallel();
-    void retrieveTimestep(double& timestep);
-	void retrieveTimestepParallel(double& timestep);
-    void retrieveVelocitiesSize(int& memory);
-	void retrieveVelocitiesSizeParallel(int& memory);
-    void retrieveVelocitiesCopy(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
-	void retrieveVelocitiesCopyParallel(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
-    void retrieveJacobianCopy(double* jacobian, const int jacobian_len);
-	void retrieveJacobianCopyParallel(double* jacobian, const int jacobian_len);
-    void retrievePressureCopy(double* pressure, const int pressure_len);
-	void retrievePressureCopyParallel(double* pressure, const int pressure_len);
+    void iterate();  
+    void iterateParallel();
+   
+    void retrieveTimestep(double& timestep);  
+    void retrieveTimestepParallel(double& timestep);
+   
+    void retrieveVelocitiesSize(int& memory);  
+    void retrieveVelocitiesSizeParallel(int& memory);
+   
+    void retrieveVelocitiesCopy(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);  
+    void retrieveVelocitiesCopyParallel(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
+   
+    void retrieveJacobianCopy(double* jacobian, const int jacobian_len);  
+    void retrieveJacobianCopyParallel(double* jacobian, const int jacobian_len);
+   
+    void retrievePressureCopy(double* pressure, const int pressure_len);  
+    void retrievePressureCopyParallel(double* pressure, const int pressure_len);
+   
 };
 #endif

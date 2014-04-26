@@ -8,7 +8,7 @@ int max( int a, int b)
 }
 LBParallelManager::LBParallelManager(LBField & flowField, const Parameters & parameters):
 
-    ParallelManager(flowField, parameters),
+    ParallelManager<LBField> (flowField, parameters),
 
     _extractPdfsStencil(parameters, _leftBufferOut, _rightBufferOut, _bottomBufferOut,
                                      _topBufferOut, _frontBufferOut, _backBufferOut),

@@ -1,20 +1,21 @@
 #include "cca/cfd/UekermannDriverImplementation.h"
 
 #include <sys/time.h>
-
+ cca::cfd::UekermannDriverImplementation* cca::cfd::UekermannDriverImplementation::singleton=NULL;
 cca::cfd::UekermannDriverImplementation::UekermannDriverImplementation(){
-
+	singleton=this;
 }
 
 cca::cfd::UekermannDriverImplementation::~UekermannDriverImplementation(){
 
 }
-extern "C" void main_loop_();
+extern "C" void main_loop_(bool);
 int main(int argc, char *argv[]){
 	int provided;
 	MPI_Init_thread(&argc,&argv,MPI_THREAD_MULTIPLE ,&provided);
-
-	main_loop_();
+	std::cout<<"main loop"<<std::endl;
+	main_loop_(false);
+	cca::cfd::UekermannDriverImplementation::singleton->go(argv[1]);
 }
 
 void cca::cfd::UekermannDriverImplementation::exchangeBoundaries(){

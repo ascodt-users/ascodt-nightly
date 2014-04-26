@@ -2,6 +2,7 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/UekermannDriverAbstractImplementation.cpp.o"
   "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/src/cca/cfd/UekermannDriverImplementation.cpp.o"
   "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/UekermannDriverC2CxxProxy.cpp.o"
+  "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/tinyxml2.cpp.o"
   "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LBSolverNative2JavaPlainPort.cpp.o"
   "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LBSolverNative2NativePlainPort.cpp.o"
   "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/LBSolverCxx2SocketPlainPort.cpp.o"
@@ -32,8 +33,6 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/cca.cfd.UekermannDriver.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o"
   "cca.cfd.UekermannDriver.pdb"
   "cca.cfd.UekermannDriver"
-  "cca.cfd.UekermannDriver.pdb"
-  "CMakeFiles/CMakeRelink.dir/cca.cfd.UekermannDriver"
 )
 
 # Per-language clean rules from dependency scanning.

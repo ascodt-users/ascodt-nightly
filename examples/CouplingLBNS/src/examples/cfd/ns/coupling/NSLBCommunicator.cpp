@@ -61,7 +61,7 @@ void NSLBCommunicator::convert(
 		std::vector<double>& pressureValues
 
 ){
-	std::unordered_map<int,std::vector<NSLBData>>::iterator it;
+	__gnu_cxx::hash_map<int,std::vector<NSLBData> >::iterator it;
 
 	for(it=_velocities[0].begin();it!=_velocities[0].end();it++){
 		for(unsigned int i=0;i<(*it).second.size();i++){

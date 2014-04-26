@@ -60,6 +60,7 @@ private:
 	std::vector<LBNSCommunicator*> _coms;
 	void gatherDomainDescriptions();
 	void gatherMids();
+	void readGeometry(std::string);
 public:
 	LBImplementation();
 	~LBImplementation();

@@ -41,15 +41,20 @@ class cca::cfd::LB2NSNative2JavaPlainPort: public cca::cfd::LB2NS{
   public:
     LB2NSNative2JavaPlainPort(JavaVM* jvm,jobject obj);
     ~LB2NSNative2JavaPlainPort();
-    void iterateBoundary();
-	void iterateBoundaryParallel();
-    void iterateInner();
-	void iterateInnerParallel();
-    void retrieveTimestep(double& dt);
-	void retrieveTimestepParallel(double& dt);
-    void retrieveVelocitiesSize(int& memoryX,int& memoryY,int& memoryZ);
-	void retrieveVelocitiesSizeParallel(int& memoryX,int& memoryY,int& memoryZ);
-    void retrieveVelocitiesCopy(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
-	void retrieveVelocitiesCopyParallel(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
+    void iterateBoundary();  
+    void iterateBoundaryParallel();
+   
+    void iterateInner();  
+    void iterateInnerParallel();
+   
+    void retrieveTimestep(double& dt);  
+    void retrieveTimestepParallel(double& dt);
+   
+    void retrieveVelocitiesSize(int& memoryX,int& memoryY,int& memoryZ);  
+    void retrieveVelocitiesSizeParallel(int& memoryX,int& memoryY,int& memoryZ);
+   
+    void retrieveVelocitiesCopy(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);  
+    void retrieveVelocitiesCopyParallel(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
+   
 };
 #endif

@@ -55,7 +55,7 @@ void LBNSCommunicator::convert(
 		std::vector<int>& offsets,
 		std::vector<int>& flips,
 		std::vector<int>& componentSize){
-	std::unordered_map<int,std::vector<LBNSData>>::iterator it;
+	__gnu_cxx::hash_map<int,std::vector<LBNSData> >::iterator it;
 
 	for(it=_velocities[0].begin();it!=_velocities[0].end();it++){
 		for(unsigned int i=0;i<(*it).second.size();i++){

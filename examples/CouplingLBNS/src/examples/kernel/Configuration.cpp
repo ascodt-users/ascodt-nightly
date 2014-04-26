@@ -1,5 +1,5 @@
 #include "Configuration.h"
-#include "3rdparty/tinyxml2/tinyxml2.h"
+#include "tinyxml2.h"
 #include <string>
 
 void readFloatMandatory(FLOAT & storage, tinyxml2::XMLElement *node, const char* tag){

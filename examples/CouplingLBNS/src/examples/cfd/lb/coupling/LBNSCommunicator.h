@@ -1,7 +1,7 @@
 #ifndef LB_NS_COMMUNICATOR
 #define LB_NS_COMMUNICATOR
 #include <string>
-#include <unordered_map>
+#include <hash_map>
 #include "Parameters.h"
 #include "cca/cfd/NSSolverCxx2SocketPlainPort.h"
 #include <vector>
@@ -20,7 +20,7 @@ private:
 	int _endIndex[3];
 	std::ofstream _logComm;
 	bool _open;
-	std::unordered_map<int,std::vector<LBNSData>> _velocities[3];
+	__gnu_cxx::hash_map<int,std::vector<LBNSData> > _velocities[3];
 	cca::cfd::NSSolverCxx2SocketPlainPort *_lbnsPeer2Peer;
 	int index2array ( int i, int j, int k, int component, int stencil ) const ;
 	void connect();

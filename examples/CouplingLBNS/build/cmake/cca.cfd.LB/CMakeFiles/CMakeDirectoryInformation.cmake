@@ -3,11 +3,25 @@
 
 # Relative path conversion top directories.
 SET(CMAKE_RELATIVE_PATH_TOP_SOURCE "/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS")
-SET(CMAKE_RELATIVE_PATH_TOP_BINARY "/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build")
+SET(CMAKE_RELATIVE_PATH_TOP_BINARY "/import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build")
 
 # Force unix paths in dependencies.
 SET(CMAKE_FORCE_UNIX_PATHS 1)
 
+# The C and CXX include file search paths:
+SET(CMAKE_C_INCLUDE_PATH
+  "cmake/cca.cfd.LB"
+  "/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/cmake/cca.cfd.LB"
+  "/usr/lib/jvm/java-6-openjdk/include"
+  "/work/atanasoa/Programme/petsc-3.3-p7/parallel_release/include"
+  "/home/atanasoa/intel/impi/4.1.3.049/intel64/include"
+  "/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/cmake/cca.cfd.LB/../../src"
+  "/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/cmake/cca.cfd.LB/../../components/java"
+  "/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/cmake/cca.cfd.LB/../../src/examples/kernel"
+  )
+SET(CMAKE_CXX_INCLUDE_PATH ${CMAKE_C_INCLUDE_PATH})
+SET(CMAKE_Fortran_INCLUDE_PATH ${CMAKE_C_INCLUDE_PATH})
+SET(CMAKE_ASM_INCLUDE_PATH ${CMAKE_C_INCLUDE_PATH})
 
 # The C and CXX include file regular expressions for this directory.
 SET(CMAKE_C_INCLUDE_REGEX_SCAN "^.*$")

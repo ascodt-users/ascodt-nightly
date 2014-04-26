@@ -16,9 +16,6 @@ SUFFIXES =
 
 .SUFFIXES: .hpux_make_needs_suffix_list
 
-# Produce verbose output by default.
-VERBOSE = 1
-
 # Suppress display of executed commands.
 $(VERBOSE).SILENT:
 
@@ -38,9 +35,6 @@ CMAKE_COMMAND = /usr/bin/cmake
 # The command to remove a file.
 RM = /usr/bin/cmake -E remove -f
 
-# Escaping for special characters.
-EQUALS = =
-
 # The program to use to edit the cache.
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
@@ -48,7 +42,7 @@ CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 CMAKE_SOURCE_DIR = /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build
+CMAKE_BINARY_DIR = /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -85,6 +79,16 @@ install/local: preinstall
 install/local/fast: install/local
 .PHONY : install/local/fast
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+.PHONY : install/strip/fast
+
 # Special rule for the target list_install_components
 list_install_components:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
@@ -106,9 +110,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -136,6 +140,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named cca.cfd.CouplingDriver
+
+# Build rule for target.
+cca.cfd.CouplingDriver: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 cca.cfd.CouplingDriver
+.PHONY : cca.cfd.CouplingDriver
+
+# fast build rule for target.
+cca.cfd.CouplingDriver/fast:
+	$(MAKE) -f cmake/cca.cfd.CouplingDriver/CMakeFiles/cca.cfd.CouplingDriver.dir/build.make cmake/cca.cfd.CouplingDriver/CMakeFiles/cca.cfd.CouplingDriver.dir/build
+.PHONY : cca.cfd.CouplingDriver/fast
+
+#=============================================================================
 # Target rules for targets named cca.cfd.NS
 
 # Build rule for target.
@@ -147,29 +164,6 @@ cca.cfd.NS: cmake_check_build_system
 cca.cfd.NS/fast:
 	$(MAKE) -f cmake/cca.cfd.NS/CMakeFiles/cca.cfd.NS.dir/build.make cmake/cca.cfd.NS/CMakeFiles/cca.cfd.NS.dir/build
 .PHONY : cca.cfd.NS/fast
-
-# Manual pre-install relink rule for target.
-cca.cfd.NS/preinstall:
-	$(MAKE) -f cmake/cca.cfd.NS/CMakeFiles/cca.cfd.NS.dir/build.make cmake/cca.cfd.NS/CMakeFiles/cca.cfd.NS.dir/preinstall
-.PHONY : cca.cfd.NS/preinstall
-
-#=============================================================================
-# Target rules for targets named cca.cfd.LB
-
-# Build rule for target.
-cca.cfd.LB: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 cca.cfd.LB
-.PHONY : cca.cfd.LB
-
-# fast build rule for target.
-cca.cfd.LB/fast:
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build
-.PHONY : cca.cfd.LB/fast
-
-# Manual pre-install relink rule for target.
-cca.cfd.LB/preinstall:
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/preinstall
-.PHONY : cca.cfd.LB/preinstall
 
 #=============================================================================
 # Target rules for targets named cca.cfd.UekermannDriver
@@ -184,28 +178,18 @@ cca.cfd.UekermannDriver/fast:
 	$(MAKE) -f cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/build.make cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/build
 .PHONY : cca.cfd.UekermannDriver/fast
 
-# Manual pre-install relink rule for target.
-cca.cfd.UekermannDriver/preinstall:
-	$(MAKE) -f cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/build.make cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/preinstall
-.PHONY : cca.cfd.UekermannDriver/preinstall
-
 #=============================================================================
-# Target rules for targets named cca.cfd.CouplingDriver
+# Target rules for targets named cca.cfd.LB
 
 # Build rule for target.
-cca.cfd.CouplingDriver: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 cca.cfd.CouplingDriver
-.PHONY : cca.cfd.CouplingDriver
+cca.cfd.LB: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 cca.cfd.LB
+.PHONY : cca.cfd.LB
 
 # fast build rule for target.
-cca.cfd.CouplingDriver/fast:
-	$(MAKE) -f cmake/cca.cfd.CouplingDriver/CMakeFiles/cca.cfd.CouplingDriver.dir/build.make cmake/cca.cfd.CouplingDriver/CMakeFiles/cca.cfd.CouplingDriver.dir/build
-.PHONY : cca.cfd.CouplingDriver/fast
-
-# Manual pre-install relink rule for target.
-cca.cfd.CouplingDriver/preinstall:
-	$(MAKE) -f cmake/cca.cfd.CouplingDriver/CMakeFiles/cca.cfd.CouplingDriver.dir/build.make cmake/cca.cfd.CouplingDriver/CMakeFiles/cca.cfd.CouplingDriver.dir/preinstall
-.PHONY : cca.cfd.CouplingDriver/preinstall
+cca.cfd.LB/fast:
+	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build
+.PHONY : cca.cfd.LB/fast
 
 # Help Target
 help:
@@ -216,12 +200,13 @@ help:
 	@echo "... edit_cache"
 	@echo "... install"
 	@echo "... install/local"
+	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... cca.cfd.NS"
-	@echo "... cca.cfd.LB"
-	@echo "... cca.cfd.UekermannDriver"
 	@echo "... cca.cfd.CouplingDriver"
+	@echo "... cca.cfd.NS"
+	@echo "... cca.cfd.UekermannDriver"
+	@echo "... cca.cfd.LB"
 .PHONY : help
 
 

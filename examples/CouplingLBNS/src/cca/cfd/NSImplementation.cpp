@@ -76,7 +76,7 @@ cca::cfd::NSImplementation::~NSImplementation(){
 	}
 
 }
-extern "C" void main_loop_();
+extern "C" void main_loop_(bool);
 void test(int argc ,char**argv){
 
 	std::cout<<"start solving loop ns"<<std::endl;
@@ -181,7 +181,7 @@ int main(int argc, char *argv[]){
 
 	PetscInitialize(&argc, &argv, PETSC_NULL, PETSC_NULL);
 	//test(argc,argv);
-	main_loop_();
+	main_loop_(true);
 	PetscFinalize();
 }
 

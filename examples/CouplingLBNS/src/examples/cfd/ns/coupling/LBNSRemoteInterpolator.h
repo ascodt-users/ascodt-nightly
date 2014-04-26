@@ -6,7 +6,7 @@
 #include "CouplingFunctions.h"
 //#include "../LBDefinitions.h"
 #include "Parameters.h"
-#include <unordered_map>
+#include <hash_map>
 #include <vector>
 #include "examples/cfd/lb/LBField.h"
 #include <fstream>
@@ -45,7 +45,7 @@ private:
 	FLOAT _locationVector [stencilSize];
 	FLOAT _regularizedPosition[3];
 	FLOAT _values[stencilSize];
-	std::unordered_map<int, std::vector<LBNSData> > _velocities[3];
+	__gnu_cxx::hash_map<int, std::vector<LBNSData> > _velocities[3];
 	std::ofstream _logComm;
 	bool _open;
 	/** Obtain the coordinates of a value in a NS cell in the LB grid.

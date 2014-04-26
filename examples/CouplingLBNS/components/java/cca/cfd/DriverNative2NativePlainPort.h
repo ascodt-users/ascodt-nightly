@@ -35,8 +35,9 @@ class cca::cfd::DriverNative2NativePlainPort: public cca::cfd::Driver{
     ~DriverNative2NativePlainPort();
     
     void connect(cca::cfd::Driver*);
-    void go(const std::string configFile);
-	void goParallel(const std::string configFile);
+    void go(const std::string configFile);  
+    void goParallel(const std::string configFile);
+   
 };
 
 #endif

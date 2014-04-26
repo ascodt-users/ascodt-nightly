@@ -41,7 +41,8 @@ class cca::cfd::DriverNative2JavaPlainPort: public cca::cfd::Driver{
   public:
     DriverNative2JavaPlainPort(JavaVM* jvm,jobject obj);
     ~DriverNative2JavaPlainPort();
-    void go(const std::string configFile);
-	void goParallel(const std::string configFile);
+    void go(const std::string configFile);  
+    void goParallel(const std::string configFile);
+   
 };
 #endif

@@ -4,7 +4,7 @@
 
 PetscParallelManager::PetscParallelManager(FlowField & flowField, const Parameters & parameters):
 
-    ParallelManager(flowField, parameters),
+    ParallelManager<FlowField> (flowField, parameters),
 
     _fillVelocityStencil(parameters, _leftBufferOut, _rightBufferOut, _bottomBufferOut,
                                      _topBufferOut, _frontBufferOut, _backBufferOut),

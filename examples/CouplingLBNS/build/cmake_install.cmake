@@ -34,10 +34,10 @@ ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.NS/cmake_install.cmake")
-  INCLUDE("/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB/cmake_install.cmake")
-  INCLUDE("/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.UekermannDriver/cmake_install.cmake")
-  INCLUDE("/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.CouplingDriver/cmake_install.cmake")
+  INCLUDE("/import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.CouplingDriver/cmake_install.cmake")
+  INCLUDE("/import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.NS/cmake_install.cmake")
+  INCLUDE("/import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.UekermannDriver/cmake_install.cmake")
+  INCLUDE("/import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 
@@ -47,7 +47,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "/import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "/import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)

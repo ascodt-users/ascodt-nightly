@@ -4,14 +4,21 @@
 #include "Definitions.h"
 #include "Parameters.h"
 #include "LBDefinitions.h"
+#include <vector>
 
+struct Sphere{
+	double x;
+	double y;
+	double z;
+	double r;
+};
 class LBField{
 
 public:
 	LBField(const Parameters & parameters);
 
 	// Constructs an LBField out of its size
-	LBField(int cellsX, int cellsY, int cellsZ);
+	//LBField(int cellsX, int cellsY, int cellsZ);
 	~LBField();
 
 	const int getNx() const;
@@ -71,7 +78,9 @@ public:
 
 	void swap();
 	void allocate();
+	void registerSphere(double x,double y,double z,double r);
 private:
+	const Parameters& _parameters;
 	const int _dim;
 	const int _Q;
 	const int _Nx, _Ny, _Nz;
@@ -86,6 +95,8 @@ private:
 	FLOAT * _fIn;
 	FLOAT * _fOut;
 	char * _flags;
+	std::vector<Sphere> _geometries;
+	const bool isInside(int i,int j,int k) const;
 };
 
 #endif

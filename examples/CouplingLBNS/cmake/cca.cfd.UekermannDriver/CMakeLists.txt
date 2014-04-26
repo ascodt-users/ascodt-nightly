@@ -16,9 +16,9 @@ project("cca.cfd.UekermannDriver" C CXX)
 OPTION (Parallel "Enable parallel" off)
 
 if(Parallel)
-	set(CMAKE_CXX_COMPILER "/opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc")
+	set(CMAKE_CXX_COMPILER "/home/atanasoa/intel/impi/4.1.3.049/bin64/mpiicpc")
 	
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DParallel -mt_mpi")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -DParallel -mt_mpi ")
 	
 endif(Parallel)
 find_library (PETSC_MKL_INTEL_LP64_LIB mkl_intel_lp64 HINTS "/opt/intel/mkl" "/home/atanasoa/Programme/petsc-3.3-p7/-Xlinker" "/opt/intel/mpi-rt/4.1" "/opt/intel/impi/4.1.3.049/intel64/lib" "/usr/lib/gcc/x86_64-linux-gnu/4.7" "/lib/x86_64-linux-gnu" "/usr/lib/x86_64-linux-gnu" "/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64" "/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64" "/usr/lib/i386-linux-gnu" )

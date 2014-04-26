@@ -1,7 +1,7 @@
 #ifndef NS_LB_COMMUNICATOR
 #define NS_LB_COMMUNICATOR
 #include <string>
-#include <unordered_map>
+#include <hash_map>
 #include "Parameters.h"
 #include "cca/cfd/LBSolverCxx2SocketPlainPort.h"
 #include <vector>
@@ -18,8 +18,8 @@ private:
 	std::string _mid;
 	int _startIndex[3];
 	int _endIndex[3];
-	std::unordered_map<int,std::vector<NSLBData> > _velocities[3];
-	std::unordered_map<int,std::vector<NSLBData> > _pressure;
+	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _velocities[3];
+	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _pressure;
 
 	cca::cfd::LBSolverCxx2SocketPlainPort *_nslbPeer2Peer;
 	int index2Varray ( int i, int j, int k, int component, int stencil ) const ;

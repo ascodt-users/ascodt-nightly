@@ -17,6 +17,6 @@ set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH "")
 # }}} General
 
 add_subdirectory(cmake/cca.cfd.CouplingDriver)
-add_subdirectory(cmake/cca.cfd.UekermannDriver)
 add_subdirectory(cmake/cca.cfd.NS)
+add_subdirectory(cmake/cca.cfd.UekermannDriver)
 add_subdirectory(cmake/cca.cfd.LB)

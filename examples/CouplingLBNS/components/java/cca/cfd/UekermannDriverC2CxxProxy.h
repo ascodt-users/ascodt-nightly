@@ -3,7 +3,8 @@
 #ifdef Parallel
 #include <mpi.h>
 #endif
-
+#include <pthread.h>
+#include <string>
 extern "C"{
 #ifdef _WIN32
 void SOCKET_CLIENT_LOOP();
@@ -45,11 +46,13 @@ struct CCA_CFD_UEKERMANNDRIVER_arg{
      #endif
      daemon_clientfd;
      int buffer_size;
-     const char* hostname;
-     const char* client_port;
-     const char* daemon_port;
+     std::string hostname;
+     std::string client_port;
+     std::string daemon_port;
      bool java_client_flag;
+     bool joinable;
      int number_of_workers;
+     const char* xml;
 #ifdef Parallel
 	 MPI_Comm communicator;
 #endif     

@@ -34,9 +34,6 @@ CMAKE_COMMAND = /usr/bin/cmake
 # The command to remove a file.
 RM = /usr/bin/cmake -E remove -f
 
-# Escaping for special characters.
-EQUALS = =
-
 # The program to use to edit the cache.
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
@@ -44,7 +41,7 @@ CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 CMAKE_SOURCE_DIR = /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build
+CMAKE_BINARY_DIR = /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build
 
 # Include any dependencies generated for this target.
 include cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/depend.make
@@ -56,18 +53,18 @@ include cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/progress.make
 include cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o: ../components/java/cca/cfd/LBAbstractImplementation.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_1)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBAbstractImplementation.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBAbstractImplementation.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBAbstractImplementation.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBAbstractImplementation.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBAbstractImplementation.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBAbstractImplementation.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBAbstractImplementation.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o.requires
@@ -79,18 +76,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstr
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o: ../src/cca/cfd/LBImplementation.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_2)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/cca/cfd/LBImplementation.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/cca/cfd/LBImplementation.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/cca/cfd/LBImplementation.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/cca/cfd/LBImplementation.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/cca/cfd/LBImplementation.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/cca/cfd/LBImplementation.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/cca/cfd/LBImplementation.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o.requires
@@ -102,18 +99,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cp
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o: ../components/java/cca/cfd/LBC2CxxProxy.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_3)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBC2CxxProxy.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBC2CxxProxy.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBC2CxxProxy.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBC2CxxProxy.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBC2CxxProxy.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBC2CxxProxy.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/LBC2CxxProxy.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o.requires
@@ -124,19 +121,42 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2Cxx
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o
 
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/tinyxml2.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_4)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/tinyxml2.cpp
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.i"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/tinyxml2.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.i
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.s"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/tinyxml2.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.s
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o.requires:
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o.requires
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o.requires
+	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o.provides.build
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o.provides
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o
+
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o: ../components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_4)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_5)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o.requires
@@ -148,18 +168,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolve
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o: ../components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_5)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_6)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o.requires
@@ -171,18 +191,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolve
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o: ../components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_6)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_7)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o.requires
@@ -194,18 +214,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolve
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o: ../components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_7)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_8)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o.requires
@@ -217,18 +237,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolve
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o: ../components/java/cca/cfd/NSSolverNativeDispatcher.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_8)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeDispatcher.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_9)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeDispatcher.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeDispatcher.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeDispatcher.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeDispatcher.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeDispatcher.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeDispatcher.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o.requires
@@ -240,18 +260,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolve
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o: ../components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_9)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_10)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o.requires
@@ -263,18 +283,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolve
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o: ../components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_10)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_11)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o.requires
@@ -285,42 +305,19 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolve
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o: ../src/examples/kernel/DataStructures.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_11)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/DataStructures.cpp
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/DataStructures.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.i
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/DataStructures.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.s
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.requires:
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.requires
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.requires
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.provides.build
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.provides
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o
-
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o: ../src/examples/kernel/Configuration.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_12)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/Configuration.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_12)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/Configuration.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/Configuration.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/Configuration.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/Configuration.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/Configuration.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/Configuration.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o.requires
@@ -332,18 +329,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configurati
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o: ../src/examples/kernel/CouplingFunctions.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_13)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/CouplingFunctions.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_13)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/CouplingFunctions.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/CouplingFunctions.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/CouplingFunctions.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/CouplingFunctions.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/CouplingFunctions.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/CouplingFunctions.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o.requires
@@ -355,18 +352,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFun
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o: ../src/examples/kernel/PetscParallelConfiguration.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_14)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/PetscParallelConfiguration.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_14)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/PetscParallelConfiguration.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/PetscParallelConfiguration.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/PetscParallelConfiguration.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/PetscParallelConfiguration.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/PetscParallelConfiguration.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/PetscParallelConfiguration.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o.requires
@@ -377,42 +374,42 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParall
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o: ../src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_15)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/DataStructures.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_15)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/DataStructures.cpp
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.i
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.i"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/DataStructures.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.i
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.s
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.s"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/kernel/DataStructures.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.s
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o.requires:
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.requires:
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.requires
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o.requires
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o.provides.build
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o.provides
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.requires
+	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.provides.build
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.provides
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o: ../src/examples/cfd/lb/LBField.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_16)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/LBField.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_16)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/LBField.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/LBField.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/LBField.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/LBField.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/LBField.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/LBField.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o.requires
@@ -423,42 +420,19 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o: ../src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_17)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.i
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.s
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.requires:
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.requires
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.requires
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.provides.build
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.provides
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o
-
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o: ../src/examples/cfd/lb/parallelManagers/BufferStencils.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_18)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_17)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o.requires
@@ -469,42 +443,65 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelMan
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o: ../src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_19)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_18)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.i
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.i"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.i
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.s
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.s"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.s
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.requires:
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.requires:
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.requires
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.requires
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.provides.build
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.provides
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.requires
+	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.provides.build
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.provides
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_19)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.i"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.i
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.s"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.s
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.requires:
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.requires
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.requires
+	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.provides.build
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.provides
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o: ../src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_20)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_20)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o.requires
@@ -516,18 +513,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LB
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o: ../src/examples/cfd/lb/coupling/LBNSCommunicator.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_21)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_21)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o.requires
@@ -538,42 +535,42 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LB
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o: ../src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_22)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_22)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.i
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.i"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.i
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.s
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.s"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.s
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.requires:
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.requires:
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.requires
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.requires
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.provides.build
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.provides
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.requires
+	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.provides.build
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.provides
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o: ../src/examples/cfd/lb/coupling/LBNSInterpolator.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_23)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_23)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o.requires
@@ -584,88 +581,42 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LB
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o: ../src/examples/cfd/lb/stencils/LBParabolicStencil.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_24)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamStencil.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_24)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamStencil.cpp
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.i
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.i"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.i
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.s
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.s"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.s
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.requires:
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.requires:
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.requires
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.requires
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.provides.build
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.provides
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.requires
+	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.provides.build
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.provides
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o: ../src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_25)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.i
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.s
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.requires:
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.requires
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.requires
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.provides.build
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.provides
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o: ../src/examples/cfd/lb/stencils/LBCollideStencil.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_26)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBCollideStencil.cpp
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBCollideStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.i
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBCollideStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.s
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.requires:
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.requires
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.requires
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.provides.build
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.provides
-
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o: ../src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_27)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_25)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o.requires
@@ -677,18 +628,18 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LB
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o: ../src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_28)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_26)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o.requires
@@ -699,19 +650,42 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LB
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o
 
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_27)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.i"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.i
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.s"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.s
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.requires:
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.requires
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.requires
+	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.provides.build
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.provides
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o
+
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o: ../src/examples/cfd/lb/stencils/LBVTKStencil.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_29)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBVTKStencil.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_28)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBVTKStencil.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBVTKStencil.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBVTKStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBVTKStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBVTKStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBVTKStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o.requires
@@ -722,65 +696,65 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LB
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o: ../src/examples/cfd/lb/stencils/LBStreamStencil.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_30)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamStencil.cpp
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_29)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.i
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.i"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.i
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBStreamStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.s
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.s"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.s
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.requires:
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.requires:
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.requires
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.requires
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.provides.build
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.provides
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.requires
+	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.provides.build
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.provides
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o: ../src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_31)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBCollideStencil.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_30)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBCollideStencil.cpp
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.i
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.i"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBCollideStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.i
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.s
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.s"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBCollideStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.s
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.requires:
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.requires:
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.requires
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.requires
-	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.provides.build
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.provides
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.requires
+	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.provides.build
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.provides
 
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o: ../src/examples/cfd/lb/stencils/LBFunctions.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_32)
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBFunctions.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_31)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBFunctions.cpp
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBFunctions.cpp
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.i"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBFunctions.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.i
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBFunctions.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.i
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.s"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /opt/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBFunctions.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.s
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBFunctions.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.s
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o.requires:
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o.requires
@@ -791,11 +765,35 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LB
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o
 
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/flags.make
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o: /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles $(CMAKE_PROGRESS_32)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o -c /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.i"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp > CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.i
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.s"
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && /home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp -o CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.s
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.requires:
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.requires
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.provides: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.requires
+	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.provides.build
+.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.provides
+
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.provides.build: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o
+
 # Object files for target cca.cfd.LB
 cca_cfd_LB_OBJECTS = \
 "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o" \
+"CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o" \
@@ -803,28 +801,27 @@ cca_cfd_LB_OBJECTS = \
 "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o" \
+"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o" \
+"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o" \
+"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o" \
+"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o" \
+"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o" \
+"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o" \
 "CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o"
+"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o" \
+"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o" \
+"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o" \
+"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o"
 
 # External object files for target cca.cfd.LB
 cca_cfd_LB_EXTERNAL_OBJECTS =
@@ -832,6 +829,7 @@ cca_cfd_LB_EXTERNAL_OBJECTS =
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o
+cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o
@@ -839,175 +837,67 @@ cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/co
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o
-cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o
-cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o
+cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o
-cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o
-cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o
+cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o
+cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o
-cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o
+cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o
-cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o
-cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o
-cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o
+cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o
+cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o
-cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o
-cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o
+cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o
+cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o
-cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make
-cmake/cca.cfd.LB/cca.cfd.LB: /home/atanasoa/Programme/jdk1.7.0_40/jre/lib/amd64/libverify.so
-cmake/cca.cfd.LB/cca.cfd.LB: /home/atanasoa/Programme/jdk1.7.0_40/jre/lib/amd64/libjava.so
-cmake/cca.cfd.LB/cca.cfd.LB: /home/atanasoa/Programme/jdk1.7.0_40/jre/lib/amd64/libawt.so
-cmake/cca.cfd.LB/cca.cfd.LB: /home/atanasoa/Programme/jdk1.7.0_40/jre/lib/amd64/server/libjvm.so
-cmake/cca.cfd.LB/cca.cfd.LB: /home/atanasoa/Programme/petsc-3.3-p7/parallel_release/lib/libpetsc.a
+cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o
+cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/jvm/java-6-openjdk/jre/lib/amd64/libverify.so
+cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/jvm/java-6-openjdk/jre/lib/amd64/libjava.so
+cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/jvm/java-6-openjdk/jre/lib/amd64/libawt.so
+cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/jvm/java-6-openjdk/jre/lib/amd64/server/libjvm.so
+cmake/cca.cfd.LB/cca.cfd.LB: /work/atanasoa/Programme/petsc-3.3-p7/parallel_release/lib/libpetsc.a
 cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/x86_64-linux-gnu/libX11.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libifport.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libifcore.so
+cmake/cca.cfd.LB/cca.cfd.LB: /home/software/intel/composer_xe_2011_sp1.7.256/compiler/lib/intel64/libifport.so
+cmake/cca.cfd.LB/cca.cfd.LB: /home/software/intel/composer_xe_2011_sp1.7.256/compiler/lib/intel64/libifcore.so
 cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/x86_64-linux-gnu/libm.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/impi/4.1.3.049/intel64/lib/libmpigf.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/impi/4.1.3.049/intel64/lib/libmpi_mt.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/impi/4.1.3.049/intel64/lib/libmpigi.a
+cmake/cca.cfd.LB/cca.cfd.LB: /home/atanasoa/intel/impi/4.1.3.049/intel64/lib/libmpigf.so
+cmake/cca.cfd.LB/cca.cfd.LB: /home/atanasoa/intel/impi/4.1.3.049/intel64/lib/libmpi_mt.so
+cmake/cca.cfd.LB/cca.cfd.LB: /home/atanasoa/intel/impi/4.1.3.049/intel64/lib/libmpigi.a
 cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/x86_64-linux-gnu/librt.so
 cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/x86_64-linux-gnu/libpthread.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libimf.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libsvml.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libirng.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libipgo.a
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libdecimal.a
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libcilkrts.so
-cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/gcc/x86_64-linux-gnu/4.7/libstdc++.so
-cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/gcc/x86_64-linux-gnu/4.7/libgcc_s.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libirc.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libirc_s.a
+cmake/cca.cfd.LB/cca.cfd.LB: /home/software/intel/composer_xe_2011_sp1.7.256/compiler/lib/intel64/libimf.so
+cmake/cca.cfd.LB/cca.cfd.LB: /home/software/intel/composer_xe_2011_sp1.7.256/compiler/lib/intel64/libsvml.so
+cmake/cca.cfd.LB/cca.cfd.LB: /home/software/intel/composer_xe_2011_sp1.7.256/compiler/lib/intel64/libipgo.a
+cmake/cca.cfd.LB/cca.cfd.LB: /home/software/intel/composer_xe_2011_sp1.7.256/compiler/lib/intel64/libdecimal.a
+cmake/cca.cfd.LB/cca.cfd.LB: /home/software/intel/composer_xe_2011_sp1.7.256/compiler/lib/intel64/libcilkrts.so
+cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/gcc/x86_64-linux-gnu/4.6/libstdc++.so
+cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/gcc/x86_64-linux-gnu/4.6/libgcc_s.so
+cmake/cca.cfd.LB/cca.cfd.LB: /home/software/intel/composer_xe_2011_sp1.7.256/compiler/lib/intel64/libirc.so
+cmake/cca.cfd.LB/cca.cfd.LB: /home/software/intel/composer_xe_2011_sp1.7.256/compiler/lib/intel64/libirc_s.a
 cmake/cca.cfd.LB/cca.cfd.LB: /usr/lib/x86_64-linux-gnu/libdl.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64/libmkl_intel_lp64.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64/libmkl_intel_thread.so
-cmake/cca.cfd.LB/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64/libmkl_core.so
+cmake/cca.cfd.LB/cca.cfd.LB: /import/home/software/intel/mkl/lib/intel64/libmkl_intel_lp64.so
+cmake/cca.cfd.LB/cca.cfd.LB: /import/home/software/intel/mkl/lib/intel64/libmkl_intel_thread.so
+cmake/cca.cfd.LB/cca.cfd.LB: /import/home/software/intel/mkl/lib/intel64/libmkl_core.so
+cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make
 cmake/cca.cfd.LB/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable cca.cfd.LB"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cca.cfd.LB.dir/link.txt --verbose=$(VERBOSE)
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cca.cfd.LB.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build: cmake/cca.cfd.LB/cca.cfd.LB
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build
 
-# Object files for target cca.cfd.LB
-cca_cfd_LB_OBJECTS = \
-"CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o" \
-"CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o"
-
-# External object files for target cca.cfd.LB
-cca_cfd_LB_EXTERNAL_OBJECTS =
-
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /home/atanasoa/Programme/jdk1.7.0_40/jre/lib/amd64/libverify.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /home/atanasoa/Programme/jdk1.7.0_40/jre/lib/amd64/libjava.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /home/atanasoa/Programme/jdk1.7.0_40/jre/lib/amd64/libawt.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /home/atanasoa/Programme/jdk1.7.0_40/jre/lib/amd64/server/libjvm.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /home/atanasoa/Programme/petsc-3.3-p7/parallel_release/lib/libpetsc.a
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /usr/lib/x86_64-linux-gnu/libX11.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libifport.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libifcore.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /usr/lib/x86_64-linux-gnu/libm.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/impi/4.1.3.049/intel64/lib/libmpigf.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/impi/4.1.3.049/intel64/lib/libmpi_mt.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/impi/4.1.3.049/intel64/lib/libmpigi.a
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /usr/lib/x86_64-linux-gnu/librt.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /usr/lib/x86_64-linux-gnu/libpthread.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libimf.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libsvml.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libirng.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libipgo.a
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libdecimal.a
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libcilkrts.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /usr/lib/gcc/x86_64-linux-gnu/4.7/libstdc++.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /usr/lib/gcc/x86_64-linux-gnu/4.7/libgcc_s.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libirc.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64/libirc_s.a
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /usr/lib/x86_64-linux-gnu/libdl.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64/libmkl_intel_lp64.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64/libmkl_intel_thread.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: /opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64/libmkl_core.so
-cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/relink.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable CMakeFiles/CMakeRelink.dir/cca.cfd.LB"
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cca.cfd.LB.dir/relink.txt --verbose=$(VERBOSE)
-
-# Rule to relink during preinstall.
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/preinstall: cmake/cca.cfd.LB/CMakeFiles/CMakeRelink.dir/cca.cfd.LB
-.PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/preinstall
-
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBAbstractImplementation.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/cca/cfd/LBImplementation.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/LBC2CxxProxy.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/tinyxml2.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp.o.requires
@@ -1015,35 +905,34 @@ cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeDispatcher.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp.o.requires
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/Configuration.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/CouplingFunctions.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/PetscParallelConfiguration.cpp.o.requires
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/3rdparty/tinyxml2/tinyxml2.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/kernel/DataStructures.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/LBField.cpp.o.requires
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/BufferStencils.cpp.o.requires
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/parallelManagers/LBParallelManager.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSRemoteInterpolator.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCommunicator.cpp.o.requires
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSCouplingIterator.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/NSLBCouplingStencil.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/coupling/LBNSInterpolator.cpp.o.requires
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.requires
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.requires
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBMovingWallStencil.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBRotatedParabolicStencil.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamAndCollideStencil.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBVTKStencil.cpp.o.requires
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBStreamStencil.cpp.o.requires
-cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBParabolicStencil.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBCollideStencil.cpp.o.requires
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBFunctions.cpp.o.requires
+cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires: cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/__/__/src/examples/cfd/lb/stencils/LBBounceBackStencil.cpp.o.requires
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/requires
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/clean:
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && $(CMAKE_COMMAND) -P CMakeFiles/cca.cfd.LB.dir/cmake_clean.cmake
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB && $(CMAKE_COMMAND) -P CMakeFiles/cca.cfd.LB.dir/cmake_clean.cmake
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/clean
 
 cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/depend:
-	cd /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/cmake/cca.cfd.LB /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/DependInfo.cmake --color=$(COLOR)
+	cd /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/cmake/cca.cfd.LB /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/depend
 
