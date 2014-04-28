@@ -72,6 +72,18 @@ public class ASCoDTVTKPlugin extends AbstractUIPlugin {
     // result, this block aims to load all VTK native libraries in a proper
     // order according to their dependencies. DO NOT CHANGE!
     // -------------------------------------------------------------------------
+    if(false&&System.getProperty("os.name").contains("Linux")){
+      vtk.vtkNativeLibrary.LoadAllNativeLibraries();
+//      try{
+//          boolean loaded =vtkNativeLibrary.LoadAllNativeLibraries();
+//          if(!loaded)
+//            ErrorWriterDevice.getInstance().showError( getClass().getName() ,
+//                    "loadNativeLibraries()",
+//                    new ASCoDTException(ASCoDTVTKPlugin.class.getCanonicalName(),"loadNativeLibraries()","VTK libraries not loaeded! Please report the bug to me!",null));
+//      }catch(Exception e){
+//          ErrorWriterDevice.getInstance().showError( getClass().getName() , "loadNativeLibraries()", e);
+//      }
+  }else{
     System.loadLibrary("vtkDICOMParser-6.1");
     System.loadLibrary("vtkalglib-6.1");
     System.loadLibrary("vtkexpat-6.1");
@@ -97,6 +109,7 @@ public class ASCoDTVTKPlugin extends AbstractUIPlugin {
     // -------------------------------------------------------------------------
     System.loadLibrary("vtkNetCDF_cxx-6.1");
     System.loadLibrary("vtkexoIIc-6.1");
+    //System.loadLibrary("vtksqlite-6.1");
     // -------------------------------------------------------------------------
     System.loadLibrary("vtkCommonCore-6.1");
     // -------------------------------------------------------------------------
@@ -133,6 +146,7 @@ public class ASCoDTVTKPlugin extends AbstractUIPlugin {
     System.loadLibrary("vtkIOGeometry-6.1");
     System.loadLibrary("vtkIOLegacy-6.1");
     System.loadLibrary("vtkIOPLY-6.1");
+   
     System.loadLibrary("vtkIOSQL-6.1");
     System.loadLibrary("vtkIOXMLParser-6.1");
     System.loadLibrary("vtkImagingColor-6.1");
@@ -310,6 +324,7 @@ public class ASCoDTVTKPlugin extends AbstractUIPlugin {
     // -------------------------------------------------------------------------
     System.loadLibrary("vtkFiltersParallelJava");
     System.loadLibrary("vtkViewsGeovisJava");
+  }
     // =========================================================================
     // }}} VTK JNI Libraries
   }

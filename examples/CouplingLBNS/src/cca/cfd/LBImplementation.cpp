@@ -226,7 +226,7 @@ void cca::cfd::LBImplementation::readGeometry(std::string file){
 }
 void cca::cfd::LBImplementation::solve(){
 	pthread_mutex_lock(&_mutex);
-	const int lbIterations = 10000;
+	const int lbIterations = 10000* (_lbField->getCellsZ()-1) * (_lbField->getCellsZ()-1) / (80*80);
 	// The original experiments had a field of size 40
 	//s* (_lbField->getCellsZ()-1) * (_lbField->getCellsZ()-1) / (40*40)
 	//_nslbCouplingStencil->computeBoundaryMeanPressure();
@@ -238,7 +238,7 @@ void cca::cfd::LBImplementation::solve(){
 	//if(_parameters.parallel.rank==0)
 	_nslbCouplingStencil->computeBoundaryMeanPressure();
 	_nslbCouplingIterator->iterate();
-	for (int i = 0; i < lbIterations* (_lbField->getCellsZ()-1) * (_lbField->getCellsZ()-1) / (80*80); i++){
+	for (int i = 0; i < 1; i++){
 		_parallelManager->communicatePdfs();
 
 
@@ -435,10 +435,10 @@ void cca::cfd::LBImplementation::forwardVelocities(
 		int& ack){
 	pthread_mutex_lock(&_mutex);
 	int offset=0;
-	std::cout<<"receiving velocities"<<std::endl;
+	//std::cout<<"receiving velocities"<<std::endl;
 	for(int i=0;i<3;i++)
 	{
-		std::cout<<"start receiving velocities:"<<i<<","<<componentSize[i]<<std::endl;
+		//std::cout<<"start receiving velocities:"<<i<<","<<componentSize[i]<<std::endl;
 		for(int j=0;j<componentSize[i];j++){
 			//std::cout<<"setting velocity j:"<<j<<" component:"<<i<<std::endl;
 
@@ -454,11 +454,11 @@ void cca::cfd::LBImplementation::forwardVelocities(
 					values[offset+j]);
 
 		}
-		std::cout<<"finished component:"<<i<<" with:"<<componentSize[i]<<std::endl;
+		//std::cout<<"finished component:"<<i<<" with:"<<componentSize[i]<<std::endl;
 		offset+=componentSize[i];
 	}
 	ack=1;
-	std::cout<<"receiving velocities on lb"<<std::endl;
+	//std::cout<<"receiving velocities on lb"<<std::endl;
 	pthread_mutex_unlock(&_mutex);
 }
 
@@ -473,9 +473,9 @@ void cca::cfd::LBImplementation::forwardPressure(
 		const int values_len,
 		int& ack){
 	pthread_mutex_lock(&_mutex);
-	std::cout<<"start iter:"<<_iterC++<<std::endl;
-	std::cout<<"receiving pressure on rank:"
-			<<_parameters.parallel.rank<<" size:"<<values_len<<std::endl;
+//	std::cout<<"start iter:"<<_iterC++<<std::endl;
+//	std::cout<<"receiving pressure on rank:"
+//			<<_parameters.parallel.rank<<" size:"<<values_len<<std::endl;
 	for (unsigned int i = 0 ; i < values_len;i++)
 		_nslbCouplingStencil->setPressure(
 				keys[i],

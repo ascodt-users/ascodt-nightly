@@ -1436,7 +1436,7 @@ std::string retrieveSocketAddress(){
                                                         inet_ntoa(((struct sockaddr_in*) &req.ifr_addr)->sin_addr));
 				if(strcmp(curif->if_name,network_interface)==0)
 				{
-					res<<std::string(inet_ntoa(((struct sockaddr_in*) &req.ifr_addr)->sin_addr))<<":"<<(atoi(daemon_args.daemon_port.c_str())+rank);
+					res<<std::string(inet_ntoa(((struct sockaddr_in*) &req.ifr_addr)->sin_addr))<<":"<<daemon_args.daemon_port;
 					
 				}
 			}
@@ -1727,7 +1727,7 @@ invokers[20]=invoker_create_client_port_for_lb;
                  std::stringstream str;
                  e->QueryIntAttribute("port",&port);
                  str<<(port+1);
-                 arg.daemon_port=str.str();
+                // arg.daemon_port=str.str();
                  for(
                            tinyxml2::XMLElement* conElement = e->FirstChildElement("outputPort");
                            conElement != NULL;
@@ -1812,12 +1812,9 @@ void initialiseParallel(CCA_CFD_NS_arg& arg){
      MPI_Comm_rank(MPI_COMM_WORLD,&rank);
      MPI_Comm_size(MPI_COMM_WORLD,&comm_size);
      int port=atoi(arg.daemon_port.c_str())+rank;
-     st<<port<<'\0';
-     std::vector<char> daemon_str(st.str().size()+1);
-     strncpy(&daemon_str[0],st.str().c_str(),st.str().size());
-     daemon_str[st.str().size()]='\0';
+     st<<port;
      arg.communicator = MPI_COMM_WORLD;
-     arg.daemon_port=std::string(&daemon_str[0]);
+     arg.daemon_port=st.str();
      if(rank>0){
           arg.java_client_flag=false;
           arg.joinable=false;
@@ -1842,14 +1839,15 @@ void initialise_(CCA_CFD_NS_arg& arg,bool joinable){
      arg.joinable=joinable;
      initialiseENV(arg);
      
+     initialiseXMLDaemons(arg);
+     initialiseParallel(arg);
+     
 
    invoker_create_instance(&arg.ref,0,0,NULL,NULL
 #ifdef Parallel
    ,MPI_COMM_WORLD,0 	
 #endif   
    );
-   initialiseXMLDaemons(arg);
-   initialiseParallel(arg);
    if(arg.java_client_flag)         
      open_client(arg.hostname.c_str(),arg.client_port.c_str(),arg.java_serverfd,arg.java_clientfd);
    

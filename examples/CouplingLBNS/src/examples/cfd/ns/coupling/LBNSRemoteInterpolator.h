@@ -46,6 +46,8 @@ private:
 	FLOAT _regularizedPosition[3];
 	FLOAT _values[stencilSize];
 	__gnu_cxx::hash_map<int, std::vector<LBNSData> > _velocities[3];
+	std::vector<double> _localVelocities[3];
+	int _localVelocitiesCounters[3];
 	std::ofstream _logComm;
 	bool _open;
 	/** Obtain the coordinates of a value in a NS cell in the LB grid.
@@ -111,6 +113,7 @@ public:
 			const int flipsZ,
 			const int component,
 			const double value);
+	void switchToLocalVelocities();
 	void clear();
 	/** Constructor of the interpolator class.
 	 * @param parameters Parameter struccture of the simulation

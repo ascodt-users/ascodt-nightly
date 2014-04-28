@@ -1,0 +1,21 @@
+CC=gcc
+CXX=g++
+RM=rm -f
+CPPFLAGS= -Icomponents/java -Isrc -I/usr/lib/jvm/java-6-openjdk/include -I/usr/lib/jvm/java-6-openjdk/include/linux -fPIC
+LDFLAGS=
+LDLIBS=
+
+SRCS= components/java/__PATH_FULL_QUALIFIED_NAME__AbstractImplementation.cpp src/__PATH_FULL_QUALIFIED_NAME__Implementation.cpp components/java/__PATH_FULL_QUALIFIED_NAME__JNIProxy.cpp 
+SRCS += components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp components/java/cca/cfd/NSSolverNativeDispatcher.cpp
+OBJS=$(subst .cpp,.o,$(SRCS))
+
+all: libLB.so
+
+libLB.so: $(OBJS)
+	$(CXX) -shared $(OBJS) -o native/libLB.so
+
+clean:
+	$(RM) $(OBJS)
+
+dist-clean: clean
+	$(RM) libLB.so

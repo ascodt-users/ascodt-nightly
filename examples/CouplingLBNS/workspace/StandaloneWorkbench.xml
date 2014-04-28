@@ -12,7 +12,7 @@
         <inputPort className="cca.cfd.LB2NS" classId="1" index="1622269603"/>
         <outputPort xsi:type="usePort" alias="ns" createId="66" connectId="67" disconnectId="68" className="ns:cca.cfd.NSSolver" classId="0" index="752719662"/>
     </component>
-    <component xsi:type="socketComponent" host="localhost" port="50025" name="cca.cfd.NS" reference="oid4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <component xsi:type="socketComponent" host="localhost" port="50050" name="cca.cfd.NS" reference="oid4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <inputPort className="cca.cfd.NS2LB" classId="0" index="1724158788"/>
         <inputPort className="cca.cfd.NSSolver" classId="1" index="818453861"/>
         <outputPort xsi:type="usePort" alias="lb" createId="20" connectId="21" disconnectId="22" className="lb:cca.cfd.LBSolver" classId="0" index="1230882719"/>

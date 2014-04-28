@@ -18,24 +18,27 @@ void LBNSRemoteInterpolator::printParameters() {
 
 
 LBNSRemoteInterpolator::LBNSRemoteInterpolator (const Parameters & parameters):
-    										_parameters (parameters),
-    										// Add 2 to refer to fluid cells and not to the boundaries
-    										// The upper limits refer to the last cell inside the overlap region
-    										_lowerX (parameters.coupling.offsetNS[0]),
-    										_upperX (_lowerX + parameters.coupling.sizeNS[0] - 1),
-    										_lowerY (parameters.coupling.offsetNS[1]),
-    										_upperY (_lowerY + parameters.coupling.sizeNS[1] - 1),
-    										_lowerZ (parameters.coupling.offsetNS[2]),
-    										_upperZ (_lowerZ + parameters.coupling.sizeNS[2] - 1),
-    										_M (parameters.coupling.ratio),
-    										_halfM (_M / 2),    // Should return the floor of the float operation if operating with ints
-    										_modulo (_M % 2),
-    										_reciprocalRatio (1.0 / _M),
-    										_dx (parameters.coupling.refLength / _M),
-    										_dt (parameters.lb.viscosity * parameters.flow.Re * _dx * _dx),
-    										_referenceVelocity (_dx / _dt)
+    														_parameters (parameters),
+    														// Add 2 to refer to fluid cells and not to the boundaries
+    														// The upper limits refer to the last cell inside the overlap region
+    														_lowerX (parameters.coupling.offsetNS[0]),
+    														_upperX (_lowerX + parameters.coupling.sizeNS[0] - 1),
+    														_lowerY (parameters.coupling.offsetNS[1]),
+    														_upperY (_lowerY + parameters.coupling.sizeNS[1] - 1),
+    														_lowerZ (parameters.coupling.offsetNS[2]),
+    														_upperZ (_lowerZ + parameters.coupling.sizeNS[2] - 1),
+    														_M (parameters.coupling.ratio),
+    														_halfM (_M / 2),    // Should return the floor of the float operation if operating with ints
+    														_modulo (_M % 2),
+    														_reciprocalRatio (1.0 / _M),
+    														_dx (parameters.coupling.refLength / _M),
+    														_dt (parameters.lb.viscosity * parameters.flow.Re * _dx * _dx),
+    														_referenceVelocity (_dx / _dt)
 {
 	printParameters();
+	for(int i=0;i<3;i++){
+		_localVelocitiesCounters[i]=0;
+	}
 	_open=false;
 }
 
@@ -87,6 +90,10 @@ void LBNSRemoteInterpolator::clear(){
 	_velocities[0].clear();
 	_velocities[1].clear();
 	_velocities[2].clear();
+	for(int i=0;i<3;i++){
+		_localVelocities[i].clear();
+		_localVelocitiesCounters[i]=0;
+	}
 }
 inline int LBNSRemoteInterpolator::index2array ( int i, int j, int k, int component, int stencil ) const {
 
@@ -114,33 +121,40 @@ const double  LBNSRemoteInterpolator::getVelocity(
 		const int* offset,
 		const int* flip,
 		const int index){
-	__gnu_cxx::hash_map<int,std::vector<LBNSData> >::iterator it=_velocities[component].find(index);
-	if(it!=_velocities[component].end()){
+	if(!_velocities[component].empty()){
+		__gnu_cxx::hash_map<int,std::vector<LBNSData> >::iterator it=_velocities[component].find(index);
+		if(it!=_velocities[component].end()){
 
-		for(unsigned int i=0;i<(*it).second.size();i++){
-			if(
-					offset[0]==(*it).second[i].offset[0]&&
-					offset[1]==(*it).second[i].offset[1]&&
-					offset[2]==(*it).second[i].offset[2]&&
-					flip[0]==(*it).second[i].flip[0]&&
-					flip[1]==(*it).second[i].flip[1]&&
-					flip[2]==(*it).second[i].flip[2]
-			)
-				return (*it).second[i].value;
+			for(unsigned int i=0;i<(*it).second.size();i++){
+				if(
+						offset[0]==(*it).second[i].offset[0]&&
+						offset[1]==(*it).second[i].offset[1]&&
+						offset[2]==(*it).second[i].offset[2]&&
+						flip[0]==(*it).second[i].flip[0]&&
+						flip[1]==(*it).second[i].flip[1]&&
+						flip[2]==(*it).second[i].flip[2]
+				){
+					_localVelocities[component].push_back((*it).second[i].value);
+
+					return (*it).second[i].value;
+				}
+			}
+
 		}
+		open();
+		//	open();
+		//
+		_logComm<<"i_j_k_index:"<<i
+				<<" "<<j<<" "<<k
+				<<" stencil:"<<l
+				<<" component:"<<component
+				<<" index:"<<index<<std::endl;
 
+		//std::cout<<"index not found"<<std::endl;
+		return 0.0;
+	}else{
+		return _localVelocities[component][_localVelocitiesCounters[component]++];
 	}
-	open();
-	//	open();
-	//
-	_logComm<<"i_j_k_index:"<<i
-			<<" "<<j<<" "<<k
-			<<" stencil:"<<l
-			<<" component:"<<component
-			<<" index:"<<index<<std::endl;
-
-	//std::cout<<"index not found"<<std::endl;
-	return 0.0;
 }
 bool LBNSRemoteInterpolator::checkIfValid (const int * const lbPosition, const int * const middle) {
 	return true;
@@ -188,7 +202,15 @@ void LBNSRemoteInterpolator::open(){
 	}
 	_open=true;
 }
-
+void LBNSRemoteInterpolator::switchToLocalVelocities(){
+	for(int i=0;i<3;i++){
+		if(_localVelocities[i].size()==0)
+				_localVelocities[i].reserve(_velocities[i].size());
+			else
+				_velocities[i].clear();
+		_localVelocitiesCounters[i]=0;
+	}
+}
 FLOAT LBNSRemoteInterpolator::interpolateVelocityComponent (int ins, int jns, int kns, int component){
 	int lbPosition[3], middle[3];
 	locateInLBGrid (lbPosition, middle, ins, jns, kns, component);

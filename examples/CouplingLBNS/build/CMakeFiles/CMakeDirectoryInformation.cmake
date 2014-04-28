@@ -3,7 +3,7 @@
 
 # Relative path conversion top directories.
 SET(CMAKE_RELATIVE_PATH_TOP_SOURCE "/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS")
-SET(CMAKE_RELATIVE_PATH_TOP_BINARY "/import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build")
+SET(CMAKE_RELATIVE_PATH_TOP_BINARY "/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build")
 
 # Force unix paths in dependencies.
 SET(CMAKE_FORCE_UNIX_PATHS 1)

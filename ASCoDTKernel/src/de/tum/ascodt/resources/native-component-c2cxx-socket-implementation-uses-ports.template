@@ -23,7 +23,15 @@ void invoker_create_client_port_for___USES_PORT_AS__(void** ref,int newsockfd, i
  
 }
   
-
+void invoker_create_client_port_for___USES_PORT_AS__(void** ref, void** dispatcherRef, void** portRef, char* host,int port,int buffer_size){
+  
+  *portRef=new __CXX_FULL_QUALIFIED_PORT_TYPE__Cxx2SocketPlainPort(
+        host,
+        port,
+        buffer_size
+   );
+  
+}
 void invoker_connect_client_dispatcher___USES_PORT_AS__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer
 #ifdef Parallel
 ,MPI_Comm communicator, int methodId
@@ -48,6 +56,14 @@ void invoker_connect_client_dispatcher___USES_PORT_AS__(void** ref,int newsockfd
   sendData((char*)&portref,sizeof(long long),sendBuffer,newsockfd,buffer_size);
 }
 
+void invoker_connect_client_dispatcher___USES_PORT_AS__(void** ref,void** dispatcherRef, void** portRef, char* host,int port,int buffer_size){
+  if(*dispatcherRef==NULL){
+     *dispatcherRef=new __CXX_FULL_QUALIFIED_PORT_TYPE__NativeDispatcher();
+     ((__CXX_FULL_QUALIFIED_NAME__Implementation*)(*ref))->connect__USES_PORT_AS__((__CXX_FULL_QUALIFIED_PORT_TYPE__NativeDispatcher*) *dispatcherRef);   
+  }
+  ((__CXX_FULL_QUALIFIED_PORT_TYPE__NativeDispatcher*) (*dispatcherRef))->connect((__CXX_FULL_QUALIFIED_PORT_TYPE__*)(*portRef));
+}
+
 
 
 
@@ -57,5 +73,9 @@ void invoker_disconnect_client_dispatcher___USES_PORT_AS__(void** ref,int newsoc
 #endif
 ){
  ((__CXX_FULL_QUALIFIED_NAME__Implementation*)*ref)->disconnect__USES_PORT_AS__();
+}
+
+void invoker_disconnect_client_dispatcher___USES_PORT_AS__(void** ref,void** dispatcherRef, void** portRef, char* host,int port,int buffer_size){
+ ((__CXX_FULL_QUALIFIED_PORT_TYPE__NativeDispatcher*)*dispatcherRef)->disconnect((__CXX_FULL_QUALIFIED_PORT_TYPE__*)(*portRef));
 }
 

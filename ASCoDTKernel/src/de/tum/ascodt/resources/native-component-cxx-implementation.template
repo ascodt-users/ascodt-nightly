@@ -7,11 +7,11 @@ __CXX_FULL_QUALIFIED_NAME__Implementation::__COMPONENT_NAME__Implementation(){
 __CXX_FULL_QUALIFIED_NAME__Implementation::~__COMPONENT_NAME__Implementation(){
 
 }
-/*
-uncomment for remote applications
-extern "C" void main_loop_();
+/**
+//uncomment for remote applications
+extern "C" void main_loop_(bool joinable);
 int main(){
-     main_loop_();
+     main_loop_(false);
 }
 */
 -- INSERT HERE --

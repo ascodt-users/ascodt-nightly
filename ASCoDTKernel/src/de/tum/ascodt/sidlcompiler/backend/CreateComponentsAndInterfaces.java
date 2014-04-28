@@ -23,9 +23,12 @@ public class CreateComponentsAndInterfaces {
       CreateComponentsAndInterfaces.class.getCanonicalName());
 
   private SymbolTable _symbolTable;
-
-  public CreateComponentsAndInterfaces(SymbolTable symbolTable) {
+  private HashMap<String, Integer> _functionTable;
+  public CreateComponentsAndInterfaces(
+      SymbolTable symbolTable,
+      HashMap<String, Integer> functionTable) {
     _symbolTable = symbolTable;
+    _functionTable = functionTable;
   }
 
   /**
@@ -41,7 +44,7 @@ public class CreateComponentsAndInterfaces {
       URL userImplementedFilesDestinationDirectory,
       URL nativeDestinationDirectory) {
     _trace.in("create(...)", generatedFilesDestinationDirectory.toString());
-    HashMap<String, Integer> offset_map = new HashMap<String, Integer>();
+    
     for (AEnumDeclarationPackageElement enumeration : _symbolTable
         .getGlobalScope().getFlattenedEnumsElements()) {
       CreateJavaAndCxxEnumeration createJavaEnumeration = new CreateJavaAndCxxEnumeration(
@@ -54,7 +57,7 @@ public class CreateComponentsAndInterfaces {
       enumeration.apply(createJavaEnumeration);
     }
 
-    generatePorts(generatedFilesDestinationDirectory, offset_map);
+    generatePorts(generatedFilesDestinationDirectory, _functionTable);
     try {
       for (AClassPackageElement component : _symbolTable.getGlobalScope()
           .getFlattenedClassElements()) {
@@ -131,7 +134,7 @@ public class CreateComponentsAndInterfaces {
               _symbolTable, userImplementedFilesDestinationDirectory,
               generatedFilesDestinationDirectory, nativeDestinationDirectory,
               _symbolTable.getScope(component).getFullIdentifierOfPackage(),
-              offset_map, "Cxx");
+              _functionTable, "Cxx");
           CreateCxxComponent createCxxComponent = new CreateCxxComponent(
               _symbolTable, userImplementedFilesDestinationDirectory,
               generatedFilesDestinationDirectory, _symbolTable.getScope(
@@ -139,7 +142,7 @@ public class CreateComponentsAndInterfaces {
           CreateSocketProxyForCxx createSocketServerProxy = new CreateSocketProxyForCxx(
               _symbolTable, userImplementedFilesDestinationDirectory,
               generatedFilesDestinationDirectory, _symbolTable.getScope(
-                  component).getFullIdentifierOfPackage(), offset_map);
+                  component).getFullIdentifierOfPackage(), _functionTable);
           CreateCxxBuildScripts createMakefile = new CreateCxxBuildScripts(
               Target.createTarget(component.getTarget().getText()),
               _symbolTable, userImplementedFilesDestinationDirectory,
@@ -156,7 +159,7 @@ public class CreateComponentsAndInterfaces {
               _symbolTable, userImplementedFilesDestinationDirectory,
               generatedFilesDestinationDirectory, nativeDestinationDirectory,
               _symbolTable.getScope(component).getFullIdentifierOfPackage(),
-              offset_map, "Fortran");
+              _functionTable, "Fortran");
           CreateFortranComponent createFortranComponent = new CreateFortranComponent(
               _symbolTable, userImplementedFilesDestinationDirectory,
               generatedFilesDestinationDirectory, _symbolTable.getScope(
@@ -169,7 +172,7 @@ public class CreateComponentsAndInterfaces {
           CreateSocketProxyForFortran createSocketClientProxyF = new CreateSocketProxyForFortran(
               _symbolTable, userImplementedFilesDestinationDirectory,
               generatedFilesDestinationDirectory, _symbolTable.getScope(
-                  component).getFullIdentifierOfPackage(), offset_map);
+                  component).getFullIdentifierOfPackage(), _functionTable);
           component.apply(createJave2SocketClient);
           component.apply(createSocketClientProxyF);
           component.apply(createFortranComponent);

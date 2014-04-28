@@ -90,7 +90,7 @@ void LBNSCouplingIterator::clear(){
 }
 void LBNSCouplingIterator::iterateBoundary(){
 
-
+	_interpolator.switchToLocalVelocities();
 	for (int j = _lowerY; j <= _upperY - 1; j++){
 		for (int k = _lowerZ; k <= _upperZ - 1; k++){
 			// Left face

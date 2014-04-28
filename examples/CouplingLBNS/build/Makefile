@@ -42,7 +42,7 @@ CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 CMAKE_SOURCE_DIR = /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build
+CMAKE_BINARY_DIR = /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -110,9 +110,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /import/home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/atanasoa/git/ascodt-nightly/examples/CouplingLBNS/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -166,19 +166,6 @@ cca.cfd.NS/fast:
 .PHONY : cca.cfd.NS/fast
 
 #=============================================================================
-# Target rules for targets named cca.cfd.UekermannDriver
-
-# Build rule for target.
-cca.cfd.UekermannDriver: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 cca.cfd.UekermannDriver
-.PHONY : cca.cfd.UekermannDriver
-
-# fast build rule for target.
-cca.cfd.UekermannDriver/fast:
-	$(MAKE) -f cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/build.make cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/build
-.PHONY : cca.cfd.UekermannDriver/fast
-
-#=============================================================================
 # Target rules for targets named cca.cfd.LB
 
 # Build rule for target.
@@ -190,6 +177,19 @@ cca.cfd.LB: cmake_check_build_system
 cca.cfd.LB/fast:
 	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build
 .PHONY : cca.cfd.LB/fast
+
+#=============================================================================
+# Target rules for targets named cca.cfd.UekermannDriver
+
+# Build rule for target.
+cca.cfd.UekermannDriver: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 cca.cfd.UekermannDriver
+.PHONY : cca.cfd.UekermannDriver
+
+# fast build rule for target.
+cca.cfd.UekermannDriver/fast:
+	$(MAKE) -f cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/build.make cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/build
+.PHONY : cca.cfd.UekermannDriver/fast
 
 # Help Target
 help:
@@ -205,8 +205,8 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... cca.cfd.CouplingDriver"
 	@echo "... cca.cfd.NS"
-	@echo "... cca.cfd.UekermannDriver"
 	@echo "... cca.cfd.LB"
+	@echo "... cca.cfd.UekermannDriver"
 .PHONY : help
 
 

@@ -34,9 +34,12 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
   private Stack<TemplateFile> _templateFilesOfC2CxxProxyHeader;
   private Stack<TemplateFile> _templateFilesProvidesPorts;
   private Stack<TemplateFile> _templateFilesUsesPortsForC2Cxx;
+  private Stack<TemplateFile> _templateFilesOfTinyXMLHeader;
+  private Stack<TemplateFile> _templateFilesOfTinyXMLImplementation;
 
   private Stack<String> _serverInvokers;
   private Stack<String> _clientInvokers;
+  private Stack<String> _xmlInvokers;
   private Stack<String> _parallelWorkerInvokers;
   private URL _generatedFilesDirectory;
   private String[] _namespace;
@@ -56,8 +59,11 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
     _templateFilesOfC2CxxProxyHeader = new Stack<TemplateFile>();
     _templateFilesProvidesPorts = new Stack<TemplateFile>();
     _templateFilesUsesPortsForC2Cxx = new Stack<TemplateFile>();
+    _templateFilesOfTinyXMLHeader= new Stack<TemplateFile>();
+    _templateFilesOfTinyXMLImplementation = new Stack<TemplateFile>();
     _serverInvokers = new Stack<String>();
     _clientInvokers = new Stack<String>();
+    _xmlInvokers = new Stack<String>();
     _parallelWorkerInvokers = new Stack<String>();
     _generatedFilesDirectory = generatedFilesDirectory;
     _namespace = namespace;
@@ -76,6 +82,8 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
 
       String templateFileForC2CxxProxyComponentImplemention = "native-component-c2cxx-socket-implementation.template";
       String templateFileForC2CxxProxyComponentHeader = "native-component-c2cxx-socket-header.template";
+      String templateFileForTinyXMLImplementation = "tinyxml-cpp.template";
+      String templateFileForTinyXMLHeader = "tinyxml-header.template";
 
       String destinationFileForC2CxxProxyImplementation = _generatedFilesDirectory
           .toString() +
@@ -85,16 +93,30 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
           .toString() +
           File.separatorChar +
           _fullQualifiedName.replaceAll("[.]", "/") + "C2CxxProxy.h";
+      String destinationFileForTinyXMLHeader = _generatedFilesDirectory
+          .toString() +
+          File.separatorChar +"tinyxml2.h";
+      String destinationFileForTinyXMLImplementation = _generatedFilesDirectory
+          .toString() +
+          File.separatorChar +"tinyxml2.cpp";
+
 
       _templateFilesOfC2CxxProxyImplementation.push(new TemplateFile(
           templateFileForC2CxxProxyComponentImplemention,
           destinationFileForC2CxxProxyImplementation, _namespace, TemplateFile
-              .getLanguageConfigurationForJNI(), true));
+          .getLanguageConfigurationForJNI(), true));
       _templateFilesOfC2CxxProxyHeader.push(new TemplateFile(
           templateFileForC2CxxProxyComponentHeader,
           destinationFileForC2CxxProxyHeader, _namespace, TemplateFile
-              .getLanguageConfigurationForJNI(), true));
-
+          .getLanguageConfigurationForJNI(), true));
+      _templateFilesOfTinyXMLHeader.push(new TemplateFile(
+          templateFileForTinyXMLHeader,
+          destinationFileForTinyXMLHeader, _namespace, TemplateFile
+          .getLanguageConfigurationForCPP(), true));
+      _templateFilesOfTinyXMLImplementation.push(new TemplateFile(
+          templateFileForTinyXMLImplementation,
+          destinationFileForTinyXMLImplementation, _namespace, TemplateFile
+          .getLanguageConfigurationForCPP(), true));
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
           "__COMPONENT_NAME__", componentName.toLowerCase());
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
@@ -106,6 +128,9 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
           "__CXX_FULL_QUALIFIED_NAME__",
           _fullQualifiedName.replaceAll("[.]", "::"));
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
+          "__FULL_QUALIFIED_NAME__",
+          _fullQualifiedName);
+      _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
           "__PATH_FULL_QUALIFIED_NAME__",
           _fullQualifiedName.replaceAll("[.]", "/"));
       _templateFilesOfC2CxxProxyHeader.peek().addMapping(
@@ -115,6 +140,8 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
           "__COMPONENT_NAME_ENV__",
           _fullQualifiedName.replaceAll("[.]", "_").toUpperCase());
       _templateFilesOfC2CxxProxyHeader.peek().open();
+      _templateFilesOfTinyXMLImplementation.peek().open();
+      _templateFilesOfTinyXMLHeader.peek().open();
       _generateProvidesMethods = true;
 
       for (PUserDefinedType definedType : node.getProvides()) {
@@ -145,7 +172,7 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
       _parallelWorkerInvokers.push("parallel_worker_invokers[" +
           _offset_map.get(_fullQualifiedPortName + node.getName().getText()) +
           "]=parallel_worker_invoker_" + node.getName().getText() + ";\n");
-     
+
       String templateC2CxxProxyImplementationFile = "native-component-c2cxx-socket-implementation-provides-port.template";
 
       TemplateFile c2CxxProxyImplementationTemplate = new TemplateFile(
@@ -160,7 +187,7 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
       node.apply(parameterList);
       c2CxxProxyImplementationTemplate.addMapping("__SOCKET_PULL__",
           parameterList.pullInFromSocketForCxx());
-      
+
       c2CxxProxyImplementationTemplate.addMapping("__PARALLEL_WORKER_PULL__",
           parameterList.pullInFromParallelWorkerForCxx());
 
@@ -171,8 +198,8 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
           parameterList.pushOutToSocketForCxx());
       c2CxxProxyImplementationTemplate.addMapping(
           "__OPERATION_PARAMETERS_LIST__", parameterList
-              .getParameterListInJNI(onlyInParameters
-                  .areAllParametersInParameters()));
+          .getParameterListInJNI(onlyInParameters
+              .areAllParametersInParameters()));
       c2CxxProxyImplementationTemplate.addMapping("__OPERATION_NAME__", node
           .getName().getText());
       c2CxxProxyImplementationTemplate.addMapping("__OPERATION_NAME_4WIN__",
@@ -247,6 +274,15 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
       _clientInvokers.push("invokers[" +
           _offset_map.get(fullQualifiedpPortType + "disconnectPort") +
           "]=invoker_disconnect_client_dispatcher_" + portName + ";\n");
+      _xmlInvokers.push("invokers[" +
+          _offset_map.get(fullQualifiedpPortType + "createPort") +
+          "]=invoker_create_client_port_for_" + portName + ";\n");
+      _xmlInvokers.push("invokers[" +
+          _offset_map.get(fullQualifiedpPortType + "connectPort") +
+          "]=invoker_connect_client_dispatcher_" + portName + ";\n");
+      _xmlInvokers.push("invokers[" +
+          _offset_map.get(fullQualifiedpPortType + "disconnectPort") +
+          "]=invoker_disconnect_client_dispatcher_" + portName + ";\n");
     } catch (ASCoDTException e) {
       ErrorWriterDevice.getInstance().println(e);
     }
@@ -261,9 +297,13 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
   public void outAClassPackageElement(AClassPackageElement node) {
     Assert.isTrue(_templateFilesOfC2CxxProxyImplementation.size() == 1);
     Assert.isTrue(_templateFilesOfC2CxxProxyHeader.size() == 1);
+    Assert.isTrue(_templateFilesOfTinyXMLImplementation.size() == 1);
+    Assert.isTrue(_templateFilesOfTinyXMLHeader.size() == 1);
     try {
       String serverInvokers = "";
       String clientInvokers = "";
+      String xmlInvokers = "";
+      
       String parallelInvokers = "";
       while (!_serverInvokers.isEmpty()) {
         serverInvokers += _serverInvokers.peek();
@@ -273,6 +313,10 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
         clientInvokers += _clientInvokers.peek();
         _clientInvokers.pop();
       }
+      while (!_xmlInvokers.isEmpty()) {
+        xmlInvokers += _xmlInvokers.peek();
+        _xmlInvokers.pop();
+      }
       while (!_parallelWorkerInvokers.isEmpty()) {
         parallelInvokers += _parallelWorkerInvokers.peek();
         _parallelWorkerInvokers.pop();
@@ -281,6 +325,8 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
           "__SET_SERVER_INVOKERS__", serverInvokers);
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
           "__SET_CLIENT_INVOKERS__", clientInvokers);
+      _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
+          "__SET_XML_INVOKERS__", xmlInvokers);
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
           "__SET_PARALLEL_WORKER_INVOKERS__", parallelInvokers);
       _templateFilesOfC2CxxProxyImplementation.peek().addMapping(
@@ -302,10 +348,14 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
 
       _templateFilesOfC2CxxProxyImplementation.peek().close();
       _templateFilesOfC2CxxProxyHeader.peek().close();
+      _templateFilesOfTinyXMLImplementation.peek().close();
+      _templateFilesOfTinyXMLHeader.peek().close();
     } catch (ASCoDTException e) {
       ErrorWriterDevice.getInstance().println(e);
     }
     _templateFilesOfC2CxxProxyImplementation.pop();
     _templateFilesOfC2CxxProxyHeader.pop();
+    _templateFilesOfTinyXMLImplementation.pop();
+    _templateFilesOfTinyXMLHeader.pop();
   }
 }

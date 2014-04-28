@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
@@ -135,6 +136,7 @@ public class Project {
    * a global symbol table for all sidl files in the project
    */
   private SymbolTable _symbolTable;
+  private HashMap<String, Integer> _functionTable;
 
   /**
    * a classpath repository
@@ -154,7 +156,8 @@ public class Project {
 
     _projectFileName = "." + _eclipseProjectHandle.getName() + ".ascodt";
     _folders = new Vector<IFolder>();
-    setSymbolTable(new SymbolTable());
+    _symbolTable = new SymbolTable();
+    _functionTable = new HashMap<String,Integer>();
 
     IFile projectFile = _eclipseProjectHandle.getFile(getNameOfProjectFile());
     if (!projectFile.exists()) {
@@ -358,6 +361,7 @@ public class Project {
       }
       _symbolTable = null;
       _symbolTable = symbolTable;
+      _functionTable.clear();
       SiDLBuilder.generateBlueprints(_eclipseProjectHandle);
       SiDLBuilder.generateBuildScripts(_eclipseProjectHandle);
 
@@ -1142,14 +1146,7 @@ public class Project {
     _staticRepository = staticRepository;
   }
 
-  /**
-   * @param symbolTable
-   *          the symbolTable to set
-   */
-  public void setSymbolTable(SymbolTable symbolTable) {
-    _symbolTable = symbolTable;
-  }
-
+  
   /**
    * Writes the project file.
    * 
@@ -1178,6 +1175,10 @@ public class Project {
     }
 
     _trace.out("writeProjectFile()");
+  }
+
+  public HashMap<String, Integer> getFunctionTable() {
+    return _functionTable;
   }
 
 }

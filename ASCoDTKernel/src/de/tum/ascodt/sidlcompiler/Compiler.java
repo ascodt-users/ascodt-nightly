@@ -9,6 +9,7 @@ import jargs.gnu.CmdLineParser.UnknownOptionException;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
 
 import de.tum.ascodt.sidlcompiler.backend.CreateComponentsAndInterfaces;
 import de.tum.ascodt.sidlcompiler.backend.CreateGlobalBuildScripts;
@@ -137,11 +138,12 @@ public class Compiler {
    * Symbol table of the compile run.
    */
   private de.tum.ascodt.sidlcompiler.symboltable.SymbolTable _symbolTable;
-
+  private HashMap<String,Integer> _functionTable;
   private boolean _isValid;
 
   Compiler() {
     _symbolTable = new de.tum.ascodt.sidlcompiler.symboltable.SymbolTable();
+    _functionTable = new HashMap<String,Integer>();
   }
 
   /**
@@ -162,7 +164,7 @@ public class Compiler {
 
   private void generateBluePrints() throws ASCoDTException {
     CreateComponentsAndInterfaces interfaces = new CreateComponentsAndInterfaces(
-        _symbolTable);
+        _symbolTable,_functionTable);
     try {
       interfaces.create(new File(_outputDirectoryForStubs).toURI().toURL(),
           new File(_outputDirectoryForUserImplementation).toURI().toURL(),
