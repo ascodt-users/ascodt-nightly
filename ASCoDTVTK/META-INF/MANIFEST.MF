@@ -206,7 +206,7 @@ Bundle-NativeCode:
   lib/windows/x64/vtkViewsInfovis-6.1.dll;
   lib/windows/x64/vtkViewsInfovisJava.dll;
   lib/windows/x64/vtkWrappingJava-6.1.dll;
-  osname=win32; processor=x86_64,
+  osname=Windows 8.1; processor=x86_64,
   lib/linux/x64/libvtkDICOMParser-6.1.so;
   lib/linux/x64/libvtkNetCDF-6.1.so;
   lib/linux/x64/libvtkNetCDF_cxx-6.1.so;

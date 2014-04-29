@@ -40,6 +40,14 @@ public class AJavaImplementation extends AAbstractJavaNativeImplementation {
     super.destroy();
   }
 
+
+
+@Override
+public void barParallel() {
+	// TODO Auto-generated method stub
+	
+}
+
 }
  
 

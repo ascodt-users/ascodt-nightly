@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <diagram>
-    <component name="examples.B" reference="oid1">
-        <inputPort className="examples.Foo" classId="0" index="694381308"/>
-    </component>
     <component name="examples.A" reference="oid0">
-        <inputPort className="examples.Driver" classId="0" index="156771530"/>
-        <outputPort className="fooHandler:examples.Foo" classId="0" index="644288110"/>
+        <inputPort className="examples.Driver" classId="0" index="258721628"/>
+        <outputPort className="fooHandler:examples.Foo" classId="0" index="199895099"/>
     </component>
+    <component name="examples.B" reference="oid1">
+        <inputPort className="examples.Foo" classId="0" index="958468958"/>
+    </component>
+    <connection source="199895099" destination="958468958"/>
 </diagram>

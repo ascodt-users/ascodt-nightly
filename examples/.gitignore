@@ -1,0 +1,10 @@
+*/.build
+*/bin
+*/build
+*/cmake
+*/components
+*/lib
+*/lib
+
+*.cmd
+*/CMakeLists.txt

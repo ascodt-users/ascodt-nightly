@@ -9,9 +9,20 @@ __CXX_FULL_QUALIFIED_NAME__Implementation::~__COMPONENT_NAME__Implementation(){
 }
 /*
 uncomment for remote applications
-extern "C" void main_loop_();
+extern "C" void
+#ifdef _WIN32
+MAIN_LOOP();
+#else
+main_loop_();
+#endif
+
 int main(){
-     main_loop_();
+#ifdef _WIN32
+  MAIN_LOOP();
+#else
+  main_loop_();
+#endif
+
 }
 */
 -- INSERT HERE --
