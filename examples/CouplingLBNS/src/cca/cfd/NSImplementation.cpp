@@ -76,7 +76,7 @@ cca::cfd::NSImplementation::~NSImplementation(){
 	}
 
 }
-extern "C" void main_loop_();
+extern "C" void main_loop_(bool);
 void test(int argc ,char**argv){
 
 	std::cout<<"start solving loop ns"<<std::endl;
@@ -162,7 +162,7 @@ void test(int argc ,char**argv){
 		// lbnsCouplingIterator.iterate();
 
 		time += parameters.timestep.dt;
-		std::cout<<"time:"<<time<<std::endl;
+		//std::cout<<"time:"<<time<<std::endl;
 		// if ( (timeSteps % parameters.stdOut.interval) == 0 && rank == 0) {
 		//     std::cout << "Current time: " << time << "\ttimestep: " <<
 		//         parameters.timestep.dt << std::endl;
@@ -181,7 +181,7 @@ int main(int argc, char *argv[]){
 
 	PetscInitialize(&argc, &argv, PETSC_NULL, PETSC_NULL);
 	//test(argc,argv);
-	main_loop_();
+	main_loop_(true);
 	PetscFinalize();
 }
 
@@ -289,13 +289,13 @@ void cca::cfd::NSImplementation::solve(){
 	std::cout<<"start solving loop ns"<<std::endl;
 	FLOAT time=0;
 	_parameters.coupling.set=false;
-	while (time <=_parameters.simulation.finalTime){
+	while (time <=0.0){//_parameters.simulation.finalTime){
 		_simulation->solveTimestepPhaseOne();
 		_lbnsCouplingIterator->iterateBoundary();
 		_simulation->solveTimestepPhaseTwo();
 		_lbnsCouplingIterator->iterateBoundary();
 		time += _parameters.timestep.dt;
-		std::cout<<"time:"<<time<<std::endl;
+		//std::cout<<"time:"<<time<<std::endl;
 
 	}
 	_lbnsCouplingIterator->clear();

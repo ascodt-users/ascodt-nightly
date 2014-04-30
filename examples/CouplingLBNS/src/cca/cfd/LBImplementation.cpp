@@ -16,6 +16,9 @@
 #include "examples/cfd/lb/coupling/LBNSCommunicator.h"
 #include "PetscParallelConfiguration.h"
 #include <unistd.h>
+#include <sstream>
+#include <iostream>
+#include "tinyxml2.h"
 cca::cfd::LBImplementation::LBImplementation():
 
 _configuration(NULL),
@@ -90,17 +93,17 @@ void testParallelLBM(std::string conf){
 	lbm.plot();
 }
 
-extern "C" void main_loop_();
+extern "C" void main_loop_(bool);
 int main(int argc, char *argv[]){
 	int provided;
 	MPI_Init_thread(&argc,&argv,MPI_THREAD_MULTIPLE ,&provided);
-	std::cout<<"thread levels:"<<MPI_THREAD_MULTIPLE<<","<<provided<<std::endl;
+	//std::cout<<"thread levels:"<<MPI_THREAD_MULTIPLE<<","<<provided<<std::endl;
 	PetscInitialize(&argc, &argv, PETSC_NULL, PETSC_NULL);
 	/*
 	 * testParallelLBM(std::string(
 			"/work_fast/atanasoa/Programme/workspace_new/LB_NS_EOF/trunk/src/configurationFiles/cavity_lb.xml"));
 	 */
-	main_loop_();
+	main_loop_(true);
 	PetscFinalize();
 }
 
@@ -153,7 +156,7 @@ void cca::cfd::LBImplementation::setup(const std::string inputScenario){
 	std::cout<<"creating lb field on rank:"<<rank<<std::endl;
 	_parameters.coupling.set = false;
 	_lbField=new LBField(_parameters);
-
+	//readGeometry("/home/atanasoa/Desktop/spheresP2.xml");
 	_lbField->allocate();
 	_streamAndCollideStencil = new LBStreamAndCollideStencil(_parameters);
 	_streamAndCollideIterator = new  FieldIterator<LBField>(*_lbField, *_streamAndCollideStencil);
@@ -188,10 +191,42 @@ void cca::cfd::LBImplementation::setup(const std::string inputScenario){
 	//_parameters.coupling.set = false;
 	pthread_mutex_unlock(&_mutex);
 }
+
+void cca::cfd::LBImplementation::readGeometry(std::string file){
+
+	//	tinyxml2::XMLElement *node;
+	//	tinyxml2::XMLElement *subNode;
+
+	//if(_parameters.parallel.rank==0){
+	tinyxml2::XMLDocument confFile;
+	confFile.LoadFile(file.c_str());
+	std::cout<<"reading geomtry file"<<std::endl;
+	tinyxml2::XMLElement* root = confFile.FirstChildElement("spheres");
+
+	for(tinyxml2::XMLElement* e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement())
+	{
+
+		//std::cout<<"sphere pos:"<<<<std::endl;
+		std::istringstream iss(e->Attribute("center"));
+		std::string token;
+		std::vector<double> pos;
+		double radius;
+		while(std::getline(iss, token, ';')) {
+			pos.push_back(atof(token.c_str()));
+		}
+		e->QueryDoubleAttribute("radius",&radius);
+
+
+		_lbField->registerSphere(pos[0],pos[1],pos[2],radius);
+
+		//std::string wmName = e->Attribute("name");
+
+	}
+	//}
+}
 void cca::cfd::LBImplementation::solve(){
 	pthread_mutex_lock(&_mutex);
-
-	const int lbIterations = 1000;
+	const int lbIterations = 10000* (_lbField->getCellsZ()-1) * (_lbField->getCellsZ()-1) / (80*80);
 	// The original experiments had a field of size 40
 	//s* (_lbField->getCellsZ()-1) * (_lbField->getCellsZ()-1) / (40*40)
 	//_nslbCouplingStencil->computeBoundaryMeanPressure();
@@ -203,7 +238,7 @@ void cca::cfd::LBImplementation::solve(){
 	//if(_parameters.parallel.rank==0)
 	_nslbCouplingStencil->computeBoundaryMeanPressure();
 	_nslbCouplingIterator->iterate();
-	for (int i = 0; i < lbIterations; i++){
+	for (int i = 0; i < 1; i++){
 		_parallelManager->communicatePdfs();
 
 
@@ -213,12 +248,13 @@ void cca::cfd::LBImplementation::solve(){
 
 		_streamAndCollideIterator->iterate();
 
-		//_bounceBackIterator->iterate();
+		_bounceBackIterator->iterate();
 		//_movingWallIterator->iterate();
 	}
 	_nslbCouplingStencil->clear();
 	MPI_Barrier(MPI_COMM_WORLD);
 	pthread_mutex_unlock(&_mutex);
+
 
 }
 
@@ -399,10 +435,10 @@ void cca::cfd::LBImplementation::forwardVelocities(
 		int& ack){
 	pthread_mutex_lock(&_mutex);
 	int offset=0;
-	std::cout<<"receiving velocities"<<std::endl;
+	//std::cout<<"receiving velocities"<<std::endl;
 	for(int i=0;i<3;i++)
 	{
-		std::cout<<"start receiving velocities:"<<i<<","<<componentSize[i]<<std::endl;
+		//std::cout<<"start receiving velocities:"<<i<<","<<componentSize[i]<<std::endl;
 		for(int j=0;j<componentSize[i];j++){
 			//std::cout<<"setting velocity j:"<<j<<" component:"<<i<<std::endl;
 
@@ -418,11 +454,11 @@ void cca::cfd::LBImplementation::forwardVelocities(
 					values[offset+j]);
 
 		}
-		std::cout<<"finished component:"<<i<<" with:"<<componentSize[i]<<std::endl;
+		//std::cout<<"finished component:"<<i<<" with:"<<componentSize[i]<<std::endl;
 		offset+=componentSize[i];
 	}
 	ack=1;
-	std::cout<<"receiving velocities on lb"<<std::endl;
+	//std::cout<<"receiving velocities on lb"<<std::endl;
 	pthread_mutex_unlock(&_mutex);
 }
 
@@ -437,9 +473,9 @@ void cca::cfd::LBImplementation::forwardPressure(
 		const int values_len,
 		int& ack){
 	pthread_mutex_lock(&_mutex);
-	std::cout<<"start iter:"<<_iterC++<<std::endl;
-	std::cout<<"receiving pressure on rank:"
-			<<_parameters.parallel.rank<<" size:"<<values_len<<std::endl;
+//	std::cout<<"start iter:"<<_iterC++<<std::endl;
+//	std::cout<<"receiving pressure on rank:"
+//			<<_parameters.parallel.rank<<" size:"<<values_len<<std::endl;
 	for (unsigned int i = 0 ; i < values_len;i++)
 		_nslbCouplingStencil->setPressure(
 				keys[i],

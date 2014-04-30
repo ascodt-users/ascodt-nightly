@@ -87,7 +87,7 @@ public class SocketClientAppsTab extends ProgramArgsTab {
   public String getCommandForExecution() {
     String mpiPrefix="";
     if(numberOfProcesses.getSelection()>1){
-      mpiPrefix="/opt/intel/impi/4.1.3.049/intel64/bin/mpiexec -np "+numberOfProcesses.getSelection()+" ";
+      mpiPrefix="/home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiexec -np "+numberOfProcesses.getSelection()+" ";
     }
     return mpiPrefix+textProgramExecutable.getText() + " " +
         textProgramArguments.getText();

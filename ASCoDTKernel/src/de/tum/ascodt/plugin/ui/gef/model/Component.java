@@ -180,6 +180,7 @@ public class Component extends Geometry implements IPropertySource {
     return className;
   }
 
+  
   @XmlTransient
   public String getComponentName() {
     return className.substring(className.lastIndexOf(".") + 1);

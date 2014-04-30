@@ -7,4 +7,6 @@
 */lib
 
 *.cmd
+*.vtk
 */CMakeLists.txt
+*/log*.txt

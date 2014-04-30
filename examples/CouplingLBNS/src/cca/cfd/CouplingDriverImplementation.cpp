@@ -27,10 +27,10 @@ double cca::cfd::CouplingDriverImplementation::computePhysicalLBTimeStep(){
 }
 
 
-extern "C" void main_loop_();
+extern "C" void main_loop_(bool);
 int main(int argc, char *argv[]){
 	PetscInitialize(&argc, &argv, PETSC_NULL, PETSC_NULL);
-	main_loop_();
+	main_loop_(false);
 	PetscFinalize();
 }
 

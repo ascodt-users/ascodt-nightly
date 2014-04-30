@@ -123,7 +123,7 @@ const FLOAT NSLBCouplingStencil::getDt() const{
 const double  NSLBCouplingStencil::getVelocity(
 		int i,int j,int k,int l,
 		const int component,const int* offset,const int* flip,const int index){
-	std::unordered_map<int,std::vector<NSLBData>>::iterator it=_velocities[component].find(index);
+	__gnu_cxx::hash_map<int,std::vector<NSLBData> >::iterator it=_velocities[component].find(index);
 	if(it!=_velocities[component].end()){
 		for(unsigned int i=0;i<(*it).second.size();i++){
 			if(
@@ -147,7 +147,7 @@ const double  NSLBCouplingStencil::getPressure(
 		const int* flip,
 		const int index) {
 
-	std::unordered_map<int,std::vector<NSLBData>>::iterator it=_pressure.find(index);
+	__gnu_cxx::hash_map<int,std::vector<NSLBData> >::iterator it=_pressure.find(index);
 	if(it!=_pressure.end())
 		for(unsigned int i=0;i<(*it).second.size();i++){
 			if(
@@ -494,6 +494,8 @@ void NSLBCouplingStencil::interpolate (int i, int j, int k, const int * const fl
 	setArrays (offset, locationVector, dxVector, dyVector,  dzVector, flip, position, 3);
 	loadPressure(iGlobal,jGlobal,kGlobal,offset,flip);
 	matrix_vector(barycentricBasis, locationVector, weights, stencilSize, stencilSize);
+	// 0 mean pressure
+	_meanPressure=0.0;
 	density = (dot(_values, weights, stencilSize) - _meanPressure) *
 			_reciprocalVelocityLB  * _reciprocalVelocityLB * 3.0 + 1.0;
 

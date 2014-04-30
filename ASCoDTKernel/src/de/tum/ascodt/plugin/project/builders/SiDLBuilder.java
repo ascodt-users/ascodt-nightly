@@ -173,7 +173,9 @@ public class SiDLBuilder {
     assert project.getSymbolTable() != null;
 
     CreateComponentsAndInterfaces interfaces = new CreateComponentsAndInterfaces(
-        project.getSymbolTable());
+        project.getSymbolTable(),
+        project.getFunctionTable()
+        );
 
     try {
       interfaces.create(

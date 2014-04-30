@@ -1,8 +1,10 @@
 package de.tum.ascodt.sidlcompiler.astproperties;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
+import de.tum.ascodt.plugin.ui.gef.model.UsePort;
 import de.tum.ascodt.plugin.utils.tracing.Trace;
 import de.tum.ascodt.sidlcompiler.frontend.analysis.DepthFirstAdapter;
 import de.tum.ascodt.sidlcompiler.frontend.node.AUserDefinedType;
@@ -25,16 +27,22 @@ public class GetProvidesAndUsesPortsOfComponent extends DepthFirstAdapter {
   private java.util.Map<String, String> _usesPorts;
   private boolean _currentlyInProvidesPort;
   private String _portName;
-
+  private HashMap<String,Integer> _functionTable;
+  public GetProvidesAndUsesPortsOfComponent(HashMap<String,Integer> functionTable) {
+    _trace.in("GetProvidesAndUsesPortsOfComponent(SymbolTable)");
+    _providesPorts = new java.util.HashSet<String>();
+    _usesPorts = new java.util.HashMap<String, String>();
+    _currentlyInProvidesPort = true;
+    _functionTable = functionTable;
+    _trace.out("GetProvidesAndUsesPortsOfComponent(SymbolTable)");
+  }
   public GetProvidesAndUsesPortsOfComponent() {
     _trace.in("GetProvidesAndUsesPortsOfComponent(SymbolTable)");
     _providesPorts = new java.util.HashSet<String>();
     _usesPorts = new java.util.HashMap<String, String>();
-
     _currentlyInProvidesPort = true;
     _trace.out("GetProvidesAndUsesPortsOfComponent(SymbolTable)");
   }
-
   private String getListOfPorts(String listSeparator,
       String namespaceSeparator, java.util.Collection<String> collection) {
     String result = "";
@@ -103,7 +111,26 @@ public class GetProvidesAndUsesPortsOfComponent extends DepthFirstAdapter {
 
     return result;
   }
+  public String getUsesPortsConnectOffsets() {
+   String ports_as_string = getUsesPortsAndAsIdentifiers(",", ".");
+   String res="";
+   String delim="";
+   if (!ports_as_string.equals("")) {
+      if (ports_as_string.contains(",")) {
+        String[] usePortsArray = ports_as_string.split(",");
+        for (int i = 0; i < usePortsArray.length; i += 2) {
+          System.out.println("usc port:"+usePortsArray[i+1]);  
+          res=res+delim+_functionTable.get(usePortsArray[i+1] + "createPort");
+          delim=",";
+          res=res+delim+_functionTable.get(usePortsArray[i+1] + "connectPort");
+          res=res+delim+_functionTable.get(usePortsArray[i+1] + "disconnectPort");
+        
+        }
+      }
+    }
 
+    return res;
+  }
   @Override
   public void inAUserDefinedType(AUserDefinedType node) {
     String portSymbol = Scope.getSymbol(node);

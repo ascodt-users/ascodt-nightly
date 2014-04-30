@@ -60,6 +60,7 @@ import de.tum.ascodt.plugin.ui.gef.model.Connection;
 import de.tum.ascodt.plugin.ui.gef.model.Diagram;
 import de.tum.ascodt.plugin.ui.gef.model.Geometry;
 import de.tum.ascodt.plugin.ui.gef.model.Port;
+import de.tum.ascodt.plugin.ui.gef.model.UsePort;
 import de.tum.ascodt.plugin.ui.views.Palette;
 import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
 import de.tum.ascodt.utils.exceptions.ASCoDTException;
@@ -260,8 +261,9 @@ public class WorkbenchEditor extends GraphicalEditor {
         JAXBContext context;
 
         try {
-          context = JAXBContext.newInstance(Diagram.class, Component.class,
-              Connection.class, Port.class);
+          context = JAXBContext.newInstance(
+              de.tum.ascodt.plugin.ui.gef.model.SocketComponent.class,Diagram.class, Component.class,
+              Connection.class, Port.class,UsePort.class);
           Marshaller marshaller = context.createMarshaller();
           marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
           marshaller.marshal(_diagram, osw);
