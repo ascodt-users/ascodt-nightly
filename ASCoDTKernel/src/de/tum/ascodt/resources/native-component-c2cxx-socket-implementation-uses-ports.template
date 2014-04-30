@@ -18,6 +18,21 @@ void invoker_create_client_port_for___USES_PORT_AS__(void** ref,int newsockfd, i
         port,
         buffer_size
    );
+            std::cout << "[";
+            writeTime(std::cout);
+            std::cout << "]"
+                      << "["
+                      << "__PATH_FULL_QUALIFIED_NAME__"
+                      << "]"
+                      << ":"
+                      << " "
+                      << "Creating handler"
+                      << ":"
+                      << " "
+                      << host
+                      << ":"
+                      << port
+                      << std::endl;
   delete [] host;
   sendData((char*)&portref,sizeof(long long),sendBuffer,newsockfd,buffer_size);
  
@@ -51,6 +66,21 @@ void invoker_connect_client_dispatcher___USES_PORT_AS__(void** ref,int newsockfd
            port,
            buffer_size
      );
+            std::cout << "[";
+            writeTime(std::cout);
+            std::cout << "]"
+                      << "["
+                      << "__PATH_FULL_QUALIFIED_NAME__"
+                      << "]"
+                      << ":"
+                      << " "
+                      << "Connecting handler"
+                      << ":"
+                      << " "
+                      << host
+                      << ":"
+                      << port
+                      << std::endl;
   ((__CXX_FULL_QUALIFIED_NAME__Implementation*)*ref)->connect__USES_PORT_AS__((__CXX_FULL_QUALIFIED_PORT_TYPE__NativeSocketDispatcher*)portref);   
   delete[]host;
   sendData((char*)&portref,sizeof(long long),sendBuffer,newsockfd,buffer_size);

@@ -7,24 +7,24 @@
 	#define bcopy(b1,b2,len) (memmove((b2), (b1), (len)), (void) 0)
 	#pragma comment(lib, "Ws2_32.lib")
 #else
+  #include <sys/ioctl.h>
 	#include <sys/types.h>
 	#include <sys/socket.h>
 	#include <netinet/in.h>
 	#include <netdb.h>
+	#include <net/if.h>
 	#include <unistd.h>
 	#include <arpa/inet.h>
 #endif
 
+#include <pthread.h>
+#include <ctime>
 #include <stdio.h>
 #include <assert.h>
 #include <algorithm>
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
 #include <sstream>
 #include "tinyxml2.h"
 #include <hash_map>
@@ -34,7 +34,15 @@
 #endif
 	
 #include "__PATH_FULL_QUALIFIED_NAME__Implementation.h"
+
 __COMPONENT_NAME_ENV___arg daemon_args;
+
+void writeTime(std::ostream& o) {
+  time_t t = time(0);
+  struct tm* time = localtime(&t);
+  o << time->tm_hour << ":" << time->tm_min << ":" << time->tm_sec;
+}
+
 void open_client(const char* hostname,const char* port,
 #ifdef _WIN32
 SOCKET
@@ -113,8 +121,18 @@ const int numberOfWorkers
        my_name.sin_family = AF_INET;
        my_name.sin_addr.s_addr = INADDR_ANY;
        my_name.sin_port = htons(atoi(port));
+#ifdef _WIN32
+       BOOL yes=TRUE;
+#else
        int yes=1;
-       setsockopt(sockd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
+#endif
+       setsockopt(sockd, SOL_SOCKET, SO_REUSEADDR,
+#ifdef _WIN32
+       (char const*)&yes,
+#else
+       &yes,
+#endif
+       sizeof(int));
        status = bind(sockd, (struct sockaddr*)&my_name, sizeof(my_name));
        if (status == -1)
        {
@@ -142,9 +160,38 @@ int&
 #endif
 clientfd
 ){
+            std::cout << "[";
+            writeTime(std::cout);
+            std::cout << "]"
+                      << "["
+                      << "__PATH_FULL_QUALIFIED_NAME__"
+                      << "]"
+                      << ":"
+                      << " "
+                      << "Accepting"
+                      << ":"
+                      << " "
+                      << sockfd
+                      << std::endl;
+                      std::cout.flush();
            clientfd = accept(sockfd,
                     NULL,
                     NULL);
+                    
+            std::cout << "[";
+            writeTime(std::cout);
+            std::cout << "]"
+                      << "["
+                      << "__PATH_FULL_QUALIFIED_NAME__"
+                      << "]"
+                      << ":"
+                      << " "
+                      << "Accepted"
+                      << ":"
+                      << " "
+                      << clientfd
+                      << std::endl;
+                      std::cout.flush();
           assert (clientfd >= 0);
 }
 
@@ -288,7 +335,7 @@ int
 #endif
 }
 
-
+#ifndef _WIN32
 std::string retrieveSocketAddress(){
 	std::stringstream res;
 	  int rank = 0 ;
@@ -325,7 +372,7 @@ std::string retrieveSocketAddress(){
 	close(_sockfd);
 	return res.str();
 }
-
+#endif
 
 void socket_worker_loop(void* ref,
 #ifdef _WIN32
@@ -356,6 +403,71 @@ clientfd,int bufferSize
 	 		,communicator,methodId
 #endif            
           );
+
+          if(methodId==0) {
+            std::cout << "[";
+            writeTime(std::cout);
+            std::cout << "]"
+                      << "["
+                      << "__PATH_FULL_QUALIFIED_NAME__"
+                      << "]"
+                      << ":"
+                      << " "
+                      << "Created instance."
+                      << std::endl;
+          }
+
+          if(methodId==1) {
+            std::cout << "[";
+            writeTime(std::cout);
+            std::cout << "]"
+                      << "["
+                      << "__PATH_FULL_QUALIFIED_NAME__"
+                      << "]"
+                      << ":"
+                      << " "
+                      << "Destroyed instance."
+                      << std::endl;
+          }
+
+          if(methodId==5) {
+            std::cout << "[";
+            writeTime(std::cout);
+            std::cout << "]"
+                      << "["
+                      << "__PATH_FULL_QUALIFIED_NAME__"
+                      << "]"
+                      << ":"
+                      << " "
+                      << "Go!"
+                      << std::endl;
+          }
+
+          if(methodId==7) {
+            std::cout << "[";
+            writeTime(std::cout);
+            std::cout << "]"
+                      << "["
+                      << "__PATH_FULL_QUALIFIED_NAME__"
+                      << "]"
+                      << ":"
+                      << " "
+                      << "Created handler."
+                      << std::endl;
+          }
+
+          if(methodId==8) {
+            std::cout << "[";
+            writeTime(std::cout);
+            std::cout << "]"
+                      << "["
+                      << "__PATH_FULL_QUALIFIED_NAME__"
+                      << "]"
+                      << ":"
+                      << " "
+                      << "Connected handler."
+                      << std::endl;
+          }
      }
      delete [] sendBuffer;
      delete [] rcvBuffer;
@@ -389,11 +501,18 @@ void* parallel_deamon_run(void* daemon_args){
 }
 #endif
  
+//#ifdef _WIN32
+//DWORD WINAPI server_deamon_run(void* daemon_args){
+//      SOCKET clientfd;
+//#else  
+//void* server_deamon_run(void* daemon_args){
+//      int clientfd=0;
+//#endif
+
+void* server_deamon_run(void* daemon_args){
 #ifdef _WIN32
-DWORD WINAPI server_deamon_run(void* daemon_args){
       SOCKET clientfd;
 #else  
-void* server_deamon_run(void* daemon_args){
       int clientfd=0;
 #endif
       accept_on_server(((__COMPONENT_NAME_ENV___arg*)daemon_args)->daemon_serverfd,clientfd);
@@ -421,13 +540,13 @@ void startSocketDaemons(__COMPONENT_NAME_ENV___arg& arg){
      std::vector<pthread_t> tasks;
   
      for(int i=0;i<arg.number_of_workers;i++){
-     #ifdef _WIN32    
-          CreateThread(NULL, 0,server_deamon_run, &arg, 0, NULL);
-     #else     
+     //#ifdef _WIN32    
+     //     CreateThread(NULL, 0,server_deamon_run, &arg, 0, NULL);
+     //#else     
           pthread_t task;
           tasks.push_back(task);
           pthread_create(&task,NULL,server_deamon_run,&arg);
-     #endif
+     //#endif
      }
    
 }
@@ -635,7 +754,7 @@ void initialiseParallel(__COMPONENT_NAME_ENV___arg& arg){
 extern "C"{
 
 #ifdef _WIN32
-void INITIALISE(__COMPONENT_NAME_ENV___arg& arg){
+void INITIALISE(__COMPONENT_NAME_ENV___arg& arg,bool joinable){
 #else
 void initialise_(__COMPONENT_NAME_ENV___arg& arg,bool joinable){
 #endif
@@ -697,7 +816,7 @@ void destroy_(__COMPONENT_NAME_ENV___arg& arg){
 }
 
 #ifdef _WIN32
-void SOCKET_LOOP(__COMPONENT_NAME_ENV___arg& arg){
+void SOCKET_LOOP(__COMPONENT_NAME_ENV___arg& arg,bool joinable){
 #else
 void socket_loop_(__COMPONENT_NAME_ENV___arg& arg,bool joinable){
 #endif
@@ -710,7 +829,7 @@ void socket_loop_(__COMPONENT_NAME_ENV___arg& arg,bool joinable){
 }
 
 #ifdef _WIN32
-void MAIN_LOOP(){
+void MAIN_LOOP(bool joinable){
 #else
 void main_loop_(bool joinable){
 #endif
@@ -718,7 +837,8 @@ void main_loop_(bool joinable){
 
   
 #ifdef _WIN32
-  INITIALISE(daemon_args);
+  INITIALISE(daemon_args,joinable);
+  SOCKET_LOOP(daemon_args,joinable);
   DESTROY(daemon_args);     
 #else  
   initialise_(daemon_args,joinable);

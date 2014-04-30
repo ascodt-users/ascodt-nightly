@@ -8,9 +8,19 @@ examples::AImplementation::~AImplementation(){
 
 }
 
+#ifdef _WIN32
+extern "C" void MAIN_LOOP();
+#else
 extern "C" void main_loop_();
+#endif
+
+
 int main(){
-     main_loop_();
+#ifdef _WIN32
+MAIN_LOOP();
+#else
+main_loop_();
+#endif
 }
 
 void examples::AImplementation::go(){

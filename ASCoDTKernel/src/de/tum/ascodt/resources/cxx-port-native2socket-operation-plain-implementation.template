@@ -9,10 +9,13 @@ void __FULL_QUALIFIED_NAME__Cxx2SocketPlainPort::__OPERATION_NAME__(__OPERATION_
 
 void __FULL_QUALIFIED_NAME__Cxx2SocketPlainPort::__OPERATION_NAME__Parallel(__OPERATION_PARAMETERS_LIST__){
      //assert(_destination!=NULL);
+#ifdef _WIN32
+#else
      int flags;
      flags = fcntl(_newsockfd, F_GETFL, 0);
      flags ^= O_NONBLOCK;
      fcntl(_newsockfd, F_SETFL, flags);
+#endif
      int methodId=__PARALLEL_OPERATION_ID__;
      sendData((char*) &methodId, sizeof(int),_sendBuffer,_newsockfd,_buffer_size);
      __SOCKET_PUSH__

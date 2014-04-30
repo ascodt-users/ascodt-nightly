@@ -1,4 +1,0 @@
-rank:0,first[0,0,0]
-rank:0,local size[40,20,20]
-rank:0,offset[12,7,7]
-rank:0,size[10,10,10]

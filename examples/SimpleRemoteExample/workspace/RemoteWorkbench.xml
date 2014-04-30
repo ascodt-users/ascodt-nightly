@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <diagram>
-    <component name="examples.B" reference="oid1">
-        <inputPort className="examples.Foo" classId="0" index="694381308"/>
+    <component xsi:type="socketComponent" host="localhost" port="50002" name="examples.B" reference="oid1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <inputPort className="examples.Foo" classId="0" index="784714772"/>
     </component>
-    <component name="examples.A" reference="oid0">
-        <inputPort className="examples.Driver" classId="0" index="156771530"/>
-        <outputPort className="fooHandler:examples.Foo" classId="0" index="644288110"/>
+    <component xsi:type="socketComponent" host="localhost" port="50000" name="examples.A" reference="oid0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <inputPort className="examples.Driver" classId="0" index="1038678108"/>
+        <outputPort xsi:type="usePort" alias="fooHandler" createId="7" connectId="8" disconnectId="9" className="fooHandler:examples.Foo" classId="0" index="231870140"/>
     </component>
 </diagram>

@@ -102,6 +102,7 @@ public class SocketComponent
                     _server=java.nio.channels.AsynchronousServerSocketChannel.open(_group).bind(
                               new java.net.InetSocketAddress(_port));
                     completed(_server.accept().get(),null);
+                    de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().println("Opened");
                }catch (Exception e) {
                     throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
                               SocketComponent.class.getCanonicalName(),

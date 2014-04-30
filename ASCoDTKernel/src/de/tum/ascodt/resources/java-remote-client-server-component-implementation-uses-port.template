@@ -54,7 +54,9 @@
      sendStringData(socketPort.getHost());
      sendIntData(socketPort.getPort());
      socketPort.open();
+     de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().println("Create");
      ref=readLongData();
+     de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().println("Created: " + ref);
      return ref;
   }
   
@@ -85,7 +87,7 @@
      sendIntData(port);
      ___USES_PORT_AS__.open();
      ref=readLongData();
-     
+     de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().println("Connected: " + ref);
      return ref;
   }
   

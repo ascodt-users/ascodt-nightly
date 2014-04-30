@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<diagram>
+    <component name="test.A" reference="oid0">
+        <inputPort className="test.Foo" classId="0" index="1856662284"/>
+        <outputPort className="foo:test.Foo" classId="0" index="114109618"/>
+    </component>
+    <component name="test.B" reference="oid1">
+        <inputPort className="test.Foo" classId="0" index="1356763258"/>
+    </component>
+    <connection source="114109618" destination="1356763258"/>
+</diagram>

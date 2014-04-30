@@ -1,5 +1,10 @@
 #ifndef __INCLUDE_GUARD_FULL_QUALIFIED_NAME__C2CXXPROXY_H_
 #define __INCLUDE_GUARD_FULL_QUALIFIED_NAME__C2CXXPROXY_H_ 
+
+#ifdef _WIN32
+  #include <winsock2.h>
+#endif
+
 #ifdef Parallel
 #include <mpi.h>
 #endif
