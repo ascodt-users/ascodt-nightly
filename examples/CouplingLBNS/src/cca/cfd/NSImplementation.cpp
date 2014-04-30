@@ -21,6 +21,7 @@ cca::cfd::NSImplementation::NSImplementation(){
 	_iter=0;
 	_nsprofiles.open("/work_fast/atanasoa/Programme/eclipse/nsprofiles.txt");
 	_nspressure.open("/work_fast/atanasoa/Programme/eclipse/nspressure.txt");
+	_comC=0;
 }
 void setTimeStep(MaxUStencil &maxUStencil,Parameters &parameters,FlowField &flowField){
 
@@ -289,13 +290,14 @@ void cca::cfd::NSImplementation::solve(){
 	std::cout<<"start solving loop ns"<<std::endl;
 	FLOAT time=0;
 	_parameters.coupling.set=false;
-	while (time <=0.0){//_parameters.simulation.finalTime){
+	while (time <=10){//_parameters.simulation.finalTime){
 		_simulation->solveTimestepPhaseOne();
 		_lbnsCouplingIterator->iterateBoundary();
 		_simulation->solveTimestepPhaseTwo();
 		_lbnsCouplingIterator->iterateBoundary();
-		time += _parameters.timestep.dt;
-		//std::cout<<"time:"<<time<<std::endl;
+		time++;
+		//time += _parameters.timestep.dt;
+		std::cout<<"time:"<<time<<std::endl;
 
 	}
 	_lbnsCouplingIterator->clear();
@@ -336,9 +338,20 @@ void cca::cfd::NSImplementation::iterate(){
 	pthread_mutex_lock(&_mutex);
 	std::cout<<"starting ns stencil iter"<<std::endl;
 	_parameters.coupling.set=true;
-		_nslbStencil->computeBoundaryMeanPressure();
+		//_nslbStencil->computeBoundaryMeanPressure();
 
 		_nslbCouplingIterator->iterate();
+		if(_maxSizeCommunicators.size()==0){
+			_maxSizeCommunicators.resize(_comC*2);
+			_sizeCommunicators.resize(_comC*2);
+			_nslbStencil->initGather();
+			MPI_Allreduce(&_sizeCommunicators[0],&_maxSizeCommunicators[0],_comC,MPI_2INT,MPI_MAXLOC,MPI_COMM_WORLD);
+			std::cout<<"init gather finished"<<std::endl;
+			for(int i=0;i<_comC;i++){
+				std::cout<<"region i:"<<i<<_maxSizeCommunicators[i*2+1]<<" data:"<<_maxSizeCommunicators[i*2]<<std::endl;
+			}
+		}
+
 		_nslbStencil->flush();
 	_parameters.coupling.set=false;
 	MPI_Barrier(MPI_COMM_WORLD);
@@ -447,7 +460,9 @@ void cca::cfd::NSImplementation::setupCommForLBRegion(
 		//		}
 
 
-		NSLBCommunicator* com=new NSLBCommunicator(_parameters,i,(int*)startOfRegion,(int*)endOfRegion,commids[i]);
+		NSLBCommunicator* com=new NSLBCommunicator(
+				_parameters,i,(int*)startOfRegion,(int*)endOfRegion,commids[i],
+				_maxSizeCommunicators,_sizeCommunicators);
 		if(_nslbStencil)
 			_nslbStencil->registerLBRegion(com);
 		else{
@@ -455,6 +470,7 @@ void cca::cfd::NSImplementation::setupCommForLBRegion(
 		}
 	}
 	//MPI_Barrier(MPI_COMM_WORLD);
+	_comC=commids_len;
 	pthread_mutex_unlock(&_mutex);
 }
 
@@ -468,29 +484,21 @@ void cca::cfd::NSImplementation::forwardVelocities(
 		const int flips_len,
 		const double* values,
 		const int values_len,
-		const int* componentSize,
-		const int componentSize_len,
 		int& ackn){
 	pthread_mutex_lock(&_mutex);
-	int offset=0;
-	for(int i=0;i<3;i++)
-	{
-		for(int j=0;j<componentSize[i];j++){
-			_lbnsCouplingIterator->setVelocity(
-					keys[offset+j],
-					offsets[3*(offset+j)],
-					offsets[3*(offset+j)+1],
-					offsets[3*(offset+j)+2],
-					flips[3*(offset+j)],
-					flips[3*(offset+j)+1],
-					flips[3*(offset+j)+2],
-					i,
-					values[offset+j]);
 
+	for (int i=0;i<keys_len;i++){
+		_lbnsCouplingIterator->setVelocity(
+						keys[i],
+						offsets[3*i],
+						offsets[3*i+1],
+						offsets[3*i+2],
+						flips[3*i],
+						flips[3*i+1],
+						flips[3*i+2],
+						values[i]);
 
-		}
-		offset+=componentSize[i];
-	}
+			}
 	pthread_mutex_unlock(&_mutex);
 }
 

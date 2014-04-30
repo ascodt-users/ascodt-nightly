@@ -226,7 +226,7 @@ void cca::cfd::LBImplementation::readGeometry(std::string file){
 }
 void cca::cfd::LBImplementation::solve(){
 	pthread_mutex_lock(&_mutex);
-	const int lbIterations = 10000* (_lbField->getCellsZ()-1) * (_lbField->getCellsZ()-1) / (80*80);
+	const int lbIterations = 10000* (_lbField->getCellsZ()-1) * (_lbField->getCellsZ()-1) / (40*40);
 	// The original experiments had a field of size 40
 	//s* (_lbField->getCellsZ()-1) * (_lbField->getCellsZ()-1) / (40*40)
 	//_nslbCouplingStencil->computeBoundaryMeanPressure();
@@ -236,9 +236,9 @@ void cca::cfd::LBImplementation::solve(){
 	//_nslbCouplingIterator->iterate();
 	//
 	//if(_parameters.parallel.rank==0)
-	_nslbCouplingStencil->computeBoundaryMeanPressure();
+	//_nslbCouplingStencil->computeBoundaryMeanPressure();
 	_nslbCouplingIterator->iterate();
-	for (int i = 0; i < 1; i++){
+	for (int i = 0; i < 10; i++){
 		_parallelManager->communicatePdfs();
 
 
@@ -430,33 +430,20 @@ void cca::cfd::LBImplementation::forwardVelocities(
 		const int flips_len,
 		const double* values,
 		const int values_len,
-		const int* componentSize,
-		const int componentSize_len,
 		int& ack){
 	pthread_mutex_lock(&_mutex);
-	int offset=0;
-	//std::cout<<"receiving velocities"<<std::endl;
-	for(int i=0;i<3;i++)
-	{
-		//std::cout<<"start receiving velocities:"<<i<<","<<componentSize[i]<<std::endl;
-		for(int j=0;j<componentSize[i];j++){
-			//std::cout<<"setting velocity j:"<<j<<" component:"<<i<<std::endl;
-
+	for (int i=0;i<keys_len;i++){
 			_nslbCouplingStencil->setVelocityComponent(
-					keys[offset+j],
-					i,
-					offsets[3*(offset+j)],
-					offsets[3*(offset+j)+1],
-					offsets[3*(offset+j)+2],
-					flips[3*(offset+j)],
-					flips[3*(offset+j)+1],
-					flips[3*(offset+j)+2],
-					values[offset+j]);
+					keys[i],
+					offsets[3*i],
+					offsets[3*i+1],
+					offsets[3*i+2],
+					flips[3*i],
+					flips[3*i+1],
+					flips[3*i+2],
+					values[i]);
 
 		}
-		//std::cout<<"finished component:"<<i<<" with:"<<componentSize[i]<<std::endl;
-		offset+=componentSize[i];
-	}
 	ack=1;
 	//std::cout<<"receiving velocities on lb"<<std::endl;
 	pthread_mutex_unlock(&_mutex);

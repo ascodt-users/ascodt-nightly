@@ -758,19 +758,14 @@ int values_len=0;
 readData((char*)&values_len,sizeof(int),rcvBuffer,newsockfd,buffer_size);
 double* values=new double[values_len];
 readData((char*)values,sizeof(double)*values_len,rcvBuffer,newsockfd,buffer_size);
-int componentSize_len=0;
-readData((char*)&componentSize_len,sizeof(int),rcvBuffer,newsockfd,buffer_size);
-int* componentSize=new int[componentSize_len];
-readData((char*)componentSize,sizeof(int)*componentSize_len,rcvBuffer,newsockfd,buffer_size);
 int ackn;
 readData((char*)&ackn,sizeof(int),rcvBuffer,newsockfd,buffer_size);
 
-  ((cca::cfd::NSImplementation*)*ref)->forwardVelocities(keys,keys_len,offsets,offsets_len,flips,flips_len,values,values_len,componentSize,componentSize_len,ackn);
+  ((cca::cfd::NSImplementation*)*ref)->forwardVelocities(keys,keys_len,offsets,offsets_len,flips,flips_len,values,values_len,ackn);
   delete [] keys;
 delete [] offsets;
 delete [] flips;
 delete [] values;
-delete [] componentSize;
 sendData((char*)&ackn,sizeof(int),sendBuffer,newsockfd,buffer_size);
 
 }
@@ -798,10 +793,6 @@ int values_len=0;
 readData((char*)&values_len,sizeof(int),rcvBuffer,newsockfd,buffer_size);
 double* values=new double[values_len];
 readData((char*)values,sizeof(double)*values_len,rcvBuffer,newsockfd,buffer_size);
-int componentSize_len=0;
-readData((char*)&componentSize_len,sizeof(int),rcvBuffer,newsockfd,buffer_size);
-int* componentSize=new int[componentSize_len];
-readData((char*)componentSize,sizeof(int)*componentSize_len,rcvBuffer,newsockfd,buffer_size);
 int ackn;
 readData((char*)&ackn,sizeof(int),rcvBuffer,newsockfd,buffer_size);
 
@@ -815,12 +806,10 @@ broadcastParallelData((char*)&flips_len,sizeof(int),communicator);
 broadcastParallelData((char*)flips,sizeof(int)*flips_len,communicator);
 broadcastParallelData((char*)&values_len,sizeof(int),communicator);
 broadcastParallelData((char*)values,sizeof(double)*values_len,communicator);
-broadcastParallelData((char*)&componentSize_len,sizeof(int),communicator);
-broadcastParallelData((char*)componentSize,sizeof(int)*componentSize_len,communicator);
 broadcastParallelData((char*)&ackn,sizeof(int),communicator);
 
   #endif
-  ((cca::cfd::NSImplementation*)*ref)->forwardVelocities(keys,keys_len,offsets,offsets_len,flips,flips_len,values,values_len,componentSize,componentSize_len,ackn);
+  ((cca::cfd::NSImplementation*)*ref)->forwardVelocities(keys,keys_len,offsets,offsets_len,flips,flips_len,values,values_len,ackn);
   //int ack=1;
   //sendData((char*)&ack,sizeof(int),sendBuffer,newsockfd,buffer_size);
 }
@@ -846,14 +835,10 @@ int values_len=0;
 broadcastParallelData((char*)&values_len,sizeof(int),newsockfd);
 double* values=new double[values_len];
 broadcastParallelData((char*)values,sizeof(double)*values_len,newsockfd);
-int componentSize_len=0;
-broadcastParallelData((char*)&componentSize_len,sizeof(int),newsockfd);
-int* componentSize=new int[componentSize_len];
-broadcastParallelData((char*)componentSize,sizeof(int)*componentSize_len,newsockfd);
 int ackn;
 broadcastParallelData((char*)&ackn,sizeof(int),newsockfd);
 
-  ((cca::cfd::NSImplementation*)*ref)->forwardVelocities(keys,keys_len,offsets,offsets_len,flips,flips_len,values,values_len,componentSize,componentSize_len,ackn);
+  ((cca::cfd::NSImplementation*)*ref)->forwardVelocities(keys,keys_len,offsets,offsets_len,flips,flips_len,values,values_len,ackn);
   #endif		  
 } 
 void invoker_iterateInner(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer

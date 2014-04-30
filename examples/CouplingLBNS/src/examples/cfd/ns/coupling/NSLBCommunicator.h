@@ -18,30 +18,99 @@ private:
 	std::string _mid;
 	int _startIndex[3];
 	int _endIndex[3];
-	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _velocities[3];
+	int _index;
+
+	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _velocities;
 	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _pressure;
 
 	cca::cfd::LBSolverCxx2SocketPlainPort *_nslbPeer2Peer;
+	std::vector<int>& _maxSizeCommunicators;
+	std::vector<int>& _sizeCommunicators;
+
+	std::vector<int> _velocity_keys_count;
+	std::vector<int> _velocity_keys_displ;
+	int _velocity_keys_count_sum;
+
+	std::vector<int> _velocity_flips_count;
+	std::vector<int> _velocity_flips_displ;
+	int _velocity_flips_count_sum;
+
+	std::vector<int> _velocity_offset_count;
+	std::vector<int> _velocity_offset_displ;
+	int _velocity_offset_count_sum;
+
+	std::vector<int> _velocity_count;
+	std::vector<int> _velocity_displ;
+	int _velocity_count_sum;
+
+	std::vector<int> _pressure_keys_count;
+	std::vector<int> _pressure_keys_displ;
+	int _pressure_keys_count_sum;
+
+	std::vector<int> _pressure_flips_count;
+	std::vector<int> _pressure_flips_displ;
+	int _pressure_flips_count_sum;
+
+	std::vector<int> _pressure_offset_count;
+	std::vector<int> _pressure_offset_displ;
+	int _pressure_offset_count_sum;
+
+	std::vector<int> _pressure_count;
+	std::vector<int> _pressure_displ;
+	int _pressure_count_sum;
+
 	int index2Varray ( int i, int j, int k, int component, int stencil ) const ;
 	int index2Parray ( int i, int j, int k, int stencil ) const ;
 	void connect();
-	void convert(
-			std::vector<int>& keysVelocity,
-			std::vector<int> &velocityOffsets,
-			std::vector<int> &velocityFlips,
-			std::vector<double>& velocityValues,
-			std::vector<int>& componentSize,
-			std::vector<int>& keysPressure,
-			std::vector<int> &pressureOffsets,
-			std::vector<int> &pressureFlips,
-			std::vector<double>& pressureValues);
+	void convertPressure(
+			std::vector<int>& keys,
+			std::vector<int>& flips,
+			std::vector<int>& offset,
+			std::vector<double>& pressure);
+	void convertVelocity(
+			std::vector<int>& keys,
+			std::vector<int>& flips,
+			std::vector<int>& offset,
+			std::vector<double>& velocities);
+	void gatherVelocity(
+			std::vector<int>& keys,
+			std::vector<int>& flips,
+			std::vector<int>& offset,
+			std::vector<double>& velocities);
+	void gatherPressure(
+			std::vector<int>& keys,
+			std::vector<int>& flips,
+			std::vector<int>& offset,
+			std::vector<double>& pressure);
+	void gatherPressureInit();
+	void gatherVelocityInit();
+	std::vector<double> _velocityValues;
+	std::vector<int> _velocityOffsets;
+	std::vector<int> _velocityFlips;
+	std::vector<int> _keysVelocity;
+
+	std::vector<double> _pressureValues;
+	std::vector<int> _keysPressure;
+	std::vector<int> _pressureOffsets;
+	std::vector<int> _pressureFlips;
+
+
 public:
-	NSLBCommunicator(const Parameters & parameters,int index,
-			int* start,int* end,std::string mid);
+	NSLBCommunicator(
+			const Parameters & parameters,
+			int index,
+			int* start,
+			int* end,
+			std::string mid,
+			std::vector<int>& maxSizeCommunicators,
+			std::vector<int>& sizeCommunicators
+	);
 	~NSLBCommunicator();
 	const bool isInside(
 			const int i,const int j , const int k) const;
 
+	void gather_init();
+	void gather();
 	void flush();
 	void setPressure(
 			int i,

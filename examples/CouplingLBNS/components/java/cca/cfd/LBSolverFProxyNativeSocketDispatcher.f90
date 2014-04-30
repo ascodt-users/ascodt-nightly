@@ -93,7 +93,6 @@ subroutine  cca_cfd_lbsolver_f2c_nsd_forwardVelocities(self,&
 	offsets,offsets_len,&
 	flips,flips_len,&
 	values,values_len,&
-	componentSize,componentSize_len,&
 	ackn) bind(c)
      use, intrinsic :: iso_c_binding
      integer(kind=c_long_long)::self
@@ -105,8 +104,6 @@ subroutine  cca_cfd_lbsolver_f2c_nsd_forwardVelocities(self,&
 	integer(kind=c_int),intent(in)::flips_len
 	real(kind=c_double),intent(in),dimension(*)::values
 	integer(kind=c_int),intent(in)::values_len
-	integer(kind=c_int),intent(in),dimension(*)::componentSize
-	integer(kind=c_int),intent(in)::componentSize_len
 	integer(kind=c_int),intent(inout)::ackn
 
 end subroutine cca_cfd_lbsolver_f2c_nsd_forwardVelocities

@@ -148,14 +148,14 @@ void cca::cfd::NSSolverNativeDispatcher::iterateInnerParallel(){
     for(unsigned int i=0;i<_destinations.size();i++)
           _destinations[i]->iterateInnerParallel();
 }
-void cca::cfd::NSSolverNativeDispatcher::forwardVelocities(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,const int* componentSize, const int componentSize_len,int& ackn){
+void cca::cfd::NSSolverNativeDispatcher::forwardVelocities(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,int& ackn){
     for(unsigned int i=0;i<_destinations.size();i++)
-          _destinations[i]->forwardVelocities(keys,keys_len,offsets,offsets_len,flips,flips_len,values,values_len,componentSize,componentSize_len,ackn);
+          _destinations[i]->forwardVelocities(keys,keys_len,offsets,offsets_len,flips,flips_len,values,values_len,ackn);
 }
 
-void cca::cfd::NSSolverNativeDispatcher::forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,const int* componentSize, const int componentSize_len,int& ackn){
+void cca::cfd::NSSolverNativeDispatcher::forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,int& ackn){
     for(unsigned int i=0;i<_destinations.size();i++)
-          _destinations[i]->forwardVelocitiesParallel(keys,keys_len,offsets,offsets_len,flips,flips_len,values,values_len,componentSize,componentSize_len,ackn);
+          _destinations[i]->forwardVelocitiesParallel(keys,keys_len,offsets,offsets_len,flips,flips_len,values,values_len,ackn);
 }
 void cca::cfd::NSSolverNativeDispatcher::plot(){
     for(unsigned int i=0;i<_destinations.size();i++)

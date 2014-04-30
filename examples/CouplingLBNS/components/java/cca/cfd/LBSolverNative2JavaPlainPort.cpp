@@ -305,11 +305,11 @@ void cca::cfd::LBSolverNative2JavaPlainPort::printLBProfilesParallel(){
      
   }
 }
-void cca::cfd::LBSolverNative2JavaPlainPort::forwardVelocities(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,const int* componentSize, const int componentSize_len,int& ackn){
+void cca::cfd::LBSolverNative2JavaPlainPort::forwardVelocities(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,int& ackn){
   JNIEnv* env;
   int status=_jvm->GetEnv((void**)&env,JNI_VERSION_1_6);
   jclass cls=env->GetObjectClass(_obj);
-  jmethodID mid = env->GetMethodID(cls,"forwardVelocities","([I[I[I[D[I[I)V");
+  jmethodID mid = env->GetMethodID(cls,"forwardVelocities","([I[I[I[D[I)V");
   
   if(mid){
      jintArray keys_jni=env->NewIntArray(keys_len);
@@ -320,21 +320,19 @@ jintArray flips_jni=env->NewIntArray(flips_len);
 env->SetIntArrayRegion(flips_jni,0,flips_len,(jint*)flips);
 jdoubleArray values_jni=env->NewDoubleArray(values_len);
 env->SetDoubleArrayRegion(values_jni,0,values_len,(jdouble*)values);
-jintArray componentSize_jni=env->NewIntArray(componentSize_len);
-env->SetIntArrayRegion(componentSize_jni,0,componentSize_len,(jint*)componentSize);
 jintArray ackn_jni=env->NewIntArray(1);
 env->SetIntArrayRegion(ackn_jni,0,1,(jint*)&ackn);
 
-     env->CallVoidMethod(_obj,mid,keys_jni,offsets_jni,flips_jni,values_jni,componentSize_jni,ackn_jni);
+     env->CallVoidMethod(_obj,mid,keys_jni,offsets_jni,flips_jni,values_jni,ackn_jni);
      env->GetIntArrayRegion(ackn_jni,0,1,(jint*)&ackn);
 
   }
 }
-void cca::cfd::LBSolverNative2JavaPlainPort::forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,const int* componentSize, const int componentSize_len,int& ackn){
+void cca::cfd::LBSolverNative2JavaPlainPort::forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,int& ackn){
   JNIEnv* env;
   int status=_jvm->GetEnv((void**)&env,JNI_VERSION_1_6);
   jclass cls=env->GetObjectClass(_obj);
-  jmethodID mid = env->GetMethodID(cls,"forwardVelocitiesParallel","([I[I[I[D[I[I)V");
+  jmethodID mid = env->GetMethodID(cls,"forwardVelocitiesParallel","([I[I[I[D[I)V");
   
   if(mid){
      jintArray keys_jni=env->NewIntArray(keys_len);
@@ -345,12 +343,10 @@ jintArray flips_jni=env->NewIntArray(flips_len);
 env->SetIntArrayRegion(flips_jni,0,flips_len,(jint*)flips);
 jdoubleArray values_jni=env->NewDoubleArray(values_len);
 env->SetDoubleArrayRegion(values_jni,0,values_len,(jdouble*)values);
-jintArray componentSize_jni=env->NewIntArray(componentSize_len);
-env->SetIntArrayRegion(componentSize_jni,0,componentSize_len,(jint*)componentSize);
 jintArray ackn_jni=env->NewIntArray(1);
 env->SetIntArrayRegion(ackn_jni,0,1,(jint*)&ackn);
 
-     env->CallVoidMethod(_obj,mid,keys_jni,offsets_jni,flips_jni,values_jni,componentSize_jni,ackn_jni);
+     env->CallVoidMethod(_obj,mid,keys_jni,offsets_jni,flips_jni,values_jni,ackn_jni);
      env->GetIntArrayRegion(ackn_jni,0,1,(jint*)&ackn);
 
   }

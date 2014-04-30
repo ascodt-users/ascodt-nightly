@@ -94,8 +94,6 @@ public:
 			const int flips_len,
 			const double* values,
 			const int values_len,
-			const int* componentSize,
-			const int componentSize_len,
 			int& ack);
 	void forwardPressure(
 			const int * keys,

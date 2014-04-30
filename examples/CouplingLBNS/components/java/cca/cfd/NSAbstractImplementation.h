@@ -44,7 +44,7 @@ class cca::cfd::NSAbstractImplementation: public Component ,public cca::cfd::NSS
 		void iterateParallel();
 		void syncrParallel(int& value);
 		void plotParallel();
-		void forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,const int* componentSize, const int componentSize_len,int& ackn);
+		void forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,int& ackn);
 		void iterateInnerParallel();
 		void iterateBoundaryParallel();
 		void closeNSProfilesParallel();

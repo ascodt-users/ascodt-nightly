@@ -227,20 +227,20 @@ public class LBSolverDispatcher implements LBSolver {
       
     }
   }
-  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]) {
+  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int ackn[]) {
     for(LBSolver port: _destinations)
-      port.forwardVelocities(keys,offsets,flips,values,componentSize,ackn);
+      port.forwardVelocities(keys,offsets,flips,values,ackn);
   }
   
-  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]) {
+  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int ackn[]) {
     for(LBSolver port: _destinations)
-      port.forwardVelocitiesParallel(keys,offsets,flips,values,componentSize,ackn);
+      port.forwardVelocitiesParallel(keys,offsets,flips,values,ackn);
   }
   
-  public void forwardVelocitiesForIntegerEnums(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]) {
+  public void forwardVelocitiesForIntegerEnums(int keys[],int offsets[],int flips[],double values[],int ackn[]) {
     for(LBSolver port: _destinations){
       
-      port.forwardVelocities(keys,offsets,flips,values,componentSize,ackn);
+      port.forwardVelocities(keys,offsets,flips,values,ackn);
       
     }
   }

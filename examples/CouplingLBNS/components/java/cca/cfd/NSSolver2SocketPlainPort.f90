@@ -78,7 +78,6 @@ subroutine forwardVelocities(this,&
 	offsets,offsets_len,&
 	flips,flips_len,&
 	values,values_len,&
-	componentSize,componentSize_len,&
 	ackn)
      use, intrinsic :: iso_c_binding
      class(NSSolver2SocketPort)::this
@@ -90,8 +89,6 @@ subroutine forwardVelocities(this,&
 	integer,intent(in)::flips_len
 	real(8),intent(in),dimension(*)::values
 	integer,intent(in)::values_len
-	integer,intent(in),dimension(*)::componentSize
-	integer,intent(in)::componentSize_len
 	integer,intent(inout)::ackn
 
      
@@ -100,7 +97,6 @@ keys,keys_len,&
 offsets,offsets_len,&
 flips,flips_len,&
 values,values_len,&
-componentSize,componentSize_len,&
 ackn)
 end subroutine forwardVelocities
 subroutine iterateInner(this)

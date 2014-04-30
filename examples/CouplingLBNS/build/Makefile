@@ -140,6 +140,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named cca.cfd.UekermannDriver
+
+# Build rule for target.
+cca.cfd.UekermannDriver: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 cca.cfd.UekermannDriver
+.PHONY : cca.cfd.UekermannDriver
+
+# fast build rule for target.
+cca.cfd.UekermannDriver/fast:
+	$(MAKE) -f cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/build.make cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/build
+.PHONY : cca.cfd.UekermannDriver/fast
+
+#=============================================================================
 # Target rules for targets named cca.cfd.CouplingDriver
 
 # Build rule for target.
@@ -178,19 +191,6 @@ cca.cfd.LB/fast:
 	$(MAKE) -f cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build.make cmake/cca.cfd.LB/CMakeFiles/cca.cfd.LB.dir/build
 .PHONY : cca.cfd.LB/fast
 
-#=============================================================================
-# Target rules for targets named cca.cfd.UekermannDriver
-
-# Build rule for target.
-cca.cfd.UekermannDriver: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 cca.cfd.UekermannDriver
-.PHONY : cca.cfd.UekermannDriver
-
-# fast build rule for target.
-cca.cfd.UekermannDriver/fast:
-	$(MAKE) -f cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/build.make cmake/cca.cfd.UekermannDriver/CMakeFiles/cca.cfd.UekermannDriver.dir/build
-.PHONY : cca.cfd.UekermannDriver/fast
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -203,10 +203,10 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... cca.cfd.UekermannDriver"
 	@echo "... cca.cfd.CouplingDriver"
 	@echo "... cca.cfd.NS"
 	@echo "... cca.cfd.LB"
-	@echo "... cca.cfd.UekermannDriver"
 .PHONY : help
 
 

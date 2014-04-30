@@ -57,7 +57,7 @@ void LBNSCommunicator::convert(
 		std::vector<int>& componentSize){
 	__gnu_cxx::hash_map<int,std::vector<LBNSData> >::iterator it;
 
-	for(it=_velocities[0].begin();it!=_velocities[0].end();it++){
+	for(it=_velocities.begin();it!=_velocities.end();it++){
 		for(unsigned int i=0;i<(*it).second.size();i++){
 			keys.push_back((*it).first);
 			values.push_back((*it).second[i].value);
@@ -69,38 +69,8 @@ void LBNSCommunicator::convert(
 			flips.push_back((*it).second[i].flip[2]);
 		}
 	}
-	componentSize[0]=values.size();
-	for(it=_velocities[1].begin();it!=_velocities[1].end();it++){
-		for(unsigned int i=0;i<(*it).second.size();i++){
-			keys.push_back((*it).first);
-			values.push_back((*it).second[i].value);
-			offsets.push_back((*it).second[i].offset[0]);
-			offsets.push_back((*it).second[i].offset[1]);
-			offsets.push_back((*it).second[i].offset[2]);
-			flips.push_back((*it).second[i].flip[0]);
-			flips.push_back((*it).second[i].flip[1]);
-			flips.push_back((*it).second[i].flip[2]);
-		}
-	}
-	componentSize[1]=values.size()-componentSize[0];
-	for(it=_velocities[2].begin();it!=_velocities[2].end();it++){
 
-		for(unsigned int i=0;i<(*it).second.size();i++){
-			keys.push_back((*it).first);
-			values.push_back((*it).second[i].value);
-			offsets.push_back((*it).second[i].offset[0]);
-			offsets.push_back((*it).second[i].offset[1]);
-			offsets.push_back((*it).second[i].offset[2]);
-			flips.push_back((*it).second[i].flip[0]);
-			flips.push_back((*it).second[i].flip[1]);
-			flips.push_back((*it).second[i].flip[2]);
-		}
-	}
-	componentSize[2]=values.size()-componentSize[1]-componentSize[0];
-
-	_velocities[0].clear();
-	_velocities[1].clear();
-	_velocities[2].clear();
+	_velocities.clear();
 }
 void LBNSCommunicator::flush(){
 	std::vector<double> values;
@@ -110,7 +80,7 @@ void LBNSCommunicator::flush(){
 	std::vector<int> flips;
 	componentSize.resize(3);
 	_logComm.flush();
-	if(_velocities[0].size()>0||_velocities[1].size()>0||_velocities[2].size()>0){
+	if(_velocities.size()>0){
 		connect();
 		int ack;
 		convert(keys,values,offsets,flips,componentSize);
@@ -123,8 +93,6 @@ void LBNSCommunicator::flush(){
 				flips.size(),
 				&values[0],
 				values.size(),
-				&componentSize[0],
-				componentSize.size(),
 				ack
 		);
 	}
@@ -183,5 +151,5 @@ void LBNSCommunicator::setVelocityComponent(
 	data.flip[0]=flip[0];
 	data.flip[1]=flip[1];
 	data.flip[2]=flip[2];
-	_velocities[component][index].push_back(data);
+	_velocities[index].push_back(data);
 }

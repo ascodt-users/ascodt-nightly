@@ -61,8 +61,8 @@ public interface NSSolver  {
   public void iterateInner();
   public void iterateInnerParallel();
 
-  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]);
-  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]);
+  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int ackn[]);
+  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int ackn[]);
 
   public void plot();
   public void plotParallel();

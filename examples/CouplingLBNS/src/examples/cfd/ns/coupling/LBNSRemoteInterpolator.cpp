@@ -74,7 +74,6 @@ void LBNSRemoteInterpolator::setVelocity(
 		const int flipsX,
 		const int flipsY,
 		const int flipsZ,
-		const int component,
 		const double value){
 	LBNSData data;
 	data.value=value;
@@ -84,16 +83,14 @@ void LBNSRemoteInterpolator::setVelocity(
 	data.flip[0]=flipsX;
 	data.flip[1]=flipsY;
 	data.flip[2]=flipsZ;
-	_velocities[component][key].push_back(data);
+	_velocities[key].push_back(data);
 }
 void LBNSRemoteInterpolator::clear(){
-	_velocities[0].clear();
-	_velocities[1].clear();
-	_velocities[2].clear();
-	for(int i=0;i<3;i++){
-		_localVelocities[i].clear();
-		_localVelocitiesCounters[i]=0;
-	}
+	_velocities.clear();
+//	for(int i=0;i<3;i++){
+//		_localVelocities[i].clear();
+//		_localVelocitiesCounters[i]=0;
+//	}
 }
 inline int LBNSRemoteInterpolator::index2array ( int i, int j, int k, int component, int stencil ) const {
 
@@ -121,9 +118,9 @@ const double  LBNSRemoteInterpolator::getVelocity(
 		const int* offset,
 		const int* flip,
 		const int index){
-	if(!_velocities[component].empty()){
-		__gnu_cxx::hash_map<int,std::vector<LBNSData> >::iterator it=_velocities[component].find(index);
-		if(it!=_velocities[component].end()){
+	//if(!_velocities[component].empty()){
+		__gnu_cxx::hash_map<int,std::vector<LBNSData> >::iterator it=_velocities.find(index);
+		if(it!=_velocities.end()){
 
 			for(unsigned int i=0;i<(*it).second.size();i++){
 				if(
@@ -134,7 +131,7 @@ const double  LBNSRemoteInterpolator::getVelocity(
 						flip[1]==(*it).second[i].flip[1]&&
 						flip[2]==(*it).second[i].flip[2]
 				){
-					_localVelocities[component].push_back((*it).second[i].value);
+					//_localVelocities[component].push_back((*it).second[i].value);
 
 					return (*it).second[i].value;
 				}
@@ -152,9 +149,10 @@ const double  LBNSRemoteInterpolator::getVelocity(
 
 		//std::cout<<"index not found"<<std::endl;
 		return 0.0;
-	}else{
-		return _localVelocities[component][_localVelocitiesCounters[component]++];
-	}
+	//}
+//	else{
+//		return _localVelocities[component][_localVelocitiesCounters[component]++];
+//	}
 }
 bool LBNSRemoteInterpolator::checkIfValid (const int * const lbPosition, const int * const middle) {
 	return true;
@@ -203,13 +201,13 @@ void LBNSRemoteInterpolator::open(){
 	_open=true;
 }
 void LBNSRemoteInterpolator::switchToLocalVelocities(){
-	for(int i=0;i<3;i++){
-		if(_localVelocities[i].size()==0)
-				_localVelocities[i].reserve(_velocities[i].size());
-			else
-				_velocities[i].clear();
-		_localVelocitiesCounters[i]=0;
-	}
+//	for(int i=0;i<3;i++){
+//		if(_localVelocities[i].size()==0)
+//				_localVelocities[i].reserve(_velocities[i].size());
+//			else
+//				_velocities[i].clear();
+//		_localVelocitiesCounters[i]=0;
+//	}
 }
 FLOAT LBNSRemoteInterpolator::interpolateVelocityComponent (int ins, int jns, int kns, int component){
 	int lbPosition[3], middle[3];

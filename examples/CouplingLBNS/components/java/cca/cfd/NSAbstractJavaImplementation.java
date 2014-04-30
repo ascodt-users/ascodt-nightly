@@ -416,7 +416,7 @@ sendDoubleData(velocitiesZ);
   }
     
 
-  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]) {
+  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int ackn[]) {
     //__SWITCH_SYNC_ASYNC__
     try{
          int methodId=91;
@@ -429,8 +429,6 @@ sendIntData(flips.length);
 sendIntData(flips);
 sendIntData(values.length);
 sendDoubleData(values);
-sendIntData(componentSize.length);
-sendIntData(componentSize);
 sendIntData(ackn);
 
          readIntData(ackn,1);
@@ -440,7 +438,7 @@ sendIntData(ackn);
     }  
   }
 
-  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]) {
+  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int ackn[]) {
     //__SWITCH_SYNC_ASYNC__
     try{
          int methodId=91+1;
@@ -453,8 +451,6 @@ sendIntData(flips.length);
 sendIntData(flips);
 sendIntData(values.length);
 sendDoubleData(values);
-sendIntData(componentSize.length);
-sendIntData(componentSize);
 sendIntData(ackn);
 
          readIntData(ackn,1);

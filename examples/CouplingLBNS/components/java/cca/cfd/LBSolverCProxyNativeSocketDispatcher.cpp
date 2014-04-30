@@ -134,13 +134,13 @@ void cca_cfd_lbsolver_f2c_nsd_printlbprofiles_(long long* ref){
      ((cca::cfd::LBSolverNativeSocketDispatcher*)*ref)->printLBProfiles();
 }
 #ifdef _WIN32
-void CCA_CFD_LBSOLVER_F2C_NSD_FORWARDVELOCITIES(long long* ref,int* keys,int* keys_len,int* offsets,int* offsets_len,int* flips,int* flips_len,double* values, int* values_len,int* componentSize,int* componentSize_len,int* ackn){
+void CCA_CFD_LBSOLVER_F2C_NSD_FORWARDVELOCITIES(long long* ref,int* keys,int* keys_len,int* offsets,int* offsets_len,int* flips,int* flips_len,double* values, int* values_len,int* ackn){
 #else
-void cca_cfd_lbsolver_f2c_nsd_forwardvelocities_(long long* ref,int* keys,int* keys_len,int* offsets,int* offsets_len,int* flips,int* flips_len,double* values, int* values_len,int* componentSize,int* componentSize_len,int* ackn){
+void cca_cfd_lbsolver_f2c_nsd_forwardvelocities_(long long* ref,int* keys,int* keys_len,int* offsets,int* offsets_len,int* flips,int* flips_len,double* values, int* values_len,int* ackn){
 #endif
     
      
-     ((cca::cfd::LBSolverNativeSocketDispatcher*)*ref)->forwardVelocities(keys,*keys_len,offsets,*offsets_len,flips,*flips_len,values,*values_len,componentSize,*componentSize_len,*ackn);
+     ((cca::cfd::LBSolverNativeSocketDispatcher*)*ref)->forwardVelocities(keys,*keys_len,offsets,*offsets_len,flips,*flips_len,values,*values_len,*ackn);
 }
 #ifdef _WIN32
 void CCA_CFD_LBSOLVER_F2C_NSD_FORWARDPRESSURE(long long* ref,int* keys,int* keys_len,int* offsets,int* offsets_len,int* flips,int* flips_len,double* values, int* values_len,int* ackn){

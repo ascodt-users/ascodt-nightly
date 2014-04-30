@@ -61,7 +61,6 @@ class LBNSCouplingIterator {
         		const int flipsX,
         		const int flipsY,
         		const int flipsZ,
-        		const int component,
         		const double value);
         void iterateInner();
         void clear();

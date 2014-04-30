@@ -45,7 +45,7 @@ void cca::cfd::LBAbstractImplementation::syncrParallel(int& value){
 void cca::cfd::LBAbstractImplementation::forwardPressureParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,int& ackn){
      // @todo Insert your code here
 }
-void cca::cfd::LBAbstractImplementation::forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,const int* componentSize, const int componentSize_len,int& ackn){
+void cca::cfd::LBAbstractImplementation::forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,int& ackn){
      // @todo Insert your code here
 }
 void cca::cfd::LBAbstractImplementation::printLBProfilesParallel(){

@@ -178,14 +178,14 @@ void cca_cfd_nssolverc2socket_plain_port_iterateinner_(long long* ref){
 }
 #endif
 #ifdef _WIN32
-void CCA_CFD_NSSOLVERC2SOCKET_PLAIN_PORT_FORWARDVELOCITIES(long long* ref,int* keys,int* keys_len,int* offsets,int* offsets_len,int* flips,int* flips_len,double* values, int* values_len,int* componentSize,int* componentSize_len,int* ackn){
+void CCA_CFD_NSSOLVERC2SOCKET_PLAIN_PORT_FORWARDVELOCITIES(long long* ref,int* keys,int* keys_len,int* offsets,int* offsets_len,int* flips,int* flips_len,double* values, int* values_len,int* ackn){
      
-     ((cca::cfd::NSSolverCxx2SocketPlainPort*)*ref)->forwardVelocities(keys,*keys_len,offsets,*offsets_len,flips,*flips_len,values,*values_len,componentSize,*componentSize_len,*ackn);
+     ((cca::cfd::NSSolverCxx2SocketPlainPort*)*ref)->forwardVelocities(keys,*keys_len,offsets,*offsets_len,flips,*flips_len,values,*values_len,*ackn);
 }
 #else
-void cca_cfd_nssolverc2socket_plain_port_forwardvelocities_(long long* ref,int* keys,int* keys_len,int* offsets,int* offsets_len,int* flips,int* flips_len,double* values, int* values_len,int* componentSize,int* componentSize_len,int* ackn){
+void cca_cfd_nssolverc2socket_plain_port_forwardvelocities_(long long* ref,int* keys,int* keys_len,int* offsets,int* offsets_len,int* flips,int* flips_len,double* values, int* values_len,int* ackn){
      
-     ((cca::cfd::NSSolverCxx2SocketPlainPort*)*ref)->forwardVelocities(keys,*keys_len,offsets,*offsets_len,flips,*flips_len,values,*values_len,componentSize,*componentSize_len,*ackn);
+     ((cca::cfd::NSSolverCxx2SocketPlainPort*)*ref)->forwardVelocities(keys,*keys_len,offsets,*offsets_len,flips,*flips_len,values,*values_len,*ackn);
 }
 #endif
 #ifdef _WIN32

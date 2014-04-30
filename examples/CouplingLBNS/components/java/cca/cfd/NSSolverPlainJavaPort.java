@@ -224,18 +224,18 @@ public class NSSolverPlainJavaPort extends NSSolverAbstractPort {
   
   
 
-  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]) {
+  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int ackn[]) {
    // if (_destination!=null) {
       //_destination.lock();
-      _destination.forwardVelocities(keys,offsets,flips,values,componentSize,ackn);
+      _destination.forwardVelocities(keys,offsets,flips,values,ackn);
       //_destination.unlock();
     //}
   }
   
-  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]) {
+  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int ackn[]) {
    // if (_destination!=null) {
       //_destination.lock();
-      _destination.forwardVelocitiesParallel(keys,offsets,flips,values,componentSize,ackn);
+      _destination.forwardVelocitiesParallel(keys,offsets,flips,values,ackn);
       //_destination.unlock();
     //}
   }

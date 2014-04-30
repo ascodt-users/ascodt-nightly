@@ -160,11 +160,11 @@ public class NSSolverNative2NativePlainPort extends NSSolverAbstractPort {
   }
   
 
-  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]) {
+  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int ackn[]) {
     //DO NOTHING HERE
   }
   
-   public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]) {
+   public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int ackn[]) {
     //DO NOTHING HERE
   }
   

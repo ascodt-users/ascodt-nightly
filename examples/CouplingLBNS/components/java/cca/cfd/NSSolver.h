@@ -28,8 +28,8 @@ class cca::cfd::NSSolver {
      virtual void syncrParallel(int& value)=0;
      virtual void plot()=0;
      virtual void plotParallel()=0;
-     virtual void forwardVelocities(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,const int* componentSize, const int componentSize_len,int& ackn)=0;
-     virtual void forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,const int* componentSize, const int componentSize_len,int& ackn)=0;
+     virtual void forwardVelocities(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,int& ackn)=0;
+     virtual void forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,int& ackn)=0;
      virtual void iterateInner()=0;
      virtual void iterateInnerParallel()=0;
      virtual void iterateBoundary()=0;

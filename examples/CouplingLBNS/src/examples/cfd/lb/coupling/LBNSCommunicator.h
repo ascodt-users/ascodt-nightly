@@ -20,7 +20,7 @@ private:
 	int _endIndex[3];
 	std::ofstream _logComm;
 	bool _open;
-	__gnu_cxx::hash_map<int,std::vector<LBNSData> > _velocities[3];
+	__gnu_cxx::hash_map<int,std::vector<LBNSData> > _velocities;
 	cca::cfd::NSSolverCxx2SocketPlainPort *_lbnsPeer2Peer;
 	int index2array ( int i, int j, int k, int component, int stencil ) const ;
 	void connect();

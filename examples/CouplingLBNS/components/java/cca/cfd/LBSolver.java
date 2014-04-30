@@ -58,8 +58,8 @@ public interface LBSolver  {
   public void printLBProfiles();
   public void printLBProfilesParallel();
 
-  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]);
-  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]);
+  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int ackn[]);
+  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int ackn[]);
 
   public void forwardPressure(int keys[],int offsets[],int flips[],double values[],int ackn[]);
   public void forwardPressureParallel(int keys[],int offsets[],int flips[],double values[],int ackn[]);

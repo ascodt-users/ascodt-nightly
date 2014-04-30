@@ -159,7 +159,6 @@ subroutine forwardVelocities_internal(this,&
 	offsets,offsets_len,&
 	flips,flips_len,&
 	values,values_len,&
-	componentSize,componentSize_len,&
 	ackn)
      use, intrinsic :: iso_c_binding
      class(LBSolverNativeSocketDispatcher)::this
@@ -171,8 +170,6 @@ subroutine forwardVelocities_internal(this,&
 	integer(kind=c_int),intent(in)::flips_len
 	real(kind=c_double),intent(in),dimension(*)::values
 	integer(kind=c_int),intent(in)::values_len
-	integer(kind=c_int),intent(in),dimension(*)::componentSize
-	integer(kind=c_int),intent(in)::componentSize_len
 	integer(kind=c_int),intent(inout)::ackn
 
      call cca_cfd_lbsolver_f2c_nsd_forwardVelocities(this%reference,&
@@ -180,7 +177,6 @@ keys,keys_len,&
 offsets,offsets_len,&
 flips,flips_len,&
 values,values_len,&
-componentSize,componentSize_len,&
 ackn)
 end subroutine forwardVelocities_internal
 
@@ -189,7 +185,6 @@ subroutine forwardVelocities(this,&
 	offsets,offsets_len,&
 	flips,flips_len,&
 	values,values_len,&
-	componentSize,componentSize_len,&
 	ackn)
      use, intrinsic :: iso_c_binding
      class(LBSolverNativeSocketDispatcher)::this
@@ -201,8 +196,6 @@ subroutine forwardVelocities(this,&
 	integer,intent(in)::flips_len
 	real(8),intent(in),dimension(*)::values
 	integer,intent(in)::values_len
-	integer,intent(in),dimension(*)::componentSize
-	integer,intent(in)::componentSize_len
 	integer,intent(inout)::ackn
 
      call this%forwardVelocities_internal(&
@@ -210,7 +203,6 @@ keys,keys_len,&
 offsets,offsets_len,&
 flips,flips_len,&
 values,values_len,&
-componentSize,componentSize_len,&
 ackn)
 end subroutine forwardVelocities
 subroutine printLBProfiles_internal(this)

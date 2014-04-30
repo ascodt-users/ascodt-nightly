@@ -466,8 +466,21 @@ void NSLBCouplingStencil::interpolate (int i, int j, int k, const int * const fl
 	//    }
 }
 void NSLBCouplingStencil::flush(){
-	for(unsigned int i=0;i<_communicators.size();i++)
+	for(unsigned int i=0;i<_communicators.size();i++){
+
+			_communicators[i]->gather();
+		}
+	for(unsigned int i=0;i<_communicators.size();i++){
+
 		_communicators[i]->flush();
+	}
+}
+
+void NSLBCouplingStencil::initGather(){
+	for(unsigned int i=0;i<_communicators.size();i++){
+
+			_communicators[i]->gather_init();
+	}
 }
 FLOAT NSLBCouplingStencil::interpolateVelocityComponent (const int * const cell,
 		const FLOAT * const position,

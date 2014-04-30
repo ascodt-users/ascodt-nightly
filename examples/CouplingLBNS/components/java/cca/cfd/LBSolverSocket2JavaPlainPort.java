@@ -467,13 +467,10 @@ readIntData(flips,flips_len);
 int values_len=readIntData();
 double []values=new double[values_len];
 readDoubleData(values,values_len);
-int componentSize_len=readIntData();
-int []componentSize=new int[componentSize_len];
-readIntData(componentSize,componentSize_len);
 int [] ackn= new int[1];
 readIntData(ackn,1);
 
-     forwardVelocities(keys,offsets,flips,values,componentSize,ackn);
+     forwardVelocities(keys,offsets,flips,values,ackn);
      sendIntData(ackn);
 
   }
@@ -481,11 +478,11 @@ readIntData(ackn,1);
          de.tum.ascodt.utils.exceptions.ASCoDTException{
     
   }
-  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]) {
-     _destination.forwardVelocities(keys,offsets,flips,values,componentSize,ackn);
+  public void forwardVelocities(int keys[],int offsets[],int flips[],double values[],int ackn[]) {
+     _destination.forwardVelocities(keys,offsets,flips,values,ackn);
   }
-  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int componentSize[],int ackn[]) {
-     _destination.forwardVelocitiesParallel(keys,offsets,flips,values,componentSize,ackn);
+  public void forwardVelocitiesParallel(int keys[],int offsets[],int flips[],double values[],int ackn[]) {
+     _destination.forwardVelocitiesParallel(keys,offsets,flips,values,ackn);
   }
   
   

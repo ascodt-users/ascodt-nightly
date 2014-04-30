@@ -605,7 +605,7 @@ void cca::cfd::NSSolverCxx2SocketPlainPort::iterateInnerParallel(){
      //readData((char*)&ack,sizeof(int),_rcvBuffer,_newsockfd,_buffer_size);
          
 }
-void cca::cfd::NSSolverCxx2SocketPlainPort::forwardVelocities(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,const int* componentSize, const int componentSize_len,int& ackn){
+void cca::cfd::NSSolverCxx2SocketPlainPort::forwardVelocities(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,int& ackn){
      //assert(_destination!=NULL);
      #ifdef _WIN32
 #else
@@ -625,15 +625,13 @@ sendData((char*)&flips_len,sizeof(int),_sendBuffer,_newsockfd,_buffer_size);
 sendData((char*)flips,sizeof(int)*flips_len,_sendBuffer,_newsockfd,_buffer_size);
 sendData((char*)&values_len,sizeof(int),_sendBuffer,_newsockfd,_buffer_size);
 sendData((char*)values,sizeof(double)*values_len,_sendBuffer,_newsockfd,_buffer_size);
-sendData((char*)&componentSize_len,sizeof(int),_sendBuffer,_newsockfd,_buffer_size);
-sendData((char*)componentSize,sizeof(int)*componentSize_len,_sendBuffer,_newsockfd,_buffer_size);
 sendData((char*)&ackn,sizeof(int),_sendBuffer,_newsockfd,_buffer_size);
 
      readData((char*)&ackn,sizeof(int),_rcvBuffer,_newsockfd,_buffer_size);
 
 }
 
-void cca::cfd::NSSolverCxx2SocketPlainPort::forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,const int* componentSize, const int componentSize_len,int& ackn){
+void cca::cfd::NSSolverCxx2SocketPlainPort::forwardVelocitiesParallel(const int* keys, const int keys_len,const int* offsets, const int offsets_len,const int* flips, const int flips_len,const double* values, const int values_len,int& ackn){
      //assert(_destination!=NULL);
      int flags;
      flags = fcntl(_newsockfd, F_GETFL, 0);
@@ -649,8 +647,6 @@ sendData((char*)&flips_len,sizeof(int),_sendBuffer,_newsockfd,_buffer_size);
 sendData((char*)flips,sizeof(int)*flips_len,_sendBuffer,_newsockfd,_buffer_size);
 sendData((char*)&values_len,sizeof(int),_sendBuffer,_newsockfd,_buffer_size);
 sendData((char*)values,sizeof(double)*values_len,_sendBuffer,_newsockfd,_buffer_size);
-sendData((char*)&componentSize_len,sizeof(int),_sendBuffer,_newsockfd,_buffer_size);
-sendData((char*)componentSize,sizeof(int)*componentSize_len,_sendBuffer,_newsockfd,_buffer_size);
 sendData((char*)&ackn,sizeof(int),_sendBuffer,_newsockfd,_buffer_size);
 
      readData((char*)&ackn,sizeof(int),_rcvBuffer,_newsockfd,_buffer_size);

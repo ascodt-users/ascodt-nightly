@@ -22,7 +22,7 @@ package cfd {
 		  	 iterateInner();
 		  	 forwardVelocities(in int keys[],
 		  		 in int offsets[],in int flips[],
-		  		 in double values[],in int componentSize [],inout int ackn);
+		  		 in double values[],inout int ackn);
 		  	 plot();
 		  	 syncr(inout int value);
 		}
@@ -37,7 +37,7 @@ package cfd {
 		  	 closeLBProfiles();
           	 printLBDensity();
              printLBProfiles();
-             forwardVelocities(in int keys[],in int offsets[],in int flips[],in double values[],in int componentSize [],inout int ackn);
+             forwardVelocities(in int keys[],in int offsets[],in int flips[],in double values[],inout int ackn);
 		  	 forwardPressure(in int keys[],in int offsets[],in int flips[],in double values[],inout int ackn);
 		  	 syncr(inout int value);
 		  	 plot();
