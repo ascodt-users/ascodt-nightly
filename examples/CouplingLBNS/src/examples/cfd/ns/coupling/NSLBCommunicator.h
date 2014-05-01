@@ -84,6 +84,16 @@ private:
 			std::vector<double>& pressure);
 	void gatherPressureInit();
 	void gatherVelocityInit();
+	void gatherArray(
+			int& count,
+			std::vector<int>& data_size,
+			std::vector<int>& data_displ,
+			std::vector<int>& data);
+	void gatherArray(
+				int& count,
+				std::vector<int>& data_size,
+				std::vector<int>& data_displ,
+				std::vector<double>& data);
 	std::vector<double> _velocityValues;
 	std::vector<int> _velocityOffsets;
 	std::vector<int> _velocityFlips;

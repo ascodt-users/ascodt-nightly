@@ -42,6 +42,7 @@ _movingWallIterator(NULL)
 	_lbvelocitycenter.open("/work_fast/atanasoa/Programme/eclipse/lbvelocitycenter.txt");
 	_setupFinished=false;
 	_iterC=0;
+	_comC=0;
 }
 
 
@@ -238,7 +239,7 @@ void cca::cfd::LBImplementation::solve(){
 	//if(_parameters.parallel.rank==0)
 	//_nslbCouplingStencil->computeBoundaryMeanPressure();
 	_nslbCouplingIterator->iterate();
-	for (int i = 0; i < 10; i++){
+	for (int i = 0; i < lbIterations; i++){
 		_parallelManager->communicatePdfs();
 
 
@@ -301,6 +302,17 @@ void cca::cfd::LBImplementation::iterateBoundary(){
 	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 	std::cout<<"lb rank:"<<rank<<"starting boundary iter"<<std::endl;
 	_lbnsCouplingIterator->iterateBoundary();
+	if(_maxSizeCommunicators.size()==0){
+			_maxSizeCommunicators.resize(_comC*2);
+			_sizeCommunicators.resize(_comC*2);
+			_lbnsCouplingIterator->initGather();
+			MPI_Allreduce(&_sizeCommunicators[0],&_maxSizeCommunicators[0],_comC,MPI_2INT,MPI_MAXLOC,MPI_COMM_WORLD);
+			std::cout<<"init gather finished"<<std::endl;
+			for(int i=0;i<_comC;i++){
+				std::cout<<"region i:"<<i<<_maxSizeCommunicators[i*2+1]<<" data:"<<_maxSizeCommunicators[i*2]<<std::endl;
+			}
+	}
+	_lbnsCouplingIterator->flush();
 	MPI_Barrier(MPI_COMM_WORLD);
 	std::cout<<"rank:"<<rank<<"finished boundary iter"<<std::endl;
 	pthread_mutex_unlock(&_mutex);
@@ -399,6 +411,7 @@ void cca::cfd::LBImplementation::setupCommForNSRegion(
 		const std::string* commids,
 		const int commids_len){
 	pthread_mutex_lock(&_mutex);
+	_comC=commids_len;
 	int *start = (int*)startOfRegion;
 	int *end = (int*)endOfRegion;
 	for(int i=0;i<commids_len;i++){
@@ -410,7 +423,14 @@ void cca::cfd::LBImplementation::setupCommForNSRegion(
 		//if(_lbnsCouplingIterator!=NULL)
 		//_lbnsCouplingIterator->registerNSRegion(i,(int*)startOfRegion,(int*)endOfRegion,commids[i]);
 		int a[3];
-		LBNSCommunicator* com=new LBNSCommunicator(_parameters,i,(int*)startOfRegion,(int*)endOfRegion,commids[i]);
+		LBNSCommunicator* com=new LBNSCommunicator(
+				_parameters,
+				i,
+				(int*)startOfRegion,
+				(int*)endOfRegion,
+				commids[i],
+				_maxSizeCommunicators,
+				_sizeCommunicators);
 		if(_lbnsCouplingIterator!=NULL)
 			_lbnsCouplingIterator->registerNSRegion(com);
 		else

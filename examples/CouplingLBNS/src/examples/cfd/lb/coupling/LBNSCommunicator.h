@@ -22,22 +22,63 @@ private:
 	bool _open;
 	__gnu_cxx::hash_map<int,std::vector<LBNSData> > _velocities;
 	cca::cfd::NSSolverCxx2SocketPlainPort *_lbnsPeer2Peer;
+	std::vector<int>& _maxSizeCommunicators;
+	std::vector<int>& _sizeCommunicators;
+
+	std::vector<int> _velocity_keys_count;
+	std::vector<int> _velocity_keys_displ;
+	int _velocity_keys_count_sum;
+
+	std::vector<int> _velocity_flips_count;
+	std::vector<int> _velocity_flips_displ;
+	int _velocity_flips_count_sum;
+
+	std::vector<int> _velocity_offset_count;
+	std::vector<int> _velocity_offset_displ;
+	int _velocity_offset_count_sum;
+
+	std::vector<int> _velocity_count;
+	std::vector<int> _velocity_displ;
+	int _velocity_count_sum;
+	int _index;
+	std::vector<double> _velocityValues;
+	std::vector<int> _velocityOffsets;
+	std::vector<int> _velocityFlips;
+	std::vector<int> _velocityKeys;
 	int index2array ( int i, int j, int k, int component, int stencil ) const ;
 	void connect();
-	void convert(
+	void convertVelocity(
 			std::vector<int>& keys,
-			std::vector<double>& values,
-			std::vector<int>& offsets,
 			std::vector<int>& flips,
-			std::vector<int>& componentSize);
+			std::vector<int>& offset,
+			std::vector<double>& velocities);
+	void gatherVelocity(
+			std::vector<int>& keys,
+			std::vector<int>& flips,
+			std::vector<int>& offset,
+			std::vector<double>& velocities);
+	void gatherArray(
+			int& count,
+			std::vector<int>& data_size,
+			std::vector<int>& data_displ,
+			std::vector<int>& data);
+	void gatherArray(
+			int& count,
+			std::vector<int>& data_size,
+			std::vector<int>& data_displ,
+			std::vector<double>& data);
 	void open();
 public:
 	LBNSCommunicator(const Parameters & parameters,int index,
-			int* start,int* end,std::string mid);
+			int* start,int* end,std::string mid,
+			std::vector<int>& maxSizeCommunicators,
+			std::vector<int>& sizeCommunicators);
 	~LBNSCommunicator();
 	const bool isInside(int i, int j ,int k) const;
 
 	void flush();
+	void gather();
+	void gather_init();
 	void setDensity(
 			int i,
 			int j,

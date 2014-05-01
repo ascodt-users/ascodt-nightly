@@ -110,6 +110,7 @@ class LBNSRemoteInterpolator {
         void interpolateVelocityComponent (int ins, int jns, int kns, int component);
         void registerNSRegion(LBNSCommunicator *com);
         void flush();
+        void initGather();
         /** Interpolate the pressure in a NS cell
          */
         //FLOAT interpolatePressure (int ins, int jns, int kns);

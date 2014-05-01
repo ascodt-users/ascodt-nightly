@@ -60,6 +60,8 @@ class LBNSCouplingIterator {
          */
         void iterateBoundary();
         void iterateInner();
+        void initGather();
+        void flush();
         int getVelocitySizeX();
         int getVelocitySizeY();
         int getVelocitySizeZ();

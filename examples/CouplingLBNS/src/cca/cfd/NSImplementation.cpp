@@ -115,8 +115,8 @@ void test(int argc ,char**argv){
 	PetscParallelManager parallelManager(flowField, parameters);
 	LBNSFGHCorrectionIterator LBNSFGHCorrectionIterator(parameters, flowField);
 	LBNSInitFlagsIterator initFlagsIterator(parameters, flowField);
-	 VTKStencil vtkStencil( parameters );
-	    FieldIterator<FlowField> vtkIterator( flowField, vtkStencil, 1, 0 );
+	VTKStencil vtkStencil( parameters );
+	FieldIterator<FlowField> vtkIterator( flowField, vtkStencil, 1, 0 );
 
 	initFlagsIterator.iterate();
 	std::cout<<"starting time loop"<<std::endl;
@@ -176,10 +176,76 @@ void test(int argc ,char**argv){
 	vtkStencil.closeFile();
 
 }
+void testGather(int argc ,char**argv){
+	int rank=0;
+	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+	int size=0;
+	MPI_Comm_size(MPI_COMM_WORLD,&size);
+
+	std::vector<int> data(rank+1);
+	std::vector<int> data_size(size);
+	std::vector<int> displ;
+	if(rank==0){
+		data[0]=1;
+	}else if(rank==1){
+		data[0]=2;
+		data[1]=3;
+	}else if(rank==2){
+		data[0]=4;
+		data[1]=5;
+		data[2]=6;
+	}else if(rank==3){
+		data[0]=7;
+		data[1]=8;
+		data[2]=9;
+		data[3]=10;
+	}else if(rank==4){
+		data[0]=11;
+		data[1]=12;
+		data[2]=13;
+		data[3]=14;
+		data[4]=15;
+	}else if(rank==5){
+		data[0]=16;
+		data[1]=17;
+		data[2]=18;
+		data[3]=19;
+		data[4]=20;
+		data[5]=21;
+	}
+	int count=data.size();
+
+	MPI_Gather(&count,1, MPI_INT, &data_size[0], 1, MPI_INT,2, MPI_COMM_WORLD);
+	if(rank==2){
+		displ.resize(size);
+
+		displ[rank]=0;
+
+		for(int i=0;i<size;i++){
+			if(i!=rank){
+				displ[i]=count;
+				count+=data_size[i];
+			}
+		}
+	}
+	data.resize(count);
+	if(rank==2)
+		MPI_Gatherv(MPI_IN_PLACE,0, MPI_INT,&data[0], &data_size[0],&displ[0], MPI_INT,2, MPI_COMM_WORLD);
+	else
+	MPI_Gatherv(&data[0],count, MPI_INT,&data[0], &data_size[0],&displ[0], MPI_INT,2, MPI_COMM_WORLD);
+
+	if(rank==2){
+		for(int i=0;i<data.size();i++)
+			std::cout<<" "<<data[i];
+		std::cout<<std::endl;
+	}
+}
+
 int main(int argc, char *argv[]){
 	int provided;
 	MPI_Init_thread(&argc,&argv,MPI_THREAD_MULTIPLE ,&provided);
-
+	//testGather(argc,argv);
+	//MPI_Finalize();
 	PetscInitialize(&argc, &argv, PETSC_NULL, PETSC_NULL);
 	//test(argc,argv);
 	main_loop_(true);
@@ -241,29 +307,29 @@ void cca::cfd::NSImplementation::setup(const std::string inputScenario){
 
 	_lbnsCouplingIterator = new LBNSCouplingIterator(_parameters,*_flowField);
 	//assert(_simulation);
-			gatherDomainDescriptions();
-			gatherMids();
-			if(_parameters.parallel.rank==0&&_lb){
-				int regionSize=3*_parameters.parallel.numProcessors[0]*_parameters.parallel.numProcessors[1]*_parameters.parallel.numProcessors[2];
-				_lb->setupCommForNSRegionParallel(
-						&_startDomain[0],
-						regionSize,
-						&_endDomain[0],
-						regionSize,
-						&_mids[0],
-						regionSize/3);
-				int atr;
-						_lb->syncr(atr);
-			}
+	gatherDomainDescriptions();
+	gatherMids();
+	if(_parameters.parallel.rank==0&&_lb){
+		int regionSize=3*_parameters.parallel.numProcessors[0]*_parameters.parallel.numProcessors[1]*_parameters.parallel.numProcessors[2];
+		_lb->setupCommForNSRegionParallel(
+				&_startDomain[0],
+				regionSize,
+				&_endDomain[0],
+				regionSize,
+				&_mids[0],
+				regionSize/3);
+		int atr;
+		_lb->syncr(atr);
+	}
 
-			_lbField = new LBField(_parameters);
-			_nslbStencil = new NSLBCouplingStencil (
-					_parameters,
-					*_lbField,
-					*_flowField);
-			_nslbCouplingIterator =  new GlobalBoundaryIterator<LBField> (*_lbField,_parameters, *_nslbStencil);
-			for(unsigned int i=0;i<_coms.size();i++)
-				_nslbStencil->registerLBRegion(_coms[i]);
+	_lbField = new LBField(_parameters);
+	_nslbStencil = new NSLBCouplingStencil (
+			_parameters,
+			*_lbField,
+			*_flowField);
+	_nslbCouplingIterator =  new GlobalBoundaryIterator<LBField> (*_lbField,_parameters, *_nslbStencil);
+	for(unsigned int i=0;i<_coms.size();i++)
+		_nslbStencil->registerLBRegion(_coms[i]);
 
 
 
@@ -290,13 +356,13 @@ void cca::cfd::NSImplementation::solve(){
 	std::cout<<"start solving loop ns"<<std::endl;
 	FLOAT time=0;
 	_parameters.coupling.set=false;
-	while (time <=10){//_parameters.simulation.finalTime){
+	while (time <=_parameters.simulation.finalTime){
 		_simulation->solveTimestepPhaseOne();
 		_lbnsCouplingIterator->iterateBoundary();
 		_simulation->solveTimestepPhaseTwo();
 		_lbnsCouplingIterator->iterateBoundary();
-		time++;
-		//time += _parameters.timestep.dt;
+		//time++;
+		time += _parameters.timestep.dt;
 		std::cout<<"time:"<<time<<std::endl;
 
 	}
@@ -338,21 +404,21 @@ void cca::cfd::NSImplementation::iterate(){
 	pthread_mutex_lock(&_mutex);
 	std::cout<<"starting ns stencil iter"<<std::endl;
 	_parameters.coupling.set=true;
-		//_nslbStencil->computeBoundaryMeanPressure();
+	//_nslbStencil->computeBoundaryMeanPressure();
 
-		_nslbCouplingIterator->iterate();
-		if(_maxSizeCommunicators.size()==0){
-			_maxSizeCommunicators.resize(_comC*2);
-			_sizeCommunicators.resize(_comC*2);
-			_nslbStencil->initGather();
-			MPI_Allreduce(&_sizeCommunicators[0],&_maxSizeCommunicators[0],_comC,MPI_2INT,MPI_MAXLOC,MPI_COMM_WORLD);
-			std::cout<<"init gather finished"<<std::endl;
-			for(int i=0;i<_comC;i++){
-				std::cout<<"region i:"<<i<<_maxSizeCommunicators[i*2+1]<<" data:"<<_maxSizeCommunicators[i*2]<<std::endl;
-			}
+	_nslbCouplingIterator->iterate();
+	if(_maxSizeCommunicators.size()==0){
+		_maxSizeCommunicators.resize(_comC*2);
+		_sizeCommunicators.resize(_comC*2);
+		_nslbStencil->initGather();
+		MPI_Allreduce(&_sizeCommunicators[0],&_maxSizeCommunicators[0],_comC,MPI_2INT,MPI_MAXLOC,MPI_COMM_WORLD);
+		std::cout<<"init gather finished"<<std::endl;
+		for(int i=0;i<_comC;i++){
+			std::cout<<"region i:"<<i<<_maxSizeCommunicators[i*2+1]<<" data:"<<_maxSizeCommunicators[i*2]<<std::endl;
 		}
+	}
 
-		_nslbStencil->flush();
+	_nslbStencil->flush();
 	_parameters.coupling.set=false;
 	MPI_Barrier(MPI_COMM_WORLD);
 	pthread_mutex_unlock(&_mutex);
@@ -489,16 +555,16 @@ void cca::cfd::NSImplementation::forwardVelocities(
 
 	for (int i=0;i<keys_len;i++){
 		_lbnsCouplingIterator->setVelocity(
-						keys[i],
-						offsets[3*i],
-						offsets[3*i+1],
-						offsets[3*i+2],
-						flips[3*i],
-						flips[3*i+1],
-						flips[3*i+2],
-						values[i]);
+				keys[i],
+				offsets[3*i],
+				offsets[3*i+1],
+				offsets[3*i+2],
+				flips[3*i],
+				flips[3*i+1],
+				flips[3*i+2],
+				values[i]);
 
-			}
+	}
 	pthread_mutex_unlock(&_mutex);
 }
 

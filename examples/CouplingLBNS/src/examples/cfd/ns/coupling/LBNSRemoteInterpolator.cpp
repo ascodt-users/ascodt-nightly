@@ -138,14 +138,14 @@ const double  LBNSRemoteInterpolator::getVelocity(
 			}
 
 		}
-		open();
+//		open();
 		//	open();
 		//
-		_logComm<<"i_j_k_index:"<<i
-				<<" "<<j<<" "<<k
-				<<" stencil:"<<l
-				<<" component:"<<component
-				<<" index:"<<index<<std::endl;
+//		_logComm<<"i_j_k_index:"<<i
+//				<<" "<<j<<" "<<k
+//				<<" stencil:"<<l
+//				<<" component:"<<component
+//				<<" index:"<<index<<std::endl;
 
 		//std::cout<<"index not found"<<std::endl;
 		return 0.0;
@@ -193,12 +193,12 @@ void LBNSRemoteInterpolator::setArrays (const int * const lbPosition, const int 
 	}
 }
 void LBNSRemoteInterpolator::open(){
-	if(!_open){
-		std::stringstream fileName;
-		fileName<<"log_lbns_receiver."<<_parameters.parallel.rank<<".txt";
-		_logComm.open(fileName.str().c_str());
-	}
-	_open=true;
+//	if(!_open){
+//		std::stringstream fileName;
+//		fileName<<"log_lbns_receiver."<<_parameters.parallel.rank<<".txt";
+//		_logComm.open(fileName.str().c_str());
+//	}
+//	_open=true;
 }
 void LBNSRemoteInterpolator::switchToLocalVelocities(){
 //	for(int i=0;i<3;i++){

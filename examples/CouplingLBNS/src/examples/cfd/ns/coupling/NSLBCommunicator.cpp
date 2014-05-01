@@ -29,6 +29,10 @@ _sizeCommunicators(sizeCommunicators)
 	_pressure_offset_count_sum=0;
 	_pressure_flips_count_sum=0;
 	_pressure_count_sum = 0;
+	_velocity_keys_count_sum=0;
+	_velocity_offset_count_sum=0;
+	_velocity_flips_count_sum=0;
+	_velocity_count_sum=0;
 	//	_iter=0;
 	//	_open=false;
 }
@@ -103,10 +107,7 @@ void NSLBCommunicator::gatherVelocityInit(){
 		_velocity_offset_count[0]=_velocities.size()*3;
 		_velocity_flips_count[0]=_velocities.size()*3;
 		_velocity_keys_count[0]=_velocities.size();
-		_velocity_keys_count_sum+=_velocity_keys_count[0];
-		_velocity_offset_count_sum+=_velocity_offset_count[0];
-		_velocity_flips_count_sum+=_velocity_flips_count[0];
-		_velocity_count_sum+=_velocity_count[0];
+
 		sendBuffer_count[0]=_velocities.size();
 		sendBuffer_offset_count[0]=_velocities.size()*3;
 		sendBuffer_flips_count[0]=_velocities.size()*3;
@@ -116,25 +117,38 @@ void NSLBCommunicator::gatherVelocityInit(){
 		MPI_Gather(&sendBuffer_flips_count[0], 1, MPI_INT, &_velocity_flips_count[0], 1, MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
 		MPI_Gather(&sendBuffer_offset_count[0], 1, MPI_INT, &_velocity_offset_count[0], 1, MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
 
-
+		_velocity_keys_count_sum+=_velocities.size();
+		_velocity_offset_count_sum+=_velocities.size()*3;
+		_velocity_flips_count_sum+=_velocities.size()*3;
+		_velocity_count_sum+=_velocities.size();
 
 		if(_maxSizeCommunicators[_index*2+1]==rank){
 
-			_velocity_displ[0]=0;
-			_velocity_keys_displ[0]=0;
-			_velocity_offset_displ[0]=0;
-			_velocity_flips_displ[0]=0;
-			for(int i=1;i<com_size;i++){
-				_velocity_displ[i]=_velocity_count_sum;
-				_velocity_keys_displ[i]=_velocity_keys_count_sum;
-				_velocity_offset_displ[i]=_velocity_offset_count_sum;
-				_velocity_flips_displ[i]=_velocity_flips_count_sum;
-				_velocity_keys_count_sum+=_velocity_keys_count[i];
-				_velocity_offset_count_sum+=_velocity_offset_count[i];
-				_velocity_flips_count_sum+=_velocity_flips_count[i];
-				_velocity_count_sum+=_velocity_count[i];
+			_velocity_displ[rank]=0;
+			_velocity_keys_displ[rank]=0;
+			_velocity_offset_displ[rank]=0;
+			_velocity_flips_displ[rank]=0;
+			//			_velocity_count[rank]=0;
+			//			_velocity_offset_count[rank]=0;
+			//			_velocity_flips_count[rank]=0;
+			//			_velocity_keys_count[rank]=0;
+			for(int i=0;i<com_size;i++){
+				if(i!=rank){
+					_velocity_displ[i]=_velocity_count_sum;
+					_velocity_keys_displ[i]=_velocity_keys_count_sum;
+					_velocity_offset_displ[i]=_velocity_offset_count_sum;
+					_velocity_flips_displ[i]=_velocity_flips_count_sum;
+					_velocity_keys_count_sum+=_velocity_keys_count[i];
+					_velocity_offset_count_sum+=_velocity_offset_count[i];
+					_velocity_flips_count_sum+=_velocity_flips_count[i];
+					_velocity_count_sum+=_velocity_count[i];
+				}
 
 			}
+			//			_velocity_keys_count[rank]=0;
+			//			_velocity_offset_count[rank]=0;
+			//			_velocity_flips_count[rank]=0;
+			//			_velocity_count[rank]=0;
 		}
 
 	}
@@ -178,38 +192,43 @@ void NSLBCommunicator::gatherPressureInit(){
 		_pressure_offset_count[0]=_pressure.size()*3;
 		_pressure_flips_count[0]=_pressure.size()*3;
 		_pressure_count[0]=_pressure.size();
-		_pressure_keys_count_sum+=sendBuffer_keys_count[0];
-		_pressure_offset_count_sum+=sendBuffer_offset_count[0];
-		_pressure_flips_count_sum+=sendBuffer_flips_count[0];
-		_pressure_count_sum+=sendBuffer_count[0];
+
 		MPI_Gather(&sendBuffer_count[0], 1, MPI_INT, &_pressure_count[0], 1, MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
 		MPI_Gather(&sendBuffer_keys_count[0], 1, MPI_INT, &_pressure_keys_count[0], 1, MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
 		MPI_Gather(&sendBuffer_flips_count[0],1, MPI_INT, &_pressure_flips_count[0], 1, MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
 		MPI_Gather(&sendBuffer_offset_count[0], 1, MPI_INT, &_pressure_offset_count[0], 1, MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
 
-
+		_pressure_keys_count_sum+=_pressure.size();
+		_pressure_offset_count_sum+=_pressure.size()*3;
+		_pressure_flips_count_sum+=_pressure.size()*3;
+		_pressure_count_sum+=_pressure.size();
 
 		if(_maxSizeCommunicators[_index*2+1]==rank){
-
-			_pressure_displ[0]=0;
-			_pressure_keys_displ[0]=0;
-			_pressure_offset_displ[0]=0;
-			_pressure_flips_displ[0]=0;
+			_pressure_displ[rank]=0;
+			_pressure_keys_displ[rank]=0;
+			_pressure_offset_displ[rank]=0;
+			_pressure_flips_displ[rank]=0;
+			//			_pressure_count[rank]=0;
+			//			_pressure_keys_count[rank]=0;
+			//			_pressure_offset_count[rank]=0;
+			//			_pressure_flips_count[rank]=0;
 			std::cout<<"disp pressure on com:"<<_index<<"[["<<_pressure_displ[0]<<","<<_pressure_count[0]<<"]";
-			for(int i=1;i<com_size;i++){
-				_pressure_displ[i]=_pressure_count_sum;
-				_pressure_keys_displ[i]=_pressure_keys_count_sum;
-				_pressure_offset_displ[i]=_pressure_offset_count_sum;
-				_pressure_flips_displ[i]=_pressure_flips_count_sum;
-				_pressure_keys_count_sum+=_pressure_keys_count[i];
-				_pressure_offset_count_sum+=_pressure_offset_count[i];
-				_pressure_flips_count_sum+=_pressure_flips_count[i];
-				_pressure_count_sum+=_pressure_count[i];
+			for(int i=0;i<com_size;i++){
+				if(i!=rank){
+					_pressure_displ[i]=_pressure_count_sum;
+					_pressure_keys_displ[i]=_pressure_keys_count_sum;
+					_pressure_offset_displ[i]=_pressure_offset_count_sum;
+					_pressure_flips_displ[i]=_pressure_flips_count_sum;
+					_pressure_keys_count_sum+=_pressure_keys_count[i];
+					_pressure_offset_count_sum+=_pressure_offset_count[i];
+					_pressure_flips_count_sum+=_pressure_flips_count[i];
+					_pressure_count_sum+=_pressure_count[i];
+				}
 				std::cout<<",["<<_pressure_displ[i]<<","<<_pressure_count[i]<<"]";
 			}
+
 			std::cout<<"]"<<std::endl;
 		}
-		std::cout<<"finished pressure gather init on com:"<<_index<<std::endl;
 	}
 	//	_sum=data_cout[0];
 
@@ -221,52 +240,106 @@ void NSLBCommunicator::gatherVelocity(
 		std::vector<int>& flips,
 		std::vector<double>& velocities)
 {
-	gatherVelocityInit();
-	keys.resize(_velocity_keys_count_sum);
-	flips.resize(_velocity_flips_count_sum);
-	offset.resize(_velocity_offset_count_sum);
-	velocities.resize(_velocity_count_sum);
-	int rank=0;
-	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
-	//	if(_maxSizeCommunicators[_index*2+1]==rank){
-	//		MPI_Gatherv(MPI_IN_PLACE,_velocity_keys_count[0], MPI_INT,&keys[0], &_velocity_keys_count[0],&_velocity_keys_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	//		MPI_Gatherv(MPI_IN_PLACE,_velocity_flips_count[0], MPI_INT,&flips[0], &_velocity_flips_count[0],&_velocity_flips_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	//		MPI_Gatherv(MPI_IN_PLACE,_velocity_offset_count[0], MPI_INT,&offset[0], &_velocity_offset_count[0],&_velocity_offset_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	//		MPI_Gatherv(MPI_IN_PLACE, _velocity_count[0], MPI_DOUBLE, &velocities[0], &_velocity_count[0],&_velocity_displ[0], MPI_DOUBLE, _maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	//
-	//	}else{
-	MPI_Gatherv(&keys[0],_velocity_keys_count[0], MPI_INT,&keys[0], &_velocity_keys_count[0],&_velocity_keys_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	MPI_Gatherv(&flips[0],_velocity_flips_count[0], MPI_INT,&flips[0], &_velocity_flips_count[0],&_velocity_flips_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	MPI_Gatherv(&offset[0],_velocity_offset_count[0], MPI_INT,&offset[0], &_velocity_offset_count[0],&_velocity_offset_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	MPI_Gatherv(&velocities[0], _velocity_count[0], MPI_DOUBLE, &velocities[0], &_velocity_count[0],&_velocity_displ[0], MPI_DOUBLE, _maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
 
-	//}
+	gatherArray(_velocity_keys_count_sum,_velocity_keys_count,_velocity_keys_displ,keys);
+	gatherArray(_velocity_flips_count_sum,_velocity_flips_count,_velocity_flips_displ,flips);
+	gatherArray(_velocity_offset_count_sum,_velocity_offset_count,_velocity_offset_displ,offset);
+	gatherArray(_velocity_count_sum,_velocity_count,_velocity_displ,velocities);
+
 }
+
+void NSLBCommunicator::gatherArray(
+		int& count,
+		std::vector<int>& data_size,
+		std::vector<int>& data_displ,
+		std::vector<int>& data){
+	int rank=0;
+	int com_size=0;
+	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+
+	MPI_Comm_size(MPI_COMM_WORLD,&com_size);
+	if(data_size.size()==0){
+		count=data.size();
+		data_size.resize(1);
+		if(rank==_maxSizeCommunicators[_index*2+1])
+			data_size.resize(com_size);
+		MPI_Gather(&count,1, MPI_INT, &data_size[0], 1, MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+		if(rank==_maxSizeCommunicators[_index*2+1]){
+			data_displ.resize(com_size);
+
+			data_displ[rank]=0;
+
+			for(int i=0;i<com_size;i++){
+				if(i!=rank){
+					data_displ[i]=count;
+					count+=data_size[i];
+				}
+			}
+		}
+	}
+
+	data.resize(count);
+	if(rank==_maxSizeCommunicators[_index*2+1])
+		MPI_Gatherv(MPI_IN_PLACE,0, MPI_INT,&data[0], &data_size[0],&data_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+	else
+		MPI_Gatherv(&data[0],count, MPI_INT,&data[0], &data_size[0],&data_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+
+
+
+
+}
+
+
+void NSLBCommunicator::gatherArray(
+		int& count,
+		std::vector<int>& data_size,
+		std::vector<int>& data_displ,
+		std::vector<double>& data){
+	int rank=0;
+	int com_size=0;
+	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+
+	MPI_Comm_size(MPI_COMM_WORLD,&com_size);
+	if(data_size.size()==0){
+		count=data.size();
+		data_size.resize(1);
+		if(rank==_maxSizeCommunicators[_index*2+1])
+			data_size.resize(com_size);
+		MPI_Gather(&count,1, MPI_INT, &data_size[0], 1, MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+		if(rank==_maxSizeCommunicators[_index*2+1]){
+			data_displ.resize(com_size);
+
+			data_displ[rank]=0;
+
+			for(int i=0;i<com_size;i++){
+				if(i!=rank){
+					data_displ[i]=count;
+					count+=data_size[i];
+				}
+			}
+		}
+	}
+	data.resize(count);
+	if(rank==_maxSizeCommunicators[_index*2+1])
+		MPI_Gatherv(MPI_IN_PLACE,0, MPI_DOUBLE,&data[0], &data_size[0],&data_displ[0], MPI_DOUBLE,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+	else
+		MPI_Gatherv(&data[0],count, MPI_DOUBLE,&data[0], &data_size[0],&data_displ[0], MPI_DOUBLE,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+
+
+
+
+}
+
 void NSLBCommunicator::gatherPressure(
 		std::vector<int>& keys,
 		std::vector<int>& offset,
 		std::vector<int>& flips,
 		std::vector<double>& pressure){
-	gatherPressureInit();
-	std::cout<<"starting gathering pressure on com:"<<_index<<" rank:"<<_parameters.parallel.rank<<" to be gathered:"<<_pressure_count_sum<<std::endl;
-	keys.resize(_pressure_keys_count_sum);
-	flips.resize(_pressure_flips_count_sum);
-	offset.resize(_pressure_offset_count_sum);
-	pressure.resize(_pressure_count_sum);
-	int rank=0;
-	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
-	//	if(_maxSizeCommunicators[_index*2+1]==rank){
-	//		MPI_Gatherv(MPI_IN_PLACE,_pressure_keys_count[0], MPI_INT,&keys[0], &_pressure_keys_count[0],&_pressure_keys_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	//		MPI_Gatherv(MPI_IN_PLACE,_pressure_flips_count[0], MPI_INT,&flips[0], &_pressure_flips_count[0],&_pressure_flips_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	//		MPI_Gatherv(MPI_IN_PLACE,_pressure_offset_count[0], MPI_INT,&offset[0], &_pressure_offset_count[0],&_pressure_offset_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	//		MPI_Gatherv(MPI_IN_PLACE, _pressure_count[0], MPI_DOUBLE, &pressure[0], &_pressure_count[0],&_pressure_displ[0], MPI_DOUBLE, _maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	//
-	//	}else{
-	MPI_Gatherv(&keys[0],_pressure_keys_count[0], MPI_INT,&keys[0], &_pressure_keys_count[0],&_pressure_keys_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	MPI_Gatherv(&flips[0],_pressure_flips_count[0], MPI_INT,&flips[0], &_pressure_flips_count[0],&_pressure_flips_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	MPI_Gatherv(&offset[0],_pressure_offset_count[0], MPI_INT,&offset[0], &_pressure_offset_count[0],&_pressure_offset_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	MPI_Gatherv(&pressure[0], _pressure_count[0], MPI_DOUBLE, &pressure[0], &_pressure_count[0],&_pressure_displ[0], MPI_DOUBLE, _maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
-	//}
+	gatherArray(_pressure_keys_count_sum,_pressure_keys_count,_pressure_keys_displ,keys);
+	gatherArray(_pressure_flips_count_sum,_pressure_flips_count,_pressure_flips_displ,flips);
+	gatherArray(_pressure_offset_count_sum,_pressure_offset_count,_pressure_offset_displ,offset);
+	gatherArray(_pressure_count_sum,_pressure_count,_pressure_displ,pressure);
+
 	std::cout<<"end gathering pressure:"<<_pressure_count_sum<<std::endl;
 
 }
