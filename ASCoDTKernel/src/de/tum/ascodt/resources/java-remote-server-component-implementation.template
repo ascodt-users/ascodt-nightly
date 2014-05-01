@@ -13,7 +13,7 @@ public abstract class __COMPONENT_NAME__AbstractJavaImplementation extends Socke
   protected String   _instanceName;
   protected String  _projectLocation;
   public __COMPONENT_NAME__AbstractJavaImplementation( String instanceName ) throws de.tum.ascodt.utils.exceptions.ASCoDTException  {
-    super("localhost");
+    super("127.0.0.1");
     _instanceName = instanceName;
     _appTab = new __SOCKET_SERVER_UI__("__COMPONENT_NAME__",this, __APPS_CONTAINER__.ID);
     _appTab.setVisible(true);

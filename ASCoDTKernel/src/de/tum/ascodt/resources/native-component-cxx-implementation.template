@@ -7,8 +7,7 @@ __CXX_FULL_QUALIFIED_NAME__Implementation::__COMPONENT_NAME__Implementation(){
 __CXX_FULL_QUALIFIED_NAME__Implementation::~__COMPONENT_NAME__Implementation(){
 
 }
-/*
-uncomment for remote applications
+
 extern "C" void
 #ifdef _WIN32
 MAIN_LOOP(bool joinable);
@@ -23,5 +22,5 @@ int main(){
   main_loop_(false);
 #endif
 }
-*/
+
 -- INSERT HERE --

@@ -5,6 +5,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Label;
@@ -50,7 +51,7 @@ public class SocketClientAppsTab extends ProgramArgsTab {
     labelHostname.setLayoutData(textGridData);
 
     textHostname = new Text(argsComp, SWT.RIGHT);
-    textHostname.setText(component.getHost() == null ? "localhost" : component
+    textHostname.setText(component.getHost() == null ? "127.0.0.1" : component
         .getHost());
     textHostname.setLayoutData(textGridData);
 
@@ -85,11 +86,12 @@ public class SocketClientAppsTab extends ProgramArgsTab {
 
   @Override
   public String getCommandForExecution() {
-    String mpiPrefix="";
-    if(numberOfProcesses.getSelection()>1){
-      mpiPrefix="/home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiexec -np "+numberOfProcesses.getSelection()+" ";
+    String mpiPrefix = "";
+    if (numberOfProcesses.getSelection() > 1) {
+      mpiPrefix = "/home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiexec -np " +
+          numberOfProcesses.getSelection() + " ";
     }
-    return mpiPrefix+textProgramExecutable.getText() + " " +
+    return mpiPrefix + textProgramExecutable.getText() + " " +
         textProgramArguments.getText();
   }
 
@@ -107,9 +109,24 @@ public class SocketClientAppsTab extends ProgramArgsTab {
       _label.toUpperCase().replaceAll("[.]", "_") + "_JAVA=on",};
   }
 
-  
   public String getHost() {
-    return textHostname.getText();
+    class HostGetter implements Runnable {
+      private String host;
+
+      String getHost() {
+        return host;
+      }
+      
+      @Override
+      public void run() {
+        host = textHostname.getText();
+      }
+    }
+
+    HostGetter hostGetter = new HostGetter();
+    Display.getDefault().syncExec(hostGetter);
+
+    return hostGetter.getHost();
   }
 
   public int getPort() {

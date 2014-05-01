@@ -8,18 +8,18 @@ examples::AImplementation::~AImplementation(){
 
 }
 
+extern "C" void
 #ifdef _WIN32
-extern "C" void MAIN_LOOP();
+MAIN_LOOP(bool joinable);
 #else
-extern "C" void main_loop_();
+main_loop_(bool joinable);
 #endif
-
 
 int main(){
 #ifdef _WIN32
-MAIN_LOOP();
+  MAIN_LOOP(false);
 #else
-main_loop_();
+  main_loop_(false);
 #endif
 }
 

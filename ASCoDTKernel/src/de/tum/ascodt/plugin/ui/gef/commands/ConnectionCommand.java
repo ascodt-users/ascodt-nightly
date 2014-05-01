@@ -4,7 +4,10 @@ package de.tum.ascodt.plugin.ui.gef.commands;
 import java.util.Iterator;
 import java.util.Vector;
 
+import javax.swing.SwingUtilities;
+
 import org.eclipse.gef.commands.Command;
+import org.eclipse.swt.widgets.Display;
 
 import de.tum.ascodt.plugin.ui.gef.model.Component;
 import de.tum.ascodt.plugin.ui.gef.model.Connection;
@@ -27,7 +30,7 @@ public class ConnectionCommand extends Command {
   }
 
   @Override
-  public boolean canExecute() {
+  public synchronized boolean canExecute() {
     if (target != null) {
       if (target.equals(source)) {
         return false;
@@ -49,35 +52,40 @@ public class ConnectionCommand extends Command {
   }
 
   @Override
-  public void execute() {
-    if (source != null) {
-      connection.detachSource();
-      connection.setSource(source);
-      connection.setSourcePort(sourcePort);
-      connection.attachSource();
-    }
-    if (target != null) {
-      connection.detachTarget();
-      connection.setTarget(target);
-      connection.setTargetPort(targetPort);
-      if (!connection.attachTarget()) {
-        source = null;
-        target = null;
+  public synchronized void execute() {
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        if (source != null) {
+          connection.detachSource();
+          connection.setSource(source);
+          connection.setSourcePort(sourcePort);
+          connection.attachSource();
+        }
+        if (target != null) {
+          connection.detachTarget();
+          connection.setTarget(target);
+          connection.setTargetPort(targetPort);
+          if (!connection.attachTarget()) {
+            source = null;
+            target = null;
+          }
+        }
+        if (source == null && target == null) {
+          connection.detachSource();
+          connection.detachTarget();
+          connection.setTarget(null);
+          connection.setSource(null);
+        }
       }
-    }
-    if (source == null && target == null) {
-      connection.detachSource();
-      connection.detachTarget();
-      connection.setTarget(null);
-      connection.setSource(null);
-    }
+    });
   }
 
-  public Object getSourcePort() {
+  public synchronized Object getSourcePort() {
     return sourcePort;
   }
 
-  public void setConnection(Connection conn) {
+  public synchronized void setConnection(Connection conn) {
     connection = conn;
     oldSource = conn.getSource();
     oldTarget = conn.getTarget();
@@ -85,25 +93,25 @@ public class ConnectionCommand extends Command {
     oldTargetPort = conn.getTargetPort();
   }
 
-  public void setSource(Component componentModel) {
+  public synchronized void setSource(Component componentModel) {
     source = componentModel;
   }
 
-  public void setSourcePort(Port model) {
+  public synchronized void setSourcePort(Port model) {
     sourcePort = model;
 
   }
 
-  public void setTarget(Component componentModel) {
+  public synchronized void setTarget(Component componentModel) {
     target = componentModel;
   }
 
-  public void setTargetPort(Port model) {
+  public synchronized void setTargetPort(Port model) {
     targetPort = model;
   }
 
   @Override
-  public void undo() {
+  public synchronized void undo() {
     source = connection.getSource();
     target = connection.getTarget();
     sourcePort = connection.getSourcePort();
