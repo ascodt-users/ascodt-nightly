@@ -4,9 +4,13 @@
 
 LBNSCommunicator::LBNSCommunicator(
 		const Parameters & parameters,
-		int index,int* start,int* end,std::string mi):
+		int index,int* start,int* end,std::string mi,
+		std::vector<int>& maxSizeCommunicators,
+		std::vector<int>& sizeCommunicators):
 		_parameters(parameters),
-		_mid(mi)
+		_mid(mi),
+		_maxSizeCommunicators(maxSizeCommunicators),
+		_sizeCommunicators(sizeCommunicators)
 
 {
 
@@ -19,7 +23,12 @@ LBNSCommunicator::LBNSCommunicator(
 	_endIndex[2]=end[index*3+2];
 	_lbnsPeer2Peer=NULL;
 	_open=false;
-
+	_velocity_keys_count_sum=0;
+	_velocity_offset_count_sum=0;
+	_velocity_flips_count_sum=0;
+	_velocity_count_sum=0;
+	_index=index;
+	std::cout<<"creating com:"<<_index<<std::endl;
 }
 LBNSCommunicator::~LBNSCommunicator(){
 	if(_lbnsPeer2Peer){
@@ -41,93 +50,178 @@ void LBNSCommunicator::connect(){
 	}
 }
 void LBNSCommunicator::open(){
-	if(!_open){
-		std::stringstream fileName;
-		fileName<<"log_lbns_sender."<<_parameters.parallel.rank<<".txt";
-		_logComm.open(fileName.str().c_str());
-	}
-	_open=true;
+//	if(!_open){
+//		std::stringstream fileName;
+//		fileName<<"log_lbns_sender."<<_parameters.parallel.rank<<".txt";
+//		_logComm.open(fileName.str().c_str());
+//	}
+//	_open=true;
 }
 
-void LBNSCommunicator::convert(
-		std::vector<int>& keys,
-		std::vector<double>& values,
-		std::vector<int>& offsets,
-		std::vector<int>& flips,
-		std::vector<int>& componentSize){
+void LBNSCommunicator::convertVelocity(
+		std::vector<int>& keysVelocity,
+		std::vector<int>& velocityOffsets,
+		std::vector<int>& velocityFlips,
+		std::vector<double>& velocityValues
+
+){
 	__gnu_cxx::hash_map<int,std::vector<LBNSData> >::iterator it;
-
-	for(it=_velocities[0].begin();it!=_velocities[0].end();it++){
+	for(it=_velocities.begin();it!=_velocities.end();it++){
 		for(unsigned int i=0;i<(*it).second.size();i++){
-			keys.push_back((*it).first);
-			values.push_back((*it).second[i].value);
-			offsets.push_back((*it).second[i].offset[0]);
-			offsets.push_back((*it).second[i].offset[1]);
-			offsets.push_back((*it).second[i].offset[2]);
-			flips.push_back((*it).second[i].flip[0]);
-			flips.push_back((*it).second[i].flip[1]);
-			flips.push_back((*it).second[i].flip[2]);
+			keysVelocity.push_back((*it).first);
+			velocityValues.push_back((*it).second[i].value);
+			velocityOffsets.push_back((*it).second[i].offset[0]);
+			velocityOffsets.push_back((*it).second[i].offset[1]);
+			velocityOffsets.push_back((*it).second[i].offset[2]);
+			velocityFlips.push_back((*it).second[i].flip[0]);
+			velocityFlips.push_back((*it).second[i].flip[1]);
+			velocityFlips.push_back((*it).second[i].flip[2]);
 		}
 	}
-	componentSize[0]=values.size();
-	for(it=_velocities[1].begin();it!=_velocities[1].end();it++){
-		for(unsigned int i=0;i<(*it).second.size();i++){
-			keys.push_back((*it).first);
-			values.push_back((*it).second[i].value);
-			offsets.push_back((*it).second[i].offset[0]);
-			offsets.push_back((*it).second[i].offset[1]);
-			offsets.push_back((*it).second[i].offset[2]);
-			flips.push_back((*it).second[i].flip[0]);
-			flips.push_back((*it).second[i].flip[1]);
-			flips.push_back((*it).second[i].flip[2]);
-		}
-	}
-	componentSize[1]=values.size()-componentSize[0];
-	for(it=_velocities[2].begin();it!=_velocities[2].end();it++){
-
-		for(unsigned int i=0;i<(*it).second.size();i++){
-			keys.push_back((*it).first);
-			values.push_back((*it).second[i].value);
-			offsets.push_back((*it).second[i].offset[0]);
-			offsets.push_back((*it).second[i].offset[1]);
-			offsets.push_back((*it).second[i].offset[2]);
-			flips.push_back((*it).second[i].flip[0]);
-			flips.push_back((*it).second[i].flip[1]);
-			flips.push_back((*it).second[i].flip[2]);
-		}
-	}
-	componentSize[2]=values.size()-componentSize[1]-componentSize[0];
-
-	_velocities[0].clear();
-	_velocities[1].clear();
-	_velocities[2].clear();
 }
+
 void LBNSCommunicator::flush(){
-	std::vector<double> values;
-	std::vector<int> keys;
-	std::vector<int> componentSize;
-	std::vector<int> offsets;
-	std::vector<int> flips;
-	componentSize.resize(3);
-	_logComm.flush();
-	if(_velocities[0].size()>0||_velocities[1].size()>0||_velocities[2].size()>0){
+	//_logComm.flush();
+	int rank=0;
+	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+	if(_maxSizeCommunicators[_index*2+1]==rank){
 		connect();
 		int ack;
-		convert(keys,values,offsets,flips,componentSize);
+		//convert(keys,values,offsets,flips,componentSize);
 		_lbnsPeer2Peer->forwardVelocities(
-				&keys[0],
-				keys.size(),
-				&offsets[0],
-				offsets.size(),
-				&flips[0],
-				flips.size(),
-				&values[0],
-				values.size(),
-				&componentSize[0],
-				componentSize.size(),
+				&_velocityKeys[0],
+				_velocityKeys.size(),
+				&_velocityOffsets[0],
+				_velocityOffsets.size(),
+				&_velocityFlips[0],
+				_velocityFlips.size(),
+				&_velocityValues[0],
+				_velocityValues.size(),
 				ack
 		);
 	}
+	_velocities.clear();
+
+}
+
+void LBNSCommunicator::gatherVelocity(
+		std::vector<int>& keys,
+		std::vector<int>& offset,
+		std::vector<int>& flips,
+		std::vector<double>& velocities)
+{
+	//_logComm<<"start gather com:"<<_index<<",on rank:"<<_parameters.parallel.rank<<" keys:"<<keys.size()<<std::endl;
+	gatherArray(_velocity_keys_count_sum,_velocity_keys_count,_velocity_keys_displ,keys);
+	//_logComm<<"start gather com:"<<_index<<",on rank:"<<_parameters.parallel.rank<<" flips:"<<flips.size()<<std::endl;
+
+	gatherArray(_velocity_flips_count_sum,_velocity_flips_count,_velocity_flips_displ,flips);
+	//_logComm<<"start gather com:"<<_index<<",on rank:"<<_parameters.parallel.rank<<" offset:"<<offset.size()<<std::endl;
+
+	gatherArray(_velocity_offset_count_sum,_velocity_offset_count,_velocity_offset_displ,offset);
+	//_logComm<<"start gather com:"<<_index<<",on rank:"<<_parameters.parallel.rank<<" data:"<<velocities.size()<<std::endl;
+
+	gatherArray(_velocity_count_sum,_velocity_count,_velocity_displ,velocities);
+	//_logComm<<"end gather com:"<<_index<<",on rank:"<<_parameters.parallel.rank<<" data:"<<_velocities.size()<<std::endl;
+}
+
+void LBNSCommunicator::gatherArray(
+		int& count,
+		std::vector<int>& data_size,
+		std::vector<int>& data_displ,
+		std::vector<int>& data){
+	int rank=0;
+	int com_size=0;
+	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+
+	MPI_Comm_size(MPI_COMM_WORLD,&com_size);
+	if(data_size.size()==0){
+
+		count=data.size();
+		data_size.resize(1);
+		if(rank==_maxSizeCommunicators[_index*2+1])
+			data_size.resize(com_size);
+		MPI_Gather(&count,1, MPI_INT, &data_size[0], 1, MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+		if(rank==_maxSizeCommunicators[_index*2+1]){
+			data_displ.resize(com_size);
+
+			data_displ[rank]=0;
+
+			for(int i=0;i<com_size;i++){
+				if(i!=rank){
+					data_displ[i]=count;
+					count+=data_size[i];
+				}
+			}
+		}
+	}
+	data.resize(count);
+	if(rank==_maxSizeCommunicators[_index*2+1])
+		MPI_Gatherv(MPI_IN_PLACE,0, MPI_INT,&data[0], &data_size[0],&data_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+	else
+		MPI_Gatherv(&data[0],count, MPI_INT,&data[0], &data_size[0],&data_displ[0], MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+
+
+
+}
+
+
+void LBNSCommunicator::gatherArray(
+		int& count,
+		std::vector<int>& data_size,
+		std::vector<int>& data_displ,
+		std::vector<double>& data){
+	int rank=0;
+	int com_size=0;
+	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+
+	MPI_Comm_size(MPI_COMM_WORLD,&com_size);
+	if(data_size.size()==0){
+		count=data.size();
+		data_size.resize(1);
+		if(rank==_maxSizeCommunicators[_index*2+1])
+			data_size.resize(com_size);
+		MPI_Gather(&count,1, MPI_INT, &data_size[0], 1, MPI_INT,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+		if(rank==_maxSizeCommunicators[_index*2+1]){
+			data_displ.resize(com_size);
+
+			data_displ[rank]=0;
+
+			for(int i=0;i<com_size;i++){
+				if(i!=rank){
+					data_displ[i]=count;
+					count+=data_size[i];
+				}
+			}
+		}
+	}
+	data.resize(count);
+	if(rank==_maxSizeCommunicators[_index*2+1])
+		MPI_Gatherv(MPI_IN_PLACE,0, MPI_DOUBLE,&data[0], &data_size[0],&data_displ[0], MPI_DOUBLE,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+	else
+		MPI_Gatherv(&data[0],count, MPI_DOUBLE,&data[0], &data_size[0],&data_displ[0], MPI_DOUBLE,_maxSizeCommunicators[_index*2+1], MPI_COMM_WORLD);
+
+
+
+}
+
+void LBNSCommunicator::gather(){
+//	_logComm<<"gather:"<<_index<<std::endl;
+
+	_velocityValues.clear();
+	_velocityOffsets.clear();
+	_velocityFlips.clear();
+	_velocityKeys.clear();
+
+
+	convertVelocity(_velocityKeys,_velocityOffsets,_velocityFlips,_velocityValues);
+
+	gatherVelocity(_velocityKeys,_velocityOffsets,_velocityFlips,_velocityValues);
+}
+void LBNSCommunicator::gather_init(){
+	int rank=0;
+	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+	_sizeCommunicators[_index*2]=_velocities.size();
+	_sizeCommunicators[_index*2+1]=rank;
 
 }
 int LBNSCommunicator::index2array ( int i, int j, int k, int component, int stencil ) const {
@@ -166,14 +260,14 @@ void LBNSCommunicator::setVelocityComponent(
 		double velocity){
 	int index=index2array(i,j,k,component,stencilIndex);
 
-	open();
-	_logComm<<"i_j_k_index:"<<i
-			<<" "<<j<<" "<<k
-			<<" stencil:"<<stencilIndex
-			<<" component:"<<component
-			<<" index:"<<index
-			<<" value:"<<velocity
-			<<" mid:"<<_mid<<std::endl;
+	//open();
+	//	_logComm<<"i_j_k_index:"<<i
+	//			<<" "<<j<<" "<<k
+	//			<<" stencil:"<<stencilIndex
+	//			<<" component:"<<component
+	//			<<" index:"<<index
+	//			<<" value:"<<velocity
+	//			<<" mid:"<<_mid<<std::endl;
 
 	LBNSData data;
 	data.value=velocity;
@@ -183,5 +277,5 @@ void LBNSCommunicator::setVelocityComponent(
 	data.flip[0]=flip[0];
 	data.flip[1]=flip[1];
 	data.flip[2]=flip[2];
-	_velocities[component][index].push_back(data);
+	_velocities[index].push_back(data);
 }

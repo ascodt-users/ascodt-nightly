@@ -72,7 +72,6 @@ void LBNSCouplingIterator::setVelocity(
 		const int flipsX,
 		const int flipsY,
 		const int flipsZ,
-		const int component,
 		const double value){
 	_interpolator.setVelocity(
 			key,
@@ -82,7 +81,6 @@ void LBNSCouplingIterator::setVelocity(
 			flipsX,
 			flipsY,
 			flipsZ,
-			component,
 			value);
 }
 void LBNSCouplingIterator::clear(){

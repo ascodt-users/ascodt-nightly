@@ -45,7 +45,7 @@ private:
 	FLOAT _locationVector [stencilSize];
 	FLOAT _regularizedPosition[3];
 	FLOAT _values[stencilSize];
-	__gnu_cxx::hash_map<int, std::vector<LBNSData> > _velocities[3];
+	__gnu_cxx::hash_map<int, std::vector<LBNSData> > _velocities;
 	std::vector<double> _localVelocities[3];
 	int _localVelocitiesCounters[3];
 	std::ofstream _logComm;
@@ -111,7 +111,6 @@ public:
 			const int flipsX,
 			const int flipsY,
 			const int flipsZ,
-			const int component,
 			const double value);
 	void switchToLocalVelocities();
 	void clear();

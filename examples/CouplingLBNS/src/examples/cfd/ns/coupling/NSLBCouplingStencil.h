@@ -20,6 +20,7 @@ private:
 	//std::vector<double>& _pressure;
 	//std::vector<double>& _jacobian;
 	std::vector<NSLBCommunicator*> _communicators;
+
 public:
 
 	/** Constructor of the class with the position of the LB subdomain defined in independent
@@ -149,8 +150,8 @@ public:
 	/** @} */
 	void registerLBRegion(NSLBCommunicator* com);
 	void flush();
+	void initGather();
 private:
-
 	LBField & _lbField;
 	FlowField & _nsField;
 

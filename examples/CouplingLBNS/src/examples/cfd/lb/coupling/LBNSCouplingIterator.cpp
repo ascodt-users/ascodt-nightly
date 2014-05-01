@@ -64,6 +64,12 @@ void LBNSCouplingIterator::registerNSRegion(
 		LBNSCommunicator* com){
 	_interpolator.registerNSRegion(com);
 }
+void LBNSCouplingIterator::initGather(){
+	_interpolator.initGather();
+}
+void LBNSCouplingIterator::flush(){
+	_interpolator.flush();
+}
 void LBNSCouplingIterator::iterateBoundary(){
 	/*_lbVelocityX.clear();
 		_lbVelocityY.clear();
@@ -170,7 +176,7 @@ void LBNSCouplingIterator::iterateBoundary(){
 	}
 	interpolateComponentZ (_upperX, _upperY, _lowerZ-1);
 	interpolateComponentZ (_upperX, _upperY, _upperZ);
-	_interpolator.flush();
+
 
 }
 int LBNSCouplingIterator::getVelocitySizeX(){

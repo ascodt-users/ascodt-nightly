@@ -58,6 +58,9 @@ private:
 	std::vector<std::string> _mids;
 	int _iterC;
 	std::vector<LBNSCommunicator*> _coms;
+	std::vector<int> _maxSizeCommunicators;
+	std::vector<int> _sizeCommunicators;
+	int _comC;
 	void gatherDomainDescriptions();
 	void gatherMids();
 	void readGeometry(std::string);
@@ -94,8 +97,6 @@ public:
 			const int flips_len,
 			const double* values,
 			const int values_len,
-			const int* componentSize,
-			const int componentSize_len,
 			int& ack);
 	void forwardPressure(
 			const int * keys,

@@ -123,8 +123,8 @@ const FLOAT NSLBCouplingStencil::getDt() const{
 const double  NSLBCouplingStencil::getVelocity(
 		int i,int j,int k,int l,
 		const int component,const int* offset,const int* flip,const int index){
-	__gnu_cxx::hash_map<int,std::vector<NSLBData> >::iterator it=_velocities[component].find(index);
-	if(it!=_velocities[component].end()){
+	__gnu_cxx::hash_map<int,std::vector<NSLBData> >::iterator it=_velocities.find(index);
+	if(it!=_velocities.end()){
 		for(unsigned int i=0;i<(*it).second.size();i++){
 			if(
 					offset[0]==(*it).second[i].offset[0]&&
@@ -210,7 +210,6 @@ void NSLBCouplingStencil::loadVelocity(
 
 void NSLBCouplingStencil::setVelocityComponent(
 		const int key,
-		const int component,
 		const int offsetX,
 		const int offsetY,
 		const int offsetZ,
@@ -226,7 +225,7 @@ void NSLBCouplingStencil::setVelocityComponent(
 	data.flip[0]=flipX;
 	data.flip[1]=flipY;
 	data.flip[2]=flipZ;
-	_velocities[component][key].push_back(data);
+	_velocities[key].push_back(data);
 }
 void NSLBCouplingStencil::setPressure(
 		const int key,
@@ -249,9 +248,7 @@ void NSLBCouplingStencil::setPressure(
 	_pressure[key].push_back(data);
 }
 void NSLBCouplingStencil::clear(){
-	_velocities[0].clear();
-	_velocities[1].clear();
-	_velocities[2].clear();
+	_velocities.clear();
 	_pressure.clear();
 	//_logComm.flush();
 }

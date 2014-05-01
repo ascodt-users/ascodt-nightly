@@ -17,22 +17,22 @@ void LBNSRemoteInterpolator::printParameters() {
 }
 
 LBNSRemoteInterpolator::LBNSRemoteInterpolator (const Parameters & parameters, const LBField & lbField) :
-    						_parameters (parameters), _lbField (lbField),
-    						// Add 2 to refer to fluid cells and not to the boundaries
-    						// The upper limits refer to the last cell inside the overlap region
-    						_lowerX (parameters.coupling.offsetNS[0]),
-    						_upperX (_lowerX + parameters.coupling.sizeNS[0] - 1),
-    						_lowerY (parameters.coupling.offsetNS[1]),
-    						_upperY (_lowerY + parameters.coupling.sizeNS[1] - 1),
-    						_lowerZ (parameters.coupling.offsetNS[2]),
-    						_upperZ (_lowerZ + parameters.coupling.sizeNS[2] - 1),
-    						_M (parameters.coupling.ratio),
-    						_halfM (_M / 2),    // Should return the floor of the float operation if operating with ints
-    						_modulo (_M % 2),
-    						_reciprocalRatio (1.0 / _M),
-    						_dx (parameters.coupling.refLength / _M),
-    						_dt (parameters.lb.viscosity * parameters.flow.Re * _dx * _dx),
-    						_referenceVelocity (_dx / _dt)
+    								_parameters (parameters), _lbField (lbField),
+    								// Add 2 to refer to fluid cells and not to the boundaries
+    								// The upper limits refer to the last cell inside the overlap region
+    								_lowerX (parameters.coupling.offsetNS[0]),
+    								_upperX (_lowerX + parameters.coupling.sizeNS[0] - 1),
+    								_lowerY (parameters.coupling.offsetNS[1]),
+    								_upperY (_lowerY + parameters.coupling.sizeNS[1] - 1),
+    								_lowerZ (parameters.coupling.offsetNS[2]),
+    								_upperZ (_lowerZ + parameters.coupling.sizeNS[2] - 1),
+    								_M (parameters.coupling.ratio),
+    								_halfM (_M / 2),    // Should return the floor of the float operation if operating with ints
+    								_modulo (_M % 2),
+    								_reciprocalRatio (1.0 / _M),
+    								_dx (parameters.coupling.refLength / _M),
+    								_dt (parameters.lb.viscosity * parameters.flow.Re * _dx * _dx),
+    								_referenceVelocity (_dx / _dt)
 {
 	printParameters();
 
@@ -224,10 +224,20 @@ void LBNSRemoteInterpolator::interpolateVelocityComponent (int ins, int jns, int
 }
 
 void LBNSRemoteInterpolator::flush(){
+	std::cout<<"coms:"<<_communicators.size()<<std::endl;
+	for(unsigned int i=0;i<_communicators.size();i++){
+		std::cout<<"flushing i="<<i<<std::endl;
+		_communicators[i]->gather();
+	}
 	for(unsigned int i=0;i<_communicators.size();i++)
 		_communicators[i]->flush();
 }
+void LBNSRemoteInterpolator::initGather(){
+	for(unsigned int i=0;i<_communicators.size();i++){
 
+		_communicators[i]->gather_init();
+	}
+}
 /*FLOAT LBNSRemoteInterpolator::interpolatePressure (int ins, int jns, int kns) {
 	int lbPosition[3], middle[3];
 	locateInLBGrid (lbPosition, middle, ins, jns, kns, 3);

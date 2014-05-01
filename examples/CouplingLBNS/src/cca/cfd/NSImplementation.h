@@ -48,11 +48,14 @@ private:
 	std::vector<int> _endDomain;
 	std::vector<std::string> _mids;
 	std::vector<NSLBCommunicator*> _coms;
+	std::vector<int> _maxSizeCommunicators;
+	std::vector<int> _sizeCommunicators;
 	double _time;
 	LBField* _lbField;
 	int _iter;
 	std::ofstream _nsprofiles;
 	std::ofstream _nspressure;
+	int _comC;
 	void gatherDomainDescriptions();
 	void gatherMids();
 public:
@@ -84,8 +87,6 @@ public:
 			const int flips_len,
 			const double* values,
 			const int values_len,
-			const int* componentSize,
-			const int componentSize_len,
 			int& ackn
 	);
 	void setupCommForLBRegion(

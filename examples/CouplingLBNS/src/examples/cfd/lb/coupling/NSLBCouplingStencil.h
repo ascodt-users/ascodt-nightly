@@ -150,7 +150,7 @@ public:
 	void applyBackWall   ( LBField & lbField, int i, int j, int k );
 	/** @} */
 	void setVelocityComponent(
-			const int key,const int component,
+			const int key,
 			const int offsetX,
 			const int offsetY,
 			const int offsetZ,
@@ -202,7 +202,7 @@ private:
 	__gnu_cxx::hash_map<int,int> _velocityCounter;
 	__gnu_cxx::hash_map<int,int> _pressureCounter;
 
-	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _velocities[3];
+	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _velocities;
 	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _pressure;
 //	std::ofstream _logComm;
 //	bool _open;
