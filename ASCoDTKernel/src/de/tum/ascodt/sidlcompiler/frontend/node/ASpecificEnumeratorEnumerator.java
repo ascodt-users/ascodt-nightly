@@ -15,9 +15,8 @@ public final class ASpecificEnumeratorEnumerator extends PEnumerator {
     // Constructor
   }
 
-  public ASpecificEnumeratorEnumerator(
-      @SuppressWarnings("hiding") TIdentifier _name_,
-      @SuppressWarnings("hiding") TDecimalConstant _value_) {
+  public ASpecificEnumeratorEnumerator(@SuppressWarnings("hiding") TIdentifier _name_,
+                                       @SuppressWarnings("hiding") TDecimalConstant _value_) {
     // Constructor
     setName(_name_);
 
@@ -33,7 +32,7 @@ public final class ASpecificEnumeratorEnumerator extends PEnumerator {
   @Override
   public Object clone() {
     return new ASpecificEnumeratorEnumerator(cloneNode(_name_),
-        cloneNode(_value_));
+                                             cloneNode(_value_));
   }
 
   public TIdentifier getName() {
@@ -62,7 +61,7 @@ public final class ASpecificEnumeratorEnumerator extends PEnumerator {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     if (_name_ == oldChild) {
       setName((TIdentifier)newChild);

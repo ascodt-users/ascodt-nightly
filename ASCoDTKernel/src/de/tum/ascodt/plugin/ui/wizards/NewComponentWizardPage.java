@@ -123,10 +123,9 @@ public class NewComponentWizardPage extends WizardPage {
     int selectionIndex = 0, counter = 0;
 
     for (String projectId : ProjectBuilder.getInstance()
-        .getProjectsIdentifiers()) {
+                                          .getProjectsIdentifiers()) {
       _projectsComboBox.add(projectId);
-      if (_initialProjectIdentifier != null &&
-          projectId.equals(_initialProjectIdentifier)) {
+      if (_initialProjectIdentifier != null && projectId.equals(_initialProjectIdentifier)) {
         selectionIndex = counter;
       }
       counter++;
@@ -176,8 +175,9 @@ public class NewComponentWizardPage extends WizardPage {
 
     initializeDialogUnits(parent);
 
-    PlatformUI.getWorkbench().getHelpSystem()
-        .setHelp(composite, IIDEHelpContextIds.NEW_PROJECT_WIZARD_PAGE);
+    PlatformUI.getWorkbench()
+              .getHelpSystem()
+              .setHelp(composite, IIDEHelpContextIds.NEW_PROJECT_WIZARD_PAGE);
 
     composite.setLayout(new GridLayout());
     composite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -253,8 +253,7 @@ public class NewComponentWizardPage extends WizardPage {
    * @throws ASCoDTException
    */
   public Target getComponentTarget() throws ASCoDTException {
-    return Target.createTarget(_componentTarget.getItem(_componentTarget
-        .getSelectionIndex()));
+    return Target.createTarget(_componentTarget.getItem(_componentTarget.getSelectionIndex()));
   }
 
   /**
@@ -315,13 +314,12 @@ public class NewComponentWizardPage extends WizardPage {
     String componentNamespaceFieldContents = getComponentNamespaceFieldValue();
     if (componentNamespaceFieldContents.equals("")) { //$NON-NLS-1$
       setErrorMessage(null);
-      setMessage("Invalid component namespace:" +
-          componentNamespaceFieldContents);
+      setMessage("Invalid component namespace:" + componentNamespaceFieldContents);
       return false;
     }
 
-    IStatus nameStatus = workspace.validateName(projectNameFieldContents,
-        IResource.PROJECT);
+    IStatus nameStatus =
+        workspace.validateName(projectNameFieldContents, IResource.PROJECT);
     if (!nameStatus.isOK()) {
       setErrorMessage(nameStatus.getMessage());
       return false;

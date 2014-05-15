@@ -29,26 +29,36 @@ public class Trace implements Serializable {
   }
 
   public void in(String methodName, String parameter) {
-    TraceDevice.getInstance().traceIn(_className, methodName,
-        "parameter=" + parameter);
+    TraceDevice.getInstance().traceIn(_className,
+                                      methodName,
+                                      "parameter=" + parameter);
   }
 
   public void in(String methodName, String parameter0, String parameter1) {
-    TraceDevice.getInstance().traceIn(_className, methodName,
-        "parameter0=" + parameter0 + ", parameter1=" + parameter1);
+    TraceDevice.getInstance().traceIn(_className,
+                                      methodName,
+                                      "parameter0=" + parameter0 +
+                                          ", parameter1=" +
+                                          parameter1);
   }
 
-  public void in(String methodName, String parameter0, String parameter1,
-      String parameter2) {
-    TraceDevice.getInstance().traceIn(
-        _className,
-        methodName,
-        "parameter0=" + parameter0 + ", parameter1=" + parameter1 +
-            ", parameter2=" + parameter2);
+  public void in(String methodName,
+                 String parameter0,
+                 String parameter1,
+                 String parameter2) {
+    TraceDevice.getInstance().traceIn(_className,
+                                      methodName,
+                                      "parameter0=" + parameter0 +
+                                          ", parameter1=" +
+                                          parameter1 +
+                                          ", parameter2=" +
+                                          parameter2);
   }
 
-  public void in(String methodName, String parameter0, String parameter1,
-      String[] parameter2) {
+  public void in(String methodName,
+                 String parameter0,
+                 String parameter1,
+                 String[] parameter2) {
     String message = "parameter0=" + parameter0 + ", parameter1=" + parameter1;
     if (parameter2 != null) {
       message += ", parameter2=String[" + parameter2.length + "]{ ";
@@ -84,8 +94,9 @@ public class Trace implements Serializable {
   }
 
   public void out(String methodName, boolean result) {
-    TraceDevice.getInstance().traceOut(_className, methodName,
-        Boolean.toString(result));
+    TraceDevice.getInstance().traceOut(_className,
+                                       methodName,
+                                       Boolean.toString(result));
   }
 
   public void out(String methodName, String result) {

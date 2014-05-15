@@ -54,11 +54,10 @@ public class BuildSIDLAction implements IWorkbenchWindowActionDelegate {
   public void run(IAction action) {
     for (IProject project : selection) {
       Assert.isTrue(project.isOpen());
-      MessageBox dialog = new MessageBox(shell, SWT.ICON_QUESTION | SWT.OK |
-          SWT.CANCEL);
+      MessageBox dialog =
+          new MessageBox(shell, SWT.ICON_QUESTION | SWT.OK | SWT.CANCEL);
       dialog.setText("Warning");
-      dialog
-          .setMessage("Rebuilding the current project needs to reinitiate the project workbench files! Are your sure?");
+      dialog.setMessage("Rebuilding the current project needs to reinitiate the project workbench files! Are your sure?");
 
       if (dialog.open() == SWT.OK) {
 
@@ -66,8 +65,9 @@ public class BuildSIDLAction implements IWorkbenchWindowActionDelegate {
           ProjectBuilder.getInstance().removeProject(project);
           System.gc();
           ProjectBuilder.getInstance().createProject(project);
-          ProjectBuilder.getInstance().getProject(project)
-              .buildProjectSources();
+          ProjectBuilder.getInstance()
+                        .getProject(project)
+                        .buildProjectSources();
         } catch (ASCoDTException e) {
           ErrorWriterDevice.getInstance().println(e);
         }
@@ -82,28 +82,27 @@ public class BuildSIDLAction implements IWorkbenchWindowActionDelegate {
     this.selection.clear();
 
     if (selection instanceof IStructuredSelection) {
-      IStructuredSelection structuredSelection = (IStructuredSelection)selection;
-      for (Iterator<Object> iterator = structuredSelection.iterator(); iterator
-          .hasNext();) {
+      IStructuredSelection structuredSelection =
+          (IStructuredSelection)selection;
+      for (Iterator<Object> iterator = structuredSelection.iterator(); iterator.hasNext();) {
 
         Object element = iterator.next();
 
         try {
           if (element instanceof DiagramEditPart) {
-            IEditorPart part = ((DefaultEditDomain)((DiagramEditPart)element)
-                .getViewer().getEditDomain()).getEditorPart();
+            IEditorPart part =
+                ((DefaultEditDomain)((DiagramEditPart)element).getViewer()
+                                                              .getEditDomain()).getEditorPart();
 
             IFile file_element = null;
-            if (part != null &&
-                part.getEditorInput() instanceof IFileEditorInput) {
-              file_element = ((IFileEditorInput)part.getEditorInput())
-                  .getFile();
+            if (part != null && part.getEditorInput() instanceof IFileEditorInput) {
+              file_element =
+                  ((IFileEditorInput)part.getEditorInput()).getFile();
 
               try {
-                if (file_element != null &&
-                    file_element instanceof IResource &&
-                    ((IResource)file_element).getProject().hasNature(
-                        ASCoDTNature.ID)) {
+                if (file_element != null && file_element instanceof IResource &&
+                    ((IResource)file_element).getProject()
+                                             .hasNature(ASCoDTNature.ID)) {
                   this.selection.add(((IResource)file_element).getProject());
                 }
               } catch (CoreException e) {
@@ -111,16 +110,16 @@ public class BuildSIDLAction implements IWorkbenchWindowActionDelegate {
               }
             }
           }
-          if (element instanceof Project &&
-              ((Project)element).getEclipseProjectHandle().isOpen()) {
+          if (element instanceof Project && ((Project)element).getEclipseProjectHandle()
+                                                              .isOpen()) {
             this.selection.add(((Project)element).getEclipseProjectHandle());
           }
           if (element instanceof IProject && ((IProject)element).isOpen()) {
             this.selection.add((IProject)element);
           }
 
-          if (element instanceof IResource &&
-              ((IResource)element).getProject().isOpen() &&
+          if (element instanceof IResource && ((IResource)element).getProject()
+                                                                  .isOpen() &&
               ((IResource)element).getProject().hasNature(ASCoDTNature.ID)) {
             this.selection.add(((IResource)element).getProject());
           }
@@ -132,12 +131,14 @@ public class BuildSIDLAction implements IWorkbenchWindowActionDelegate {
     }
 
     if (selection instanceof TextSelection) {
-      IEditorPart activeEditor = PlatformUI.getWorkbench()
-          .getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+      IEditorPart activeEditor =
+          PlatformUI.getWorkbench()
+                    .getActiveWorkbenchWindow()
+                    .getActivePage()
+                    .getActiveEditor();
 
       IFile element = null;
-      if (activeEditor != null &&
-          activeEditor.getEditorInput() instanceof IFileEditorInput) {
+      if (activeEditor != null && activeEditor.getEditorInput() instanceof IFileEditorInput) {
         element = ((IFileEditorInput)activeEditor.getEditorInput()).getFile();
       }
 

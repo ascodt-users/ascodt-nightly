@@ -15,9 +15,8 @@ public final class AParameterArrayInEnumParameter extends PParameter {
     // Constructor
   }
 
-  public AParameterArrayInEnumParameter(
-      @SuppressWarnings("hiding") PUserDefinedType _type_,
-      @SuppressWarnings("hiding") TIdentifier _name_) {
+  public AParameterArrayInEnumParameter(@SuppressWarnings("hiding") PUserDefinedType _type_,
+                                        @SuppressWarnings("hiding") TIdentifier _name_) {
     // Constructor
     setType(_type_);
 
@@ -33,7 +32,7 @@ public final class AParameterArrayInEnumParameter extends PParameter {
   @Override
   public Object clone() {
     return new AParameterArrayInEnumParameter(cloneNode(_type_),
-        cloneNode(_name_));
+                                              cloneNode(_name_));
   }
 
   public TIdentifier getName() {
@@ -62,7 +61,7 @@ public final class AParameterArrayInEnumParameter extends PParameter {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     if (_type_ == oldChild) {
       setType((PUserDefinedType)newChild);

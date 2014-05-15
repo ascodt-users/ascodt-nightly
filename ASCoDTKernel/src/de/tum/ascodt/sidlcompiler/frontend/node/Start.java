@@ -16,7 +16,7 @@ public final class Start extends Node {
   }
 
   public Start(@SuppressWarnings("hiding") PDeclaration _pDeclaration_,
-      @SuppressWarnings("hiding") EOF _eof_) {
+               @SuppressWarnings("hiding") EOF _eof_) {
     setPDeclaration(_pDeclaration_);
     setEOF(_eof_);
   }

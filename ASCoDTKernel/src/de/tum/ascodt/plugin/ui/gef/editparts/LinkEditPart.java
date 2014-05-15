@@ -20,7 +20,7 @@ import de.tum.ascodt.plugin.ui.gef.model.ModelElement;
 
 
 public class LinkEditPart extends AbstractConnectionEditPart implements
-    PropertyChangeListener {
+                                                            PropertyChangeListener {
 
   /**
    * Upon activation, attach to the model element as a property change listener.
@@ -37,7 +37,7 @@ public class LinkEditPart extends AbstractConnectionEditPart implements
   protected void createEditPolicies() {
     // Makes the connection show a feedback, when selected by the user.
     installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE,
-        new ConnectionEndpointEditPolicy());
+                      new ConnectionEndpointEditPolicy());
     installEditPolicy(EditPolicy.CONNECTION_ROLE, new ConnectionEditPolicy() {
       @Override
       protected Command getDeleteCommand(GroupRequest request) {
@@ -89,8 +89,7 @@ public class LinkEditPart extends AbstractConnectionEditPart implements
   public void propertyChange(PropertyChangeEvent event) {
     String property = event.getPropertyName();
     if (Link.LINESTYLE_PROP.equals(property)) {
-      ((PolylineConnection)getFigure()).setLineStyle(getCastedModel()
-          .getLineStyle());
+      ((PolylineConnection)getFigure()).setLineStyle(getCastedModel().getLineStyle());
     }
     refreshVisuals();
   }

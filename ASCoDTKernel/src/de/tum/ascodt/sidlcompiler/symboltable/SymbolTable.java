@@ -59,7 +59,7 @@ public class SymbolTable {
   }
 
   public void setScope(de.tum.ascodt.sidlcompiler.frontend.node.Node node,
-      Scope scope) {
+                       Scope scope) {
     _mapping.put(Scope.getSymbol(node), scope);
   }
 }

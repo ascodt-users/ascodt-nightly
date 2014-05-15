@@ -59,9 +59,11 @@ public abstract class ContainerTab {
 
   void createContent() {
 
-    tabFolderPageScrolled = new ScrolledComposite(ASCoDTKernel.getDefault()
-        .getUIservice().getContainer(_parentContainerID), SWT.V_SCROLL |
-        SWT.H_SCROLL);
+    tabFolderPageScrolled =
+        new ScrolledComposite(ASCoDTKernel.getDefault()
+                                          .getUIservice()
+                                          .getContainer(_parentContainerID),
+                              SWT.V_SCROLL | SWT.H_SCROLL);
     tabFolderPage = new Composite(tabFolderPageScrolled, SWT.NONE);
 
     // which goes as content to the scrolled composite
@@ -71,20 +73,22 @@ public abstract class ContainerTab {
     tabFolderPageScrolled.setExpandVertical(true);
     tabFolderPageScrolled.setExpandHorizontal(true);
     tabFolderPageScrolled.setMinHeight(tabFolderPage.computeSize(SWT.DEFAULT,
-        SWT.DEFAULT).y);
+                                                                 SWT.DEFAULT).y);
     tabFolderPageScrolled.addControlListener(new ControlAdapter() {
       @Override
       public void controlResized(ControlEvent e) {
         // recalculate height in case the resize makes texts
         // // wrap or things happen that require it
-        tabFolderPageScrolled.setMinHeight(tabFolderPage.computeSize(
-            SWT.DEFAULT, SWT.DEFAULT).y);
+        tabFolderPageScrolled.setMinHeight(tabFolderPage.computeSize(SWT.DEFAULT,
+                                                                     SWT.DEFAULT).y);
       }
     });
     // create user content
 
-    ASCoDTKernel.getDefault().getUIservice().getContainer(_parentContainerID)
-        .setLayout(new FillLayout());
+    ASCoDTKernel.getDefault()
+                .getUIservice()
+                .getContainer(_parentContainerID)
+                .setLayout(new FillLayout());
     _contentCreated = true;
     redraw();
   }
@@ -159,8 +163,11 @@ public abstract class ContainerTab {
           if (!_contentCreated) {
             createContent();
           }
-          _tabItem = new TabItem(ASCoDTKernel.getDefault().getUIservice()
-              .getContainer(_parentContainerID), SWT.FILL);
+          _tabItem =
+              new TabItem(ASCoDTKernel.getDefault()
+                                      .getUIservice()
+                                      .getContainer(_parentContainerID),
+                          SWT.FILL);
           _tabItem.setText(_label);
           _tabItem.setControl(tabFolderPageScrolled);
         }

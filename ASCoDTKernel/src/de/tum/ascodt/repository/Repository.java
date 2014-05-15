@@ -22,7 +22,7 @@ class NonSerializableRepository {
  * @author Tobias Weinzierl
  */
 public class Repository extends NonSerializableRepository implements
-    Serializable {
+                                                         Serializable {
 
   /**
    * default serialisation id
@@ -60,8 +60,7 @@ public class Repository extends NonSerializableRepository implements
   public void informListenersAboutChangedComponents() {
     for (RepositoryListener listener : _myListeners) {
       listener.begin();
-      for (Entry<String, String> componentEntry : _componentInterfaces
-          .entrySet()) {
+      for (Entry<String, String> componentEntry : _componentInterfaces.entrySet()) {
         listener.notify(componentEntry.getKey(), componentEntry.getValue());
       }
       listener.end();

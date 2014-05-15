@@ -32,10 +32,12 @@
 #ifdef Parallel
 #include <mpi.h>
 #endif
-	
+
 #include "__PATH_FULL_QUALIFIED_NAME__Implementation.h"
 
 __COMPONENT_NAME_ENV___arg daemon_args;
+
+using namespace ascodt;
 
 void writeTime(std::ostream& o) {
   time_t t = time(0);

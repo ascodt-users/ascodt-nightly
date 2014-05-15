@@ -43,7 +43,7 @@ public class StickyNoteFigure extends BentCornerFigure {
     textFlow = new TextFlow();
 
     textFlow.setLayoutManager(new ParagraphTextLayout(textFlow,
-        ParagraphTextLayout.WORD_WRAP_SOFT));
+                                                      ParagraphTextLayout.WORD_WRAP_SOFT));
     flowPage.add(textFlow);
 
     setLayoutManager(new StackLayout());

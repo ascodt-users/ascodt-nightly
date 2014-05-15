@@ -14,7 +14,8 @@ import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
 public final class AClassPackageElement extends PPackageElement {
   private TIdentifier _target_;
   private TIdentifier _name_;
-  private final LinkedList<PUserDefinedType> _provides_ = new LinkedList<PUserDefinedType>();
+  private final LinkedList<PUserDefinedType> _provides_ =
+      new LinkedList<PUserDefinedType>();
   private final LinkedList<PUses> _uses_ = new LinkedList<PUses>();
 
   public AClassPackageElement() {
@@ -22,9 +23,9 @@ public final class AClassPackageElement extends PPackageElement {
   }
 
   public AClassPackageElement(@SuppressWarnings("hiding") TIdentifier _target_,
-      @SuppressWarnings("hiding") TIdentifier _name_,
-      @SuppressWarnings("hiding") List<PUserDefinedType> _provides_,
-      @SuppressWarnings("hiding") List<PUses> _uses_) {
+                              @SuppressWarnings("hiding") TIdentifier _name_,
+                              @SuppressWarnings("hiding") List<PUserDefinedType> _provides_,
+                              @SuppressWarnings("hiding") List<PUses> _uses_) {
     // Constructor
     setTarget(_target_);
 
@@ -43,8 +44,10 @@ public final class AClassPackageElement extends PPackageElement {
 
   @Override
   public Object clone() {
-    return new AClassPackageElement(cloneNode(_target_), cloneNode(_name_),
-        cloneList(_provides_), cloneList(_uses_));
+    return new AClassPackageElement(cloneNode(_target_),
+                                    cloneNode(_name_),
+                                    cloneList(_provides_),
+                                    cloneList(_uses_));
   }
 
   public TIdentifier getName() {
@@ -89,7 +92,7 @@ public final class AClassPackageElement extends PPackageElement {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     if (_target_ == oldChild) {
       setTarget((TIdentifier)newChild);
@@ -101,8 +104,7 @@ public final class AClassPackageElement extends PPackageElement {
       return;
     }
 
-    for (ListIterator<PUserDefinedType> i = _provides_.listIterator(); i
-        .hasNext();) {
+    for (ListIterator<PUserDefinedType> i = _provides_.listIterator(); i.hasNext();) {
       if (i.next() == oldChild) {
         if (newChild != null) {
           i.set((PUserDefinedType)newChild);
@@ -193,7 +195,9 @@ public final class AClassPackageElement extends PPackageElement {
 
   @Override
   public String toString() {
-    return "" + toString(_target_) + toString(_name_) + toString(_provides_) +
-        toString(_uses_);
+    return "" + toString(_target_) +
+           toString(_name_) +
+           toString(_provides_) +
+           toString(_uses_);
   }
 }

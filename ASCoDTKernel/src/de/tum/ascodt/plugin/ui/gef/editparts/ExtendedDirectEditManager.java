@@ -42,7 +42,9 @@ public class ExtendedDirectEditManager extends DirectEditManager {
    *          the CellEditorLocator
    */
   public ExtendedDirectEditManager(GraphicalEditPart source,
-      Class<?> editorType, CellEditorLocator locator, Label label) {
+                                   Class<?> editorType,
+                                   CellEditorLocator locator,
+                                   Label label) {
     super(source, editorType, locator);
     this.label = label;
     originalValue = label.getText();
@@ -79,8 +81,8 @@ public class ExtendedDirectEditManager extends DirectEditManager {
       // possible flicker
       getCellEditor().getControl().setVisible(false);
       if (isDirty()) {
-        CommandStack stack = getEditPart().getViewer().getEditDomain()
-            .getCommandStack();
+        CommandStack stack =
+            getEditPart().getViewer().getEditDomain().getCommandStack();
         Command command = getEditPart().getCommand(getDirectEditRequest());
 
         if (command != null && command.canExecute()) {

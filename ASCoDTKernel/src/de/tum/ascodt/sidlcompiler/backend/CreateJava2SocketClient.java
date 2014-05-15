@@ -1,8 +1,8 @@
 package de.tum.ascodt.sidlcompiler.backend;
 
 
-import java.io.File;
-import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -35,13 +35,13 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * 
  */
 public class CreateJava2SocketClient extends DepthFirstAdapter {
-  private Trace _trace = new Trace(
-      CreateJava2SocketClient.class.getCanonicalName());
+  private Trace _trace =
+      new Trace(CreateJava2SocketClient.class.getCanonicalName());
   private Stack<TemplateFile> _templateFilesForAbstractComponent;
   private Stack<TemplateFile> _templateFilesForJavaBasisImplementation;
   private Stack<TemplateFile> _templateFilesForJavaImplementation;
-  private URL _userImplementationsDestinationDirectory;
-  private URL _generatedFilesDirectory;
+  private Path _sourcesDirectoryPath;
+  private Path _javaDirectoryPath;
 
   private String[] _namespace;
   private SymbolTable _symbolTable;
@@ -52,21 +52,22 @@ public class CreateJava2SocketClient extends DepthFirstAdapter {
    * @see inAClassPackageElement()
    */
   private boolean _generateProvidesMethods;
-  private String _fullQualifiedName;
+  private String _fullyQualifiedComponentName;
   private HashMap<String, Integer> _operationMap;
   private String _fullQualifiedPortName;
   private String _language;
 
   CreateJava2SocketClient(SymbolTable symbolTable,
-      URL userImplementationsDestinationDirectory, URL generatedFilesDirectory,
-      URL nativeDirectory, String[] namespace,
-      HashMap<String, Integer> operationMap, String language) {
+                          Path sourcesDirectoryPath,
+                          Path componentsDirectoryPath,
+                          String[] namespace,
+                          HashMap<String, Integer> operationMap,
+                          String language) {
     _templateFilesForAbstractComponent = new Stack<TemplateFile>();
     _templateFilesForJavaBasisImplementation = new Stack<TemplateFile>();
     _templateFilesForJavaImplementation = new Stack<TemplateFile>();
-
-    _userImplementationsDestinationDirectory = userImplementationsDestinationDirectory;
-    _generatedFilesDirectory = generatedFilesDirectory;
+    _sourcesDirectoryPath = sourcesDirectoryPath;
+    _javaDirectoryPath = componentsDirectoryPath.resolve("java");
     _namespace = namespace;
     _symbolTable = symbolTable;
     _operationMap = operationMap;
@@ -80,81 +81,64 @@ public class CreateJava2SocketClient extends DepthFirstAdapter {
    * @return
    */
   public String getFullQualifiedNameOfTheComponentImplementation() {
-    return _fullQualifiedName + "JavaImplementation";
+    return _fullyQualifiedComponentName + "JavaImplementation";
   }
 
   @Override
   public void inAClassPackageElement(AClassPackageElement node) {
     _trace.in("inAClassPackageElement(...)", "open new port interface");
-    try {
-      String componentName = node.getName().getText();
-      String fullQualifiedNameOfJava2AppAdapter = _symbolTable.getScope(node)
-          .getFullyQualifiedName(componentName) + "AbstractJavaImplementation";
-      String fullQualifiedNameOfJavaBasisImplementation = _symbolTable
-          .getScope(node).getFullyQualifiedName(componentName) +
-          "BasisJavaImplementation";
-      String fullQualifiedNameOfJavaImplementation = _symbolTable
-          .getScope(node).getFullyQualifiedName(componentName) +
-          "JavaImplementation";
 
-      _fullQualifiedName = _symbolTable.getScope(node).getFullyQualifiedName(
-          componentName);
-      String templateFileForJava2AppAdapter = "java-remote-client-component-implementation.template";
-      String templateFileForJavaBasisImplementaion = "basis-java-implementation.template";
-      String templateFileForJavaImplementaion = "java-component-java-implementation.template";
-      String destiationForJava2AppAdapter = _generatedFilesDirectory.toString() +
-          File.separatorChar +
-          fullQualifiedNameOfJava2AppAdapter.replaceAll("[.]", "/") + ".java";
-      String destiationForJavaBasisImplementation = _userImplementationsDestinationDirectory
-          .toString() +
-          File.separatorChar +
-          fullQualifiedNameOfJavaBasisImplementation.replaceAll("[.]", "/") +
-          ".java";
-      String destiationForJavaImplementation = _userImplementationsDestinationDirectory
-          .toString() +
-          File.separatorChar +
-          fullQualifiedNameOfJavaImplementation.replaceAll("[.]", "/") +
-          ".java";
+    String componentName = node.getName().getText();
+    _fullyQualifiedComponentName =
+        _symbolTable.getScope(node).getFullyQualifiedName(componentName);
 
-      _templateFilesForAbstractComponent.push(new TemplateFile(
-          templateFileForJava2AppAdapter, destiationForJava2AppAdapter,
-          _namespace, TemplateFile.getLanguageConfigurationForJava(), true));
-      _templateFilesForJavaBasisImplementation.push(new TemplateFile(
-          templateFileForJavaBasisImplementaion,
-          destiationForJavaBasisImplementation, _namespace, TemplateFile
-              .getLanguageConfigurationForJava(), true));
-      _templateFilesForJavaImplementation.push(new TemplateFile(
-          templateFileForJavaImplementaion, destiationForJavaImplementation,
-          _namespace, TemplateFile.getLanguageConfigurationForJava(), false));
-      _templateFilesForAbstractComponent.peek().addMapping(
-          "__COMPONENT_NAME__", componentName);
-      _templateFilesForAbstractComponent.peek().addMapping(
-          "__FULLY_QUALIFIED_COMPONENT_NAME__", _fullQualifiedName);
-      _templateFilesForAbstractComponent.peek().addMapping(
-          "__SOCKET_CLIENT_UI__", SocketClientAppsTab.class.getCanonicalName());
-      _templateFilesForAbstractComponent.peek().addMapping(
-          "__APPS_CONTAINER__", AppsViewContainer.class.getCanonicalName());
-      _templateFilesForJavaBasisImplementation.peek().addMapping(
-          "__COMPONENT_NAME__", componentName);
-      _templateFilesForJavaImplementation.peek().addMapping(
-          "__COMPONENT_NAME__", componentName);
-      _templateFilesForJavaBasisImplementation.peek().addMapping(
-          "__FULL_QUALIFIED_COMPONENT_NAME__", _fullQualifiedName);
+    _templateFilesForAbstractComponent.push(new TemplateFile(Paths.get("java-remote-client-component-implementation.template"),
+                                                             _javaDirectoryPath.resolve(_fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                "/") + "AbstractJavaImplementation.java"),
+                                                             _namespace,
+                                                             TemplateFile.getLanguageConfigurationForJava(),
+                                                             true));
+    _templateFilesForJavaBasisImplementation.push(new TemplateFile(Paths.get("basis-java-implementation.template"),
+                                                                   _sourcesDirectoryPath.resolve(_fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                         "/") + "BasisJavaImplementation.java"),
+                                                                   _namespace,
+                                                                   TemplateFile.getLanguageConfigurationForJava(),
+                                                                   true));
+    _templateFilesForJavaImplementation.push(new TemplateFile(Paths.get("java-component-java-implementation.template"),
+                                                              _sourcesDirectoryPath.resolve(_fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                    "/") + "JavaImplementation.java"),
+                                                              _namespace,
+                                                              TemplateFile.getLanguageConfigurationForJava(),
+                                                              false));
+    _templateFilesForAbstractComponent.peek().addMapping("__COMPONENT_NAME__",
+                                                         componentName);
+    _templateFilesForAbstractComponent.peek()
+                                      .addMapping("__FULLY_QUALIFIED_COMPONENT_NAME__",
+                                                  _fullyQualifiedComponentName);
+    _templateFilesForAbstractComponent.peek()
+                                      .addMapping("__SOCKET_CLIENT_UI__",
+                                                  SocketClientAppsTab.class.getCanonicalName());
+    _templateFilesForAbstractComponent.peek()
+                                      .addMapping("__APPS_CONTAINER__",
+                                                  AppsViewContainer.class.getCanonicalName());
+    _templateFilesForJavaBasisImplementation.peek()
+                                            .addMapping("__COMPONENT_NAME__",
+                                                        componentName);
+    _templateFilesForJavaImplementation.peek().addMapping("__COMPONENT_NAME__",
+                                                          componentName);
+    _templateFilesForJavaBasisImplementation.peek()
+                                            .addMapping("__FULL_QUALIFIED_COMPONENT_NAME__",
+                                                        _fullyQualifiedComponentName);
 
-      _templateFilesForAbstractComponent.peek().addMapping("__LANG__",
-          _language);
-      _templateFilesForAbstractComponent.peek().open();
-      _templateFilesForJavaBasisImplementation.peek().open();
-      _templateFilesForJavaImplementation.peek().open();
-      _generateProvidesMethods = true;
-      for (PUserDefinedType definedType : node.getProvides()) {
-        definedType.apply(this);
-      }
-      _generateProvidesMethods = false;
-
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
+    _templateFilesForAbstractComponent.peek().addMapping("__LANG__", _language);
+    _templateFilesForAbstractComponent.peek().open();
+    _templateFilesForJavaBasisImplementation.peek().open();
+    _templateFilesForJavaImplementation.peek().open();
+    _generateProvidesMethods = true;
+    for (PUserDefinedType definedType : node.getProvides()) {
+      definedType.apply(this);
     }
+    _generateProvidesMethods = false;
 
     _trace.out("inAClassPackageElement(...)", "open new port interface");
   }
@@ -163,29 +147,28 @@ public class CreateJava2SocketClient extends DepthFirstAdapter {
   public void inAOperation(AOperation node) {
     Assert.isTrue(_generateProvidesMethods);
     try {
-      String templateJavaImplementationFile = "java-remote-client-server-component-implementation-provides-port.template";
-      TemplateFile javaImplementationTemplate = new TemplateFile(
-          _templateFilesForAbstractComponent.peek(),
-          templateJavaImplementationFile);
+      TemplateFile javaImplementationTemplate =
+          new TemplateFile(_templateFilesForAbstractComponent.peek(),
+                           Paths.get("java-remote-client-server-component-implementation-provides-port.template"));
 
       ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
       node.apply(onlyInParameters);
 
-      GetParameterList parameterList = new GetParameterList(
-          _symbolTable.getScope(node));
+      GetParameterList parameterList =
+          new GetParameterList(_symbolTable.getScope(node));
       node.apply(parameterList);
 
-      javaImplementationTemplate.addMapping("__OPERATION_NAME__", node
-          .getName().getText());
+      javaImplementationTemplate.addMapping("__OPERATION_NAME__",
+                                            node.getName().getText());
       javaImplementationTemplate.addMapping("__OPERATION_PARAMETERS_LIST__",
-          parameterList.getParameterListInJava(onlyInParameters
-              .areAllParametersInParameters()));
-      javaImplementationTemplate.addMapping("__OPERATION_ID__", "" +
-          _operationMap.get(_fullQualifiedPortName + node.getName().getText()));
+                                            parameterList.getParameterListInJava(onlyInParameters.areAllParametersInParameters()));
+      javaImplementationTemplate.addMapping("__OPERATION_ID__",
+                                            "" + _operationMap.get(_fullQualifiedPortName + node.getName()
+                                                                                                .getText()));
       javaImplementationTemplate.addMapping("__SOCKET_PULL__",
-          parameterList.pullOutFromSocketForJava());
+                                            parameterList.pullOutFromSocketForJava());
       javaImplementationTemplate.addMapping("__SOCKET_PUSH__",
-          parameterList.pushInToSocketForJava());
+                                            parameterList.pushInToSocketForJava());
       javaImplementationTemplate.open();
       javaImplementationTemplate.close();
 
@@ -197,11 +180,11 @@ public class CreateJava2SocketClient extends DepthFirstAdapter {
   @Override
   public void inAUserDefinedType(AUserDefinedType node) {
     String fullQualifiedSymbol = Scope.getSymbol(node);
-    AInterfacePackageElement interfaceNode = _symbolTable.getScope(node)
-        .getInterfaceDefinition(fullQualifiedSymbol);
+    AInterfacePackageElement interfaceNode =
+        _symbolTable.getScope(node).getInterfaceDefinition(fullQualifiedSymbol);
     String portName = interfaceNode.getName().getText();
-    _fullQualifiedPortName = _symbolTable.getScope(interfaceNode)
-        .getFullyQualifiedName(portName);
+    _fullQualifiedPortName =
+        _symbolTable.getScope(interfaceNode).getFullyQualifiedName(portName);
     if (_generateProvidesMethods) {
       if (interfaceNode != null) {
         interfaceNode.apply(this);
@@ -217,25 +200,27 @@ public class CreateJava2SocketClient extends DepthFirstAdapter {
   public void inAUses(AUses node) {
     _trace.in("inAUses(AUses)", node.toString());
     try {
-      GetProvidesAndUsesPortsOfComponent getPorts = new GetProvidesAndUsesPortsOfComponent();
+      GetProvidesAndUsesPortsOfComponent getPorts =
+          new GetProvidesAndUsesPortsOfComponent();
       node.apply(getPorts);
       ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
       node.apply(onlyInParameters);
 
       String portType = getPorts.getUsesPorts("", ".");
       String portName = node.getAs().getText();
-      String templateFile = "java-remote-client-server-component-implementation-uses-port.template";
-      TemplateFile template = new TemplateFile(
-          _templateFilesForAbstractComponent.peek(), templateFile);
+
+      TemplateFile template =
+          new TemplateFile(_templateFilesForAbstractComponent.peek(),
+                           Paths.get("java-remote-client-server-component-implementation-uses-port.template"));
       template.addMapping("__USES_PORT_AS__", portName);
       template.addMapping("__USES_PORT_TYPE__", portType);
 
       template.addMapping("__CREATE_PORT_ID__",
-          "" + _operationMap.get(portType + "createPort"));
+                          "" + _operationMap.get(portType + "createPort"));
       template.addMapping("__CONNECT_DISPATCHER_PORT_ID__",
-          "" + _operationMap.get(portType + "connectPort"));
-      template.addMapping("__DISCONNECT_DISPATCHER_PORT_ID__", "" +
-          _operationMap.get(portType + "disconnectPort"));
+                          "" + _operationMap.get(portType + "connectPort"));
+      template.addMapping("__DISCONNECT_DISPATCHER_PORT_ID__",
+                          "" + _operationMap.get(portType + "disconnectPort"));
       // template.addMapping("__CONNECT_PORT_ID__",""+_operationId++);
       // template.addMapping("__DISCONNECT_PORT_ID__",""+_operationId++);
       template.open();
@@ -254,14 +239,10 @@ public class CreateJava2SocketClient extends DepthFirstAdapter {
     Assert.isTrue(_templateFilesForAbstractComponent.size() == 1);
     Assert.isTrue(_templateFilesForJavaBasisImplementation.size() == 1);
     Assert.isTrue(_templateFilesForJavaImplementation.size() == 1);
-    try {
-      _templateFilesForAbstractComponent.peek().close();
-      _templateFilesForJavaImplementation.peek().close();
-      _templateFilesForJavaBasisImplementation.peek().close();
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
-    }
 
+    _templateFilesForAbstractComponent.peek().close();
+    _templateFilesForJavaImplementation.peek().close();
+    _templateFilesForJavaBasisImplementation.peek().close();
     _templateFilesForAbstractComponent.pop();
     _templateFilesForJavaBasisImplementation.pop();
     _templateFilesForJavaImplementation.pop();

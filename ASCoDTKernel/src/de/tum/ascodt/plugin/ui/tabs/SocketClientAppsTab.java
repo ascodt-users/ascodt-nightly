@@ -29,8 +29,9 @@ public class SocketClientAppsTab extends ProgramArgsTab {
   private SocketComponent component;
   private int _daemonPort;
 
-  public SocketClientAppsTab(String label, SocketComponent component,
-      String containerId) {
+  public SocketClientAppsTab(String label,
+                             SocketComponent component,
+                             String containerId) {
     super(label, containerId);
     this.component = component;
     _daemonPort = SocketService.getDefault().getFreePort();
@@ -51,8 +52,9 @@ public class SocketClientAppsTab extends ProgramArgsTab {
     labelHostname.setLayoutData(textGridData);
 
     textHostname = new Text(argsComp, SWT.RIGHT);
-    textHostname.setText(component.getHost() == null ? "127.0.0.1" : component
-        .getHost());
+    textHostname.setText(component.getHost() == null
+                                                    ? "127.0.0.1"
+                                                    : component.getHost());
     textHostname.setLayoutData(textGridData);
 
     Label labelPort = new Label(argsComp, SWT.LEFT);
@@ -88,25 +90,26 @@ public class SocketClientAppsTab extends ProgramArgsTab {
   public String getCommandForExecution() {
     String mpiPrefix = "";
     if (numberOfProcesses.getSelection() > 1) {
-      mpiPrefix = "/home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiexec -np " +
-          numberOfProcesses.getSelection() + " ";
+      mpiPrefix =
+          "/home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiexec -np " + numberOfProcesses.getSelection() +
+              " ";
     }
-    return mpiPrefix + textProgramExecutable.getText() + " " +
-        textProgramArguments.getText();
+    return mpiPrefix + textProgramExecutable.getText() +
+           " " +
+           textProgramArguments.getText();
   }
 
   @Override
   public String[] getEnv() {
-    return new String[] {
-      _label.toUpperCase().replaceAll("[.]", "_") + "_BUFFER_SIZE=" +
-          SocketService.getDefault().getBufferSize(),
-      _label.toUpperCase().replaceAll("[.]", "_") + "_DAEMON_PORT=" +
-          _daemonPort,
-      _label.toUpperCase().replaceAll("[.]", "_") + "_HOSTNAME=" +
-          textHostname.getText(),
-      _label.toUpperCase().replaceAll("[.]", "_") + "_PORT=" +
-          textPort.getText(),
-      _label.toUpperCase().replaceAll("[.]", "_") + "_JAVA=on",};
+    return new String[] {_label.toUpperCase().replaceAll("[.]", "_") + "_BUFFER_SIZE=" +
+                             SocketService.getDefault().getBufferSize(),
+                         _label.toUpperCase().replaceAll("[.]", "_") + "_DAEMON_PORT=" +
+                             _daemonPort,
+                         _label.toUpperCase().replaceAll("[.]", "_") + "_HOSTNAME=" +
+                             textHostname.getText(),
+                         _label.toUpperCase().replaceAll("[.]", "_") + "_PORT=" +
+                             textPort.getText(),
+                         _label.toUpperCase().replaceAll("[.]", "_") + "_JAVA=on",};
   }
 
   public String getHost() {
@@ -116,7 +119,7 @@ public class SocketClientAppsTab extends ProgramArgsTab {
       String getHost() {
         return host;
       }
-      
+
       @Override
       public void run() {
         host = textHostname.getText();

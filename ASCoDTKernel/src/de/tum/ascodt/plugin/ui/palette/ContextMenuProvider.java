@@ -71,8 +71,8 @@ public class ContextMenuProvider extends PaletteContextMenuProvider {
       }
     };
 
-    ActionContributionItem itemDelete = new ActionContributionItem(
-        actionDeleteComponent);
+    ActionContributionItem itemDelete =
+        new ActionContributionItem(actionDeleteComponent);
     menu.add(itemDelete);
 
   }
@@ -86,18 +86,16 @@ public class ContextMenuProvider extends PaletteContextMenuProvider {
     Action actionExportComponent = new Action(Actions.EXPORT_COMPONENT) {
       @Override
       public void run() {
-        Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-            .getShell();
+        Shell shell =
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
         FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
         fileDialog.setText("Export ASCoDT component");
         fileDialog.setFilterExtensions(new String[] {"*.ascodt-component"});
         for (Object item : getPaletteViewer().getSelectedEditParts()) {
-          if (item instanceof EditPart &&
-              ((EditPart)item).getModel() instanceof CombinedTemplateCreationEntry) {
-            CombinedTemplateCreationEntry selectedEntry = (CombinedTemplateCreationEntry)((EditPart)item)
-                .getModel();
-            fileDialog.setFileName(selectedEntry.getLabel() +
-                ".ascodt-component");
+          if (item instanceof EditPart && ((EditPart)item).getModel() instanceof CombinedTemplateCreationEntry) {
+            CombinedTemplateCreationEntry selectedEntry =
+                (CombinedTemplateCreationEntry)((EditPart)item).getModel();
+            fileDialog.setFileName(selectedEntry.getLabel() + ".ascodt-component");
             String destination = fileDialog.open();
             int rc = SWT.OK;
             if (destination != null) {
@@ -106,13 +104,15 @@ public class ContextMenuProvider extends PaletteContextMenuProvider {
 
                 MessageBox messageBox = new MessageBox(shell, style);
                 messageBox.setMessage("A file named \"" + destination +
-                    "\" already exists.  Do you want to replace it?");
+                                      "\" already exists.  Do you want to replace it?");
                 rc = messageBox.open();
               }
               if (rc == SWT.OK) {
                 try {
-                  Exporter.exportBinary(selectedEntry.getLabel(), destination,
-                      _palette.getProject().getEclipseProjectHandle());
+                  Exporter.exportBinary(selectedEntry.getLabel(),
+                                        destination,
+                                        _palette.getProject()
+                                                .getEclipseProjectHandle());
                 } catch (ASCoDTException e) {
                   ErrorWriterDevice.getInstance().println(e);
 
@@ -126,8 +126,8 @@ public class ContextMenuProvider extends PaletteContextMenuProvider {
       }
     };
 
-    ActionContributionItem itemExport = new ActionContributionItem(
-        actionExportComponent);
+    ActionContributionItem itemExport =
+        new ActionContributionItem(actionExportComponent);
     menu.add(itemExport);
 
   }
@@ -141,8 +141,8 @@ public class ContextMenuProvider extends PaletteContextMenuProvider {
     Action actionExportComponent = new Action(Actions.IMPORT_COMPONENT) {
       @Override
       public void run() {
-        Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-            .getShell();
+        Shell shell =
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
         FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
         fileDialog.setText("Import ASCoDT component");
         fileDialog.setFilterExtensions(new String[] {"*.ascodt-component"});
@@ -150,7 +150,7 @@ public class ContextMenuProvider extends PaletteContextMenuProvider {
         if (source != null) {
           try {
             Importer.importBinary(source, _palette.getProject()
-                .getEclipseProjectHandle());
+                                                  .getEclipseProjectHandle());
           } catch (ASCoDTException e) {
             ErrorWriterDevice.getInstance().println(e);
 
@@ -159,8 +159,8 @@ public class ContextMenuProvider extends PaletteContextMenuProvider {
       }
     };
 
-    ActionContributionItem itemImport = new ActionContributionItem(
-        actionExportComponent);
+    ActionContributionItem itemImport =
+        new ActionContributionItem(actionExportComponent);
     menu.add(itemImport);
 
   }

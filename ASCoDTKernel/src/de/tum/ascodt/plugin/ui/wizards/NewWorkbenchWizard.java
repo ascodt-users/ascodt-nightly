@@ -56,14 +56,15 @@ public class NewWorkbenchWizard extends Wizard implements INewWizard {
 
   @Override
   public boolean performFinish() {
-    de.tum.ascodt.plugin.utils.tracing.Trace trace = new de.tum.ascodt.plugin.utils.tracing.Trace(
-        getClass().getName());
+    de.tum.ascodt.plugin.utils.tracing.Trace trace =
+        new de.tum.ascodt.plugin.utils.tracing.Trace(getClass().getName());
     trace.in("performFinish()");
     try {
       String projectIdentifier = _page.getProjectName();
       String workbenchName = _page.getWorkbenchName();
-      ProjectBuilder.getInstance().getProject(projectIdentifier)
-          .createWorkbench(workbenchName);
+      ProjectBuilder.getInstance()
+                    .getProject(projectIdentifier)
+                    .createWorkbench(workbenchName);
 
     } catch (ASCoDTException e) {
       ErrorWriterDevice.getInstance().println(e);

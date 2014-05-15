@@ -13,15 +13,15 @@ import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
 @SuppressWarnings("nls")
 public final class AEnumDeclarationPackageElement extends PPackageElement {
   private TIdentifier _name_;
-  private final LinkedList<PEnumerator> _enumerator_ = new LinkedList<PEnumerator>();
+  private final LinkedList<PEnumerator> _enumerator_ =
+      new LinkedList<PEnumerator>();
 
   public AEnumDeclarationPackageElement() {
     // Constructor
   }
 
-  public AEnumDeclarationPackageElement(
-      @SuppressWarnings("hiding") TIdentifier _name_,
-      @SuppressWarnings("hiding") List<PEnumerator> _enumerator_) {
+  public AEnumDeclarationPackageElement(@SuppressWarnings("hiding") TIdentifier _name_,
+                                        @SuppressWarnings("hiding") List<PEnumerator> _enumerator_) {
     // Constructor
     setName(_name_);
 
@@ -37,7 +37,7 @@ public final class AEnumDeclarationPackageElement extends PPackageElement {
   @Override
   public Object clone() {
     return new AEnumDeclarationPackageElement(cloneNode(_name_),
-        cloneList(_enumerator_));
+                                              cloneList(_enumerator_));
   }
 
   public LinkedList<PEnumerator> getEnumerator() {
@@ -65,7 +65,7 @@ public final class AEnumDeclarationPackageElement extends PPackageElement {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     if (_name_ == oldChild) {
       setName((TIdentifier)newChild);

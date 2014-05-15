@@ -14,8 +14,10 @@ public class NaturePropertyTest extends PropertyTester {
   }
 
   @Override
-  public boolean test(Object receiver, String property, Object[] args,
-      Object expectedValue) {
+  public boolean test(Object receiver,
+                      String property,
+                      Object[] args,
+                      Object expectedValue) {
     IResource res = (IResource)receiver;
 
     IProject project = res.getProject();

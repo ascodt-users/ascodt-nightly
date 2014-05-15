@@ -4,8 +4,8 @@
 package de.tum.ascodt.sidlcompiler.backend;
 
 
-import java.io.File;
-import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Stack;
 
 import org.eclipse.core.runtime.Assert;
@@ -30,13 +30,14 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * 
  */
 public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
-  private static Trace _trace = new Trace(
-      CreateNative2NativePlainPorts.class.getCanonicalName());
+  private static Trace _trace =
+      new Trace(CreateNative2NativePlainPorts.class.getCanonicalName());
 
   private Stack<TemplateFile> _templateJava;
   private Stack<TemplateFile> _templateFilesHeader;
   private Stack<TemplateFile> _templateFilesImplementation;
-  private URL _destinationDirectory;
+  private Path _javaDirectoryPath;
+  private Path _cxxDirectoryPath;
   private String[] _namespace;
 
   private SymbolTable _symbolTable;
@@ -44,11 +45,13 @@ public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
   private boolean _generateSuperport;
 
   public CreateNative2NativePlainPorts(SymbolTable symbolTable,
-      URL destinationDirectory, String[] namespace) {
+                                       Path componentsDirectoryPath,
+                                       String[] namespace) {
     _templateJava = new Stack<TemplateFile>();
     _templateFilesHeader = new Stack<TemplateFile>();
     _templateFilesImplementation = new Stack<TemplateFile>();
-    _destinationDirectory = destinationDirectory;
+    _javaDirectoryPath = componentsDirectoryPath.resolve("java");
+    _cxxDirectoryPath = componentsDirectoryPath.resolve("c++");
     _namespace = namespace;
     _symbolTable = symbolTable;
     _generateSuperport = false;
@@ -59,16 +62,20 @@ public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
    * @param fullQualifiedPortName
    */
   public void addCxxImplementationMappings(String portType,
-      String fullQualifiedPortName) {
-    _templateFilesImplementation.peek().addMapping("__FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "::"));
+                                           String fullQualifiedPortName) {
+    _templateFilesImplementation.peek()
+                                .addMapping("__FULL_QUALIFIED_NAME__",
+                                            fullQualifiedPortName.replaceAll("[.]",
+                                                                             "::"));
     _templateFilesImplementation.peek().addMapping("__PORT_NAME__", portType);
-    _templateFilesImplementation.peek().addMapping(
-        "__PATH_FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "/"));
-    _templateFilesImplementation.peek().addMapping(
-        "__JNI_FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "_"));
+    _templateFilesImplementation.peek()
+                                .addMapping("__PATH_FULL_QUALIFIED_NAME__",
+                                            fullQualifiedPortName.replaceAll("[.]",
+                                                                             "/"));
+    _templateFilesImplementation.peek()
+                                .addMapping("__JNI_FULL_QUALIFIED_NAME__",
+                                            fullQualifiedPortName.replaceAll("[.]",
+                                                                             "_"));
 
   }
 
@@ -77,18 +84,22 @@ public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
    * @param fullQualifiedPortName
    * @throws ASCoDTException
    */
-  public void addMappingHeader(String portName, String fullQualifiedPortName)
-      throws ASCoDTException {
+  public void addMappingHeader(String portName, String fullQualifiedPortName) throws ASCoDTException {
     _templateFilesHeader.peek().addMapping("__PORT_NAME__", portName);
-    _templateFilesHeader.peek().addMapping(
-        "__INCLUDE_GUARD_FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "_").toUpperCase());
-    _templateFilesHeader.peek().addMapping("__FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "::"));
-    _templateFilesHeader.peek().addMapping("__PATH_FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "/"));
-    _templateFilesHeader.peek().addMapping("__JNI_FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "_"));
+    _templateFilesHeader.peek()
+                        .addMapping("__INCLUDE_GUARD_FULL_QUALIFIED_NAME__",
+                                    fullQualifiedPortName.replaceAll("[.]", "_")
+                                                         .toUpperCase());
+    _templateFilesHeader.peek()
+                        .addMapping("__FULL_QUALIFIED_NAME__",
+                                    fullQualifiedPortName.replaceAll("[.]",
+                                                                     "::"));
+    _templateFilesHeader.peek()
+                        .addMapping("__PATH_FULL_QUALIFIED_NAME__",
+                                    fullQualifiedPortName.replaceAll("[.]", "/"));
+    _templateFilesHeader.peek()
+                        .addMapping("__JNI_FULL_QUALIFIED_NAME__",
+                                    fullQualifiedPortName.replaceAll("[.]", "_"));
 
   }
 
@@ -98,7 +109,7 @@ public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
   public void addMappingsJava(String portName) {
     _templateJava.peek().addMapping("__PORT_NAME__", portName);
     _templateJava.peek().addMapping("__NATIVE_COMPONENT__",
-        NativeComponent.class.getCanonicalName());
+                                    NativeComponent.class.getCanonicalName());
   }
 
   @Override
@@ -106,43 +117,32 @@ public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
     _trace.in("inAInterfacePackageElement(...)", "open new port interface");
     try {
       if (!_generateSuperport) {
-        String portName = node.getName().getText();
+        String componentName = node.getName().getText();
+        String fullyQualifiedComponentName =
+            _symbolTable.getScope(node).getFullyQualifiedName(componentName);
 
-        String fullQualifiedPortName = _symbolTable.getScope(node)
-            .getFullyQualifiedName(portName);
+        _templateJava.push(new TemplateFile(Paths.get("java-port-native2native-plain-port.template"),
+                                            _javaDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                              "/") + "Native2NativePlainPort.java"),
+                                            _namespace,
+                                            TemplateFile.getLanguageConfigurationForJava(),
+                                            true));
+        _templateFilesHeader.push(new TemplateFile(Paths.get("cxx-port-native2native-plain-port-header.template"),
+                                                   _cxxDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                    "/") + "Native2NativePlainPort.h"),
+                                                   _namespace,
+                                                   TemplateFile.getLanguageConfigurationForCPP(),
+                                                   true));
+        _templateFilesImplementation.push(new TemplateFile(Paths.get("cxx-port-native2native-plain-port-implementation.template"),
+                                                           _cxxDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                            "/") + "Native2NativePlainPort.cpp"),
+                                                           _namespace,
+                                                           TemplateFile.getLanguageConfigurationForCPP(),
+                                                           true));
 
-        String templateFileJava = "java-port-native2native-plain-port.template";
-        String templateFileHeader = "cxx-port-native2native-plain-port-header.template";
-        String templateFileImplementation = "cxx-port-native2native-plain-port-implementation.template";
-
-        String fullQualifiedComponentName = _symbolTable.getScope(node)
-            .getFullyQualifiedName(portName);
-        String destinationFileJava = _destinationDirectory.toString() +
-            File.separatorChar +
-            fullQualifiedComponentName.replaceAll("[.]", "/") +
-            "Native2NativePlainPort.java";
-        String destinationFileHeader = _destinationDirectory.toString() +
-            File.separatorChar +
-            fullQualifiedComponentName.replaceAll("[.]", "/") +
-            "Native2NativePlainPort.h";
-        String destinationFileImplementation = _destinationDirectory.toString() +
-            File.separatorChar +
-            fullQualifiedComponentName.replaceAll("[.]", "/") +
-            "Native2NativePlainPort.cpp";
-
-        _templateJava.push(new TemplateFile(templateFileJava,
-            destinationFileJava, _namespace, TemplateFile
-                .getLanguageConfigurationForJava(), true));
-        _templateFilesHeader.push(new TemplateFile(templateFileHeader,
-            destinationFileHeader, _namespace, TemplateFile
-                .getLanguageConfigurationForCPP(), true));
-        _templateFilesImplementation.push(new TemplateFile(
-            templateFileImplementation, destinationFileImplementation,
-            _namespace, TemplateFile.getLanguageConfigurationForCPP(), true));
-
-        addMappingsJava(portName);
-        addMappingHeader(portName, fullQualifiedPortName);
-        addCxxImplementationMappings(portName, fullQualifiedPortName);
+        addMappingsJava(componentName);
+        addMappingHeader(componentName, fullyQualifiedComponentName);
+        addCxxImplementationMappings(componentName, fullyQualifiedComponentName);
 
         _templateJava.peek().open();
         _templateFilesHeader.peek().open();
@@ -165,38 +165,36 @@ public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
       ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
       node.apply(onlyInParameters);
 
-      String templateFile = "java-port-native2native-operation-plain-java-implementation.template";
-      String templateFileHeader = "cxx-port-native-operation-plain-header.template";
-      String templateFileImplementation = "cxx-port-native2native-operation-plain-implementation.template";
+      TemplateFile templateJava =
+          new TemplateFile(_templateJava.peek(),
+                           Paths.get("java-port-native2native-operation-plain-java-implementation.template"));
+      TemplateFile templateHeader =
+          new TemplateFile(_templateFilesHeader.peek(),
+                           Paths.get("cxx-port-native-operation-plain-header.template"));
+      TemplateFile templateImplementation =
+          new TemplateFile(_templateFilesImplementation.peek(),
+                           Paths.get("cxx-port-native2native-operation-plain-implementation.template"));
 
-      TemplateFile templateJava = new TemplateFile(_templateJava.peek(),
-          templateFile);
-      TemplateFile templateHeader = new TemplateFile(
-          _templateFilesHeader.peek(), templateFileHeader);
-      TemplateFile templateImplementation = new TemplateFile(
-          _templateFilesImplementation.peek(), templateFileImplementation);
-
-      GetParameterList parameterList = new GetParameterList(
-          _symbolTable.getScope(node));
+      GetParameterList parameterList =
+          new GetParameterList(_symbolTable.getScope(node));
       node.apply(parameterList);
 
       templateHeader.addMapping("__OPERATION_NAME__", node.getName().getText());
       templateHeader.addMapping("__OPERATION_PARAMETERS_LIST__",
-          parameterList.getParameterListInCxx());
+                                parameterList.getParameterListInCxx());
 
       templateImplementation.addMapping("__OPERATION_NAME__", node.getName()
-          .getText());
+                                                                  .getText());
       templateImplementation.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",
-          parameterList.getFunctionCallListInCxx());
+                                        parameterList.getFunctionCallListInCxx());
       templateImplementation.addMapping("__OPERATION_PARAMETERS_LIST__",
-          parameterList.getParameterListInCxx());
+                                        parameterList.getParameterListInCxx());
 
       templateJava.addMapping("__OPERATION_NAME__", node.getName().getText());
-      templateJava.addMapping("__OPERATION_PARAMETERS_LIST__", parameterList
-          .getParameterListInJava(onlyInParameters
-              .areAllParametersInParameters()));
+      templateJava.addMapping("__OPERATION_PARAMETERS_LIST__",
+                              parameterList.getParameterListInJava(onlyInParameters.areAllParametersInParameters()));
       templateJava.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",
-          parameterList.getFunctionCallListInJava());
+                              parameterList.getFunctionCallListInJava());
 
       templateHeader.open();
       templateHeader.close();
@@ -216,8 +214,8 @@ public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
   public void inAUserDefinedType(AUserDefinedType node) {
 
     String fullQualifiedSymbol = Scope.getSymbol(node);
-    AInterfacePackageElement interfaceDefintion = _symbolTable.getScope(node)
-        .getInterfaceDefinition(fullQualifiedSymbol);
+    AInterfacePackageElement interfaceDefintion =
+        _symbolTable.getScope(node).getInterfaceDefinition(fullQualifiedSymbol);
     if (interfaceDefintion != null) {
       _generateSuperport = true;
       interfaceDefintion.apply(this);
@@ -229,15 +227,9 @@ public class CreateNative2NativePlainPorts extends DepthFirstAdapter {
   public void outAInterfacePackageElement(AInterfacePackageElement node) {
     Assert.isTrue(_templateJava.size() == 1);
     if (!_generateSuperport) {
-      try {
-
-        _templateJava.peek().close();
-        _templateFilesHeader.peek().close();
-        _templateFilesImplementation.peek().close();
-      } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().println(e);
-      }
-
+      _templateJava.peek().close();
+      _templateFilesHeader.peek().close();
+      _templateFilesImplementation.peek().close();
       _templateJava.pop();
       _templateFilesHeader.pop();
       _templateFilesImplementation.pop();

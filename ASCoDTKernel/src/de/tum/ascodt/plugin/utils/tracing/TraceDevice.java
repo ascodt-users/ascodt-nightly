@@ -40,11 +40,17 @@ public class TraceDevice {
     }
   }
 
-  private void writeStream(String prefix, String className, String methodName,
-      String message) {
-    ConsoleDevice
-        .getInstance()
-        .getConsole(_traceConsolveIdentifier)
-        .println(prefix + "\t" + className + "\t" + methodName + "\t" + message);
+  private void writeStream(String prefix,
+                           String className,
+                           String methodName,
+                           String message) {
+    ConsoleDevice.getInstance()
+                 .getConsole(_traceConsolveIdentifier)
+                 .println(prefix + "\t" +
+                          className +
+                          "\t" +
+                          methodName +
+                          "\t" +
+                          message);
   }
 }

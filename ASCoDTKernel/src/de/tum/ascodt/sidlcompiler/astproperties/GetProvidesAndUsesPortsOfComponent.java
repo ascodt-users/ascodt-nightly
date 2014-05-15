@@ -4,7 +4,6 @@ package de.tum.ascodt.sidlcompiler.astproperties;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.tum.ascodt.plugin.ui.gef.model.UsePort;
 import de.tum.ascodt.plugin.utils.tracing.Trace;
 import de.tum.ascodt.sidlcompiler.frontend.analysis.DepthFirstAdapter;
 import de.tum.ascodt.sidlcompiler.frontend.node.AUserDefinedType;
@@ -13,8 +12,8 @@ import de.tum.ascodt.sidlcompiler.symboltable.Scope;
 
 
 public class GetProvidesAndUsesPortsOfComponent extends DepthFirstAdapter {
-  private static Trace _trace = new Trace(
-      "de.tum.ascodt.sidlcompiler.astproperties.GetProvidesAndUsesPortsOfComponent");
+  private static Trace _trace =
+      new Trace("de.tum.ascodt.sidlcompiler.astproperties.GetProvidesAndUsesPortsOfComponent");
 
   /**
    * Entries are separated by .
@@ -27,8 +26,9 @@ public class GetProvidesAndUsesPortsOfComponent extends DepthFirstAdapter {
   private java.util.Map<String, String> _usesPorts;
   private boolean _currentlyInProvidesPort;
   private String _portName;
-  private HashMap<String,Integer> _functionTable;
-  public GetProvidesAndUsesPortsOfComponent(HashMap<String,Integer> functionTable) {
+  private HashMap<String, Integer> _functionTable;
+
+  public GetProvidesAndUsesPortsOfComponent(HashMap<String, Integer> functionTable) {
     _trace.in("GetProvidesAndUsesPortsOfComponent(SymbolTable)");
     _providesPorts = new java.util.HashSet<String>();
     _usesPorts = new java.util.HashMap<String, String>();
@@ -36,6 +36,7 @@ public class GetProvidesAndUsesPortsOfComponent extends DepthFirstAdapter {
     _functionTable = functionTable;
     _trace.out("GetProvidesAndUsesPortsOfComponent(SymbolTable)");
   }
+
   public GetProvidesAndUsesPortsOfComponent() {
     _trace.in("GetProvidesAndUsesPortsOfComponent(SymbolTable)");
     _providesPorts = new java.util.HashSet<String>();
@@ -43,8 +44,10 @@ public class GetProvidesAndUsesPortsOfComponent extends DepthFirstAdapter {
     _currentlyInProvidesPort = true;
     _trace.out("GetProvidesAndUsesPortsOfComponent(SymbolTable)");
   }
+
   private String getListOfPorts(String listSeparator,
-      String namespaceSeparator, java.util.Collection<String> collection) {
+                                String namespaceSeparator,
+                                java.util.Collection<String> collection) {
     String result = "";
 
     for (String currentPort : collection) {
@@ -58,12 +61,14 @@ public class GetProvidesAndUsesPortsOfComponent extends DepthFirstAdapter {
   }
 
   private String getListOfPortsWithAsIdentifiers(String listSeparator,
-      String namespaceSeparator, Map<String, String> usePorts) {
+                                                 String namespaceSeparator,
+                                                 Map<String, String> usePorts) {
     String result = "";
 
     for (java.util.Map.Entry<String, String> currentPort : usePorts.entrySet()) {
-      result += currentPort.getKey() + listSeparator +
-          currentPort.getValue().replaceAll("[.]", namespaceSeparator);
+      result +=
+          currentPort.getKey() + listSeparator +
+              currentPort.getValue().replaceAll("[.]", namespaceSeparator);
       result += listSeparator;
     }
     if (result.lastIndexOf(listSeparator) != -1) {
@@ -82,61 +87,79 @@ public class GetProvidesAndUsesPortsOfComponent extends DepthFirstAdapter {
    *          of the result list.
    * @return List of provides ports.
    */
-  public String
-      getProvidesPorts(String listSeparator, String namespaceSeparator) {
-    _trace.in("getProvidesPorts(...)", listSeparator, namespaceSeparator,
-        Integer.toString(_providesPorts.size()));
-    String result = getListOfPorts(listSeparator, namespaceSeparator,
-        _providesPorts);
+  public String getProvidesPorts(String listSeparator, String namespaceSeparator) {
+    _trace.in("getProvidesPorts(...)",
+              listSeparator,
+              namespaceSeparator,
+              Integer.toString(_providesPorts.size()));
+    String result =
+        getListOfPorts(listSeparator, namespaceSeparator, _providesPorts);
     _trace.out("getProvidesPorts(...)", result);
     return result;
   }
 
   public String getUsesPorts(String listSeparator, String namespaceSeparator) {
-    _trace.in("getUsesPorts(...)", listSeparator, namespaceSeparator, Integer
-        .toString(new java.util.HashSet<String>(_usesPorts.values()).size()));
-    String result = getListOfPorts(listSeparator, namespaceSeparator,
-        new java.util.HashSet<String>(_usesPorts.values()));
+    _trace.in("getUsesPorts(...)",
+              listSeparator,
+              namespaceSeparator,
+              Integer.toString(new java.util.HashSet<String>(_usesPorts.values()).size()));
+    String result =
+        getListOfPorts(listSeparator,
+                       namespaceSeparator,
+                       new java.util.HashSet<String>(_usesPorts.values()));
     _trace.out("getUsesPorts(...)", result);
     return result;
   }
 
   public String getUsesPortsAndAsIdentifiers(String listSeparator,
-      String namespaceSeparator) {
-    _trace.in("getUsesPortsAndAsIdentifiers(...)", listSeparator,
-        namespaceSeparator, Integer.toString(_usesPorts.size()));
-    String result = getListOfPortsWithAsIdentifiers(listSeparator,
-        namespaceSeparator, _usesPorts);
+                                             String namespaceSeparator) {
+    _trace.in("getUsesPortsAndAsIdentifiers(...)",
+              listSeparator,
+              namespaceSeparator,
+              Integer.toString(_usesPorts.size()));
+    String result =
+        getListOfPortsWithAsIdentifiers(listSeparator,
+                                        namespaceSeparator,
+                                        _usesPorts);
     _trace.out("getUsesPortsAndAsIdentifiers(...)", result);
 
     return result;
   }
+
   public String getUsesPortsConnectOffsets() {
-   String ports_as_string = getUsesPortsAndAsIdentifiers(",", ".");
-   String res="";
-   String delim="";
-   if (!ports_as_string.equals("")) {
+    String ports_as_string = getUsesPortsAndAsIdentifiers(",", ".");
+    String res = "";
+    String delim = "";
+    if (!ports_as_string.equals("")) {
       if (ports_as_string.contains(",")) {
         String[] usePortsArray = ports_as_string.split(",");
         for (int i = 0; i < usePortsArray.length; i += 2) {
-          System.out.println("usc port:"+usePortsArray[i+1]);  
-          res=res+delim+_functionTable.get(usePortsArray[i+1] + "createPort");
-          delim=",";
-          res=res+delim+_functionTable.get(usePortsArray[i+1] + "connectPort");
-          res=res+delim+_functionTable.get(usePortsArray[i+1] + "disconnectPort");
-        
+          System.out.println("usc port:" + usePortsArray[i + 1]);
+          res =
+              res + delim +
+                  _functionTable.get(usePortsArray[i + 1] + "createPort");
+          delim = ",";
+          res =
+              res + delim +
+                  _functionTable.get(usePortsArray[i + 1] + "connectPort");
+          res =
+              res + delim +
+                  _functionTable.get(usePortsArray[i + 1] + "disconnectPort");
+
         }
       }
     }
 
     return res;
   }
+
   @Override
   public void inAUserDefinedType(AUserDefinedType node) {
     String portSymbol = Scope.getSymbol(node);
 
     _trace.in("inAUserDefinedType(...)",
-        Boolean.toString(_currentlyInProvidesPort), portSymbol);
+              Boolean.toString(_currentlyInProvidesPort),
+              portSymbol);
     if (_currentlyInProvidesPort) {
       _providesPorts.add(portSymbol);
     } else {

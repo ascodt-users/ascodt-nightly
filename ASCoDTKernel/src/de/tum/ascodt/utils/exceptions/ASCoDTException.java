@@ -37,8 +37,10 @@ public class ASCoDTException extends java.lang.Exception {
    *          Exceptions wrapped by this exception if there is any. Otherwise
    *          null.
    */
-  public ASCoDTException(String className, String methodName, String message,
-      Throwable cause) {
+  public ASCoDTException(String className,
+                         String methodName,
+                         String message,
+                         Throwable cause) {
     super(message);
     _className = className;
     _methodName = methodName;

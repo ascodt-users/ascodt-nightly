@@ -77,8 +77,7 @@ class TokenIndex extends AnalysisAdapter {
   }
 
   @Override
-  public void caseTDecimalConstant(
-      @SuppressWarnings("unused") TDecimalConstant node) {
+  public void caseTDecimalConstant(@SuppressWarnings("unused") TDecimalConstant node) {
     index = 27;
   }
 
@@ -113,8 +112,7 @@ class TokenIndex extends AnalysisAdapter {
   }
 
   @Override
-  public void caseTImplementsToken(
-      @SuppressWarnings("unused") TImplementsToken node) {
+  public void caseTImplementsToken(@SuppressWarnings("unused") TImplementsToken node) {
     index = 23;
   }
 
@@ -124,8 +122,7 @@ class TokenIndex extends AnalysisAdapter {
   }
 
   @Override
-  public void caseTInterfaceToken(
-      @SuppressWarnings("unused") TInterfaceToken node) {
+  public void caseTInterfaceToken(@SuppressWarnings("unused") TInterfaceToken node) {
     index = 21;
   }
 
@@ -140,8 +137,7 @@ class TokenIndex extends AnalysisAdapter {
   }
 
   @Override
-  public void
-      caseTLAngleBracket(@SuppressWarnings("unused") TLAngleBracket node) {
+  public void caseTLAngleBracket(@SuppressWarnings("unused") TLAngleBracket node) {
     index = 0;
   }
 
@@ -166,8 +162,7 @@ class TokenIndex extends AnalysisAdapter {
   }
 
   @Override
-  public void
-      caseTRAngleBracket(@SuppressWarnings("unused") TRAngleBracket node) {
+  public void caseTRAngleBracket(@SuppressWarnings("unused") TRAngleBracket node) {
     index = 1;
   }
 
@@ -187,8 +182,7 @@ class TokenIndex extends AnalysisAdapter {
   }
 
   @Override
-  public void caseTSignedDecimalNumber(
-      @SuppressWarnings("unused") TSignedDecimalNumber node) {
+  public void caseTSignedDecimalNumber(@SuppressWarnings("unused") TSignedDecimalNumber node) {
     index = 28;
   }
 

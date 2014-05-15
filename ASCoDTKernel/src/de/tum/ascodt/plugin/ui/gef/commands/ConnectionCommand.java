@@ -7,7 +7,6 @@ import java.util.Vector;
 import javax.swing.SwingUtilities;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.swt.widgets.Display;
 
 import de.tum.ascodt.plugin.ui.gef.model.Component;
 import de.tum.ascodt.plugin.ui.gef.model.Connection;
@@ -41,8 +40,8 @@ public class ConnectionCommand extends Command {
       while (i.hasNext()) {
         Connection conn = i.next();
         if (targetPort != null && conn.getTargetPort() != null) {
-          if (conn.getTargetPort().equals(targetPort) &&
-              conn.getTarget().equals(target)) {
+          if (conn.getTargetPort().equals(targetPort) && conn.getTarget()
+                                                             .equals(target)) {
             return false;
           }
         }

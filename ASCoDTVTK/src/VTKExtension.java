@@ -19,12 +19,18 @@ public class VTKExtension implements Project {
   @Override
   public void addClasspathEntries(Set<IClasspathEntry> classpathEntries) {
     try {
-      classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager
-          .getResourceAsPath("vtk.jar", ASCoDTVTKPlugin.ID)
-          .getPath()), null, null, false));
-      classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager
-          .getResourceAsPath("", ASCoDTVTKPlugin.ID).getPath()), null, null,
-          false));
+      classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("vtk.jar",
+                                                                                               ASCoDTVTKPlugin.ID)
+                                                                            .toString()),
+                                                    null,
+                                                    null,
+                                                    false));
+      classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("",
+                                                                                               ASCoDTVTKPlugin.ID)
+                                                                            .toString()),
+                                                    null,
+                                                    null,
+                                                    false));
     } catch (IOException e) {
       e.printStackTrace();
     }

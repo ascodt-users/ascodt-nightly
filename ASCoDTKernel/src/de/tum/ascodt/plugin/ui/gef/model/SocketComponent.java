@@ -1,6 +1,8 @@
 package de.tum.ascodt.plugin.ui.gef.model;
 
+
 import javax.xml.bind.annotation.XmlAttribute;
+
 
 public class SocketComponent extends Component {
 
@@ -15,16 +17,18 @@ public class SocketComponent extends Component {
   public int getPort() {
     return port;
   }
-  public void setPort(int port){
-    this.port=port;
+
+  public void setPort(int port) {
+    this.port = port;
   }
+
   @XmlAttribute(name = "host")
   public String getHost() {
     return host;
   }
-  public void setHost(String host){
-    this.host=host;
+
+  public void setHost(String host) {
+    this.host = host;
   }
 
-  
 }

@@ -19,7 +19,8 @@ public class ComponentDirectEditPolicy extends DirectEditPolicy {
    */
   @Override
   protected Command getDirectEditCommand(DirectEditRequest request) {
-    ResetReferenceForComponentCommand cmd = new ResetReferenceForComponentCommand();
+    ResetReferenceForComponentCommand cmd =
+        new ResetReferenceForComponentCommand();
     Component component = (Component)getHost().getModel();
     cmd.setSource(component);
     cmd.setOldReference(component.getReference());

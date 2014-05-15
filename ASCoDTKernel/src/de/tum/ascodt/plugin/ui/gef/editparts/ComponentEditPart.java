@@ -49,7 +49,8 @@ import de.tum.ascodt.plugin.ui.gef.model.Port;
  * 
  */
 public class ComponentEditPart extends AbstractGraphicalEditPart implements
-    NodeEditPart, PropertyChangeListener {
+                                                                NodeEditPart,
+                                                                PropertyChangeListener {
   protected DirectEditManager manager;
   private double cachedZoom = -1.0;
   private String _projectName;
@@ -73,8 +74,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
     if (!isActive()) {
       super.activate();
       ((ModelElement)getModel()).addPropertyChangeListener(this);
-      ZoomManager zoomMgr = (ZoomManager)getViewer().getProperty(
-          ZoomManager.class.toString());
+      ZoomManager zoomMgr =
+          (ZoomManager)getViewer().getProperty(ZoomManager.class.toString());
       if (zoomMgr != null) {
         // this will force the font to be set
         cachedZoom = -1.0;
@@ -90,7 +91,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
   private void commitNameChange(PropertyChangeEvent evt) {
     EditableLabel componentLabel = getComponentLabel();
     componentLabel.setText(getCastedModel().getReference() + ":" +
-        getCastedModel().getComponentName());
+                           getCastedModel().getComponentName());
     setSelected(EditPart.SELECTED_PRIMARY);
     componentLabel.revalidate();
   }
@@ -112,17 +113,21 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
     installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy());
 
     installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-        new ComponentDirectEditPolicy());
+                      new ComponentDirectEditPolicy());
     installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE,
-        new ComponentConnectionPolicy());
+                      new ComponentConnectionPolicy());
   }
 
   @Override
   protected IFigure createFigure() {
-    return new ComponentFigure(getCastedModel().hasGUI(), getCastedModel()
-        .isRemote(), getCastedModel().getReference(), getCastedModel()
-        .getComponentName(), null, getCastedModel().getUsePorts(),
-        getCastedModel().getProvidePorts(), _projectName);
+    return new ComponentFigure(getCastedModel().hasGUI(),
+                               getCastedModel().isRemote(),
+                               getCastedModel().getReference(),
+                               getCastedModel().getComponentName(),
+                               null,
+                               getCastedModel().getUsePorts(),
+                               getCastedModel().getProvidePorts(),
+                               _projectName);
   }
 
   /**
@@ -134,8 +139,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
     if (isActive()) {
       super.deactivate();
       getCastedModel().removePropertyChangeListener(this);
-      ZoomManager zoomMgr = (ZoomManager)getViewer().getProperty(
-          ZoomManager.class.toString());
+      ZoomManager zoomMgr =
+          (ZoomManager)getViewer().getProperty(ZoomManager.class.toString());
       if (zoomMgr != null) {
         zoomMgr.removeZoomListener(zoomListener);
       }
@@ -210,8 +215,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
    * @return ConnectionAnchor.
    */
   @Override
-  public ConnectionAnchor getSourceConnectionAnchor(
-      final ConnectionEditPart connEditPart) {
+  public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connEditPart) {
     if (connEditPart instanceof LinkEditPart) {
       getComponentFigure().setLink(true);
       return new ChopboxAnchor(getComponentFigure());
@@ -230,9 +234,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
    */
   @Override
   public ConnectionAnchor getSourceConnectionAnchor(Request request) {
-    if (request instanceof CreateConnectionRequest &&
-        ((CreateConnectionRequest)request).getNewObjectType().equals(
-            Link.DASH_CONNECTION)) {
+    if (request instanceof CreateConnectionRequest && ((CreateConnectionRequest)request).getNewObjectType()
+                                                                                        .equals(Link.DASH_CONNECTION)) {
       getComponentFigure().setLink(true);
       return new ChopboxAnchor(getComponentFigure());
     } else {
@@ -249,8 +252,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
    * @return ConnectionAnchor.
    */
   @Override
-  public ConnectionAnchor getTargetConnectionAnchor(
-      ConnectionEditPart connEditPart) {
+  public ConnectionAnchor getTargetConnectionAnchor(ConnectionEditPart connEditPart) {
     Connection conn = (Connection)connEditPart.getModel();
     return getComponentFigure().getConnectionAnchor(conn.getTargetPort());
   }
@@ -287,8 +289,11 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
     if (manager == null) {
 
       Label l = getComponentLabel();
-      manager = new ExtendedDirectEditManager(this, TextCellEditor.class,
-          new LabelCellEditorLocator(l), l);
+      manager =
+          new ExtendedDirectEditManager(this,
+                                        TextCellEditor.class,
+                                        new LabelCellEditorLocator(l),
+                                        l);
     }
     manager.show();
   }
@@ -296,18 +301,15 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
   @Override
   public void performRequest(Request request) {
     if (request.getType().equals(RequestConstants.REQ_DIRECT_EDIT)) {
-      if (request instanceof DirectEditRequest &&
-          !directEditHitTest(((DirectEditRequest)request).getLocation()
-              .getCopy())) {
+      if (request instanceof DirectEditRequest && !directEditHitTest(((DirectEditRequest)request).getLocation()
+                                                                                                 .getCopy())) {
         return;
       }
       performDirectEdit();
     } else if (request.getType().equals(RequestConstants.REQ_OPEN)) {
-      getViewer()
-          .getEditDomain()
-          .getCommandStack()
-          .execute(
-              getEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE).getCommand(request));
+      getViewer().getEditDomain()
+                 .getCommandStack()
+                 .execute(getEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE).getCommand(request));
 
     } else if (request.getType().equals(RequestConstants.REQ_CONNECTION_START)) {
 
@@ -318,8 +320,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     String prop = evt.getPropertyName();
-    if (Component.SIZE_PROP.equals(prop) ||
-        Component.LOCATION_PROP.equals(prop)) {
+    if (Component.SIZE_PROP.equals(prop) || Component.LOCATION_PROP.equals(prop)) {
       refreshVisuals();
     } else if (Component.REFERENCE_PROP.equals(prop)) {
       commitNameChange(evt);
@@ -343,10 +344,12 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
     // and will not draw it correctly.
     ((ComponentFigure)getFigure()).setCCAValid(getCastedModel().isValid());
     ((ComponentFigure)getFigure()).repaint();
-    Rectangle bounds = new Rectangle(getCastedModel().getLocation(),
-        getCastedModel().getSize());
-    ((GraphicalEditPart)getParent()).setLayoutConstraint(this, getFigure(),
-        bounds);
+    Rectangle bounds =
+        new Rectangle(getCastedModel().getLocation(),
+                      getCastedModel().getSize());
+    ((GraphicalEditPart)getParent()).setLayoutConstraint(this,
+                                                         getFigure(),
+                                                         bounds);
     super.refreshVisuals();
   }
 
@@ -389,9 +392,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
     if (request instanceof CreateConnectionRequest) {
       ConnectionAnchor ctor = getSourceConnectionAnchor(request);
       if (ctor != null && ctor instanceof PortAnchor) {
-        ((DiagramEditPart)getParent()).markCompatibleTargets(
-            ((ComponentFigure)getFigure()).getModelForAnchor((PortAnchor)ctor),
-            this);
+        ((DiagramEditPart)getParent()).markCompatibleTargets(((ComponentFigure)getFigure()).getModelForAnchor((PortAnchor)ctor),
+                                                             this);
       }
 
     }

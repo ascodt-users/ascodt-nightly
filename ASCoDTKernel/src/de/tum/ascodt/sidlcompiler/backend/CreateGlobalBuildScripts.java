@@ -1,10 +1,7 @@
 package de.tum.ascodt.sidlcompiler.backend;
 
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +9,6 @@ import java.util.Stack;
 
 import org.eclipse.core.runtime.Assert;
 
-import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
 import de.tum.ascodt.repository.Target;
 import de.tum.ascodt.sidlcompiler.frontend.analysis.DepthFirstAdapter;
 import de.tum.ascodt.sidlcompiler.frontend.node.AClassPackageElement;
@@ -49,7 +45,7 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
     _fullyQualifiedComponentNames = new LinkedList<String>();
   }
 
-  private void closeOutputStreams() throws ASCoDTException {
+  private void closeOutputStreams() {
     StringBuilder sb = new StringBuilder();
 
     for (String fullQualifiedName : _fullyQualifiedComponentNames) {
@@ -69,37 +65,19 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
     String subdirectories = sb.toString();
 
     _templateFilesOfGlobalCMakeFile.peek().addMapping("__SUBDIRECTORIES__",
-        subdirectories);
+                                                      subdirectories);
     _templateFilesOfGlobalCMakeFile.peek().open();
 
     Assert.isTrue(_templateFilesOfGlobalCMakeFile.size() == 1);
-    try {
-      _templateFilesOfGlobalCMakeFile.peek().close();
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
-    }
 
+    _templateFilesOfGlobalCMakeFile.peek().close();
     _templateFilesOfGlobalCMakeFile.pop();
   }
 
-  public void create(URL generatedFilesDestinationDirectory,
-      URL userImplementedFilesDestinationDirectory,
-      URL nativeDestinationDirectory) throws ASCoDTException {
-    URL projectDirectory = null;
-    try {
-      projectDirectory = Paths
-          .get(userImplementedFilesDestinationDirectory.toURI()).getParent()
-          .toUri().toURL();
-    } catch (MalformedURLException e) {
-      ErrorWriterDevice.getInstance().println(e);
-    } catch (URISyntaxException e) {
-      ErrorWriterDevice.getInstance().println(e);
-    }
-
-    openOutputStreams(generatedFilesDestinationDirectory, projectDirectory,
-        nativeDestinationDirectory);
+  public void create(Path projectDirectoryPath, Path componentsDirectoryPath) {
+    openOutputStreams(projectDirectoryPath, componentsDirectoryPath);
     for (AClassPackageElement component : _symbolTable.getGlobalScope()
-        .getFlattenedClassElements()) {
+                                                      .getFlattenedClassElements()) {
       component.apply(this);
     }
     closeOutputStreams();
@@ -111,8 +89,8 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
   @Override
   public void inAClassPackageElement(AClassPackageElement node) {
     String componentName = node.getName().getText();
-    String fullyQualifiedComponentName = _symbolTable.getScope(node)
-        .getFullyQualifiedName(componentName);
+    String fullyQualifiedComponentName =
+        _symbolTable.getScope(node).getFullyQualifiedName(componentName);
     if (!Target.isJavaLocal(node.getTarget().getText())) {
       _fullyQualifiedComponentNames.add(fullyQualifiedComponentName);
     }
@@ -134,24 +112,21 @@ public class CreateGlobalBuildScripts extends DepthFirstAdapter {
    * @param nativeDestinationDirectory
    * @throws ASCoDTException
    */
-  private void openOutputStreams(URL generatedFilesDestinationDirectory,
-      URL projectDirectory, URL nativeDestinationDirectory)
-      throws ASCoDTException {
+  private void openOutputStreams(Path projectDirectoryPath,
+                                 Path componentsDirectoryPath) {
     _fullyQualifiedComponentNames.clear();
 
-    String templateFileForGlobalCmake = "cmakefile-cxx-global.template";
-    String templateFileForGlobalComponentHeader = "component.template";
-    String destinationFileForGlobalCmake = projectDirectory.toString() +
-        File.separatorChar + "CMakeLists.txt";
-    String destinationFileForGlobalComponentHeader = generatedFilesDestinationDirectory
-        .toString() + File.separatorChar + "Component.h";
-    _templateFilesOfGlobalCMakeFile.push(new TemplateFile(
-        templateFileForGlobalCmake, destinationFileForGlobalCmake, null,
-        TemplateFile.getLanguageConfigurationForCPP(), true));
-    _templateFilesOfComponent.push(new TemplateFile(
-        templateFileForGlobalComponentHeader,
-        destinationFileForGlobalComponentHeader, null, TemplateFile
-            .getLanguageConfigurationForCPP(), true));
+    _templateFilesOfGlobalCMakeFile.push(new TemplateFile(Paths.get("cmakefile-cxx-global.template"),
+                                                          projectDirectoryPath.resolve("CMakeLists.txt"),
+                                                          null,
+                                                          TemplateFile.getLanguageConfigurationForCPP(),
+                                                          true));
+    _templateFilesOfComponent.push(new TemplateFile(Paths.get("component.template"),
+                                                    componentsDirectoryPath.resolve("c++")
+                                                                           .resolve("Component.h"),
+                                                    null,
+                                                    TemplateFile.getLanguageConfigurationForCPP(),
+                                                    true));
     _templateFilesOfComponent.peek().open();
     _templateFilesOfComponent.peek().close();
     _templateFilesOfComponent.pop();

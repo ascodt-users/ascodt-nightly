@@ -20,8 +20,9 @@ public class SocketServerAppsTab extends ProgramArgsTab {
 
   private SocketComponent component;
 
-  public SocketServerAppsTab(String label, SocketComponent component,
-      String containerId) {
+  public SocketServerAppsTab(String label,
+                             SocketComponent component,
+                             String containerId) {
     super(label, containerId);
     this.component = component;
 
@@ -69,7 +70,7 @@ public class SocketServerAppsTab extends ProgramArgsTab {
   @Override
   public String getCommandForExecution() {
     return textProgramExecutable.getText() + " " +
-        textProgramArguments.getText();
+           textProgramArguments.getText();
   }
 
   @Override

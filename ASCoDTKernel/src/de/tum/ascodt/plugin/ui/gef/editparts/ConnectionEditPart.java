@@ -28,7 +28,7 @@ import de.tum.ascodt.plugin.ui.gef.model.Connection;
  * @author Elias Volanakis
  */
 public class ConnectionEditPart extends AbstractConnectionEditPart implements
-    PropertyChangeListener {
+                                                                  PropertyChangeListener {
 
   /**
    * Upon activation, attach to the model element as a property change listener.
@@ -51,12 +51,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements
     // Selection handle edit policy.
     // Makes the connection show a feedback, when selected by the user.
     installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE,
-        new ConnectionEndpointEditPolicy());
+                      new ConnectionEndpointEditPolicy());
     // Allows the removal of the connection model element
     installEditPolicy(EditPolicy.CONNECTION_ROLE, new ConnectionEditPolicy() {
       @Override
       protected Command getDeleteCommand(GroupRequest request) {
-        de.tum.ascodt.plugin.ui.gef.commands.ConnectionCommand cmd = new de.tum.ascodt.plugin.ui.gef.commands.ConnectionCommand();
+        de.tum.ascodt.plugin.ui.gef.commands.ConnectionCommand cmd =
+            new de.tum.ascodt.plugin.ui.gef.commands.ConnectionCommand();
         cmd.setConnection((Connection)getHost().getModel());
         return cmd;
       }

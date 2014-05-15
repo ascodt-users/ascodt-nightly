@@ -38,7 +38,7 @@ public class ASTEquals extends DepthFirstAdapter {
 
   public boolean ASTsAreEqual() {
     return _isInCompareMode && _differenceDescription.equals("") &&
-        _queue.isEmpty();
+           _queue.isEmpty();
   }
 
   public String getDifferenceDescription() {
@@ -54,32 +54,41 @@ public class ASTEquals extends DepthFirstAdapter {
       String numberOfUses = _queue.poll();
       String target = _queue.poll();
       if (classIdentifier == null || !classIdentifier.equals("class")) {
-        _differenceDescription += "expected class but got " + classIdentifier +
-            "\n";
+        _differenceDescription +=
+            "expected class but got " + classIdentifier + "\n";
       }
       if (className == null || !className.equals(node.getName().getText())) {
-        _differenceDescription += "expected class " + className + " but got " +
-            node.getName() + "\n";
+        _differenceDescription +=
+            "expected class " + className + " but got " + node.getName() + "\n";
       }
-      if (numberOfProvides == null ||
-          Integer.parseInt(numberOfProvides) != node.getProvides().size()) {
+      if (numberOfProvides == null || Integer.parseInt(numberOfProvides) != node.getProvides()
+                                                                                .size()) {
 
-        _differenceDescription += "expected " + numberOfProvides +
-            " provides ports but got " + node.getProvides().size() + "\n";
+        _differenceDescription +=
+            "expected " + numberOfProvides +
+                " provides ports but got " +
+                node.getProvides().size() +
+                "\n";
       }
-      if (numberOfUses == null ||
-          Integer.parseInt(numberOfUses) != node.getUses().size()) {
-        _differenceDescription += "expected " + numberOfUses +
-            " uses ports but got " + node.getUses().size() + "\n";
+      if (numberOfUses == null || Integer.parseInt(numberOfUses) != node.getUses()
+                                                                        .size()) {
+        _differenceDescription +=
+            "expected " + numberOfUses +
+                " uses ports but got " +
+                node.getUses().size() +
+                "\n";
       }
       if (node.getTarget() != null) {
         if (!node.getTarget().getText().equals(target)) {
-          _differenceDescription += "expected " + target +
-              " uses ports but got " + node.getTarget().getText() + "\n";
+          _differenceDescription +=
+              "expected " + target +
+                  " uses ports but got " +
+                  node.getTarget().getText() +
+                  "\n";
         }
       } else if (!target.equals("no-target")) {
-        _differenceDescription += "expected no target for class but got " +
-            target + "\n";
+        _differenceDescription +=
+            "expected no target for class but got " + target + "\n";
       }
 
     } else {
@@ -102,17 +111,23 @@ public class ASTEquals extends DepthFirstAdapter {
       String className = _queue.poll();
       String numberOfSuperTypes = _queue.poll();
       if (classIdentifier == null || !classIdentifier.equals("interface")) {
-        _differenceDescription += "expected interface but got " +
-            classIdentifier + "\n";
+        _differenceDescription +=
+            "expected interface but got " + classIdentifier + "\n";
       }
       if (className == null || !className.equals(node.getName().getText())) {
-        _differenceDescription += "expected interface " + className +
-            " but got " + node.getName() + "\n";
+        _differenceDescription +=
+            "expected interface " + className +
+                " but got " +
+                node.getName() +
+                "\n";
       }
-      if (numberOfSuperTypes == null ||
-          Integer.parseInt(numberOfSuperTypes) != node.getSupertype().size()) {
-        _differenceDescription += "expected " + numberOfSuperTypes +
-            " super types but got " + node.getSupertype().size() + "\n";
+      if (numberOfSuperTypes == null || Integer.parseInt(numberOfSuperTypes) != node.getSupertype()
+                                                                                    .size()) {
+        _differenceDescription +=
+            "expected " + numberOfSuperTypes +
+                " super types but got " +
+                node.getSupertype().size() +
+                "\n";
       }
     } else {
       _queue.add("interface");
@@ -127,20 +142,24 @@ public class ASTEquals extends DepthFirstAdapter {
       String operationIdentifier = _queue.poll();
       String name = _queue.poll();
       String numberOfArgumentsAsString = _queue.poll();
-      if (operationIdentifier == null ||
-          !operationIdentifier.equals("operation")) {
-        _differenceDescription += "expected operation but got " +
-            operationIdentifier + "\n";
+      if (operationIdentifier == null || !operationIdentifier.equals("operation")) {
+        _differenceDescription +=
+            "expected operation but got " + operationIdentifier + "\n";
       }
       if (name == null || !name.equals(node.getName().getText())) {
-        _differenceDescription += "expected operation name " + name +
-            " but got " + node.getName().getText() + "\n";
+        _differenceDescription +=
+            "expected operation name " + name +
+                " but got " +
+                node.getName().getText() +
+                "\n";
       }
-      if (numberOfArgumentsAsString == null ||
-          Integer.parseInt(numberOfArgumentsAsString) != node.getParameter()
-              .size()) {
-        _differenceDescription += "expected " + numberOfArgumentsAsString +
-            " parameters but got " + node.getParameter().size() + "\n";
+      if (numberOfArgumentsAsString == null || Integer.parseInt(numberOfArgumentsAsString) != node.getParameter()
+                                                                                                  .size()) {
+        _differenceDescription +=
+            "expected " + numberOfArgumentsAsString +
+                " parameters but got " +
+                node.getParameter().size() +
+                "\n";
       }
     } else {
       _queue.add("operation");
@@ -151,7 +170,8 @@ public class ASTEquals extends DepthFirstAdapter {
 
   @Override
   public void inAPackage(APackage node) {
-    _differenceDescription += "got a subpackage, but operation AST equals is not defined on subpackages \n";
+    _differenceDescription +=
+        "got a subpackage, but operation AST equals is not defined on subpackages \n";
   }
 
   @Override
@@ -160,18 +180,23 @@ public class ASTEquals extends DepthFirstAdapter {
       String parameterIdentifier = _queue.poll();
       String name = _queue.poll();
       String type = _queue.poll();
-      if (parameterIdentifier == null ||
-          !parameterIdentifier.equals("in-array-parameter")) {
-        _differenceDescription += "expected in array parameter but got " +
-            parameterIdentifier + "\n";
+      if (parameterIdentifier == null || !parameterIdentifier.equals("in-array-parameter")) {
+        _differenceDescription +=
+            "expected in array parameter but got " + parameterIdentifier + "\n";
       }
       if (name == null || !name.equals(node.getName().getText())) {
-        _differenceDescription += "expected parameter with name " + name +
-            " but got " + node.getName().getText() + "\n";
+        _differenceDescription +=
+            "expected parameter with name " + name +
+                " but got " +
+                node.getName().getText() +
+                "\n";
       }
       if (type == null || !type.equals(node.getType().toString())) {
-        _differenceDescription += "expected parameter type " + type +
-            " but got " + node.getType().toString() + "\n";
+        _differenceDescription +=
+            "expected parameter type " + type +
+                " but got " +
+                node.getType().toString() +
+                "\n";
       }
     } else {
       _queue.add("in-array-parameter");
@@ -185,18 +210,24 @@ public class ASTEquals extends DepthFirstAdapter {
       String parameterIdentifier = _queue.poll();
       String name = _queue.poll();
       String type = _queue.poll();
-      if (parameterIdentifier == null ||
-          !parameterIdentifier.equals("out-array")) {
-        _differenceDescription += "expected out array parameter but got " +
-            parameterIdentifier + "\n";
+      if (parameterIdentifier == null || !parameterIdentifier.equals("out-array")) {
+        _differenceDescription +=
+            "expected out array parameter but got " + parameterIdentifier +
+                "\n";
       }
       if (name == null || !name.equals(node.getName().getText())) {
-        _differenceDescription += "expected parameter with name " + name +
-            " but got " + node.getName().getText() + "\n";
+        _differenceDescription +=
+            "expected parameter with name " + name +
+                " but got " +
+                node.getName().getText() +
+                "\n";
       }
       if (type == null || !type.equals(node.getType().toString())) {
-        _differenceDescription += "expected parameter type " + type +
-            " but got " + node.getType().toString() + "\n";
+        _differenceDescription +=
+            "expected parameter type " + type +
+                " but got " +
+                node.getType().toString() +
+                "\n";
       }
     } else {
       _queue.add("out-array-parameter");
@@ -211,19 +242,25 @@ public class ASTEquals extends DepthFirstAdapter {
       String parameterIdentifier = _queue.poll();
       String name = _queue.poll();
       String type = _queue.poll();
-      if (parameterIdentifier == null ||
-          !parameterIdentifier.equals("in-parameter")) {
-        _differenceDescription += "expected in parameter but got " +
-            parameterIdentifier + "\n";
+      if (parameterIdentifier == null || !parameterIdentifier.equals("in-parameter")) {
+        _differenceDescription +=
+            "expected in parameter but got " + parameterIdentifier + "\n";
       }
       if (name == null || !name.equals(node.getName().getText())) {
-        _differenceDescription += "expected parameter with name " + name +
-            " but got " + node.getName().getText() + "\n";
+        _differenceDescription +=
+            "expected parameter with name " + name +
+                " but got " +
+                node.getName().getText() +
+                "\n";
       }
-      if (type == null ||
-          !type.equals(node.getType().getClass().getCanonicalName())) {
-        _differenceDescription += "expected parameter type " + type +
-            " but got " + node.getType().toString() + "\n";
+      if (type == null || !type.equals(node.getType()
+                                           .getClass()
+                                           .getCanonicalName())) {
+        _differenceDescription +=
+            "expected parameter type " + type +
+                " but got " +
+                node.getType().toString() +
+                "\n";
       }
     } else {
       _queue.add("in-parameter");
@@ -237,18 +274,23 @@ public class ASTEquals extends DepthFirstAdapter {
       String parameterIdentifier = _queue.poll();
       String name = _queue.poll();
       String type = _queue.poll();
-      if (parameterIdentifier == null ||
-          !parameterIdentifier.equals("out-parameter")) {
-        _differenceDescription += "expected out parameter but got " +
-            parameterIdentifier + "\n";
+      if (parameterIdentifier == null || !parameterIdentifier.equals("out-parameter")) {
+        _differenceDescription +=
+            "expected out parameter but got " + parameterIdentifier + "\n";
       }
       if (name == null || !name.equals(node.getName().getText())) {
-        _differenceDescription += "expected parameter with name " + name +
-            " but got " + node.getName().getText() + "\n";
+        _differenceDescription +=
+            "expected parameter with name " + name +
+                " but got " +
+                node.getName().getText() +
+                "\n";
       }
       if (type == null || !type.equals(node.getType().toString())) {
-        _differenceDescription += "expected parameter type " + type +
-            " but got " + node.getType().toString() + "\n";
+        _differenceDescription +=
+            "expected parameter type " + type +
+                " but got " +
+                node.getType().toString() +
+                "\n";
       }
     } else {
       _queue.add("out-parameter");
@@ -262,15 +304,16 @@ public class ASTEquals extends DepthFirstAdapter {
     if (_isInCompareMode) {
       String extendsIdentifier = _queue.poll();
       String fullQualifiedName = _queue.poll();
-      if (extendsIdentifier == null ||
-          !extendsIdentifier.equals("user-defined-type")) {
-        _differenceDescription += "expected used defined type but got " +
-            extendsIdentifier + "\n";
+      if (extendsIdentifier == null || !extendsIdentifier.equals("user-defined-type")) {
+        _differenceDescription +=
+            "expected used defined type but got " + extendsIdentifier + "\n";
       }
-      if (fullQualifiedName == null ||
-          !fullQualifiedName.equals(Scope.getSymbol(node))) {
-        _differenceDescription += "expected type " + fullQualifiedName +
-            " but got " + Scope.getSymbol(node) + "\n";
+      if (fullQualifiedName == null || !fullQualifiedName.equals(Scope.getSymbol(node))) {
+        _differenceDescription +=
+            "expected type " + fullQualifiedName +
+                " but got " +
+                Scope.getSymbol(node) +
+                "\n";
       }
     } else {
       _queue.add("user-defined-type");

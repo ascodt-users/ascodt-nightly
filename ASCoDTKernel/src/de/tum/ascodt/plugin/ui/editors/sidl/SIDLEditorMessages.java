@@ -7,10 +7,11 @@ import java.util.ResourceBundle;
 
 public class SIDLEditorMessages {
 
-  private static final String RESOURCE_BUNDLE = "de.tum.ascodt.plugin.SIDLEditorMessages"; //$NON-NLS-1$
+  private static final String RESOURCE_BUNDLE =
+      "de.tum.ascodt.plugin.SIDLEditorMessages"; //$NON-NLS-1$
 
-  private static ResourceBundle fgResourceBundle = ResourceBundle
-      .getBundle(RESOURCE_BUNDLE);
+  private static ResourceBundle fgResourceBundle =
+      ResourceBundle.getBundle(RESOURCE_BUNDLE);
 
   public static ResourceBundle getResourceBundle() {
     return fgResourceBundle;

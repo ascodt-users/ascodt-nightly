@@ -1,6 +1,7 @@
 */.build
 */bin
 */build
+*/components/java
 */lib
 
 */*.cmd

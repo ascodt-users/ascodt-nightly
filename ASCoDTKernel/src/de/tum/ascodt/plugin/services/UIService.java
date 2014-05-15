@@ -32,8 +32,8 @@ public class UIService {
 
       @Override
       public void run() {
-        IWorkbenchWindow dwindow = PlatformUI.getWorkbench()
-            .getActiveWorkbenchWindow();
+        IWorkbenchWindow dwindow =
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         IWorkbenchPage page = dwindow.getActivePage();
 
         if (dwindow != null && page != null) {

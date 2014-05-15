@@ -61,20 +61,24 @@ public class PaletteFactory {
     toolbar.add(new MarqueeToolEntry());
     // Add an icon for file browsing
     // Add (Plain-port) connection tool
-    tool = new ConnectionCreationToolEntry(CONNECTION_TOOL,
-        "Create a port connection", new CreationFactory() {
-          @Override
-          public Object getNewObject() {
-            return null;
-          }
+    tool =
+        new ConnectionCreationToolEntry(CONNECTION_TOOL,
+                                        "Create a port connection",
+                                        new CreationFactory() {
+                                          @Override
+                                          public Object getNewObject() {
+                                            return null;
+                                          }
 
-          @Override
-          public Object getObjectType() {
-            return Connection.SOLID_CONNECTION;
-          }
-        }, ImageDescriptor.createFromFile(ASCoDTKernel.class,
-            "ui/resources/connection_s16.gif"), ImageDescriptor.createFromFile(
-            ASCoDTKernel.class, "ui/resources/connection_s24.gif"));
+                                          @Override
+                                          public Object getObjectType() {
+                                            return Connection.SOLID_CONNECTION;
+                                          }
+                                        },
+                                        ImageDescriptor.createFromFile(ASCoDTKernel.class,
+                                                                       "ui/resources/connection_s16.gif"),
+                                        ImageDescriptor.createFromFile(ASCoDTKernel.class,
+                                                                       "ui/resources/connection_s24.gif"));
     toolbar.add(tool);
     //
     // // Add comment link tool

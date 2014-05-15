@@ -3,10 +3,11 @@ package de.tum.ascodt.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
 
@@ -18,21 +19,27 @@ import org.eclipse.core.runtime.Platform;
  * 
  */
 public class ResourceManager {
-
-  public static URL getResourceAsPath(String pathToResource, String plugin)
-      throws IOException {
-    URL url = null;
-    boolean hasBinFolder = false;
+  public static Path getResourceAsPath(String pathString, String plugin) throws IOException {
     if (Platform.getBundle(plugin) != null) {
-      if (FileLocator.find(Platform.getBundle(plugin), new Path("debug"), null) != null) {
-        hasBinFolder = true;
-      }
-      url = FileLocator.toFileURL(FileLocator.find(Platform.getBundle(plugin),
-          new Path((hasBinFolder ? "debug" + Path.SEPARATOR : "") +
-              pathToResource), null));
+      boolean hasDebugDirectory = false;
 
+      if (FileLocator.find(Platform.getBundle(plugin),
+                           new org.eclipse.core.runtime.Path("debug"),
+                           null) != null) {
+        hasDebugDirectory = true;
+      }
+
+      try {
+        return Paths.get(FileLocator.toFileURL(FileLocator.find(Platform.getBundle(plugin),
+                                                                new org.eclipse.core.runtime.Path((hasDebugDirectory
+                                                                                                                    ? "debug" + org.eclipse.core.runtime.Path.SEPARATOR
+                                                                                                                    : "") + pathString),
+                                                                null))
+                                    .toURI());
+      } catch (URISyntaxException e) {}
     }
-    return url;
+
+    return null;
   }
 
   /**
@@ -44,9 +51,7 @@ public class ResourceManager {
    * @return
    * @throws IOException
    */
-  public static InputStream getResourceAsStream(String pathToResource,
-      String plugin) throws IOException {
-    return ResourceManager.class.getResourceAsStream(pathToResource);
-
+  public static InputStream getResourceAsStream(Path path, String plugin) throws IOException {
+    return ResourceManager.class.getResourceAsStream(path.toString());
   }
 }

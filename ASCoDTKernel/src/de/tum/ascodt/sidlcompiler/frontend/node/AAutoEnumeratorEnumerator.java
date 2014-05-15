@@ -14,8 +14,7 @@ public final class AAutoEnumeratorEnumerator extends PEnumerator {
     // Constructor
   }
 
-  public AAutoEnumeratorEnumerator(
-      @SuppressWarnings("hiding") TIdentifier _name_) {
+  public AAutoEnumeratorEnumerator(@SuppressWarnings("hiding") TIdentifier _name_) {
     // Constructor
     setName(_name_);
 
@@ -48,7 +47,7 @@ public final class AAutoEnumeratorEnumerator extends PEnumerator {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     if (_name_ == oldChild) {
       setName((TIdentifier)newChild);

@@ -1,10 +1,10 @@
 set(CPP_FILES
    	${CPP_FILES}
-   	../../components/java/__USES_PORT_PATH__Native2JavaPlainPort.cpp 
-   	../../components/java/__USES_PORT_PATH__Native2NativePlainPort.cpp
-	../../components/java/__USES_PORT_PATH__Cxx2SocketPlainPort.cpp
-	../../components/java/__USES_PORT_PATH__C2CxxSocketPlainPort.cpp 
-	../../components/java/__USES_PORT_PATH__NativeDispatcher.cpp
-	../../components/java/__USES_PORT_PATH__NativeSocketDispatcher.cpp
-	../../components/java/__USES_PORT_PATH__CProxyNativeSocketDispatcher.cpp
+   	../../components/c++/__USES_PORT_PATH__Native2JavaPlainPort.cpp 
+   	../../components/c++/__USES_PORT_PATH__Native2NativePlainPort.cpp
+	../../components/c++/__USES_PORT_PATH__Cxx2SocketPlainPort.cpp
+	../../components/c++/__USES_PORT_PATH__C2CxxSocketPlainPort.cpp 
+	../../components/c++/__USES_PORT_PATH__NativeDispatcher.cpp
+	../../components/c++/__USES_PORT_PATH__NativeSocketDispatcher.cpp
+	../../components/c++/__USES_PORT_PATH__CProxyNativeSocketDispatcher.cpp
 )

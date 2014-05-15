@@ -13,14 +13,15 @@ import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
 @SuppressWarnings("nls")
 public final class APackage extends PPackage {
   private TIdentifier _name_;
-  private final LinkedList<PPackageElement> _packageElement_ = new LinkedList<PPackageElement>();
+  private final LinkedList<PPackageElement> _packageElement_ =
+      new LinkedList<PPackageElement>();
 
   public APackage() {
     // Constructor
   }
 
   public APackage(@SuppressWarnings("hiding") TIdentifier _name_,
-      @SuppressWarnings("hiding") List<PPackageElement> _packageElement_) {
+                  @SuppressWarnings("hiding") List<PPackageElement> _packageElement_) {
     // Constructor
     setName(_name_);
 
@@ -63,15 +64,14 @@ public final class APackage extends PPackage {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     if (_name_ == oldChild) {
       setName((TIdentifier)newChild);
       return;
     }
 
-    for (ListIterator<PPackageElement> i = _packageElement_.listIterator(); i
-        .hasNext();) {
+    for (ListIterator<PPackageElement> i = _packageElement_.listIterator(); i.hasNext();) {
       if (i.next() == oldChild) {
         if (newChild != null) {
           i.set((PPackageElement)newChild);

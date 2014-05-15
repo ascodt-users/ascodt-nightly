@@ -54,7 +54,7 @@ import de.tum.ascodt.plugin.ui.gef.model.Port;
  * @autho atanasoa
  */
 public class DiagramEditPart extends AbstractGraphicalEditPart implements
-    PropertyChangeListener {
+                                                              PropertyChangeListener {
 
   /**
    * Upon activation, attach to the model element as a property change listener.
@@ -95,7 +95,8 @@ public class DiagramEditPart extends AbstractGraphicalEditPart implements
     // f.setForegroundColor(ColorConstants.white);
     // f.setBackgroundColor(ColorConstants.white);
     // Create the static router for the connection layer
-    ConnectionLayer connLayer = (ConnectionLayer)getLayer(LayerConstants.CONNECTION_LAYER);
+    ConnectionLayer connLayer =
+        (ConnectionLayer)getLayer(LayerConstants.CONNECTION_LAYER);
     AutomaticRouter router = new FanRouter();
     router.setNextRouter(new ManhattanConnectionRouter());
     connLayer.setConnectionRouter(router);
@@ -123,13 +124,13 @@ public class DiagramEditPart extends AbstractGraphicalEditPart implements
   public Object getAdapter(Class adapter) {
     if (adapter == SnapToHelper.class) {
       List snapStrategies = new ArrayList();
-      Boolean val = (Boolean)getViewer().getProperty(
-          RulerProvider.PROPERTY_RULER_VISIBILITY);
+      Boolean val =
+          (Boolean)getViewer().getProperty(RulerProvider.PROPERTY_RULER_VISIBILITY);
       if (val != null && val.booleanValue()) {
         snapStrategies.add(new SnapToGuides(this));
       }
-      val = (Boolean)getViewer().getProperty(
-          SnapToGeometry.PROPERTY_SNAP_ENABLED);
+      val =
+          (Boolean)getViewer().getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED);
       if (val != null && val.booleanValue()) {
         snapStrategies.add(new SnapToGeometry(this));
       }
@@ -164,8 +165,7 @@ public class DiagramEditPart extends AbstractGraphicalEditPart implements
 
   @Override
   public DragTracker getDragTracker(Request req) {
-    if (req instanceof SelectionRequest &&
-        ((SelectionRequest)req).getLastButtonPressed() == 3) {
+    if (req instanceof SelectionRequest && ((SelectionRequest)req).getLastButtonPressed() == 3) {
       return new DeselectAllTracker(this);
     }
     return new MarqueeDragTracker();
@@ -201,8 +201,7 @@ public class DiagramEditPart extends AbstractGraphicalEditPart implements
     // these properties are fired when Shapes are added into or removed from
     // the ASCoDTDiagram instance and must cause a call of refreshChildren()
     // to update the diagram's contents.
-    if (Diagram.CHILD_ADDED_PROP.equals(prop) ||
-        Diagram.CHILD_REMOVED_PROP.equals(prop)) {
+    if (Diagram.CHILD_ADDED_PROP.equals(prop) || Diagram.CHILD_REMOVED_PROP.equals(prop)) {
       refreshChildren();
     }
   }

@@ -16,7 +16,7 @@ import de.tum.ascodt.plugin.ui.gef.model.Diagram;
  * 
  */
 public class ComponentEditPolicy extends
-    org.eclipse.gef.editpolicies.ComponentEditPolicy {
+                                org.eclipse.gef.editpolicies.ComponentEditPolicy {
   @Override
   protected Command createDeleteCommand(GroupRequest deleteRequest) {
     Object childModel = getHost().getModel();

@@ -1,8 +1,8 @@
 package de.tum.ascodt.sidlcompiler.backend;
 
 
-import java.io.File;
-import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Stack;
 
 import org.eclipse.core.runtime.Assert;
@@ -26,23 +26,23 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
 
 
 /**
- * This generator is used to create the cxx code for native components.
+ * This generator is used to create the fortran code for native components.
  * 
  * @author Atanas Atanasov
  * 
  */
 public class CreateFortranComponent extends DepthFirstAdapter {
-  private Trace _trace = new Trace(
-      CreateFortranComponent.class.getCanonicalName());
+  private Trace _trace =
+      new Trace(CreateFortranComponent.class.getCanonicalName());
 
   private Stack<TemplateFile> _templateFilesOfFortranImplementation;
   private Stack<TemplateFile> _templateFilesOfAbstractFortranImplementation;
   private Stack<TemplateFile> _templateFilesForAbstractUsesPorts;
-  private URL _userImplementationsDestinationDirectory;
-  private URL _generatedFilesDirectory;
+  private Path _sourcesDirectoryPath;
+  private Path _fortranDirectoryPath;
   private String[] _namespace;
 
-  private String _fullQualifiedName;
+  private String _fullyQualifiedComponentName;
   private SymbolTable _symbolTable;
   private boolean _generateProvidesMethods;
   private String _provideOperations;
@@ -55,15 +55,15 @@ public class CreateFortranComponent extends DepthFirstAdapter {
   private String _usesVariablesValidity;
 
   public CreateFortranComponent(SymbolTable symbolTable,
-      URL userImplementationsDestinationDirectory, URL generatedFilesDirectory,
-      String[] namespace) {
+                                Path sourcesDirectoryPath,
+                                Path componentsDirectoryPath,
+                                String[] namespace) {
     _templateFilesOfFortranImplementation = new Stack<TemplateFile>();
     _templateFilesOfAbstractFortranImplementation = new Stack<TemplateFile>();
     _subTemplates = new Stack<TemplateFile>();
     _templateFilesForAbstractUsesPorts = new Stack<TemplateFile>();
-    _userImplementationsDestinationDirectory = userImplementationsDestinationDirectory;
-
-    _generatedFilesDirectory = generatedFilesDirectory;
+    _sourcesDirectoryPath = sourcesDirectoryPath;
+    _fortranDirectoryPath = componentsDirectoryPath.resolve("fortran");
     _namespace = namespace;
     _symbolTable = symbolTable;
     _provideOperations = "";
@@ -77,55 +77,48 @@ public class CreateFortranComponent extends DepthFirstAdapter {
   @Override
   public void inAClassPackageElement(AClassPackageElement node) {
     _trace.in("inAClassPackageElement(...)", "open new port interface");
-    try {
-      String componentName = node.getName().getText();
-      _fullQualifiedName = _symbolTable.getScope(node).getFullyQualifiedName(
-          componentName);
 
-      String templateFileForFortranComponentImplementation = "native-component-fortran-implementation.template";
-      String destinationFileForFortranImplementation = _userImplementationsDestinationDirectory
-          .toString() +
-          File.separatorChar +
-          _fullQualifiedName.replaceAll("[.]", "/") + "Implementation.f90";
-      String templateFileForFortranAbstractComponentImplementation = "native-component-fortran-abstract-implementation.template";
-      String destinationFileForFortranAbstractImplementation = _generatedFilesDirectory
-          .toString() +
-          File.separatorChar +
-          _fullQualifiedName.replaceAll("[.]", "/") +
-          "AbstractImplementation.f90";
+    String componentName = node.getName().getText();
+    _fullyQualifiedComponentName =
+        _symbolTable.getScope(node).getFullyQualifiedName(componentName);
 
-      _templateFilesOfFortranImplementation.push(new TemplateFile(
-          templateFileForFortranComponentImplementation,
-          destinationFileForFortranImplementation, _namespace, TemplateFile
-              .getLanguageConfigurationForFortran(), false));
-      _templateFilesOfAbstractFortranImplementation.push(new TemplateFile(
-          templateFileForFortranAbstractComponentImplementation,
-          destinationFileForFortranAbstractImplementation, _namespace,
-          TemplateFile.getLanguageConfigurationForFortran(), true));
+    _templateFilesOfFortranImplementation.push(new TemplateFile(Paths.get("native-component-fortran-implementation.template"),
+                                                                _sourcesDirectoryPath.resolve(_fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                      "/") + "Implementation.f90"),
+                                                                _namespace,
+                                                                TemplateFile.getLanguageConfigurationForFortran(),
+                                                                false));
+    _templateFilesOfAbstractFortranImplementation.push(new TemplateFile(Paths.get("native-component-fortran-abstract-implementation.template"),
+                                                                        _fortranDirectoryPath.resolve(_fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                              "/") + "AbstractImplementation.f90"),
+                                                                        _namespace,
+                                                                        TemplateFile.getLanguageConfigurationForFortran(),
+                                                                        true));
 
-      _templateFilesOfFortranImplementation.peek().addMapping(
-          "__FULL_QUALIFIED_NAME__",
-          _fullQualifiedName.replaceAll("\\.", "_").toLowerCase());
-      _templateFilesOfFortranImplementation.peek().addMapping(
-          "__COMPONENT_NAME__", componentName);
-      _templateFilesOfAbstractFortranImplementation.peek().addMapping(
-          "__COMPONENT_NAME__", componentName);
+    _templateFilesOfFortranImplementation.peek()
+                                         .addMapping("__FULL_QUALIFIED_NAME__",
+                                                     _fullyQualifiedComponentName.replaceAll("\\.",
+                                                                                             "_")
+                                                                                 .toLowerCase());
+    _templateFilesOfFortranImplementation.peek()
+                                         .addMapping("__COMPONENT_NAME__",
+                                                     componentName);
+    _templateFilesOfAbstractFortranImplementation.peek()
+                                                 .addMapping("__COMPONENT_NAME__",
+                                                             componentName);
 
-      _generateProvidesMethods = true;
+    _generateProvidesMethods = true;
 
-      if (node.getProvides().size() > 0) {
-        // _templateFilesOfAbstractCXXHeader.peek().addMapping("__IMPLEMENTS__",": public");
-        // else
-        //
-        // _templateFilesOfAbstractCXXHeader.peek().addMapping("__IMPLEMENTS__","");
-        for (PUserDefinedType definedType : node.getProvides()) {
-          definedType.apply(this);
-        }
+    if (node.getProvides().size() > 0) {
+      // _templateFilesOfAbstractCXXHeader.peek().addMapping("__IMPLEMENTS__",": public");
+      // else
+      //
+      // _templateFilesOfAbstractCXXHeader.peek().addMapping("__IMPLEMENTS__","");
+      for (PUserDefinedType definedType : node.getProvides()) {
+        definedType.apply(this);
       }
-      _generateProvidesMethods = false;
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
     }
+    _generateProvidesMethods = false;
 
     _trace.out("inAClassPackageElement(...)", "open new port interface");
   }
@@ -134,25 +127,23 @@ public class CreateFortranComponent extends DepthFirstAdapter {
   public void inAOperation(AOperation node) {
     Assert.isTrue(_generateProvidesMethods);
     try {
-      String templateFile = "native-component-fortran-implementation-provides-port.template";
-      TemplateFile template = new TemplateFile(
-          _templateFilesOfFortranImplementation.peek(), templateFile);
+      TemplateFile template =
+          new TemplateFile(_templateFilesOfFortranImplementation.peek(),
+                           Paths.get("native-component-fortran-implementation-provides-port.template"));
 
       ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
       node.apply(onlyInParameters);
 
-      GetParameterList parameterList = new GetParameterList(
-          _symbolTable.getScope(node));
+      GetParameterList parameterList =
+          new GetParameterList(_symbolTable.getScope(node));
       node.apply(parameterList);
       template.addMapping("__PARAMETER_LIST_TYPES_INTENTS__",
-          parameterList.getParameterListTypesForF(false));
+                          parameterList.getParameterListTypesForF(false));
       template.addMapping("__OPERATION_NAME__", node.getName().getText());
-      _provideOperations += "procedure,public::" + node.getName().getText() +
-          "\n";
-      template
-          .addMapping("__OPERATION_PARAMETERS_LIST__", parameterList
-              .getParameterListInF(onlyInParameters
-                  .areAllParametersInParameters()));
+      _provideOperations +=
+          "procedure,public::" + node.getName().getText() + "\n";
+      template.addMapping("__OPERATION_PARAMETERS_LIST__",
+                          parameterList.getParameterListInF(onlyInParameters.areAllParametersInParameters()));
       _subTemplates.push(template);
 
     } catch (ASCoDTException e) {
@@ -164,8 +155,9 @@ public class CreateFortranComponent extends DepthFirstAdapter {
   public void inAUserDefinedType(AUserDefinedType node) {
     if (_generateProvidesMethods) {
       String fullQualifiedSymbol = Scope.getSymbol(node);
-      AInterfacePackageElement interfaceDefintion = _symbolTable.getScope(node)
-          .getInterfaceDefinition(fullQualifiedSymbol);
+      AInterfacePackageElement interfaceDefintion =
+          _symbolTable.getScope(node)
+                      .getInterfaceDefinition(fullQualifiedSymbol);
       if (interfaceDefintion != null) {
         interfaceDefintion.apply(this);
       }
@@ -176,37 +168,42 @@ public class CreateFortranComponent extends DepthFirstAdapter {
   public void inAUses(AUses node) {
     _trace.in("inAUses(AUses)", node.toString());
     // try {
-    GetProvidesAndUsesPortsOfComponent getPorts = new GetProvidesAndUsesPortsOfComponent();
+    GetProvidesAndUsesPortsOfComponent getPorts =
+        new GetProvidesAndUsesPortsOfComponent();
     node.apply(getPorts);
     ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
     node.apply(onlyInParameters);
     String portName = node.getAs().getText();
     String fullQualifiedpPortType = getPorts.getUsesPorts("", ".");
-    String portType = fullQualifiedpPortType.substring(fullQualifiedpPortType
-        .lastIndexOf(".") + 1);
+    String portType =
+        fullQualifiedpPortType.substring(fullQualifiedpPortType.lastIndexOf(".") + 1);
 
-    _usesImports += "use " +
-        fullQualifiedpPortType.replaceAll("\\.", "_").toLowerCase() +
-        "FNativeSocketDispatcher\n";
-    _usesVariables += "type(" + portType.replaceAll("\\.", "_") +
-        "NativeSocketDispatcher)::" + portName + "\n";
+    _usesImports +=
+        "use " + fullQualifiedpPortType.replaceAll("\\.", "_").toLowerCase() +
+            "FNativeSocketDispatcher\n";
+    _usesVariables +=
+        "type(" + portType.replaceAll("\\.", "_") +
+            "NativeSocketDispatcher)::" +
+            portName +
+            "\n";
     _usesVariables += "logical:: v_is_connected_" + portName + "\n";
-    _usesMethods += "procedure,public::connect_" + portName.toLowerCase() +
-        "\n";
-    _usesMethods += "\tprocedure,public::disconnect_" + portName.toLowerCase() +
-        "\n";
-    _usesMethods += "\tprocedure,public::is_connected_" +
-        portName.toLowerCase() + "\n";
+    _usesMethods +=
+        "procedure,public::connect_" + portName.toLowerCase() + "\n";
+    _usesMethods +=
+        "\tprocedure,public::disconnect_" + portName.toLowerCase() + "\n";
+    _usesMethods +=
+        "\tprocedure,public::is_connected_" + portName.toLowerCase() + "\n";
     _usesVariablesValidity += ".and.this%v_is_connected_" + portName + "";
-    String templateFile = "native-component-fortran-abstract-implementation-uses-port.template";
+
     try {
-      TemplateFile template = new TemplateFile(
-          _templateFilesOfAbstractFortranImplementation.peek(), templateFile);
+      TemplateFile template =
+          new TemplateFile(_templateFilesOfAbstractFortranImplementation.peek(),
+                           Paths.get("native-component-fortran-abstract-implementation-uses-port.template"));
       template.addMapping("__FULL_QUALIFIED_USES_PORT_TYPE__",
-          fullQualifiedpPortType.replaceAll("\\.", "_").toLowerCase());
+                          fullQualifiedpPortType.replaceAll("\\.", "_")
+                                                .toLowerCase());
       template.addMapping("__USES_PORT_AS__", portName);
-      template
-          .addMapping("__USES_PORT_TYPE__", portType.replaceAll("\\.", "_"));
+      template.addMapping("__USES_PORT_TYPE__", portType.replaceAll("\\.", "_"));
       _templateFilesForAbstractUsesPorts.add(template);
     } catch (ASCoDTException e) {
       ErrorWriterDevice.getInstance().println(e);
@@ -221,40 +218,40 @@ public class CreateFortranComponent extends DepthFirstAdapter {
   public void outAClassPackageElement(AClassPackageElement node) {
     Assert.isTrue(_templateFilesOfFortranImplementation.size() == 1);
     Assert.isTrue(_templateFilesOfAbstractFortranImplementation.size() == 1);
-    try {
 
-      _templateFilesOfFortranImplementation.peek().addMapping(
-          "__PROVIDE_PORTS__", _provideOperations);
-      _templateFilesOfFortranImplementation.peek().open();
-      _templateFilesOfAbstractFortranImplementation.peek().addMapping(
-          "__USE_PORTS_VARIABLES__", _usesVariables);
-      _templateFilesOfAbstractFortranImplementation.peek().addMapping(
-          "__USE_PORTS_IMPORTS__", _usesImports);
-      _templateFilesOfAbstractFortranImplementation.peek().addMapping(
-          "__USE_PORTS_CONN_METHODS__", _usesMethods);
-      if (_usesVariablesValidity.equals("")) {
-        _usesVariablesValidity = ".True.";
-      }
-      _templateFilesOfAbstractFortranImplementation.peek().addMapping(
-          "__USES_PORTS_VARIABLES_VALIDITY__",
-          _usesVariablesValidity.replaceFirst(".and.", ""));
-      _templateFilesOfAbstractFortranImplementation.peek().open();
-      while (!_subTemplates.isEmpty()) {
-        _subTemplates.peek().open();
-        _subTemplates.peek().close();
-        _subTemplates.pop();
-      }
-      while (!_templateFilesForAbstractUsesPorts.isEmpty()) {
-        _templateFilesForAbstractUsesPorts.peek().open();
-        _templateFilesForAbstractUsesPorts.peek().close();
-        _templateFilesForAbstractUsesPorts.pop();
-      }
-      _templateFilesOfFortranImplementation.peek().close();
-      _templateFilesOfAbstractFortranImplementation.peek().close();
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
+    _templateFilesOfFortranImplementation.peek()
+                                         .addMapping("__PROVIDE_PORTS__",
+                                                     _provideOperations);
+    _templateFilesOfFortranImplementation.peek().open();
+    _templateFilesOfAbstractFortranImplementation.peek()
+                                                 .addMapping("__USE_PORTS_VARIABLES__",
+                                                             _usesVariables);
+    _templateFilesOfAbstractFortranImplementation.peek()
+                                                 .addMapping("__USE_PORTS_IMPORTS__",
+                                                             _usesImports);
+    _templateFilesOfAbstractFortranImplementation.peek()
+                                                 .addMapping("__USE_PORTS_CONN_METHODS__",
+                                                             _usesMethods);
+    if (_usesVariablesValidity.equals("")) {
+      _usesVariablesValidity = ".True.";
     }
-
+    _templateFilesOfAbstractFortranImplementation.peek()
+                                                 .addMapping("__USES_PORTS_VARIABLES_VALIDITY__",
+                                                             _usesVariablesValidity.replaceFirst(".and.",
+                                                                                                 ""));
+    _templateFilesOfAbstractFortranImplementation.peek().open();
+    while (!_subTemplates.isEmpty()) {
+      _subTemplates.peek().open();
+      _subTemplates.peek().close();
+      _subTemplates.pop();
+    }
+    while (!_templateFilesForAbstractUsesPorts.isEmpty()) {
+      _templateFilesForAbstractUsesPorts.peek().open();
+      _templateFilesForAbstractUsesPorts.peek().close();
+      _templateFilesForAbstractUsesPorts.pop();
+    }
+    _templateFilesOfFortranImplementation.peek().close();
+    _templateFilesOfAbstractFortranImplementation.peek().close();
     _templateFilesOfFortranImplementation.pop();
     _templateFilesOfAbstractFortranImplementation.pop();
 

@@ -38,8 +38,7 @@ public class Importer {
    * @throws ASCoDTException
    * @throws
    */
-  private static void compileSIDLFiles(File currentFile, IProject project)
-      throws ASCoDTException {
+  private static void compileSIDLFiles(File currentFile, IProject project) throws ASCoDTException {
     if (currentFile.isDirectory()) {
       for (File child : currentFile.listFiles()) {
         compileSIDLFiles(child, project);
@@ -61,14 +60,18 @@ public class Importer {
    *          the destination folder
    * @throws ASCoDTException
    */
-  private static void compileSIDLFiles(String sourcePath, String destination,
-      IProject project) throws ASCoDTException {
+  private static void compileSIDLFiles(String sourcePath,
+                                       String destination,
+                                       IProject project) throws ASCoDTException {
     File f = new File(sourcePath);
-    File directory = new File(destination + File.separatorChar +
-        f.getName().substring(0, f.getName().lastIndexOf(".")));
-    File includesDirectory = new File(destination + File.separatorChar +
-        f.getName().substring(0, f.getName().lastIndexOf(".")) +
-        File.separatorChar + "includes");
+    File directory =
+        new File(destination + File.separatorChar +
+                 f.getName().substring(0, f.getName().lastIndexOf(".")));
+    File includesDirectory =
+        new File(destination + File.separatorChar +
+                 f.getName().substring(0, f.getName().lastIndexOf(".")) +
+                 File.separatorChar +
+                 "includes");
     if (directory.exists()) {
       if (includesDirectory.exists()) {
         compileSIDLFiles(includesDirectory, project);
@@ -78,8 +81,9 @@ public class Importer {
           compileSIDLFiles(child, project);
         }
       }
-      de.tum.ascodt.plugin.project.Project proj = de.tum.ascodt.plugin.project.ProjectBuilder
-          .getInstance().getProject(project);
+      de.tum.ascodt.plugin.project.Project proj =
+          de.tum.ascodt.plugin.project.ProjectBuilder.getInstance()
+                                                     .getProject(project);
       proj.compileComponents();
 
     }
@@ -96,7 +100,7 @@ public class Importer {
    * @throws IOException
    */
   private static void copyInputStream(InputStream inputStream,
-      BufferedOutputStream bufferedOutputStream) throws IOException {
+                                      BufferedOutputStream bufferedOutputStream) throws IOException {
     byte[] buffer = new byte[1024];
     int len;
 
@@ -120,8 +124,9 @@ public class Importer {
    *          the current project
    * @throws IOException
    */
-  private static void extract(String sourcePath, String targetPath,
-      IProject project) throws ASCoDTException {
+  private static void extract(String sourcePath,
+                              String targetPath,
+                              IProject project) throws ASCoDTException {
     File f = new File(sourcePath);
     ZipFile zipFile = null;
     if (f.exists()) {
@@ -129,13 +134,17 @@ public class Importer {
         zipFile = new ZipFile(f);
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-        File destinationDirectory = new File(targetPath + File.separatorChar +
-            f.getName().substring(0, f.getName().lastIndexOf(".")));
-        File libDirectory = new File(project.getLocation().toPortableString() +
-            ProjectBuilder.getInstance().getProject(project).getFolderForLibs());
-        File exeDirectory = new File(project.getLocation().toPortableString() +
-            ProjectBuilder.getInstance().getProject(project)
-                .getFolderForExecutables());
+        File destinationDirectory =
+            new File(targetPath + File.separatorChar +
+                     f.getName().substring(0, f.getName().lastIndexOf(".")));
+        File libDirectory =
+            new File(project.getLocation().toPortableString() + ProjectBuilder.getInstance()
+                                                                              .getProject(project)
+                                                                              .getLibrariesDirectoryPrefix());
+        File exeDirectory =
+            new File(project.getLocation().toPortableString() + ProjectBuilder.getInstance()
+                                                                              .getProject(project)
+                                                                              .getBinariesDirectoryPrefix());
         if (destinationDirectory.exists()) {
           // TODO deleteDirectory(directory);
           destinationDirectory.mkdirs();
@@ -150,16 +159,16 @@ public class Importer {
             file.mkdirs();
           } else {
             file.getParentFile().mkdirs();
-            if (entry.getName().endsWith(".so") ||
-                entry.getName().endsWith(".dll")) {
+            if (entry.getName().endsWith(".so") || entry.getName()
+                                                        .endsWith(".dll")) {
               copyInputStream(zipFile.getInputStream(entry),
-                  new BufferedOutputStream(new FileOutputStream(native_file)));
+                              new BufferedOutputStream(new FileOutputStream(native_file)));
             } else if (entry.getName().endsWith(".exe")) {
               copyInputStream(zipFile.getInputStream(entry),
-                  new BufferedOutputStream(new FileOutputStream(exe_file)));
+                              new BufferedOutputStream(new FileOutputStream(exe_file)));
             } else {
               copyInputStream(zipFile.getInputStream(entry),
-                  new BufferedOutputStream(new FileOutputStream(file)));
+                              new BufferedOutputStream(new FileOutputStream(file)));
             }
 
           }
@@ -168,10 +177,14 @@ public class Importer {
         zipFile.close();
       } catch (FileNotFoundException e) {
         throw new ASCoDTException(Importer.class.getCanonicalName(),
-            "extract()", "Importer File not found error:" + e.getMessage(), e);
+                                  "extract()",
+                                  "Importer File not found error:" + e.getMessage(),
+                                  e);
       } catch (IOException e) {
         throw new ASCoDTException(Importer.class.getCanonicalName(),
-            "extract()", "Importer IO error:" + e.getMessage(), e);
+                                  "extract()",
+                                  "Importer IO error:" + e.getMessage(),
+                                  e);
       }
     }
   }
@@ -185,12 +198,13 @@ public class Importer {
    *          the current project
    * @throws ASCoDTException
    */
-  public static void importBinary(String sourcePath, IProject project)
-      throws ASCoDTException {
-    extract(sourcePath, project.getLocation().toPortableString() + "/imports",
-        project);
-    compileSIDLFiles(sourcePath, project.getLocation().toPortableString() +
-        "/imports", project);
+  public static void importBinary(String sourcePath, IProject project) throws ASCoDTException {
+    extract(sourcePath,
+            project.getLocation().toPortableString() + "/imports",
+            project);
+    compileSIDLFiles(sourcePath,
+                     project.getLocation().toPortableString() + "/imports",
+                     project);
   }
 
 }

@@ -34,7 +34,7 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  *         ->includes: dependet sidl files
  */
 public class ASCoDTBuilderPropertyPage extends PropertyPage implements
-    IWorkbenchPropertyPage {
+                                                           IWorkbenchPropertyPage {
 
   /**
    * holds all included sidl files
@@ -68,13 +68,14 @@ public class ASCoDTBuilderPropertyPage extends PropertyPage implements
 
     Composite composite = new Composite(parent, SWT.NONE);
     composite.setLayout(new FillLayout());
-    Label includesLabel = new Label(composite, SWT.FILL | SWT.SEPARATOR |
-        SWT.HORIZONTAL);
+    Label includesLabel =
+        new Label(composite, SWT.FILL | SWT.SEPARATOR | SWT.HORIZONTAL);
     includesLabel.setText("Included sidl files:");
     _includes = new List(composite, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
     try {
-      for (String dep : ProjectBuilder.getInstance().getProject(_project)
-          .getSIDLDependencies()) {
+      for (String dep : ProjectBuilder.getInstance()
+                                      .getProject(_project)
+                                      .getSIDLDependencies()) {
         _includes.add(dep);
       }
     } catch (CoreException e) {
@@ -92,8 +93,8 @@ public class ASCoDTBuilderPropertyPage extends PropertyPage implements
 
       @Override
       public void widgetSelected(SelectionEvent e) {
-        Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-            .getShell();
+        Shell shell =
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
         FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
         fileDialog.setFilterExtensions(new String[] {"*.sidl"});
         String res = fileDialog.open();
@@ -136,8 +137,9 @@ public class ASCoDTBuilderPropertyPage extends PropertyPage implements
     if (_isDirty) {
       for (int i = _compiledSIDLFiles; i < _includes.getItemCount(); i++) {
         try {
-          ProjectBuilder.getInstance().getProject(_project)
-              .addSIDLDependency(_includes.getItem(i));
+          ProjectBuilder.getInstance()
+                        .getProject(_project)
+                        .addSIDLDependency(_includes.getItem(i));
         } catch (CoreException e) {
           ErrorWriterDevice.getInstance().println(e);
           return false;

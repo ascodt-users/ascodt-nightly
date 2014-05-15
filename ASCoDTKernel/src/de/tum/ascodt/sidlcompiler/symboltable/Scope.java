@@ -140,14 +140,14 @@ public class Scope {
       _identifier = old._identifier;
       _superScope = new Scope(old._superScope);
       _nameOfDefiningFile = old._nameOfDefiningFile;
-      _classSymbols = new HashMap<String, AClassPackageElement>(
-          old._classSymbols);
-      _interfaceSymbols = new HashMap<String, AInterfacePackageElement>(
-          old._interfaceSymbols);
-      _enumSymbols = new HashMap<String, AEnumDeclarationPackageElement>(
-          old._enumSymbols);
-      _classSymbolsFiles = new HashMap<AClassPackageElement, String>(
-          old._classSymbolsFiles);
+      _classSymbols =
+          new HashMap<String, AClassPackageElement>(old._classSymbols);
+      _interfaceSymbols =
+          new HashMap<String, AInterfacePackageElement>(old._interfaceSymbols);
+      _enumSymbols =
+          new HashMap<String, AEnumDeclarationPackageElement>(old._enumSymbols);
+      _classSymbolsFiles =
+          new HashMap<AClassPackageElement, String>(old._classSymbolsFiles);
       _subScope = new HashMap<String, Scope>(old._subScope);
       _errorMessage = old._errorMessage;
 
@@ -194,13 +194,21 @@ public class Scope {
     String symbolName = getSymbol(newEntry);
 
     if (_interfaceSymbols.containsKey(symbolName)) {
-      _errorMessage += "Class symbol " + symbolName + " in " + fileName +
-          " coincides with interface symbol previously defined in " +
-          getDefiningScope(symbolName).getFullIdentifierOfPackage() + "\n";
+      _errorMessage +=
+          "Class symbol " + symbolName +
+              " in " +
+              fileName +
+              " coincides with interface symbol previously defined in " +
+              getDefiningScope(symbolName).getFullIdentifierOfPackage() +
+              "\n";
     } else if (_enumSymbols.containsKey(symbolName)) {
-      _errorMessage += "Interface symbol " + symbolName + " in " + fileName +
-          " coincides with enum symbol previously defined in " +
-          getDefiningScope(symbolName).getFullIdentifierOfPackage() + "\n";
+      _errorMessage +=
+          "Interface symbol " + symbolName +
+              " in " +
+              fileName +
+              " coincides with enum symbol previously defined in " +
+              getDefiningScope(symbolName).getFullIdentifierOfPackage() +
+              "\n";
     } else {
       _classSymbols.put(symbolName, newEntry);
     }
@@ -215,18 +223,25 @@ public class Scope {
    * @param newEntry
    * @param fileName
    */
-  public void
-      addSymbol(AEnumDeclarationPackageElement newEntry, String fileName) {
+  public void addSymbol(AEnumDeclarationPackageElement newEntry, String fileName) {
     String symbolName = getSymbol(newEntry);
 
     if (_classSymbols.containsKey(symbolName)) {
-      _errorMessage += "Interface symbol " + symbolName + " in " + fileName +
-          " coincides with enum symbol previously defined in " +
-          getDefiningScope(symbolName).getFullIdentifierOfPackage() + "\n";
+      _errorMessage +=
+          "Interface symbol " + symbolName +
+              " in " +
+              fileName +
+              " coincides with enum symbol previously defined in " +
+              getDefiningScope(symbolName).getFullIdentifierOfPackage() +
+              "\n";
     } else if (_interfaceSymbols.containsKey(symbolName)) {
-      _errorMessage += "Class symbol " + symbolName + " in " + fileName +
-          " coincides with interface symbol previously defined in " +
-          getDefiningScope(symbolName).getFullIdentifierOfPackage() + "\n";
+      _errorMessage +=
+          "Class symbol " + symbolName +
+              " in " +
+              fileName +
+              " coincides with interface symbol previously defined in " +
+              getDefiningScope(symbolName).getFullIdentifierOfPackage() +
+              "\n";
     } else {
       _enumSymbols.put(symbolName, newEntry);
     }
@@ -245,13 +260,21 @@ public class Scope {
     String symbolName = getSymbol(newEntry);
 
     if (_classSymbols.containsKey(symbolName)) {
-      _errorMessage += "Interface symbol " + symbolName + " in " + fileName +
-          " coincides with class symbol previously defined in " +
-          getDefiningScope(symbolName).getFullIdentifierOfPackage() + "\n";
+      _errorMessage +=
+          "Interface symbol " + symbolName +
+              " in " +
+              fileName +
+              " coincides with class symbol previously defined in " +
+              getDefiningScope(symbolName).getFullIdentifierOfPackage() +
+              "\n";
     } else if (_enumSymbols.containsKey(symbolName)) {
-      _errorMessage += "Interface symbol " + symbolName + " in " + fileName +
-          " coincides with enum symbol previously defined in " +
-          getDefiningScope(symbolName).getFullIdentifierOfPackage() + "\n";
+      _errorMessage +=
+          "Interface symbol " + symbolName +
+              " in " +
+              fileName +
+              " coincides with enum symbol previously defined in " +
+              getDefiningScope(symbolName).getFullIdentifierOfPackage() +
+              "\n";
     } else {
       _interfaceSymbols.put(symbolName, newEntry);
     }
@@ -344,14 +367,15 @@ public class Scope {
       return null;
     }
     if (!identifier.contains(".")) {
-      return _enumSymbols.containsKey(identifier) ||
-          _classSymbols.containsKey(identifier) ||
-          _interfaceSymbols.containsKey(identifier) ? this : null;
+      return _enumSymbols.containsKey(identifier) || _classSymbols.containsKey(identifier) ||
+             _interfaceSymbols.containsKey(identifier) ? this : null;
     } else {
       String subScope = identifier.substring(0, identifier.indexOf('.'));
       String subIdentifier = identifier.substring(identifier.indexOf('.') + 1);
-      return _subScope.containsKey(subScope) ? _subScope.get(subScope)
-          .getDefiningScopeDFS(subIdentifier) : null;
+      return _subScope.containsKey(subScope)
+                                            ? _subScope.get(subScope)
+                                                       .getDefiningScopeDFS(subIdentifier)
+                                            : null;
     }
   }
 
@@ -362,8 +386,7 @@ public class Scope {
    * @param identifier
    * @return
    */
-  public AEnumDeclarationPackageElement getEnumerationDefinition(
-      String identifier) {
+  public AEnumDeclarationPackageElement getEnumerationDefinition(String identifier) {
     Scope scope = getDefiningScope(identifier);
     String typeName = identifier.substring(identifier.lastIndexOf(".") + 1);
     if (scope == null) {
@@ -403,7 +426,8 @@ public class Scope {
    * @return
    */
   public Set<AEnumDeclarationPackageElement> getFlattenedEnumsElements() {
-    Set<AEnumDeclarationPackageElement> result = new HashSet<AEnumDeclarationPackageElement>();
+    Set<AEnumDeclarationPackageElement> result =
+        new HashSet<AEnumDeclarationPackageElement>();
 
     result.addAll(_enumSymbols.values());
     for (String subScopeName : _subScope.keySet()) {
@@ -420,12 +444,12 @@ public class Scope {
    */
   public Set<AInterfacePackageElement> getFlattenedInterfaceElements() {
 
-    Set<AInterfacePackageElement> result = new TreeSet<AInterfacePackageElement>(
-        new Comparator<AInterfacePackageElement>() {
+    Set<AInterfacePackageElement> result =
+        new TreeSet<AInterfacePackageElement>(new Comparator<AInterfacePackageElement>() {
 
           @Override
           public int compare(AInterfacePackageElement o1,
-              AInterfacePackageElement o2) {
+                             AInterfacePackageElement o2) {
             return o1.getName().getText().compareTo(o2.getName().getText());
           }
 
@@ -433,8 +457,7 @@ public class Scope {
 
     result.addAll(_interfaceSymbols.values());
     for (String subScopeName : _subScope.keySet()) {
-      result
-          .addAll(_subScope.get(subScopeName).getFlattenedInterfaceElements());
+      result.addAll(_subScope.get(subScopeName).getFlattenedInterfaceElements());
     }
     return result;
   }
@@ -555,8 +578,8 @@ public class Scope {
   public String toString() {
     String result = getFullIdentifierOfPackage(".");
     if (_classSymbols.isEmpty() && _interfaceSymbols.isEmpty()) {
-      result += _identifier.length() == 0 ? "[no gobal symbols]"
-          : " [no symbols]";
+      result +=
+          _identifier.length() == 0 ? "[no gobal symbols]" : " [no symbols]";
     } else {
       result += ": ";
       for (String symbolName : _interfaceSymbols.keySet()) {

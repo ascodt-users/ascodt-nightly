@@ -21,13 +21,13 @@ public class SIDLDocumentProvider extends FileDocumentProvider {
   protected IDocument createDocument(Object element) throws CoreException {
     IDocument document = super.createDocument(element);
     if (document != null) {
-      IDocumentPartitioner partitioner = new FastPartitioner(SIDLEditor
-          .getDefault().getSIDLPartitionScanner(),
-          SIDLPartitionScanner.SIDL_PARTITION_TYPES);
+      IDocumentPartitioner partitioner =
+          new FastPartitioner(SIDLEditor.getDefault().getSIDLPartitionScanner(),
+                              SIDLPartitionScanner.SIDL_PARTITION_TYPES);
 
       IDocumentExtension3 extension = (IDocumentExtension3)document;
       extension.setDocumentPartitioner(SIDLEditor.SIDL_PARTITIONING,
-          partitioner);
+                                       partitioner);
 
       partitioner.connect(document);
 

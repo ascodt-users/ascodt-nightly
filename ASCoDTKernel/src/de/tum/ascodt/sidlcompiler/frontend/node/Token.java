@@ -28,7 +28,7 @@ public abstract class Token extends Node {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     throw new RuntimeException("Not a child.");
   }
 

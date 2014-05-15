@@ -22,8 +22,8 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * 
  */
 public class ProjectResourceDeltaListener implements IResourceDeltaVisitor {
-  private Trace _trace = new Trace(
-      ProjectResourceDeltaListener.class.getCanonicalName());
+  private Trace _trace =
+      new Trace(ProjectResourceDeltaListener.class.getCanonicalName());
   private boolean _hasChanged = false;
 
   /**
@@ -36,13 +36,17 @@ public class ProjectResourceDeltaListener implements IResourceDeltaVisitor {
    * @param mode
    * @throws ASCoDTException
    */
-  public void buildResource(IResourceDelta delta, Project project, Mode mode)
-      throws ASCoDTException {
+  public void buildResource(IResourceDelta delta, Project project, Mode mode) throws ASCoDTException {
 
-    Start startSymbol = SiDLBuilder.buildStartSymbolsForSIDLResource(delta
-        .getResource().getLocation().toPortableString());
-    SiDLBuilder.extendSymbolTable(startSymbol, project.getSymbolTable(), delta
-        .getResource().getLocation().toPortableString());
+    Start startSymbol =
+        SiDLBuilder.buildStartSymbolsForSIDLResource(delta.getResource()
+                                                          .getLocation()
+                                                          .toPortableString());
+    SiDLBuilder.extendSymbolTable(startSymbol,
+                                  project.getSymbolTable(),
+                                  delta.getResource()
+                                       .getLocation()
+                                       .toPortableString());
     _hasChanged = true;
   }
 
@@ -62,11 +66,15 @@ public class ProjectResourceDeltaListener implements IResourceDeltaVisitor {
     _trace.in("visit()", delta.toString());
     try {
 
-      if (delta.getResource().getName().contains(".sidl") &&
-          delta.getResource().getLocation().toPortableString()
-              .contains(delta.getResource().getProject().getName() + "/sidl")) {
-        Project project = ProjectBuilder.getInstance().getProject(
-            delta.getResource().getProject());
+      if (delta.getResource().getName().contains(".sidl") && delta.getResource()
+                                                                  .getLocation()
+                                                                  .toPortableString()
+                                                                  .contains(delta.getResource()
+                                                                                 .getProject()
+                                                                                 .getName() + "/sidl")) {
+        Project project =
+            ProjectBuilder.getInstance().getProject(delta.getResource()
+                                                         .getProject());
 
         switch (delta.getKind()) {
         case IResourceDelta.ADDED:

@@ -2,7 +2,6 @@ package de.tum.ascodt.plugin.repository;
 
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.Vector;
 
 import org.eclipse.gef.requests.CreationFactory;
@@ -57,8 +56,9 @@ public class InstanceFactory implements CreationFactory {
    * @param target
    * @throws ASCoDTException
    */
-  public InstanceFactory(Project project, String componentInterface,
-      String target) throws ASCoDTException {
+  public InstanceFactory(Project project,
+                         String componentInterface,
+                         String target) throws ASCoDTException {
     _project = project;
     _componentInterface = componentInterface;
     _target = target;
@@ -70,8 +70,7 @@ public class InstanceFactory implements CreationFactory {
    * @param getPorts
    * @return
    */
-  private Vector<Port> createProvidePorts(
-      GetProvidesAndUsesPortsOfComponent ports) {
+  private Vector<Port> createProvidePorts(GetProvidesAndUsesPortsOfComponent ports) {
     Vector<Port> providePorts = new Vector<Port>();
     String ports_as_string = ports.getProvidesPorts(",", ".");
     int index = 0;
@@ -93,30 +92,25 @@ public class InstanceFactory implements CreationFactory {
    * @param getPorts
    * @return
    */
-  private Vector<Port> createUsePorts(
-      GetProvidesAndUsesPortsOfComponent getPorts) {
+  private Vector<Port> createUsePorts(GetProvidesAndUsesPortsOfComponent getPorts) {
     Vector<Port> usePorts = new Vector<Port>();
-   
-    
+
     String ports_as_connectIds = getPorts.getUsesPortsConnectOffsets();
-    System.out.println("conn ids:"+ports_as_connectIds);
-    
+    System.out.println("conn ids:" + ports_as_connectIds);
+
     String ports_as_string = getPorts.getUsesPortsAndAsIdentifiers(",", ".");
     if (!ports_as_string.equals("")) {
-      
+
       if (ports_as_string.contains(",")) {
         String[] usePortsArray = ports_as_string.split(",");
         String[] functionIds = ports_as_connectIds.split(",");
         for (int i = 0; i < usePortsArray.length; i += 2) {
-          usePorts.add(
-              new UsePort(
-                  usePortsArray[i], usePortsArray[i + 1],
-                  i / 2,
-                  Integer.parseInt(functionIds[(i/2)*3]),
-                  Integer.parseInt(functionIds[(i/2)*3+1]),
-                  Integer.parseInt(functionIds[(i/2)*3+2])
-                  )
-              );
+          usePorts.add(new UsePort(usePortsArray[i],
+                                   usePortsArray[i + 1],
+                                   i / 2,
+                                   Integer.parseInt(functionIds[(i / 2) * 3]),
+                                   Integer.parseInt(functionIds[(i / 2) * 3 + 1]),
+                                   Integer.parseInt(functionIds[(i / 2) * 3 + 2])));
         }
       }
     }
@@ -139,31 +133,33 @@ public class InstanceFactory implements CreationFactory {
       String classToLoad = getTargetMainClass();
       try {
         String reference = "oid" + _project.getClasspathRepository().getNewId();
-        Class<?> componentClass = _project.getClasspathRepository().loadClass(
-            classToLoad);
-        de.tum.ascodt.repository.entities.Component application = (de.tum.ascodt.repository.entities.Component)componentClass
-            .getConstructor(String.class).newInstance(reference);
-        Component component=null;
-        if(application instanceof SocketComponent){
+        Class<?> componentClass =
+            _project.getClasspathRepository().loadClass(classToLoad);
+        de.tum.ascodt.repository.entities.Component application =
+            (de.tum.ascodt.repository.entities.Component)componentClass.getConstructor(String.class)
+                                                                       .newInstance(reference);
+        Component component = null;
+        if (application instanceof SocketComponent) {
           System.out.println("instantiating sc");
-          component= new de.tum.ascodt.plugin.ui.gef.model.SocketComponent();
-          ((de.tum.ascodt.plugin.ui.gef.model.SocketComponent)component).setPort(
-              ((SocketComponent)application).getPort());
-          ((de.tum.ascodt.plugin.ui.gef.model.SocketComponent)component).setHost(
-              ((SocketComponent)application).getHost());
-        }else
-          component= new Component();
+          component = new de.tum.ascodt.plugin.ui.gef.model.SocketComponent();
+          ((de.tum.ascodt.plugin.ui.gef.model.SocketComponent)component).setPort(((SocketComponent)application).getPort());
+          ((de.tum.ascodt.plugin.ui.gef.model.SocketComponent)component).setHost(((SocketComponent)application).getHost());
+        } else
+          component = new Component();
         component.setReference(reference);
         component.setClassName(_componentInterface);
         component.setTarget(_target);
-        
+
         application.setProjectLocation(_project.getEclipseProjectHandle()
-            .getLocation().toPortableString());
+                                               .getLocation()
+                                               .toPortableString());
         SymbolTable symbolTable = _project.getSymbolTable();
-        AClassPackageElement node = symbolTable.getGlobalScope()
-            .getClassDefinition(_componentInterface);
+        AClassPackageElement node =
+            symbolTable.getGlobalScope()
+                       .getClassDefinition(_componentInterface);
         assert node != null;
-        GetProvidesAndUsesPortsOfComponent getPorts = new GetProvidesAndUsesPortsOfComponent(_project.getFunctionTable());
+        GetProvidesAndUsesPortsOfComponent getPorts =
+            new GetProvidesAndUsesPortsOfComponent(_project.getFunctionTable());
         node.apply(getPorts);
         component.setProvidePorts(createProvidePorts(getPorts));
         component.setUsePorts(createUsePorts(getPorts));
@@ -235,27 +231,26 @@ public class InstanceFactory implements CreationFactory {
     Class<?> componentClass;
     try {
       componentClass = _project.getClasspathRepository().loadClass(classToLoad);
-      de.tum.ascodt.repository.entities.Component application = (de.tum.ascodt.repository.entities.Component)componentClass
-          .getConstructor(String.class)
-          .newInstance(gefComponent.getReference());
-      if(application instanceof SocketComponent){
-        System.out.println("loading sc:"+
-         ((de.tum.ascodt.plugin.ui.gef.model.SocketComponent)gefComponent).getPort());
-        AClassPackageElement node = _project.getSymbolTable().getGlobalScope()
-            .getClassDefinition(_componentInterface);
+      de.tum.ascodt.repository.entities.Component application =
+          (de.tum.ascodt.repository.entities.Component)componentClass.getConstructor(String.class)
+                                                                     .newInstance(gefComponent.getReference());
+      if (application instanceof SocketComponent) {
+        System.out.println("loading sc:" + ((de.tum.ascodt.plugin.ui.gef.model.SocketComponent)gefComponent).getPort());
+        AClassPackageElement node =
+            _project.getSymbolTable()
+                    .getGlobalScope()
+                    .getClassDefinition(_componentInterface);
         assert node != null;
-        GetProvidesAndUsesPortsOfComponent getPorts = new GetProvidesAndUsesPortsOfComponent(_project.getFunctionTable());
-        node.apply(getPorts); 
+        GetProvidesAndUsesPortsOfComponent getPorts =
+            new GetProvidesAndUsesPortsOfComponent(_project.getFunctionTable());
+        node.apply(getPorts);
         gefComponent.setUsePorts(createUsePorts(getPorts));
-        ((de.tum.ascodt.plugin.ui.gef.model.SocketComponent)gefComponent).setPort(
-            ((SocketComponent)application).getPort() 
-        );
-        ((de.tum.ascodt.plugin.ui.gef.model.SocketComponent)gefComponent).setHost(
-            ((SocketComponent)application).getHost() 
-        );
+        ((de.tum.ascodt.plugin.ui.gef.model.SocketComponent)gefComponent).setPort(((SocketComponent)application).getPort());
+        ((de.tum.ascodt.plugin.ui.gef.model.SocketComponent)gefComponent).setHost(((SocketComponent)application).getHost());
       }
       application.setProjectLocation(_project.getEclipseProjectHandle()
-          .getLocation().toPortableString());
+                                             .getLocation()
+                                             .toPortableString());
       gefComponent.setCCAComponent(application);
     } catch (ClassNotFoundException e) {
       ErrorWriterDevice.getInstance().println(e);

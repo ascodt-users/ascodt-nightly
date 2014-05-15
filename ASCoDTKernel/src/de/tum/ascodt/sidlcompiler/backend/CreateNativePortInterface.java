@@ -1,8 +1,8 @@
 package de.tum.ascodt.sidlcompiler.backend;
 
 
-import java.io.File;
-import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Stack;
 
@@ -31,8 +31,8 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * @author Atanas Atanasov
  */
 public class CreateNativePortInterface extends DepthFirstAdapter {
-  private static Trace _trace = new Trace(
-      CreateNativePortInterface.class.getCanonicalName());
+  private static Trace _trace =
+      new Trace(CreateNativePortInterface.class.getCanonicalName());
 
   private Stack<TemplateFile> _templateFilesInterface;
   private Stack<TemplateFile> _templateFilesDispatcherHeader;
@@ -47,7 +47,8 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
 
   private Stack<TemplateFile> _cxxOperationsTemplateFiles;
   private Stack<TemplateFile> _fortranOperationsTemplateFiles;
-  private URL _destinationDirectory;
+  private Path _fortranDirectoryPath;
+  private Path _cxxDirectoryPath;
   private String[] _namespace;
 
   private SymbolTable _symbolTable;
@@ -59,7 +60,8 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
   private boolean _generateSuperport;
 
   public CreateNativePortInterface(SymbolTable symbolTable,
-      URL destinationDirectory, String[] namespace) {
+                                   Path componentsDirectoryPath,
+                                   String[] namespace) {
     _templateFilesInterface = new Stack<TemplateFile>();
     _templateFilesDispatcherHeader = new Stack<TemplateFile>();
     _templateFilesDispatcherImplementation = new Stack<TemplateFile>();
@@ -70,7 +72,8 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
     _templateFilesCProxy4SocketDispatcher = new Stack<TemplateFile>();
     _cxxOperationsTemplateFiles = new Stack<TemplateFile>();
     _fortranOperationsTemplateFiles = new Stack<TemplateFile>();
-    _destinationDirectory = destinationDirectory;
+    _fortranDirectoryPath = componentsDirectoryPath.resolve("fortran");
+    _cxxDirectoryPath = componentsDirectoryPath.resolve("c++");
     _namespace = namespace;
     _symbolTable = symbolTable;
     _enumerationIncludes = "";
@@ -84,32 +87,43 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
    */
   public void addMappingsHeader(String portName, String fullQualifiedPortName) {
     _templateFilesDispatcherHeader.peek().addMapping("__PORT_NAME__", portName);
-    _templateFilesDispatcherHeader.peek().addMapping(
-        "__INCLUDE_GUARD_FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "_").toUpperCase());
-    _templateFilesDispatcherHeader.peek().addMapping("__FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "::"));
-    _templateFilesDispatcherHeader.peek().addMapping(
-        "__PATH_FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "/"));
-    _templateFilesDispatcherHeader.peek().addMapping(
-        "__JNI_FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "_"));
+    _templateFilesDispatcherHeader.peek()
+                                  .addMapping("__INCLUDE_GUARD_FULL_QUALIFIED_NAME__",
+                                              fullQualifiedPortName.replaceAll("[.]",
+                                                                               "_")
+                                                                   .toUpperCase());
+    _templateFilesDispatcherHeader.peek()
+                                  .addMapping("__FULL_QUALIFIED_NAME__",
+                                              fullQualifiedPortName.replaceAll("[.]",
+                                                                               "::"));
+    _templateFilesDispatcherHeader.peek()
+                                  .addMapping("__PATH_FULL_QUALIFIED_NAME__",
+                                              fullQualifiedPortName.replaceAll("[.]",
+                                                                               "/"));
+    _templateFilesDispatcherHeader.peek()
+                                  .addMapping("__JNI_FULL_QUALIFIED_NAME__",
+                                              fullQualifiedPortName.replaceAll("[.]",
+                                                                               "_"));
 
     _templateFilesSocketDispatcherHeader.peek().addMapping("__PORT_NAME__",
-        portName);
-    _templateFilesSocketDispatcherHeader.peek().addMapping(
-        "__INCLUDE_GUARD_FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "_").toUpperCase());
-    _templateFilesSocketDispatcherHeader.peek().addMapping(
-        "__FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "::"));
-    _templateFilesSocketDispatcherHeader.peek().addMapping(
-        "__PATH_FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "/"));
-    _templateFilesSocketDispatcherHeader.peek().addMapping(
-        "__JNI_FULL_QUALIFIED_NAME__",
-        fullQualifiedPortName.replaceAll("[.]", "_"));
+                                                           portName);
+    _templateFilesSocketDispatcherHeader.peek()
+                                        .addMapping("__INCLUDE_GUARD_FULL_QUALIFIED_NAME__",
+                                                    fullQualifiedPortName.replaceAll("[.]",
+                                                                                     "_")
+                                                                         .toUpperCase());
+    _templateFilesSocketDispatcherHeader.peek()
+                                        .addMapping("__FULL_QUALIFIED_NAME__",
+                                                    fullQualifiedPortName.replaceAll("[.]",
+                                                                                     "::"));
+    _templateFilesSocketDispatcherHeader.peek()
+                                        .addMapping("__PATH_FULL_QUALIFIED_NAME__",
+                                                    fullQualifiedPortName.replaceAll("[.]",
+                                                                                     "/"));
+    _templateFilesSocketDispatcherHeader.peek()
+                                        .addMapping("__JNI_FULL_QUALIFIED_NAME__",
+                                                    fullQualifiedPortName.replaceAll("[.]",
+                                                                                     "_"));
 
   }
 
@@ -118,50 +132,69 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
    * @param fullQualifiedName
    */
   public void addMappingsImplementation(String portName,
-      String fullQualifiedName) {
-    _templateFilesDispatcherImplementation.peek().addMapping(
-        "__FULL_QUALIFIED_NAME__", fullQualifiedName.replaceAll("[.]", "::"));
-    _templateFilesDispatcherImplementation.peek().addMapping("__PORT_NAME__",
-        portName);
-    _templateFilesDispatcherImplementation.peek().addMapping(
-        "__PATH_FULL_QUALIFIED_NAME__",
-        fullQualifiedName.replaceAll("[.]", "/"));
+                                        String fullQualifiedName) {
     _templateFilesDispatcherImplementation.peek()
-        .addMapping("__JNI_FULL_QUALIFIED_NAME__",
-            fullQualifiedName.replaceAll("[.]", "_"));
+                                          .addMapping("__FULL_QUALIFIED_NAME__",
+                                                      fullQualifiedName.replaceAll("[.]",
+                                                                                   "::"));
+    _templateFilesDispatcherImplementation.peek().addMapping("__PORT_NAME__",
+                                                             portName);
+    _templateFilesDispatcherImplementation.peek()
+                                          .addMapping("__PATH_FULL_QUALIFIED_NAME__",
+                                                      fullQualifiedName.replaceAll("[.]",
+                                                                                   "/"));
+    _templateFilesDispatcherImplementation.peek()
+                                          .addMapping("__JNI_FULL_QUALIFIED_NAME__",
+                                                      fullQualifiedName.replaceAll("[.]",
+                                                                                   "_"));
 
-    _templateFilesSocketDispatcherImplementation.peek().addMapping(
-        "__FULL_QUALIFIED_NAME__", fullQualifiedName.replaceAll("[.]", "::"));
-    _templateFilesSocketDispatcherImplementation.peek().addMapping(
-        "__PORT_NAME__", portName);
-    _templateFilesSocketDispatcherImplementation.peek().addMapping(
-        "__PATH_FULL_QUALIFIED_NAME__",
-        fullQualifiedName.replaceAll("[.]", "/"));
     _templateFilesSocketDispatcherImplementation.peek()
-        .addMapping("__JNI_FULL_QUALIFIED_NAME__",
-            fullQualifiedName.replaceAll("[.]", "_"));
+                                                .addMapping("__FULL_QUALIFIED_NAME__",
+                                                            fullQualifiedName.replaceAll("[.]",
+                                                                                         "::"));
+    _templateFilesSocketDispatcherImplementation.peek()
+                                                .addMapping("__PORT_NAME__",
+                                                            portName);
+    _templateFilesSocketDispatcherImplementation.peek()
+                                                .addMapping("__PATH_FULL_QUALIFIED_NAME__",
+                                                            fullQualifiedName.replaceAll("[.]",
+                                                                                         "/"));
+    _templateFilesSocketDispatcherImplementation.peek()
+                                                .addMapping("__JNI_FULL_QUALIFIED_NAME__",
+                                                            fullQualifiedName.replaceAll("[.]",
+                                                                                         "_"));
 
     _templateFilesFortranSocketDispatcher.peek().addMapping("__PORT_NAME__",
-        portName);
-    _templateFilesFortranSocketDispatcher.peek().addMapping(
-        "__C_FULL_QUALIFIED_NAME__",
-        fullQualifiedName.replaceAll("[.]", "_").toLowerCase());
-    _templateFilesFortranProxy4SocketDispatcher.peek().addMapping(
-        "__C_FULL_QUALIFIED_NAME__",
-        fullQualifiedName.replaceAll("[.]", "_").toLowerCase());
-    _templateFilesCProxy4SocketDispatcher.peek().addMapping(
-        "__C_FULL_QUALIFIED_NAME_4WIN__",
-        fullQualifiedName.replaceAll("[.]", "_").toUpperCase());
+                                                            portName);
+    _templateFilesFortranSocketDispatcher.peek()
+                                         .addMapping("__C_FULL_QUALIFIED_NAME__",
+                                                     fullQualifiedName.replaceAll("[.]",
+                                                                                  "_")
+                                                                      .toLowerCase());
+    _templateFilesFortranProxy4SocketDispatcher.peek()
+                                               .addMapping("__C_FULL_QUALIFIED_NAME__",
+                                                           fullQualifiedName.replaceAll("[.]",
+                                                                                        "_")
+                                                                            .toLowerCase());
+    _templateFilesCProxy4SocketDispatcher.peek()
+                                         .addMapping("__C_FULL_QUALIFIED_NAME_4WIN__",
+                                                     fullQualifiedName.replaceAll("[.]",
+                                                                                  "_")
+                                                                      .toUpperCase());
 
-    _templateFilesCProxy4SocketDispatcher.peek().addMapping(
-        "__C_FULL_QUALIFIED_NAME__",
-        fullQualifiedName.replaceAll("[.]", "_").toLowerCase());
-    _templateFilesCProxy4SocketDispatcher.peek().addMapping(
-        "__CXX_FULL_QUALIFIED_NAME__",
-        fullQualifiedName.replaceAll("[.]", "::"));
-    _templateFilesCProxy4SocketDispatcher.peek().addMapping(
-        "__PATH_FULL_QUALIFIED_NAME__",
-        fullQualifiedName.replaceAll("[.]", "/"));
+    _templateFilesCProxy4SocketDispatcher.peek()
+                                         .addMapping("__C_FULL_QUALIFIED_NAME__",
+                                                     fullQualifiedName.replaceAll("[.]",
+                                                                                  "_")
+                                                                      .toLowerCase());
+    _templateFilesCProxy4SocketDispatcher.peek()
+                                         .addMapping("__CXX_FULL_QUALIFIED_NAME__",
+                                                     fullQualifiedName.replaceAll("[.]",
+                                                                                  "::"));
+    _templateFilesCProxy4SocketDispatcher.peek()
+                                         .addMapping("__PATH_FULL_QUALIFIED_NAME__",
+                                                     fullQualifiedName.replaceAll("[.]",
+                                                                                  "/"));
   }
 
   /**
@@ -170,18 +203,22 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
    * @param interfaceExtensions
    * @param interfaceExtensionsIncludes
    */
-  public void addMappingsInterface(String portName, String fullQualifiedName,
-      String interfaceExtensions, String interfaceExtensionsIncludes) {
+  public void addMappingsInterface(String portName,
+                                   String fullQualifiedName,
+                                   String interfaceExtensions,
+                                   String interfaceExtensionsIncludes) {
     _templateFilesInterface.peek().addMapping("__SUPER_PORTS_INCLUDES__",
-        interfaceExtensionsIncludes);
+                                              interfaceExtensionsIncludes);
     _templateFilesInterface.peek().addMapping("__PORT_NAME__", portName);
     _templateFilesInterface.peek().addMapping("__SUPER_TYPES__",
-        interfaceExtensions);
-    _templateFilesInterface.peek().addMapping(
-        "__INCLUDE_GUARD_FULL_QUALIFIED_NAME__",
-        fullQualifiedName.replaceAll("[.]", "_").toUpperCase());
-    _templateFilesInterface.peek().addMapping("__FULL_QUALIFIED_NAME__",
-        fullQualifiedName.replaceAll("[.]", "::"));
+                                              interfaceExtensions);
+    _templateFilesInterface.peek()
+                           .addMapping("__INCLUDE_GUARD_FULL_QUALIFIED_NAME__",
+                                       fullQualifiedName.replaceAll("[.]", "_")
+                                                        .toUpperCase());
+    _templateFilesInterface.peek()
+                           .addMapping("__FULL_QUALIFIED_NAME__",
+                                       fullQualifiedName.replaceAll("[.]", "::"));
   }
 
   /**
@@ -189,15 +226,17 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
    * @param enums
    */
   private void generateEnumIncludes() {
-    for (AEnumDeclarationPackageElement globalEnumeration : _symbolTable
-        .getGlobalScope().getFlattenedEnumsElements()) {
+    for (AEnumDeclarationPackageElement globalEnumeration : _symbolTable.getGlobalScope()
+                                                                        .getFlattenedEnumsElements()) {
       // for(String localEnumeration:_enums)
 
       // if(globalEnumeration.getName().getText().contains(localEnumeration.substring(localEnumeration.lastIndexOf(".")+1))){
-      String fullQualifiedName = _symbolTable.getScope(globalEnumeration)
-          .getFullyQualifiedName(globalEnumeration.getName().getText());
-      _enumerationIncludes += "#include \"" +
-          fullQualifiedName.replaceAll("[.]", "/") + ".h\"\n";
+      String fullQualifiedName =
+          _symbolTable.getScope(globalEnumeration)
+                      .getFullyQualifiedName(globalEnumeration.getName()
+                                                              .getText());
+      _enumerationIncludes +=
+          "#include \"" + fullQualifiedName.replaceAll("[.]", "/") + ".h\"\n";
       // }
     }
   }
@@ -207,123 +246,90 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
     if (!_generateSuperport) {
       _trace.in("inAInterfacePackageElement(...)", "open new port interface");
 
-      try {
-        String portName = node.getName().getText();
-        String templateFileOfInterface = "cxx-port-interface.template";
-        String templateFileOfDispatcherHeaderPort = "cxx-port-dispatcher-header.template";
-        String templateFileOfDispatcherImplementationPort = "cxx-port-dispatcher-implementation.template";
-        String templateFileOfSocketDispatcherHeaderPort = "cxx-port-socket-dispatcher-header.template";
-        String templateFileOfSocketDispatcherImplementationPort = "cxx-port-socket-dispatcher-implementation.template";
-        String templateFileOfFortranSocketDispatcherImplementationPort = "fortran-port-socket-dispatcher-implementation.template";
-        String templateFileOfFortranProxy4SocketDispatcherImplementationPort = "fortran-port-socket-dispatcher-proxy-implementation.template";
-        String templateFileOfCProxy4SocketDispatcherImplementationPort = "c-port-socket-dispatcher-proxy-implementation.template";
+      String componentName = node.getName().getText();
+      String fullyQualifiedComponentName =
+          _symbolTable.getScope(node).getFullyQualifiedName(componentName);
 
-        String fullQualifiedName = _symbolTable.getScope(node)
-            .getFullyQualifiedName(portName);
-        String destinationFileOfInterface = _destinationDirectory.toString() +
-            File.separatorChar + fullQualifiedName.replaceAll("[.]", "/") +
-            ".h";
-        String destinationFileOfDispatcherPortHeader = _destinationDirectory
-            .toString() +
-            File.separatorChar +
-            fullQualifiedName.replaceAll("[.]", "/") + "NativeDispatcher.h";
-        String destinationFileOfDispatcherPortImplementation = _destinationDirectory
-            .toString() +
-            File.separatorChar +
-            fullQualifiedName.replaceAll("[.]", "/") + "NativeDispatcher.cpp";
-        String destinationFileOfSocketDispatcherPortHeader = _destinationDirectory
-            .toString() +
-            File.separatorChar +
-            fullQualifiedName.replaceAll("[.]", "/") +
-            "NativeSocketDispatcher.h";
-        String destinationFileOfSocketDispatcherPortImplementation = _destinationDirectory
-            .toString() +
-            File.separatorChar +
-            fullQualifiedName.replaceAll("[.]", "/") +
-            "NativeSocketDispatcher.cpp";
-        String destinationFileOfFortranSocketDispatcherPortImplementation = _destinationDirectory
-            .toString() +
-            File.separatorChar +
-            fullQualifiedName.replaceAll("[.]", "/") +
-            "FNativeSocketDispatcher.f90";
-        String destinationFileOfFortranProxy4SocketDispatcherPortImplementation = _destinationDirectory
-            .toString() +
-            File.separatorChar +
-            fullQualifiedName.replaceAll("[.]", "/") +
-            "FProxyNativeSocketDispatcher.f90";
-        String destinationFileOfCProxy4SocketDispatcherPortImplementation = _destinationDirectory
-            .toString() +
-            File.separatorChar +
-            fullQualifiedName.replaceAll("[.]", "/") +
-            "CProxyNativeSocketDispatcher.cpp";
+      _templateFilesInterface.push(new TemplateFile(Paths.get("cxx-port-interface.template"),
+                                                    _cxxDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                     "/") + ".h"),
+                                                    _namespace,
+                                                    TemplateFile.getLanguageConfigurationForCPP(),
+                                                    true));
+      _templateFilesDispatcherHeader.push(new TemplateFile(Paths.get("cxx-port-dispatcher-header.template"),
+                                                           _cxxDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                            "/") + "NativeDispatcher.h"),
+                                                           _namespace,
+                                                           TemplateFile.getLanguageConfigurationForCPP(),
+                                                           true));
+      _templateFilesDispatcherImplementation.push(new TemplateFile(Paths.get("cxx-port-dispatcher-implementation.template"),
+                                                                   _cxxDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                    "/") + "NativeDispatcher.cpp"),
+                                                                   _namespace,
+                                                                   TemplateFile.getLanguageConfigurationForCPP(),
+                                                                   true));
+      _templateFilesSocketDispatcherHeader.push(new TemplateFile(Paths.get("cxx-port-socket-dispatcher-header.template"),
+                                                                 _cxxDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                  "/") + "NativeSocketDispatcher.h"),
+                                                                 _namespace,
+                                                                 TemplateFile.getLanguageConfigurationForCPP(),
+                                                                 true));
+      _templateFilesSocketDispatcherImplementation.push(new TemplateFile(Paths.get("cxx-port-socket-dispatcher-implementation.template"),
+                                                                         _cxxDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                          "/") + "NativeSocketDispatcher.cpp"),
+                                                                         _namespace,
+                                                                         TemplateFile.getLanguageConfigurationForCPP(),
+                                                                         true));
+      _templateFilesFortranSocketDispatcher.push(new TemplateFile(Paths.get("fortran-port-socket-dispatcher-implementation.template"),
+                                                                  _fortranDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                       "/") + "FNativeSocketDispatcher.f90"),
+                                                                  _namespace,
+                                                                  TemplateFile.getLanguageConfigurationForFortran(),
+                                                                  true));
+      _templateFilesFortranProxy4SocketDispatcher.push(new TemplateFile(Paths.get("fortran-port-socket-dispatcher-proxy-implementation.template"),
+                                                                        _fortranDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                             "/") + "FProxyNativeSocketDispatcher.f90"),
+                                                                        _namespace,
+                                                                        TemplateFile.getLanguageConfigurationForFortran(),
+                                                                        true));
+      _templateFilesCProxy4SocketDispatcher.push(new TemplateFile(Paths.get("c-port-socket-dispatcher-proxy-implementation.template"),
+                                                                  _cxxDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                   "/") + "CProxyNativeSocketDispatcher.cpp"),
+                                                                  _namespace,
+                                                                  TemplateFile.getLanguageConfigurationForCPP(),
+                                                                  true));
+      String interfaceExtensions = "";
+      String interfaceExtensionsIncludes = "";
+      String delim = ": public ";
+      for (PUserDefinedType superInterface : node.getSupertype()) {
+        String usesTypeName = superInterface.toString().trim();
+        interfaceExtensions += delim + usesTypeName.replaceAll(" ", "::");
+        interfaceExtensionsIncludes +=
+            "#include \"" + usesTypeName.replaceAll(" ", "/") + ".h\"\n";
+        delim = ", public ";
 
-        _templateFilesInterface.push(new TemplateFile(templateFileOfInterface,
-            destinationFileOfInterface, _namespace, TemplateFile
-                .getLanguageConfigurationForCPP(), true));
-        _templateFilesDispatcherHeader.push(new TemplateFile(
-            templateFileOfDispatcherHeaderPort,
-            destinationFileOfDispatcherPortHeader, _namespace, TemplateFile
-                .getLanguageConfigurationForCPP(), true));
-        _templateFilesDispatcherImplementation.push(new TemplateFile(
-            templateFileOfDispatcherImplementationPort,
-            destinationFileOfDispatcherPortImplementation, _namespace,
-            TemplateFile.getLanguageConfigurationForCPP(), true));
-        _templateFilesSocketDispatcherHeader.push(new TemplateFile(
-            templateFileOfSocketDispatcherHeaderPort,
-            destinationFileOfSocketDispatcherPortHeader, _namespace,
-            TemplateFile.getLanguageConfigurationForCPP(), true));
-        _templateFilesSocketDispatcherImplementation.push(new TemplateFile(
-            templateFileOfSocketDispatcherImplementationPort,
-            destinationFileOfSocketDispatcherPortImplementation, _namespace,
-            TemplateFile.getLanguageConfigurationForCPP(), true));
-        _templateFilesFortranSocketDispatcher
-            .push(new TemplateFile(
-                templateFileOfFortranSocketDispatcherImplementationPort,
-                destinationFileOfFortranSocketDispatcherPortImplementation,
-                _namespace, TemplateFile.getLanguageConfigurationForFortran(),
-                true));
-        _templateFilesFortranProxy4SocketDispatcher
-            .push(new TemplateFile(
-                templateFileOfFortranProxy4SocketDispatcherImplementationPort,
-                destinationFileOfFortranProxy4SocketDispatcherPortImplementation,
-                _namespace, TemplateFile.getLanguageConfigurationForFortran(),
-                true));
-        _templateFilesCProxy4SocketDispatcher.push(new TemplateFile(
-            templateFileOfCProxy4SocketDispatcherImplementationPort,
-            destinationFileOfCProxy4SocketDispatcherPortImplementation,
-            _namespace, TemplateFile.getLanguageConfigurationForCPP(), true));
-        String interfaceExtensions = "";
-        String interfaceExtensionsIncludes = "";
-        String delim = ": public ";
-        for (PUserDefinedType superInterface : node.getSupertype()) {
-          String usesTypeName = superInterface.toString().trim();
-          interfaceExtensions += delim + usesTypeName.replaceAll(" ", "::");
-          interfaceExtensionsIncludes += "#include \"" +
-              usesTypeName.replaceAll(" ", "/") + ".h\"\n";
-          delim = ", public ";
-
-        }
-
-        addMappingsInterface(portName, fullQualifiedName, interfaceExtensions,
-            interfaceExtensionsIncludes);
-
-        addMappingsHeader(portName, fullQualifiedName);
-        addMappingsImplementation(portName, fullQualifiedName);
-        generateEnumIncludes();
-        _templateFilesInterface.peek().addMapping("__ENUM_INCLUDES__",
-            _enumerationIncludes);
-        _templateFilesCProxy4SocketDispatcher.peek().addMapping(
-            "__ENUM_INCLUDES__", _enumerationIncludes);
-        _templateFilesDispatcherHeader.peek().open();
-        _templateFilesDispatcherImplementation.peek().open();
-        _templateFilesSocketDispatcherHeader.peek().open();
-        _templateFilesSocketDispatcherImplementation.peek().open();
-        _templateFilesFortranProxy4SocketDispatcher.peek().open();
-        _templateFilesCProxy4SocketDispatcher.peek().open();
-        // _templateFilesFortranSocketDispatcher.peek().open();
-      } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().println(e);
       }
+
+      addMappingsInterface(componentName,
+                           fullyQualifiedComponentName,
+                           interfaceExtensions,
+                           interfaceExtensionsIncludes);
+
+      addMappingsHeader(componentName, fullyQualifiedComponentName);
+      addMappingsImplementation(componentName, fullyQualifiedComponentName);
+      generateEnumIncludes();
+      _templateFilesInterface.peek().addMapping("__ENUM_INCLUDES__",
+                                                _enumerationIncludes);
+      _templateFilesCProxy4SocketDispatcher.peek()
+                                           .addMapping("__ENUM_INCLUDES__",
+                                                       _enumerationIncludes);
+      _templateFilesDispatcherHeader.peek().open();
+      _templateFilesDispatcherImplementation.peek().open();
+      _templateFilesSocketDispatcherHeader.peek().open();
+      _templateFilesSocketDispatcherImplementation.peek().open();
+      _templateFilesFortranProxy4SocketDispatcher.peek().open();
+      _templateFilesCProxy4SocketDispatcher.peek().open();
+      // _templateFilesFortranSocketDispatcher.peek().open();
 
       _trace.out("inAInterfacePackageElement(...)", "open new port interface");
     }
@@ -336,29 +342,23 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
   public void inAOperation(AOperation node) {
     _trace.in("inAOperation(...)");
     try {
-      String templateFileInterface = "cxx-port-operation-interface.template";
-      String templateFileHeader = "cxx-port-native-operation-plain-header.template";
-      String templateFileImplementation = "cxx-port-native-operation-dispatcher-implementation.template";
-      String templateFileFortranOperationImplementation = "fortran-port-socket-dispatcher-operation-implementation.template";
-      String templateFileFortranProxyOperationImplementation = "fortran-port-socket-dispatcher-proxy-operation-implementation.template";
-      String templateFileCProxyOperationImplementation = "c-port-socket-dispatcher-operation-implementation.template";
-
-      TemplateFile templateDispatcherHeader = new TemplateFile(
-          _templateFilesDispatcherHeader.peek(), templateFileHeader);
-      TemplateFile templateDispatcherImplementation = new TemplateFile(
-          _templateFilesDispatcherImplementation.peek(),
-          templateFileImplementation);
-      TemplateFile templateFortranOperation4DispatcherImplementation = new TemplateFile(
-          _templateFilesFortranSocketDispatcher.peek(),
-          templateFileFortranOperationImplementation);
-      TemplateFile templateFortranProxyOperation4DispatcherImplementation = new TemplateFile(
-          _templateFilesFortranProxy4SocketDispatcher.peek(),
-          templateFileFortranProxyOperationImplementation);
-      TemplateFile templateCProxyOperation4DispatcherImplementation = new TemplateFile(
-          _templateFilesCProxy4SocketDispatcher.peek(),
-          templateFileCProxyOperationImplementation);
-      GetParameterList parameterList = new GetParameterList(
-          _symbolTable.getScope(node));
+      TemplateFile templateDispatcherHeader =
+          new TemplateFile(_templateFilesDispatcherHeader.peek(),
+                           Paths.get("cxx-port-native-operation-plain-header.template"));
+      TemplateFile templateDispatcherImplementation =
+          new TemplateFile(_templateFilesDispatcherImplementation.peek(),
+                           Paths.get("cxx-port-native-operation-dispatcher-implementation.template"));
+      TemplateFile templateFortranOperation4DispatcherImplementation =
+          new TemplateFile(_templateFilesFortranSocketDispatcher.peek(),
+                           Paths.get("fortran-port-socket-dispatcher-operation-implementation.template"));
+      TemplateFile templateFortranProxyOperation4DispatcherImplementation =
+          new TemplateFile(_templateFilesFortranProxy4SocketDispatcher.peek(),
+                           Paths.get("fortran-port-socket-dispatcher-proxy-operation-implementation.template"));
+      TemplateFile templateCProxyOperation4DispatcherImplementation =
+          new TemplateFile(_templateFilesCProxy4SocketDispatcher.peek(),
+                           Paths.get("c-port-socket-dispatcher-operation-implementation.template"));
+      GetParameterList parameterList =
+          new GetParameterList(_symbolTable.getScope(node));
       node.apply(parameterList);
       if (parameterList.hasEnums()) {
         HashSet<String> enums = parameterList.getEnumTypes();
@@ -367,80 +367,78 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
       ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
       node.apply(onlyInParameters);
       if (!_generateSuperport) {
-        TemplateFile templateInterface = new TemplateFile(
-            _templateFilesInterface.peek(), templateFileInterface);
+        TemplateFile templateInterface =
+            new TemplateFile(_templateFilesInterface.peek(),
+                             Paths.get("cxx-port-operation-interface.template"));
 
         templateInterface.addMapping("__OPERATION_NAME__", node.getName()
-            .getText());
+                                                               .getText());
         templateInterface.addMapping("__OPERATION_PARAMETERS_LIST__",
-            parameterList.getParameterListInCxx());
+                                     parameterList.getParameterListInCxx());
 
         _cxxOperationsTemplateFiles.push(templateInterface);
       }
-      templateFortranOperation4DispatcherImplementation.addMapping(
-          "__OPERATION_NAME__", node.getName().getText());
-      templateFortranProxyOperation4DispatcherImplementation.addMapping(
-          "__OPERATION_NAME__", node.getName().getText());
+      templateFortranOperation4DispatcherImplementation.addMapping("__OPERATION_NAME__",
+                                                                   node.getName()
+                                                                       .getText());
+      templateFortranProxyOperation4DispatcherImplementation.addMapping("__OPERATION_NAME__",
+                                                                        node.getName()
+                                                                            .getText());
 
-      templateFortranOperation4DispatcherImplementation.addMapping(
-          "__OPERATION_PARAMETERS_LIST__",
-          parameterList.getParameterListInF(true));
-      templateFortranOperation4DispatcherImplementation.addMapping(
-          "__OPERATION_PARAMETERS_TYPES_LIST_FOR_C__",
-          parameterList.getParameterListTypesForFCBindedToC(false));
-      templateFortranOperation4DispatcherImplementation.addMapping(
-          "__OPERATION_PARAMETERS_TYPES_LIST__",
-          parameterList.getParameterListTypesForF(true));
+      templateFortranOperation4DispatcherImplementation.addMapping("__OPERATION_PARAMETERS_LIST__",
+                                                                   parameterList.getParameterListInF(true));
+      templateFortranOperation4DispatcherImplementation.addMapping("__OPERATION_PARAMETERS_TYPES_LIST_FOR_C__",
+                                                                   parameterList.getParameterListTypesForFCBindedToC(false));
+      templateFortranOperation4DispatcherImplementation.addMapping("__OPERATION_PARAMETERS_TYPES_LIST__",
+                                                                   parameterList.getParameterListTypesForF(true));
 
-      templateFortranProxyOperation4DispatcherImplementation.addMapping(
-          "__OPERATION_PARAMETERS_LIST__",
-          parameterList.getParameterListInF(true));
-      templateFortranProxyOperation4DispatcherImplementation.addMapping(
-          "__OPERATION_PARAMETERS_TYPES_LIST__",
-          parameterList.getParameterListTypesForFCBindedToC(true));
+      templateFortranProxyOperation4DispatcherImplementation.addMapping("__OPERATION_PARAMETERS_LIST__",
+                                                                        parameterList.getParameterListInF(true));
+      templateFortranProxyOperation4DispatcherImplementation.addMapping("__OPERATION_PARAMETERS_TYPES_LIST__",
+                                                                        parameterList.getParameterListTypesForFCBindedToC(true));
 
-      templateFortranOperation4DispatcherImplementation.addMapping(
-          "__FUNCTION_CALL_PARAMETERS_LIST__",
-          parameterList.getFunctionCallListInFClient(true));
-      templateFortranOperation4DispatcherImplementation.addMapping(
-          "__FUNCTION_CALL_PARAMETERS_LIST_FOR_C__",
-          parameterList.getFunctionCallListInFClient(false));
+      templateFortranOperation4DispatcherImplementation.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",
+                                                                   parameterList.getFunctionCallListInFClient(true));
+      templateFortranOperation4DispatcherImplementation.addMapping("__FUNCTION_CALL_PARAMETERS_LIST_FOR_C__",
+                                                                   parameterList.getFunctionCallListInFClient(false));
 
       templateDispatcherHeader.addMapping("__OPERATION_NAME__", node.getName()
-          .getText());
+                                                                    .getText());
       templateDispatcherHeader.addMapping("__OPERATION_PARAMETERS_LIST__",
-          parameterList.getParameterListInCxx());
+                                          parameterList.getParameterListInCxx());
 
-      templateDispatcherImplementation.addMapping("__OPERATION_NAME__", node
-          .getName().getText());
-      templateDispatcherImplementation.addMapping(
-          "__OPERATION_PARAMETERS_LIST__",
-          parameterList.getParameterListInCxx());
-      templateDispatcherImplementation.addMapping(
-          "__FUNCTION_CALL_PARAMETERS_LIST__",
-          parameterList.getFunctionCallListInCxx());
+      templateDispatcherImplementation.addMapping("__OPERATION_NAME__",
+                                                  node.getName().getText());
+      templateDispatcherImplementation.addMapping("__OPERATION_PARAMETERS_LIST__",
+                                                  parameterList.getParameterListInCxx());
+      templateDispatcherImplementation.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",
+                                                  parameterList.getFunctionCallListInCxx());
       String parameters = parameterList.getParameterListInF2Cxx();
       if (!parameters.equals("")) {
         parameters = "," + parameters;
       }
-      templateCProxyOperation4DispatcherImplementation.addMapping(
-          "__PREPARE__STRING_ARGS__", parameterList.convertCharsToString());
-      templateCProxyOperation4DispatcherImplementation.addMapping(
-          "__OPERATION_NAME__", node.getName().getText().toLowerCase());
-      templateCProxyOperation4DispatcherImplementation.addMapping(
-          "__OPERATION_NAME_4WIN__", node.getName().getText().toUpperCase());
+      templateCProxyOperation4DispatcherImplementation.addMapping("__PREPARE__STRING_ARGS__",
+                                                                  parameterList.convertCharsToString());
+      templateCProxyOperation4DispatcherImplementation.addMapping("__OPERATION_NAME__",
+                                                                  node.getName()
+                                                                      .getText()
+                                                                      .toLowerCase());
+      templateCProxyOperation4DispatcherImplementation.addMapping("__OPERATION_NAME_4WIN__",
+                                                                  node.getName()
+                                                                      .getText()
+                                                                      .toUpperCase());
 
-      templateCProxyOperation4DispatcherImplementation.addMapping(
-          "__CXX_OPERATION_NAME__", node.getName().getText());
-      templateCProxyOperation4DispatcherImplementation.addMapping(
-          "__FUNCTION_CALL_PARAMETERS_LIST__",
-          parameterList.getFunctionCallListInF2Cxx());
-      templateCProxyOperation4DispatcherImplementation.addMapping(
-          "__OPERATION_PARAMETERS_LIST__", parameters);
+      templateCProxyOperation4DispatcherImplementation.addMapping("__CXX_OPERATION_NAME__",
+                                                                  node.getName()
+                                                                      .getText());
+      templateCProxyOperation4DispatcherImplementation.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",
+                                                                  parameterList.getFunctionCallListInF2Cxx());
+      templateCProxyOperation4DispatcherImplementation.addMapping("__OPERATION_PARAMETERS_LIST__",
+                                                                  parameters);
 
       _operations += "\tprocedure,public::" + node.getName().getText() + "\n";
-      _operations += "\tprocedure,private::" + node.getName().getText() +
-          "_internal\n";
+      _operations +=
+          "\tprocedure,private::" + node.getName().getText() + "_internal\n";
       templateDispatcherHeader.open();
       templateDispatcherHeader.close();
 
@@ -450,10 +448,7 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
       templateFortranProxyOperation4DispatcherImplementation.close();
       templateCProxyOperation4DispatcherImplementation.open();
       templateCProxyOperation4DispatcherImplementation.close();
-      _fortranOperationsTemplateFiles
-          .add(templateFortranOperation4DispatcherImplementation);
-      // _fortranOperationsTemplateFiles
-
+      _fortranOperationsTemplateFiles.add(templateFortranOperation4DispatcherImplementation);
     } catch (ASCoDTException e) {
       ErrorWriterDevice.getInstance().println(e);
     }
@@ -465,8 +460,8 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
   public void inAUserDefinedType(AUserDefinedType node) {
 
     String fullQualifiedSymbol = Scope.getSymbol(node);
-    AInterfacePackageElement interfaceDefintion = _symbolTable.getScope(node)
-        .getInterfaceDefinition(fullQualifiedSymbol);
+    AInterfacePackageElement interfaceDefintion =
+        _symbolTable.getScope(node).getInterfaceDefinition(fullQualifiedSymbol);
     if (interfaceDefintion != null) {
       _generateSuperport = true;
       interfaceDefintion.apply(this);
@@ -480,38 +475,32 @@ public class CreateNativePortInterface extends DepthFirstAdapter {
     if (!_generateSuperport) {
 
       _templateFilesFortranSocketDispatcher.peek().addMapping("__OPERATIONS__",
-          _operations);
+                                                              _operations);
 
-      try {
-        _templateFilesFortranSocketDispatcher.peek().open();
-        _templateFilesInterface.peek().open();
+      _templateFilesFortranSocketDispatcher.peek().open();
+      _templateFilesInterface.peek().open();
 
-        while (!_cxxOperationsTemplateFiles.isEmpty()) {
-          TemplateFile operationTemplate = _cxxOperationsTemplateFiles.peek();
-          operationTemplate.open();
-          operationTemplate.close();
-          _cxxOperationsTemplateFiles.pop();
-        }
-        while (!_fortranOperationsTemplateFiles.isEmpty()) {
-          TemplateFile operationTemplate = _fortranOperationsTemplateFiles
-              .peek();
-          operationTemplate.open();
-          operationTemplate.close();
-          _fortranOperationsTemplateFiles.pop();
-        }
-
-        _templateFilesInterface.peek().close();
-        _templateFilesDispatcherHeader.peek().close();
-        _templateFilesDispatcherImplementation.peek().close();
-
-        _templateFilesSocketDispatcherHeader.peek().close();
-        _templateFilesSocketDispatcherImplementation.peek().close();
-        _templateFilesFortranSocketDispatcher.peek().close();
-        _templateFilesFortranProxy4SocketDispatcher.peek().close();
-        _templateFilesCProxy4SocketDispatcher.peek().close();
-      } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().println(e);
+      while (!_cxxOperationsTemplateFiles.isEmpty()) {
+        TemplateFile operationTemplate = _cxxOperationsTemplateFiles.peek();
+        operationTemplate.open();
+        operationTemplate.close();
+        _cxxOperationsTemplateFiles.pop();
       }
+      while (!_fortranOperationsTemplateFiles.isEmpty()) {
+        TemplateFile operationTemplate = _fortranOperationsTemplateFiles.peek();
+        operationTemplate.open();
+        operationTemplate.close();
+        _fortranOperationsTemplateFiles.pop();
+      }
+
+      _templateFilesInterface.peek().close();
+      _templateFilesDispatcherHeader.peek().close();
+      _templateFilesDispatcherImplementation.peek().close();
+      _templateFilesSocketDispatcherHeader.peek().close();
+      _templateFilesSocketDispatcherImplementation.peek().close();
+      _templateFilesFortranSocketDispatcher.peek().close();
+      _templateFilesFortranProxy4SocketDispatcher.peek().close();
+      _templateFilesCProxy4SocketDispatcher.peek().close();
 
       _templateFilesInterface.pop();
       _templateFilesDispatcherHeader.pop();

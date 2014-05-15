@@ -95,8 +95,7 @@ public interface Analysis extends Switch {
 
   void caseAParameterArrayInParameter(AParameterArrayInParameter node);
 
-  void
-      caseAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node);
+  void caseAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node);
 
   void caseAParameterArrayOutParameter(AParameterArrayOutParameter node);
 

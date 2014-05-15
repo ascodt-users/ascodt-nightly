@@ -16,7 +16,7 @@ public final class AParameterInParameter extends PParameter {
   }
 
   public AParameterInParameter(@SuppressWarnings("hiding") PBuiltInType _type_,
-      @SuppressWarnings("hiding") TIdentifier _name_) {
+                               @SuppressWarnings("hiding") TIdentifier _name_) {
     // Constructor
     setType(_type_);
 
@@ -60,7 +60,7 @@ public final class AParameterInParameter extends PParameter {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     if (_type_ == oldChild) {
       setType((PBuiltInType)newChild);

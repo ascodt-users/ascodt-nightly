@@ -33,8 +33,7 @@ public class ProjectContentProvider implements IStructuredContentProvider {
   }
 
   @Override
-  public void
-      inputChanged(final Viewer viewer, Object oldInput, Object newInput) {
+  public void inputChanged(final Viewer viewer, Object oldInput, Object newInput) {
     Display.getDefault().syncExec(new Runnable() {
       @Override
       public void run() {

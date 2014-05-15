@@ -1,7 +1,7 @@
 SET(SRC_COMP
-     ../../components/java/__PATH_FULL_QUALIFIED_NAME__JNIProxy.cpp 
-     ../../components/java/__PATH_FULL_QUALIFIED_NAME__AbstractImplementation.f90
-     ../../components/java/__PATH_FULL_QUALIFIED_NAME__FProxy.f90
+     ../../components/c++/__PATH_FULL_QUALIFIED_NAME__JNIProxy.cpp 
+     ../../components/fortran/__PATH_FULL_QUALIFIED_NAME__AbstractImplementation.f90
+     ../../components/fortran/__PATH_FULL_QUALIFIED_NAME__FProxy.f90
      ../../src/__PATH_FULL_QUALIFIED_NAME__Implementation.f90
      )
 

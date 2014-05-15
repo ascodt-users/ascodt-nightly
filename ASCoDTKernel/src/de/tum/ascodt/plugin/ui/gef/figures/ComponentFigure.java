@@ -46,9 +46,14 @@ public class ComponentFigure extends Figure {
 
   private Vector<RectangleFigure> output;
 
-  public ComponentFigure(boolean hasGUI, boolean isRemote, String ref,
-      String className, String iconPath, Vector<Port> usePorts,
-      Vector<Port> providePorts, String projectName) {
+  public ComponentFigure(boolean hasGUI,
+                         boolean isRemote,
+                         String ref,
+                         String className,
+                         String iconPath,
+                         Vector<Port> usePorts,
+                         Vector<Port> providePorts,
+                         String projectName) {
     setBackgroundColor(ColorConstants.tooltipBackground);
     setForegroundColor(ColorConstants.tooltipForeground);
     input = new Vector<RectangleFigure>();
@@ -68,13 +73,23 @@ public class ComponentFigure extends Figure {
       add(rf);
     }
 
-    componentBorder = new ComponentBorder(isRemote, this, usePorts,
-        providePorts, input, output, projectName);
+    componentBorder =
+        new ComponentBorder(isRemote,
+                            this,
+                            usePorts,
+                            providePorts,
+                            input,
+                            output,
+                            projectName);
     setBorder(componentBorder);
-    openGUIImage = new ImageFigure(ImageDescriptor.createFromFile(
-        ASCoDTKernel.class, "./ui/resources/openGUI.png").createImage());
-    closeGUIImage = new ImageFigure(ImageDescriptor.createFromFile(
-        ASCoDTKernel.class, "./ui/resources/closeGUI.png").createImage());
+    openGUIImage =
+        new ImageFigure(ImageDescriptor.createFromFile(ASCoDTKernel.class,
+                                                       "./ui/resources/openGUI.png")
+                                       .createImage());
+    closeGUIImage =
+        new ImageFigure(ImageDescriptor.createFromFile(ASCoDTKernel.class,
+                                                       "./ui/resources/closeGUI.png")
+                                       .createImage());
     classLabel = new EditableLabel(ref + ":" + className);
     this.isRemote = isRemote;
     setLayoutManager(new FreeformLayout());
@@ -120,8 +135,9 @@ public class ComponentFigure extends Figure {
    * @param location
    * @return
    */
-  private int hitTest(Point location, Figure enabledFigure,
-      Figure disabledFigure) {
+  private int hitTest(Point location,
+                      Figure enabledFigure,
+                      Figure disabledFigure) {
     if (enabledFigure != null && disabledFigure != null) {
       if (enabledFigure.isVisible()) {
         if (hitTestForObject(enabledFigure, location)) {
@@ -173,10 +189,11 @@ public class ComponentFigure extends Figure {
       int bottom = rect.bottom() - 1;
       int right = rect.right() - 1;
       Color color;
-      Color[] br = new Color[] {new Color(Display.getDefault(), 0, 0, 0),
-        new Color(Display.getDefault(), 0, 0, 0),
-        new Color(Display.getDefault(), 0, 0, 0),
-        new Color(Display.getDefault(), 0, 0, 0)};
+      Color[] br =
+          new Color[] {new Color(Display.getDefault(), 0, 0, 0),
+                       new Color(Display.getDefault(), 0, 0, 0),
+                       new Color(Display.getDefault(), 0, 0, 0),
+                       new Color(Display.getDefault(), 0, 0, 0)};
       for (int i = 0; i < br.length; i++) {
         color = br[i];
         graphics.setForegroundColor(color);
@@ -187,11 +204,15 @@ public class ComponentFigure extends Figure {
     Color color = new Color(Display.getDefault(), 0, 0, 0);
     Rectangle rect = getBounds();
     graphics.setForegroundColor(color);
-    graphics.drawLine(rect.right() - 4, rect.bottom() - 4, rect.right() - 4,
-        rect.y);
+    graphics.drawLine(rect.right() - 4,
+                      rect.bottom() - 4,
+                      rect.right() - 4,
+                      rect.y);
     graphics.drawLine(rect.x + 4, rect.bottom() - 4, rect.x + 4, rect.y);
-    graphics.drawLine(rect.x + 4, rect.bottom() - 4, rect.right() - 4,
-        rect.bottom() - 4);
+    graphics.drawLine(rect.x + 4,
+                      rect.bottom() - 4,
+                      rect.right() - 4,
+                      rect.bottom() - 4);
     graphics.drawLine(rect.x + 4, rect.y, rect.right() - 4, rect.y);
 
     if (valid) {
@@ -201,37 +222,34 @@ public class ComponentFigure extends Figure {
     }
     Rectangle rec = new Rectangle();
     rec.setLocation(getBounds().getLocation().x + 4,
-        getBounds().getLocation().y);
+                    getBounds().getLocation().y);
     rec.setSize(new Dimension(getBounds().getSize().width - 8,
-        (int)(0.27 * getBounds().getSize().height)));
+                              (int)(0.27 * getBounds().getSize().height)));
     graphics.fillRectangle(rec.getShrinked(new Insets(1, 1, 1, 1)));
 
     Rectangle rec2 = new Rectangle();
     rec2.setLocation(getBounds().getLocation().x + 4,
-        getBounds().getLocation().y);
-    rec2.setSize(new Dimension(getBounds().getSize().width - 8, getBounds()
-        .getSize().height - 4));
+                     getBounds().getLocation().y);
+    rec2.setSize(new Dimension(getBounds().getSize().width - 8,
+                               getBounds().getSize().height - 4));
     graphics.drawRectangle(rec2.getShrinked(new Insets(1, 1, 1, 1)));
 
-    classLabel.setLocation(new Point(
-        (int)(getLocation().x + 0.25 * getSize().width),
-        (int)(getLocation().y + 0.05 * getSize().height)));
+    classLabel.setLocation(new Point((int)(getLocation().x + 0.25 * getSize().width),
+                                     (int)(getLocation().y + 0.05 * getSize().height)));
 
     classLabel.setSize((int)(0.50 * getSize().width),
-        (int)(getSize().height * 0.15));// new
-                                        // Dimension((int)((double)getBounds().getSize().width/2.0),(int)(0.25*(double)getBounds().getSize().height)));
-    openGUIImage.setLocation(new Point(
-        (int)(getLocation().x + 0.75 * getSize().width),
-        (int)(getLocation().y + 0.05 * getSize().height)));
+                       (int)(getSize().height * 0.15));// new
+                                                       // Dimension((int)((double)getBounds().getSize().width/2.0),(int)(0.25*(double)getBounds().getSize().height)));
+    openGUIImage.setLocation(new Point((int)(getLocation().x + 0.75 * getSize().width),
+                                       (int)(getLocation().y + 0.05 * getSize().height)));
     openGUIImage.setSize((int)(0.10 * getSize().width),
-        (int)(getSize().height * 0.15));// new
-                                        // Dimension((int)((double)getBounds().getSize().width/2.0),(int)(0.25*(double)getBounds().getSize().height)));
-    closeGUIImage.setLocation(new Point(
-        (int)(getLocation().x + 0.75 * getSize().width),
-        (int)(getLocation().y + 0.05 * getSize().height)));
+                         (int)(getSize().height * 0.15));// new
+                                                         // Dimension((int)((double)getBounds().getSize().width/2.0),(int)(0.25*(double)getBounds().getSize().height)));
+    closeGUIImage.setLocation(new Point((int)(getLocation().x + 0.75 * getSize().width),
+                                        (int)(getLocation().y + 0.05 * getSize().height)));
     closeGUIImage.setSize((int)(0.10 * getSize().width),
-        (int)(getSize().height * 0.15));// new
-                                        // Dimension((int)((double)getBounds().getSize().width/2.0),(int)(0.25*(double)getBounds().getSize().height)));
+                          (int)(getSize().height * 0.15));// new
+                                                          // Dimension((int)((double)getBounds().getSize().width/2.0),(int)(0.25*(double)getBounds().getSize().height)));
 
     graphics.setBackgroundColor(ColorConstants.lightBlue);
 
@@ -243,8 +261,9 @@ public class ComponentFigure extends Figure {
     this.valid = valid;
   }
 
-  private void setEnabled(boolean enabled, Figure enabledFigure,
-      Figure disabledFigure) {
+  private void setEnabled(boolean enabled,
+                          Figure enabledFigure,
+                          Figure disabledFigure) {
     if (enabled) {
       enabledFigure.setVisible(false);
       disabledFigure.setVisible(true);

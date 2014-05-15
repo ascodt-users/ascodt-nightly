@@ -1,8 +1,8 @@
 package de.tum.ascodt.sidlcompiler.backend;
 
 
-import java.io.File;
-import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Stack;
 
 import org.eclipse.core.runtime.Assert;
@@ -33,25 +33,28 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * @author Tobias Weinzierl
  */
 public class CreateJavaComponentInterface extends DepthFirstAdapter {
-  private static Trace _trace = new Trace(
-      CreateJavaComponentInterface.class.getCanonicalName());
+  private static Trace _trace =
+      new Trace(CreateJavaComponentInterface.class.getCanonicalName());
 
   private Stack<TemplateFile> _templateFiles;
-  private URL _destinationDirectory;
+  private Path _javaDirectoryPath;
   private String[] _namespace;
   private String _fullQualifiedNameOfTheComponentImplementation;
   private SymbolTable _symbolTable;
   private Target _target;
 
   public CreateJavaComponentInterface(SymbolTable symbolTable,
-      URL destinationDirectory, String[] namespace,
-      String fullQualifiedNameOfTheComponentImplementation, Target target) {
+                                      Path componentsDirectoryPath,
+                                      String[] namespace,
+                                      String fullQualifiedNameOfTheComponentImplementation,
+                                      Target target) {
     _templateFiles = new Stack<TemplateFile>();
-    _destinationDirectory = destinationDirectory;
+    _javaDirectoryPath = componentsDirectoryPath.resolve("java");
     _namespace = namespace;
     _symbolTable = symbolTable;
     _target = target;
-    _fullQualifiedNameOfTheComponentImplementation = fullQualifiedNameOfTheComponentImplementation;
+    _fullQualifiedNameOfTheComponentImplementation =
+        fullQualifiedNameOfTheComponentImplementation;
   }
 
   /**
@@ -65,53 +68,51 @@ public class CreateJavaComponentInterface extends DepthFirstAdapter {
   @Override
   public void inAClassPackageElement(AClassPackageElement node) {
     _trace.in("inAClassPackageElement(...)", node.toString());
-    try {
-      String componentName = node.getName().getText();
-      String fullQualifiedComponentName = _symbolTable.getScope(node)
-          .getFullyQualifiedName(componentName);
-      String templateFile = "java-component-interface.template";
-      String destinationFile = _destinationDirectory.toString() +
-          File.separatorChar +
-          fullQualifiedComponentName.replaceAll("[.]", "/") + ".java";
-      _templateFiles.push(new TemplateFile(templateFile, destinationFile,
-          _namespace, TemplateFile.getLanguageConfigurationForJava(), true));
 
-      _templateFiles.peek().addMapping("__COMPONENT_NAME__", componentName);
-      _templateFiles.peek().addMapping(
-          "__FULL_QUALIFIED_PATH_OF_IMPLEMENTATION_FILE__",
-          _fullQualifiedNameOfTheComponentImplementation);
+    String componentName = node.getName().getText();
+    String fullyQualifiedComponentName =
+        _symbolTable.getScope(node).getFullyQualifiedName(componentName);
 
-      GetProvidesAndUsesPortsOfComponent getPorts = new GetProvidesAndUsesPortsOfComponent();
-      node.apply(getPorts);
+    _templateFiles.push(new TemplateFile(Paths.get("java-component-interface.template"),
+                                         _javaDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                           "/") + ".java"),
+                                         _namespace,
+                                         TemplateFile.getLanguageConfigurationForJava(),
+                                         true));
 
-      String extendingInterfaces = getPorts.getProvidesPorts(",", ".");
-      if (!extendingInterfaces.equals("")) {
-        extendingInterfaces += ",";
-      }
-      switch (_target.getType()) {
-      case JavaLocal:
-        extendingInterfaces += Component.class.getCanonicalName();
-        break;
-      case JavaNative:
-        extendingInterfaces += NativeComponent.class.getCanonicalName();
-        break;
-      case CxxRemoteSocket:
-        extendingInterfaces += CxxReverseRemoteSocketComponent.class
-            .getCanonicalName();
-        break;
-      default:
-        extendingInterfaces += Component.class.getCanonicalName();
-        break;
-      }
+    _templateFiles.peek().addMapping("__COMPONENT_NAME__", componentName);
+    _templateFiles.peek()
+                  .addMapping("__FULL_QUALIFIED_PATH_OF_IMPLEMENTATION_FILE__",
+                              _fullQualifiedNameOfTheComponentImplementation);
 
-      _templateFiles.peek().addMapping(
-          "__LIST_OF_PROVIDES_INTERFACES_AND_STANDARD_COMPONENT_INTERFACE__",
-          extendingInterfaces);
+    GetProvidesAndUsesPortsOfComponent getPorts =
+        new GetProvidesAndUsesPortsOfComponent();
+    node.apply(getPorts);
 
-      _templateFiles.peek().open();
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
+    String extendingInterfaces = getPorts.getProvidesPorts(",", ".");
+    if (!extendingInterfaces.equals("")) {
+      extendingInterfaces += ",";
     }
+    switch (_target.getType()) {
+    case JavaLocal:
+      extendingInterfaces += Component.class.getCanonicalName();
+      break;
+    case JavaNative:
+      extendingInterfaces += NativeComponent.class.getCanonicalName();
+      break;
+    case CxxRemoteSocket:
+      extendingInterfaces +=
+          CxxReverseRemoteSocketComponent.class.getCanonicalName();
+      break;
+    default:
+      extendingInterfaces += Component.class.getCanonicalName();
+      break;
+    }
+
+    _templateFiles.peek()
+                  .addMapping("__LIST_OF_PROVIDES_INTERFACES_AND_STANDARD_COMPONENT_INTERFACE__",
+                              extendingInterfaces);
+    _templateFiles.peek().open();
 
     _trace.out("inAClassPackageElement(...)");
   }
@@ -124,15 +125,16 @@ public class CreateJavaComponentInterface extends DepthFirstAdapter {
   public void inAUses(AUses node) {
     _trace.in("inAUses(AUses)", node.toString());
     try {
-      GetProvidesAndUsesPortsOfComponent getPorts = new GetProvidesAndUsesPortsOfComponent();
+      GetProvidesAndUsesPortsOfComponent getPorts =
+          new GetProvidesAndUsesPortsOfComponent();
       node.apply(getPorts);
 
       String portType = getPorts.getUsesPorts("", ".");
       String portName = node.getAs().getText();
-      String templateFile = "java-component-interface-uses-port.template";
 
-      TemplateFile template = new TemplateFile(_templateFiles.peek(),
-          templateFile);
+      TemplateFile template =
+          new TemplateFile(_templateFiles.peek(),
+                           Paths.get("java-component-interface-uses-port.template"));
 
       template.addMapping("__USES_PORT_AS__", portName);
       template.addMapping("__USES_PORT_TYPE__", portType);
@@ -152,12 +154,7 @@ public class CreateJavaComponentInterface extends DepthFirstAdapter {
   public void outAClassPackageElement(AClassPackageElement node) {
     Assert.isTrue(_templateFiles.size() == 1);
 
-    try {
-      _templateFiles.peek().close();
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
-    }
-
+    _templateFiles.peek().close();
     _templateFiles.pop();
   }
 

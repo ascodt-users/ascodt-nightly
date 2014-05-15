@@ -16,7 +16,7 @@ import de.tum.ascodt.plugin.ui.gef.model.StickyNote;
 
 
 public class StickyNoteFlowEditPolicy extends
-    org.eclipse.gef.editpolicies.FlowLayoutEditPolicy {
+                                     org.eclipse.gef.editpolicies.FlowLayoutEditPolicy {
 
   @Override
   protected Command createAddCommand(EditPart child, EditPart after) {
@@ -65,16 +65,16 @@ public class StickyNoteFlowEditPolicy extends
       int x = 0, y = 0;
       if (host instanceof StickyNoteEditPart) {
         re.setType(REQ_MOVE);
-        x = ((ChangeBoundsRequest)r).getLocation().x -
-            ((ChangeBoundsRequest)r).getLocation().x -
-            ((StickyNote)host.getModel()).getLocation().x;
-        y = ((ChangeBoundsRequest)r).getLocation().y -
-            ((ChangeBoundsRequest)r).getLocation().y -
-            ((StickyNote)host.getModel()).getLocation().y;
+        x =
+            ((ChangeBoundsRequest)r).getLocation().x - ((ChangeBoundsRequest)r).getLocation().x -
+                ((StickyNote)host.getModel()).getLocation().x;
+        y =
+            ((ChangeBoundsRequest)r).getLocation().y - ((ChangeBoundsRequest)r).getLocation().y -
+                ((StickyNote)host.getModel()).getLocation().y;
       }
       re.setLocation(new Point(x, y));
-      return ((DiagramEditPart)host.getParent()).getEditPolicy(
-          EditPolicy.LAYOUT_ROLE).getCommand(re);
+      return ((DiagramEditPart)host.getParent()).getEditPolicy(EditPolicy.LAYOUT_ROLE)
+                                                .getCommand(re);
     }
     return null;
   }

@@ -35,23 +35,25 @@ public class XYLayouetEditPolicy extends XYLayoutEditPolicy {
    */
   @Override
   protected Command createChangeConstraintCommand(ChangeBoundsRequest request,
-      EditPart child, Object constraint) {
+                                                  EditPart child,
+                                                  Object constraint) {
     if (child instanceof ComponentEditPart && constraint instanceof Rectangle) {
       // return a command that can move and/or resize a Component
       return new ComponentSetConstraintCommand((Component)child.getModel(),
-          request, (Rectangle)constraint);
-    } else if (child instanceof StickyNoteEditPart &&
-        constraint instanceof Rectangle) {
+                                               request,
+                                               (Rectangle)constraint);
+    } else if (child instanceof StickyNoteEditPart && constraint instanceof Rectangle) {
       // return a command that can move and/or resize a StickyNote
       return new StickyNoteSetConstraintCommand((StickyNote)child.getModel(),
-          request, (Rectangle)constraint);
+                                                request,
+                                                (Rectangle)constraint);
     }
     return super.createChangeConstraintCommand(request, child, constraint);
   }
 
   @Override
   protected Command createChangeConstraintCommand(EditPart child,
-      Object constraint) {
+                                                  Object constraint) {
     return null;
   }
 
@@ -63,13 +65,17 @@ public class XYLayouetEditPolicy extends XYLayoutEditPolicy {
     Object childClass = request.getNewObjectType();
     Command command = null;
     if (childClass == StickyNote.class) {
-      command = new StickyNoteCreateCommand(request, (Diagram)getHost()
-          .getModel(), (Rectangle)getConstraintFor(request));
+      command =
+          new StickyNoteCreateCommand(request,
+                                      (Diagram)getHost().getModel(),
+                                      (Rectangle)getConstraintFor(request));
       return command;
     }
     if (childClass == Component.class) {
-      command = new CreateComponentCommand(request, (Diagram)getHost()
-          .getModel(), (Rectangle)getConstraintFor(request));
+      command =
+          new CreateComponentCommand(request,
+                                     (Diagram)getHost().getModel(),
+                                     (Rectangle)getConstraintFor(request));
       return command;
     }
     return null;

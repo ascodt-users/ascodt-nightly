@@ -45,8 +45,8 @@ public class StickyNoteResizableEditPolicy extends ResizableEditPolicy {
       note_parent = note_parent.getParent();
     }
     Rectangle childBounds = null;
-    childBounds = ((StickyNoteEditPart)note_parent).getFigure().getBounds()
-        .getCopy();
+    childBounds =
+        ((StickyNoteEditPart)note_parent).getFigure().getBounds().getCopy();
 
     IFigure walker = part.getFigure().getParent();
 

@@ -99,10 +99,9 @@ public class NewWorkbenchWizardPage extends WizardPage {
     int selectionIndex = 0, counter = 0;
 
     for (String projectId : ProjectBuilder.getInstance()
-        .getProjectsIdentifiers()) {
+                                          .getProjectsIdentifiers()) {
       _projectsComboBox.add(projectId);
-      if (_initialProjectIdentifier != null &&
-          projectId.equals(_initialProjectIdentifier)) {
+      if (_initialProjectIdentifier != null && projectId.equals(_initialProjectIdentifier)) {
         selectionIndex = counter;
       }
       counter++;
@@ -141,8 +140,9 @@ public class NewWorkbenchWizardPage extends WizardPage {
 
     initializeDialogUnits(parent);
 
-    PlatformUI.getWorkbench().getHelpSystem()
-        .setHelp(composite, IIDEHelpContextIds.NEW_PROJECT_WIZARD_PAGE);
+    PlatformUI.getWorkbench()
+              .getHelpSystem()
+              .setHelp(composite, IIDEHelpContextIds.NEW_PROJECT_WIZARD_PAGE);
 
     composite.setLayout(new GridLayout());
     composite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -237,16 +237,16 @@ public class NewWorkbenchWizardPage extends WizardPage {
     }
 
     String workbenchNameFieldContents = getWorkbenchNameFieldValue();
-    if (workbenchNameFieldContents.equals("") ||
-        ProjectBuilder.getInstance().getProject(projectNameFieldContents)
-            .hasWorkbench(workbenchNameFieldContents)) {
+    if (workbenchNameFieldContents.equals("") || ProjectBuilder.getInstance()
+                                                               .getProject(projectNameFieldContents)
+                                                               .hasWorkbench(workbenchNameFieldContents)) {
       setErrorMessage(null);
       setMessage("Invalid workbench name");
       return false;
     }
 
-    IStatus nameStatus = workspace.validateName(projectNameFieldContents,
-        IResource.PROJECT);
+    IStatus nameStatus =
+        workspace.validateName(projectNameFieldContents, IResource.PROJECT);
     if (!nameStatus.isOK()) {
       setErrorMessage(nameStatus.getMessage());
       return false;
