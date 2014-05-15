@@ -1,5 +1,36 @@
-void invoker___OPERATION_NAME__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer){
+void invoker___OPERATION_NAME__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer
+#ifdef Parallel
+,MPI_Comm communicator, int methodId
+#endif
+){
   __SOCKET_PULL__
   ((__CXX_FULL_QUALIFIED_NAME__Implementation*)*ref)->__OPERATION_NAME__(__FUNCTION_CALL_PARAMETERS_LIST__);
   __SOCKET_PUSH__
 }
+
+
+void parallel_master_invoker___OPERATION_NAME__(void** ref,int newsockfd, int buffer_size,char* rcvBuffer, char* sendBuffer
+#ifdef Parallel
+,MPI_Comm communicator, int methodId
+#endif
+){
+ 	
+  __SOCKET_PULL__
+  #ifdef Parallel
+  broadcastParallelData((char*)&methodId,sizeof(int),communicator);
+  __PARALLEL_MASTER_PULL__
+  #endif
+  ((__CXX_FULL_QUALIFIED_NAME__Implementation*)*ref)->__OPERATION_NAME__(__FUNCTION_CALL_PARAMETERS_LIST__);
+  //int ack=1;
+  //sendData((char*)&ack,sizeof(int),sendBuffer,newsockfd,buffer_size);
+}
+void parallel_worker_invoker___OPERATION_NAME__(void** ref
+#ifdef Parallel
+,MPI_Comm newsockfd
+#endif
+){
+  #ifdef Parallel
+  __PARALLEL_WORKER_PULL__
+  ((__CXX_FULL_QUALIFIED_NAME__Implementation*)*ref)->__OPERATION_NAME__(__FUNCTION_CALL_PARAMETERS_LIST__);
+  #endif		  
+} 

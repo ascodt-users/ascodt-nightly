@@ -26,8 +26,12 @@ public class ErrorWriterDevice {
   private static ErrorWriterDevice _singleton = new ErrorWriterDevice();
 
   private static String date() {
-    return new SimpleDateFormat("yyyy.MM.dd").format(Calendar.getInstance()
-        .getTime());
+    return date(".");
+  }
+
+  private static String date(String delimiter) {
+    return new SimpleDateFormat("yyyy" + delimiter + "MM" + delimiter + "dd").format(Calendar.getInstance()
+                                                                                             .getTime());
   }
 
   public static ErrorWriterDevice getInstance() {
@@ -35,8 +39,12 @@ public class ErrorWriterDevice {
   }
 
   private static String time() {
-    return new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance()
-        .getTime());
+    return time(":");
+  }
+
+  private static String time(String delimiter) {
+    return new SimpleDateFormat("HH" + delimiter + "mm" + delimiter + "ss").format(Calendar.getInstance()
+                                                                                           .getTime());
   }
 
   private FileWriter _fileWriter;
@@ -45,11 +53,17 @@ public class ErrorWriterDevice {
 
   private ErrorWriterDevice() {
     try {
-      File errorLogFile = new File("ErrorLog.log");
+      String timestamp = date("-") + "-" + time("-");
+      String errorLogFileName = "ErrorLog-" + timestamp + ".log";
+      String tmpDirPath = System.getProperty("java.io.tmpdir");
+      File errorLogFile = new File(tmpDirPath, errorLogFileName);
+
       if (errorLogFile.exists()) {
         errorLogFile.delete();
       }
+
       errorLogFile.createNewFile();
+
       _fileWriter = new FileWriter(errorLogFile, true);
       _errorLog = new BufferedWriter(_fileWriter);
     } catch (IOException e) {
@@ -93,8 +107,8 @@ public class ErrorWriterDevice {
   }
 
   public void print(Throwable throwable) {
-    print(new Exception().getStackTrace()[1].toString(), throwable != null
-        ? throwable.getMessage() : "");
+    print(new Exception().getStackTrace()[1].toString(),
+          throwable != null ? throwable.getMessage() : "");
 
     if (throwable != null) {
       throwable.printStackTrace(new PrintWriter(_fileWriter));
@@ -111,8 +125,8 @@ public class ErrorWriterDevice {
   }
 
   public void println(Throwable throwable) {
-    println(new Exception().getStackTrace()[1].toString(), throwable != null
-        ? throwable.getMessage() : "");
+    println(new Exception().getStackTrace()[1].toString(),
+            throwable != null ? throwable.getMessage() : "");
 
     if (throwable != null) {
       throwable.printStackTrace(new PrintWriter(_fileWriter));

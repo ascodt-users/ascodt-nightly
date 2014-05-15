@@ -39,7 +39,8 @@ public class ComponentSetConstraintCommand extends Command {
    *           if any of the parameters is null
    */
   public ComponentSetConstraintCommand(Component component,
-      ChangeBoundsRequest req, Rectangle newBounds) {
+                                       ChangeBoundsRequest req,
+                                       Rectangle newBounds) {
     if (component == null || req == null || newBounds == null) {
       throw new IllegalArgumentException();
     }
@@ -58,10 +59,9 @@ public class ComponentSetConstraintCommand extends Command {
   public boolean canExecute() {
     Object type = request.getType();
     // make sure the Request is of a type we support:
-    return RequestConstants.REQ_MOVE.equals(type) ||
-        RequestConstants.REQ_MOVE_CHILDREN.equals(type) ||
-        RequestConstants.REQ_RESIZE.equals(type) ||
-        RequestConstants.REQ_RESIZE_CHILDREN.equals(type);
+    return RequestConstants.REQ_MOVE.equals(type) || RequestConstants.REQ_MOVE_CHILDREN.equals(type) ||
+           RequestConstants.REQ_RESIZE.equals(type) ||
+           RequestConstants.REQ_RESIZE_CHILDREN.equals(type);
   }
 
   /*

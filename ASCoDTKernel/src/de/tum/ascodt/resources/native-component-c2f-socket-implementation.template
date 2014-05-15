@@ -348,7 +348,7 @@ void initialise_(__COMPONENT_NAME_ENV___arg& arg){
    const char* hostname = getenv("__COMPONENT_NAME_ENV___HOSTNAME");
    const char* java_client_flag = getenv("__COMPONENT_NAME_ENV___JAVA");
    arg.buffer_size = (buffer_size!=NULL)?atoi(buffer_size):4096;
-   arg.hostname = (hostname!=NULL)?hostname:"localhost";
+   arg.hostname = (hostname!=NULL)?hostname:"127.0.0.1";
    arg.client_port = (client_port!=NULL)?client_port:"50000";
    arg.daemon_port = (daemon_port!=NULL)?daemon_port:"50001";
    arg.java_client_flag=(java_client_flag!=NULL&&strcmp(java_client_flag,"off")==0)?false:true;

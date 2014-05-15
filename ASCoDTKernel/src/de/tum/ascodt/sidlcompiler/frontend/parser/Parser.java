@@ -277,8 +277,8 @@ public class Parser {
 
   static {
     try {
-      DataInputStream s = new DataInputStream(new BufferedInputStream(
-          Parser.class.getResourceAsStream("parser.dat")));
+      DataInputStream s =
+          new DataInputStream(new BufferedInputStream(Parser.class.getResourceAsStream("parser.dat")));
 
       // read actionTable
       int length = s.readInt();
@@ -328,8 +328,7 @@ public class Parser {
 
       s.close();
     } catch (Exception e) {
-      throw new RuntimeException(
-          "The file \"parser.dat\" is either missing or corrupted.");
+      throw new RuntimeException("The file \"parser.dat\" is either missing or corrupted.");
     }
   }
 
@@ -462,8 +461,8 @@ public class Parser {
         }
       }
 
-      ppackageelementNode1 = new AClassPackageElement(null, tidentifierNode3,
-          listNode5, listNode7);
+      ppackageelementNode1 =
+          new AClassPackageElement(null, tidentifierNode3, listNode5, listNode7);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -505,8 +504,11 @@ public class Parser {
         // Block
       }
 
-      ppackageelementNode1 = new AClassPackageElement(tidentifierNode2,
-          tidentifierNode3, listNode4, listNode5);
+      ppackageelementNode1 =
+          new AClassPackageElement(tidentifierNode2,
+                                   tidentifierNode3,
+                                   listNode4,
+                                   listNode5);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -557,8 +559,11 @@ public class Parser {
         // Block
       }
 
-      ppackageelementNode1 = new AClassPackageElement(tidentifierNode2,
-          tidentifierNode3, listNode5, listNode6);
+      ppackageelementNode1 =
+          new AClassPackageElement(tidentifierNode2,
+                                   tidentifierNode3,
+                                   listNode5,
+                                   listNode6);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -607,8 +612,11 @@ public class Parser {
         }
       }
 
-      ppackageelementNode1 = new AClassPackageElement(tidentifierNode2,
-          tidentifierNode3, listNode4, listNode6);
+      ppackageelementNode1 =
+          new AClassPackageElement(tidentifierNode2,
+                                   tidentifierNode3,
+                                   listNode4,
+                                   listNode6);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -666,8 +674,11 @@ public class Parser {
         }
       }
 
-      ppackageelementNode1 = new AClassPackageElement(tidentifierNode2,
-          tidentifierNode3, listNode5, listNode7);
+      ppackageelementNode1 =
+          new AClassPackageElement(tidentifierNode2,
+                                   tidentifierNode3,
+                                   listNode5,
+                                   listNode7);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -701,8 +712,8 @@ public class Parser {
         // Block
       }
 
-      ppackageelementNode1 = new AInterfacePackageElement(tidentifierNode2,
-          listNode3, listNode4);
+      ppackageelementNode1 =
+          new AInterfacePackageElement(tidentifierNode2, listNode3, listNode4);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -743,8 +754,8 @@ public class Parser {
         }
       }
 
-      ppackageelementNode1 = new AInterfacePackageElement(tidentifierNode2,
-          listNode3, listNode5);
+      ppackageelementNode1 =
+          new AInterfacePackageElement(tidentifierNode2, listNode3, listNode5);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -790,8 +801,8 @@ public class Parser {
         // Block
       }
 
-      ppackageelementNode1 = new AInterfacePackageElement(tidentifierNode2,
-          listNode4, listNode5);
+      ppackageelementNode1 =
+          new AInterfacePackageElement(tidentifierNode2, listNode4, listNode5);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -844,8 +855,8 @@ public class Parser {
         }
       }
 
-      ppackageelementNode1 = new AInterfacePackageElement(tidentifierNode2,
-          listNode4, listNode6);
+      ppackageelementNode1 =
+          new AInterfacePackageElement(tidentifierNode2, listNode4, listNode6);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -884,8 +895,8 @@ public class Parser {
         }
       }
 
-      ppackageelementNode1 = new AEnumDeclarationPackageElement(
-          tidentifierNode2, listNode4);
+      ppackageelementNode1 =
+          new AEnumDeclarationPackageElement(tidentifierNode2, listNode4);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -1442,8 +1453,8 @@ public class Parser {
       pbuiltintypeNode2 = (PBuiltInType)nodeArrayList2.get(0);
       tidentifierNode3 = (TIdentifier)nodeArrayList3.get(0);
 
-      pparameterNode1 = new AParameterInParameter(pbuiltintypeNode2,
-          tidentifierNode3);
+      pparameterNode1 =
+          new AParameterInParameter(pbuiltintypeNode2, tidentifierNode3);
     }
     nodeList.add(pparameterNode1);
     return nodeList;
@@ -1469,8 +1480,8 @@ public class Parser {
       pbuiltintypeNode2 = (PBuiltInType)nodeArrayList2.get(0);
       tidentifierNode3 = (TIdentifier)nodeArrayList3.get(0);
 
-      pparameterNode1 = new AParameterOutParameter(pbuiltintypeNode2,
-          tidentifierNode3);
+      pparameterNode1 =
+          new AParameterOutParameter(pbuiltintypeNode2, tidentifierNode3);
     }
     nodeList.add(pparameterNode1);
     return nodeList;
@@ -1498,8 +1509,8 @@ public class Parser {
       pbuiltintypeNode2 = (PBuiltInType)nodeArrayList2.get(0);
       tidentifierNode3 = (TIdentifier)nodeArrayList3.get(0);
 
-      pparameterNode1 = new AParameterArrayInParameter(pbuiltintypeNode2,
-          tidentifierNode3);
+      pparameterNode1 =
+          new AParameterArrayInParameter(pbuiltintypeNode2, tidentifierNode3);
     }
     nodeList.add(pparameterNode1);
     return nodeList;
@@ -1548,8 +1559,8 @@ public class Parser {
       pbuiltintypeNode2 = (PBuiltInType)nodeArrayList2.get(0);
       tidentifierNode3 = (TIdentifier)nodeArrayList3.get(0);
 
-      pparameterNode1 = new AParameterArrayOutParameter(pbuiltintypeNode2,
-          tidentifierNode3);
+      pparameterNode1 =
+          new AParameterArrayOutParameter(pbuiltintypeNode2, tidentifierNode3);
     }
     nodeList.add(pparameterNode1);
     return nodeList;
@@ -1575,8 +1586,8 @@ public class Parser {
       puserdefinedtypeNode2 = (PUserDefinedType)nodeArrayList2.get(0);
       tidentifierNode3 = (TIdentifier)nodeArrayList3.get(0);
 
-      pparameterNode1 = new AParameterInEnumParameter(puserdefinedtypeNode2,
-          tidentifierNode3);
+      pparameterNode1 =
+          new AParameterInEnumParameter(puserdefinedtypeNode2, tidentifierNode3);
     }
     nodeList.add(pparameterNode1);
     return nodeList;
@@ -1602,8 +1613,9 @@ public class Parser {
       puserdefinedtypeNode2 = (PUserDefinedType)nodeArrayList2.get(0);
       tidentifierNode3 = (TIdentifier)nodeArrayList3.get(0);
 
-      pparameterNode1 = new AParameterOutEnumParameter(puserdefinedtypeNode2,
-          tidentifierNode3);
+      pparameterNode1 =
+          new AParameterOutEnumParameter(puserdefinedtypeNode2,
+                                         tidentifierNode3);
     }
     nodeList.add(pparameterNode1);
     return nodeList;
@@ -1631,8 +1643,9 @@ public class Parser {
       puserdefinedtypeNode2 = (PUserDefinedType)nodeArrayList2.get(0);
       tidentifierNode3 = (TIdentifier)nodeArrayList3.get(0);
 
-      pparameterNode1 = new AParameterArrayInEnumParameter(
-          puserdefinedtypeNode2, tidentifierNode3);
+      pparameterNode1 =
+          new AParameterArrayInEnumParameter(puserdefinedtypeNode2,
+                                             tidentifierNode3);
     }
     nodeList.add(pparameterNode1);
     return nodeList;
@@ -1660,8 +1673,9 @@ public class Parser {
       puserdefinedtypeNode2 = (PUserDefinedType)nodeArrayList2.get(0);
       tidentifierNode3 = (TIdentifier)nodeArrayList3.get(0);
 
-      pparameterNode1 = new AParameterArrayOutEnumParameter(
-          puserdefinedtypeNode2, tidentifierNode3);
+      pparameterNode1 =
+          new AParameterArrayOutEnumParameter(puserdefinedtypeNode2,
+                                              tidentifierNode3);
     }
     nodeList.add(pparameterNode1);
     return nodeList;
@@ -1889,8 +1903,9 @@ public class Parser {
       tidentifierNode2 = (TIdentifier)nodeArrayList1.get(0);
       tdecimalconstantNode3 = (TDecimalConstant)nodeArrayList3.get(0);
 
-      penumeratorNode1 = new ASpecificEnumeratorEnumerator(tidentifierNode2,
-          tdecimalconstantNode3);
+      penumeratorNode1 =
+          new ASpecificEnumeratorEnumerator(tidentifierNode2,
+                                            tdecimalconstantNode3);
     }
     nodeList.add(penumeratorNode1);
     return nodeList;
@@ -1946,8 +1961,8 @@ public class Parser {
         // Block
       }
 
-      ppackageelementNode1 = new AClassPackageElement(null, tidentifierNode3,
-          listNode4, listNode5);
+      ppackageelementNode1 =
+          new AClassPackageElement(null, tidentifierNode3, listNode4, listNode5);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -1992,8 +2007,8 @@ public class Parser {
         // Block
       }
 
-      ppackageelementNode1 = new AClassPackageElement(null, tidentifierNode3,
-          listNode5, listNode6);
+      ppackageelementNode1 =
+          new AClassPackageElement(null, tidentifierNode3, listNode5, listNode6);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -2036,8 +2051,8 @@ public class Parser {
         }
       }
 
-      ppackageelementNode1 = new AClassPackageElement(null, tidentifierNode3,
-          listNode4, listNode6);
+      ppackageelementNode1 =
+          new AClassPackageElement(null, tidentifierNode3, listNode4, listNode6);
     }
     nodeList.add(ppackageelementNode1);
     return nodeList;
@@ -2422,8 +2437,12 @@ public class Parser {
         return node;
       }
       case ERROR:
-        throw new ParserException(last_token, "[" + last_line + "," + last_pos +
-            "] " + Parser.errorMessages[Parser.errors[action[1]]]);
+        throw new ParserException(last_token,
+                                  "[" + last_line +
+                                      "," +
+                                      last_pos +
+                                      "] " +
+                                      Parser.errorMessages[Parser.errors[action[1]]]);
       }
     }
   }
@@ -2434,7 +2453,8 @@ public class Parser {
 
   @SuppressWarnings({"unchecked", "unused"})
   private void push(int numstate, ArrayList listNode) throws ParserException,
-      LexerException, IOException {
+                                                     LexerException,
+                                                     IOException {
     nodeList = listNode;
 
     if (!stack.hasNext()) {

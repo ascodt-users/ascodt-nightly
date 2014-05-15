@@ -1,8 +1,8 @@
 package de.tum.ascodt.sidlcompiler.backend;
 
 
-import java.io.File;
-import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -33,19 +33,19 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * 
  */
 public class CreateLocalJavaComponent extends DepthFirstAdapter {
-  private static Trace _trace = new Trace(
-      CreateLocalJavaComponent.class.getCanonicalName());
+  private static Trace _trace =
+      new Trace(CreateLocalJavaComponent.class.getCanonicalName());
 
   private Stack<TemplateFile> _templateFilesOfAbstractImplementation;
 
   private Stack<TemplateFile> _templateFilesOfBasisImplementation;
   private Stack<TemplateFile> _templateFilesOfPlainImplementation;
-  private URL _userDirectory;
-  private URL _generatedDirectory;
+  private Path _sourcesDirectoryPath;
+  private Path _javaDirectoryPath;
 
   private String[] _namespace;
 
-  private String _fullQualifiedNameOfTheComponentImplementation;
+  private String _fullyQualifiedComponentName;
   private SymbolTable _symbolTable;
 
   private Vector<String> _conditions;
@@ -57,14 +57,15 @@ public class CreateLocalJavaComponent extends DepthFirstAdapter {
   private boolean _generateProvidesMethods;
 
   public CreateLocalJavaComponent(SymbolTable symbolTable,
-      URL destinationDirectory, URL userDirectory, String[] namespace,
-      String... conditions) {
+                                  Path sourcesDirectoryPath,
+                                  Path componentsDirectoryPath,
+                                  String[] namespace,
+                                  String... conditions) {
     _templateFilesOfAbstractImplementation = new Stack<TemplateFile>();
     _templateFilesOfBasisImplementation = new Stack<TemplateFile>();
     _templateFilesOfPlainImplementation = new Stack<TemplateFile>();
-
-    _generatedDirectory = destinationDirectory;
-    _userDirectory = userDirectory;
+    _sourcesDirectoryPath = sourcesDirectoryPath;
+    _javaDirectoryPath = componentsDirectoryPath.resolve("java");
     _namespace = namespace;
     _symbolTable = symbolTable;
     _conditions = new Vector<String>();
@@ -80,77 +81,55 @@ public class CreateLocalJavaComponent extends DepthFirstAdapter {
    * @return
    */
   public String getFullQualifiedNameOfTheComponentImplementation() {
-    return _fullQualifiedNameOfTheComponentImplementation;
+    return _fullyQualifiedComponentName.replaceAll("[.]", "/") + "JavaImplementation.java";
   }
 
   @Override
   public void inAClassPackageElement(AClassPackageElement node) {
     _trace.in("inAClassPackageElement(...)", "open new port interface");
-    try {
-      String componentName = node.getName().getText();
-      String fullQualifiedNameOfTheAbstractComponentImplementation = _symbolTable
-          .getScope(node).getFullyQualifiedName(componentName) +
-          "AbstractJavaImplementation";
-      String fullQualifiedNameOfTheBasisComponentImplementation = _symbolTable
-          .getScope(node).getFullyQualifiedName(componentName) +
-          "BasisJavaImplementation";
 
-      _fullQualifiedNameOfTheComponentImplementation = _symbolTable.getScope(
-          node).getFullyQualifiedName(componentName) +
-          "JavaImplementation";
-      String templateFileForAbstractComponentImplementation = "java-component-abstract-java-implementation.template";
-      String templateFileForComponentImplementation = "java-component-java-implementation.template";
-      String templateFileForBasisComponentImplementation = "basis-java-implementation.template";
+    String componentName = node.getName().getText();
+    _fullyQualifiedComponentName =
+        _symbolTable.getScope(node).getFullyQualifiedName(componentName);
 
-      String destinationFileForAbstractComponentImplementation = _generatedDirectory
-          .toString() +
-          File.separatorChar +
-          fullQualifiedNameOfTheAbstractComponentImplementation.replaceAll(
-              "[.]", "/") + ".java";
-      String destinationFileForComponentImplementation = _userDirectory
-          .toString() +
-          File.separatorChar +
-          _fullQualifiedNameOfTheComponentImplementation.replaceAll("[.]", "/") +
-          ".java";
-      String destinationFileForBasisComponentImplementation = _userDirectory
-          .toString() +
-          File.separatorChar +
-          fullQualifiedNameOfTheBasisComponentImplementation.replaceAll("[.]",
-              "/") + ".java";
+    _templateFilesOfAbstractImplementation.push(new TemplateFile(Paths.get("java-component-abstract-java-implementation.template"),
+                                                                 _javaDirectoryPath.resolve(_fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                    "/") + "AbstractJavaImplementation.java"),
+                                                                 _namespace,
+                                                                 TemplateFile.getLanguageConfigurationForJava(),
+                                                                 true));
+    _templateFilesOfPlainImplementation.push(new TemplateFile(Paths.get("java-component-java-implementation.template"),
+                                                              _sourcesDirectoryPath.resolve(_fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                    "/") + "JavaImplementation.java"),
+                                                              _namespace,
+                                                              TemplateFile.getLanguageConfigurationForJava(),
+                                                              false));
+    _templateFilesOfBasisImplementation.push(new TemplateFile(Paths.get("basis-java-implementation.template"),
+                                                              _sourcesDirectoryPath.resolve(_fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                    "/") + "BasisJavaImplementation.java"),
+                                                              _namespace,
+                                                              TemplateFile.getLanguageConfigurationForJava(),
+                                                              false));
+    _templateFilesOfAbstractImplementation.peek()
+                                          .addMapping("__COMPONENT_NAME__",
+                                                      componentName);
+    _templateFilesOfPlainImplementation.peek().addMapping("__COMPONENT_NAME__",
+                                                          componentName);
+    _templateFilesOfBasisImplementation.peek().addMapping("__COMPONENT_NAME__",
+                                                          componentName);
 
-      _templateFilesOfAbstractImplementation.push(new TemplateFile(
-          templateFileForAbstractComponentImplementation,
-          destinationFileForAbstractComponentImplementation, _namespace,
-          TemplateFile.getLanguageConfigurationForJava(), true));
-      _templateFilesOfPlainImplementation.push(new TemplateFile(
-          templateFileForComponentImplementation,
-          destinationFileForComponentImplementation, _namespace, TemplateFile
-              .getLanguageConfigurationForJava(), false));
-      _templateFilesOfBasisImplementation.push(new TemplateFile(
-          templateFileForBasisComponentImplementation,
-          destinationFileForBasisComponentImplementation, _namespace,
-          TemplateFile.getLanguageConfigurationForJava(), false));
-      _templateFilesOfAbstractImplementation.peek().addMapping(
-          "__COMPONENT_NAME__", componentName);
-      _templateFilesOfPlainImplementation.peek().addMapping(
-          "__COMPONENT_NAME__", componentName);
-      _templateFilesOfBasisImplementation.peek().addMapping(
-          "__COMPONENT_NAME__", componentName);
-
-      _templateFilesOfBasisImplementation.peek().addMapping(
-          "__FULL_QUALIFIED_COMPONENT_NAME__",
-          _symbolTable.getScope(node).getFullyQualifiedName(componentName));
-      _templateFilesOfAbstractImplementation.peek().open();
-      _templateFilesOfPlainImplementation.peek().open();
-      _templateFilesOfBasisImplementation.peek().open();
-      _generateProvidesMethods = true;
-      for (PUserDefinedType definedType : node.getProvides()) {
-        definedType.apply(this);
-      }
-      _generateProvidesMethods = false;
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
+    _templateFilesOfBasisImplementation.peek()
+                                       .addMapping("__FULL_QUALIFIED_COMPONENT_NAME__",
+                                                   _symbolTable.getScope(node)
+                                                               .getFullyQualifiedName(componentName));
+    _templateFilesOfAbstractImplementation.peek().open();
+    _templateFilesOfPlainImplementation.peek().open();
+    _templateFilesOfBasisImplementation.peek().open();
+    _generateProvidesMethods = true;
+    for (PUserDefinedType definedType : node.getProvides()) {
+      definedType.apply(this);
     }
+    _generateProvidesMethods = false;
 
     _trace.out("inAClassPackageElement(...)", "open new port interface");
   }
@@ -159,21 +138,20 @@ public class CreateLocalJavaComponent extends DepthFirstAdapter {
   public void inAOperation(AOperation node) {
     Assert.isTrue(_generateProvidesMethods);
     try {
-      String templateFile = "java-components-java-implementation-provides-port.template";
-      TemplateFile template = new TemplateFile(
-          _templateFilesOfBasisImplementation.peek(), templateFile);
+      TemplateFile template =
+          new TemplateFile(_templateFilesOfBasisImplementation.peek(),
+                           Paths.get("java-components-java-implementation-provides-port.template"));
 
       ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
       node.apply(onlyInParameters);
 
-      GetParameterList parameterList = new GetParameterList(
-          _symbolTable.getScope(node));
+      GetParameterList parameterList =
+          new GetParameterList(_symbolTable.getScope(node));
       node.apply(parameterList);
 
       template.addMapping("__OPERATION_NAME__", node.getName().getText());
-      template.addMapping("__OPERATION_PARAMETERS_LIST__", parameterList
-          .getParameterListInJava(onlyInParameters
-              .areAllParametersInParameters()));
+      template.addMapping("__OPERATION_PARAMETERS_LIST__",
+                          parameterList.getParameterListInJava(onlyInParameters.areAllParametersInParameters()));
 
       template.open();
       template.close();
@@ -186,8 +164,9 @@ public class CreateLocalJavaComponent extends DepthFirstAdapter {
   public void inAUserDefinedType(AUserDefinedType node) {
     if (_generateProvidesMethods) {
       String fullQualifiedSymbol = Scope.getSymbol(node);
-      AInterfacePackageElement interfaceDefintion = _symbolTable.getScope(node)
-          .getInterfaceDefinition(fullQualifiedSymbol);
+      AInterfacePackageElement interfaceDefintion =
+          _symbolTable.getScope(node)
+                      .getInterfaceDefinition(fullQualifiedSymbol);
       if (interfaceDefintion != null) {
         interfaceDefintion.apply(this);
       }
@@ -202,17 +181,18 @@ public class CreateLocalJavaComponent extends DepthFirstAdapter {
   public void inAUses(AUses node) {
     _trace.in("inAUses(AUses)", node.toString());
     try {
-      GetProvidesAndUsesPortsOfComponent getPorts = new GetProvidesAndUsesPortsOfComponent();
+      GetProvidesAndUsesPortsOfComponent getPorts =
+          new GetProvidesAndUsesPortsOfComponent();
       node.apply(getPorts);
       ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
       node.apply(onlyInParameters);
 
       String portType = getPorts.getUsesPorts("", ".");
       String portName = node.getAs().getText();
-      String templateFile = "java-component-abstract-java-implementation-uses-port.template";
 
-      TemplateFile template = new TemplateFile(
-          _templateFilesOfAbstractImplementation.peek(), templateFile);
+      TemplateFile template =
+          new TemplateFile(_templateFilesOfAbstractImplementation.peek(),
+                           Paths.get("java-component-abstract-java-implementation-uses-port.template"));
 
       template.addMapping("__USES_PORT_AS__", portName);
       template.addMapping("__USES_PORT_TYPE__", portType);
@@ -234,14 +214,9 @@ public class CreateLocalJavaComponent extends DepthFirstAdapter {
     Assert.isTrue(_templateFilesOfBasisImplementation.size() == 1);
     Assert.isTrue(_templateFilesOfPlainImplementation.size() == 1);
 
-    try {
-      _templateFilesOfAbstractImplementation.peek().close();
-      _templateFilesOfPlainImplementation.peek().close();
-      _templateFilesOfBasisImplementation.peek().close();
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
-    }
-
+    _templateFilesOfAbstractImplementation.peek().close();
+    _templateFilesOfPlainImplementation.peek().close();
+    _templateFilesOfBasisImplementation.peek().close();
     _templateFilesOfAbstractImplementation.pop();
     _templateFilesOfBasisImplementation.pop();
     _templateFilesOfPlainImplementation.pop();

@@ -31,16 +31,16 @@ public class Connection extends ModelElement {
   private Port sourcePort;
 
   public void attachSource() {
-    if (getSource() == null ||
-        getSource().getSourceConnections().contains(this)) {
+    if (getSource() == null || getSource().getSourceConnections()
+                                          .contains(this)) {
       return;
     }
     getSource().connectOutput(this);
   }
 
   public boolean attachTarget() {
-    if (getTarget() == null ||
-        getTarget().getTargetConnections().contains(this)) {
+    if (getTarget() == null || getTarget().getTargetConnections()
+                                          .contains(this)) {
       return false;
     }
     return getTarget().connectInput(this);

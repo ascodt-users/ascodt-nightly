@@ -3,3 +3,7 @@
     //DO NOTHING HERE
   }
   
+   public void __OPERATION_NAME__Parallel(__OPERATION_PARAMETERS_LIST__) {
+    //DO NOTHING HERE
+  }
+  

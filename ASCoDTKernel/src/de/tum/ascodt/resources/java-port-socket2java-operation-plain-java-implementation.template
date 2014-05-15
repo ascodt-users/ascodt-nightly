@@ -5,7 +5,15 @@
      __OPERATION_NAME__(__FUNCTION_CALL_PARAMETERS_LIST__);
      __SOCKET_PUSH__
   }
+  public void invoke___OPERATION_NAME__Parallel() throws 
+         de.tum.ascodt.utils.exceptions.ASCoDTException{
+    
+  }
   public void __OPERATION_NAME__(__OPERATION_PARAMETERS_LIST__) {
      _destination.__OPERATION_NAME__(__FUNCTION_CALL_PARAMETERS_LIST__);
   }
+  public void __OPERATION_NAME__Parallel(__OPERATION_PARAMETERS_LIST__) {
+     _destination.__OPERATION_NAME__Parallel(__FUNCTION_CALL_PARAMETERS_LIST__);
+  }
+  
   

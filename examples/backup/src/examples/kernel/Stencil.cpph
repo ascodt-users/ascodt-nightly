@@ -1,0 +1,14 @@
+//#include "Stencil.h"
+
+template<class FlowField>
+FieldStencil<FlowField>::FieldStencil ( const Parameters & parameters ) : _parameters ( parameters ) {}
+
+
+template<class FlowField>
+GlobalBoundaryStencil<FlowField>::GlobalBoundaryStencil ( const Parameters & parameters ):
+    _parameters(parameters) {}
+
+
+template<class FlowField>
+ParallelBoundaryStencil<FlowField>::ParallelBoundaryStencil ( const Parameters & parameters ):
+    _parameters(parameters) {}

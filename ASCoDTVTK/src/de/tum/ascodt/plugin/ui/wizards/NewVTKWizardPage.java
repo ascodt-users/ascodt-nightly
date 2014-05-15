@@ -70,7 +70,7 @@ public class NewVTKWizardPage extends WizardPage implements RepositoryListener {
 
   /**
    * Creates the component ui specification controls.
-   *
+   * 
    * @param parent
    *          the parent composite
    */
@@ -96,10 +96,9 @@ public class NewVTKWizardPage extends WizardPage implements RepositoryListener {
     _componentInterfacesComboBox = new Combo(projectGroup, SWT.NONE);
     int selectionIndex = 0, counter = 0;
     for (String projectId : ProjectBuilder.getInstance()
-        .getProjectsIdentifiers()) {
+                                          .getProjectsIdentifiers()) {
       _projectsComboBox.add(projectId);
-      if (_initialProjectIdentifier != null &&
-          projectId.equals(_initialProjectIdentifier)) {
+      if (_initialProjectIdentifier != null && projectId.equals(_initialProjectIdentifier)) {
         selectionIndex = counter;
       }
       counter++;
@@ -185,8 +184,9 @@ public class NewVTKWizardPage extends WizardPage implements RepositoryListener {
     if (_lastProject != null) {
       _lastProject.getStaticRepository().removeListener(NewVTKWizardPage.this);
     }
-    _lastProject = ProjectBuilder.getInstance().getProject(
-        _projectsComboBox.getItem(_projectsComboBox.getSelectionIndex()));
+    _lastProject =
+        ProjectBuilder.getInstance()
+                      .getProject(_projectsComboBox.getItem(_projectsComboBox.getSelectionIndex()));
     _lastProject.getStaticRepository().addListener(NewVTKWizardPage.this);
     _lastProject.getStaticRepository().informListenersAboutChangedComponents();
     if (_componentInterfacesComboBox.getItemCount() > 0) {
@@ -205,7 +205,7 @@ public class NewVTKWizardPage extends WizardPage implements RepositoryListener {
   /**
    * Returns whether this page's controls currently all contain valid
    * values.
-   *
+   * 
    * @return <code>true</code> if all controls are valid, and <code>false</code>
    *         if at least one is invalid
    */
@@ -218,7 +218,8 @@ public class NewVTKWizardPage extends WizardPage implements RepositoryListener {
       return false;
     }
 
-    String componentInterfacesFieldContents = getComponentInterfacesFieldValue();
+    String componentInterfacesFieldContents =
+        getComponentInterfacesFieldValue();
     if (componentInterfacesFieldContents.equals("")) { //$NON-NLS-1$
       setErrorMessage(null);
       setMessage("Invalid component interface");

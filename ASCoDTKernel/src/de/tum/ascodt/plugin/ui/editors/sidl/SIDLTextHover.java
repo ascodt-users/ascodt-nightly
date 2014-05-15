@@ -25,7 +25,7 @@ public class SIDLTextHover implements ITextHover {
       try {
         if (hoverRegion.getLength() > -1) {
           return textViewer.getDocument().get(hoverRegion.getOffset(),
-              hoverRegion.getLength());
+                                              hoverRegion.getLength());
         }
       } catch (BadLocationException x) {}
     }

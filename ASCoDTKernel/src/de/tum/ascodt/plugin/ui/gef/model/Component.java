@@ -111,8 +111,8 @@ public class Component extends Geometry implements IPropertySource {
     inputConnections = new Vector<Connection>();
     outputConnections = new Vector<Connection>();
     sourceLinks = new Vector<Link>();
-    fileName = System.getProperty("java.io.tmpdir") + "/" + hashCode() +
-        ".asc_state";
+    fileName =
+        System.getProperty("java.io.tmpdir") + "/" + hashCode() + ".asc_state";
     _target = "";
     valid = true;
 
@@ -264,18 +264,19 @@ public class Component extends Geometry implements IPropertySource {
     Assert.isNotNull(targetPort);
     Method createPort;
     try {
-      createPort = source
-          .getCCAComponent()
-          .getClass()
-          .getMethod("createPortFor" + sourcePort.getReference(), Target.class,
-              TargetParameters.class);
+      createPort =
+          source.getCCAComponent()
+                .getClass()
+                .getMethod("createPortFor" + sourcePort.getReference(),
+                           Target.class,
+                           TargetParameters.class);
       if (createPort != null && target.getCCAComponent().getTarget() != null) {
-        Object usePort = createPort.invoke(source.getCCAComponent(), target
-            .getCCAComponent().getTarget(), target.getCCAComponent()
-            .getTargetParameters());
+        Object usePort =
+            createPort.invoke(source.getCCAComponent(),
+                              target.getCCAComponent().getTarget(),
+                              target.getCCAComponent().getTargetParameters());
         for (Method m : usePort.getClass().getMethods()) {
-          if (m.getName().equals("connect") &&
-              (m.getModifiers() & Modifier.NATIVE) == 0) {
+          if (m.getName().equals("connect") && (m.getModifiers() & Modifier.NATIVE) == 0) {
             m.invoke(usePort, target.getCCAComponent());
           }
         }
@@ -286,12 +287,24 @@ public class Component extends Geometry implements IPropertySource {
         }
         _connections.put(connection, usePort);
       } else {
-        ErrorWriterDevice.getInstance().println(
-            "Cannot create connection between" + " " + "`" +
-                source.getReference() + ":" + source.getComponentName() + "'" +
-                " " + "and" + " " + "`" + target.getReference() + ":" +
-                target.getComponentName() + "'" + "!" + " " +
-                "Target is not specified in SIDL.");
+        ErrorWriterDevice.getInstance()
+                         .println("Cannot create connection between" + " " +
+                                  "`" +
+                                  source.getReference() +
+                                  ":" +
+                                  source.getComponentName() +
+                                  "'" +
+                                  " " +
+                                  "and" +
+                                  " " +
+                                  "`" +
+                                  target.getReference() +
+                                  ":" +
+                                  target.getComponentName() +
+                                  "'" +
+                                  "!" +
+                                  " " +
+                                  "Target is not specified in SIDL.");
         return false;
       }
     } catch (Exception e) {
@@ -342,11 +355,22 @@ public class Component extends Geometry implements IPropertySource {
         }
         _connections.remove(connection);
       } catch (Exception e) {
-        ErrorWriterDevice.getInstance().println(
-            "Cannot delete connection between" + " " + "`" +
-                source.getReference() + ":" + source.getComponentName() + "'" +
-                " " + "and" + " " + "`" + target.getReference() + ":" +
-                target.getComponentName() + "'" + "!");
+        ErrorWriterDevice.getInstance()
+                         .println("Cannot delete connection between" + " " +
+                                  "`" +
+                                  source.getReference() +
+                                  ":" +
+                                  source.getComponentName() +
+                                  "'" +
+                                  " " +
+                                  "and" +
+                                  " " +
+                                  "`" +
+                                  target.getReference() +
+                                  ":" +
+                                  target.getComponentName() +
+                                  "'" +
+                                  "!");
         return false;
       }
 
@@ -408,8 +432,7 @@ public class Component extends Geometry implements IPropertySource {
    * 
    * @param component
    */
-  public void setCCAComponent(
-      de.tum.ascodt.repository.entities.Component component) {
+  public void setCCAComponent(de.tum.ascodt.repository.entities.Component component) {
     _component = component;
     _connections = new HashMap<Connection, Object>();
   }

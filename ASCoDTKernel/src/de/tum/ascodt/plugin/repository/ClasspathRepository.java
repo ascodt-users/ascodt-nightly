@@ -76,16 +76,22 @@ public class ClasspathRepository extends URLClassLoader {
       for (IClasspathEntry entry : jProject.getRawClasspath()) {
         if (entry.getEntryKind() == IClasspathEntry.CPE_LIBRARY) {
           if (entry.getPath().toString().startsWith("/" + _project.getName())) {
-            URL urlToAdd = new Path(_project.getLocation() +
-                entry.getPath().toString()
-                    .substring(_project.getName().length() + 1)).toFile()
-                .toURI().toURL();
+            URL urlToAdd =
+                new Path(_project.getLocation() + entry.getPath()
+                                                       .toString()
+                                                       .substring(_project.getName()
+                                                                          .length() + 1)).toFile()
+                                                                                         .toURI()
+                                                                                         .toURL();
             // if(!_urls.containsKey(urlToAdd)){
             addURL(urlToAdd);
             // _urls.put(urlToAdd, 0);
             // }
-          } else if (!entry.getPath().toFile().toURI().toString()
-              .contains("vtk.jar")) {
+          } else if (!entry.getPath()
+                           .toFile()
+                           .toURI()
+                           .toString()
+                           .contains("vtk.jar")) {
             URL urlToAdd = entry.getPath().toFile().toURI().toURL();
             // if(!_urls.containsKey(urlToAdd)){
             addURL(urlToAdd);

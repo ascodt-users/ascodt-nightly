@@ -15,9 +15,8 @@ public final class AParameterOutEnumParameter extends PParameter {
     // Constructor
   }
 
-  public AParameterOutEnumParameter(
-      @SuppressWarnings("hiding") PUserDefinedType _type_,
-      @SuppressWarnings("hiding") TIdentifier _name_) {
+  public AParameterOutEnumParameter(@SuppressWarnings("hiding") PUserDefinedType _type_,
+                                    @SuppressWarnings("hiding") TIdentifier _name_) {
     // Constructor
     setType(_type_);
 
@@ -61,7 +60,7 @@ public final class AParameterOutEnumParameter extends PParameter {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     if (_type_ == oldChild) {
       setType((PUserDefinedType)newChild);

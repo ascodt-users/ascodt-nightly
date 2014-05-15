@@ -36,8 +36,9 @@ public class StickyNoteCreateCommand extends Command {
    *           if any parameter is null, or the request
    *           does not provide a new Shape instance
    */
-  public StickyNoteCreateCommand(CreateRequest request, Diagram parent,
-      Rectangle bounds) {
+  public StickyNoteCreateCommand(CreateRequest request,
+                                 Diagram parent,
+                                 Rectangle bounds) {
     this.request = request;
     _parent = parent;
     this.bounds = bounds;

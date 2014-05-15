@@ -31,7 +31,7 @@ public final class AStringBuiltInType extends PBuiltInType {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     throw new RuntimeException("Not a child.");
   }

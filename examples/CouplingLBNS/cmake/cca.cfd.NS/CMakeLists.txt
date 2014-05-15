@@ -14,6 +14,20 @@ endif()
 # ------------------------------------------------------------------------------
 # Declare project.
 project("cca.cfd.NS" C CXX)
+OPTION (Parallel "Enable parallel" off)
+
+if(Parallel)
+	set(CMAKE_CXX_COMPILER "/home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc")
+	#set(CMAKE_C_COMPILER "mpicxx.openmpi")
+	
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DParallel -mt_mpi ")
+	
+endif(Parallel)
+
+find_library (PETSC_MKL_INTEL_LP64_LIB mkl_intel_lp64 HINTS "/opt/intel/mkl" "/home/atanasoa/Programme/petsc-3.3-p7/-Xlinker" "/opt/intel/mpi-rt/4.1" "/opt/intel/impi/4.1.3.049/intel64/lib" "/usr/lib/gcc/x86_64-linux-gnu/4.7" "/lib/x86_64-linux-gnu" "/usr/lib/x86_64-linux-gnu" "/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64" "/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64" "/usr/lib/i386-linux-gnu" )
+find_library (PETSC_MKL_INTEL_THREAD_LIB mkl_intel_thread HINTS "/opt/intel/mkl" "/home/atanasoa/Programme/petsc-3.3-p7/-Xlinker" "/opt/intel/mpi-rt/4.1" "/opt/intel/impi/4.1.3.049/intel64/lib" "/usr/lib/gcc/x86_64-linux-gnu/4.7" "/lib/x86_64-linux-gnu" "/usr/lib/x86_64-linux-gnu" "/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64" "/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64" "/usr/lib/i386-linux-gnu" )
+find_library (PETSC_MKL_CORE_LIB mkl_core HINTS "/opt/intel/mkl" "/home/atanasoa/Programme/petsc-3.3-p7/-Xlinker" "/opt/intel/mpi-rt/4.1" "/opt/intel/impi/4.1.3.049/intel64/lib" "/usr/lib/gcc/x86_64-linux-gnu/4.7" "/lib/x86_64-linux-gnu" "/usr/lib/x86_64-linux-gnu" "/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64" "/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64" "/usr/lib/i386-linux-gnu" )
+
 # ------------------------------------------------------------------------------
 # Issue deprecation errors for macros and functions.
 set(CMAKE_ERROR_DEPRECATED ON)
@@ -160,7 +174,6 @@ set(CPP_FILES
 #    ${PETSC_LIBRARIES}
     ${CPP_FILES}
     ${KERNEL_SOURCES}
-    ${XML_SOURCES}
     ${NS_SOURCES}
     ${COUPLING_SOURCES}
    	${STENCIL_SOURCES}
@@ -174,7 +187,11 @@ include("targets.cmake")
 target_link_libraries("cca.cfd.NS"
                       ${JNI_LIBRARIES}
                       ${Threads_LIBRARIES}
-                      ${PETSC_LIBRARIES})
+                      ${PETSC_LIBRARIES}
+                      ${PETSC_MKL_INTEL_LP64_LIB}
+                      ${PETSC_MKL_INTEL_THREAD_LIB}
+                      ${PETSC_MKL_CORE_LIB}
+                      iomp5)
 
 install(TARGETS "cca.cfd.NS"
         ARCHIVE DESTINATION "lib"

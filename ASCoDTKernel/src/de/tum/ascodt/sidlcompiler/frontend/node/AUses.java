@@ -12,7 +12,8 @@ import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
 
 @SuppressWarnings("nls")
 public final class AUses extends PUses {
-  private final LinkedList<PUserDefinedType> _type_ = new LinkedList<PUserDefinedType>();
+  private final LinkedList<PUserDefinedType> _type_ =
+      new LinkedList<PUserDefinedType>();
   private TIdentifier _as_;
 
   public AUses() {
@@ -20,7 +21,7 @@ public final class AUses extends PUses {
   }
 
   public AUses(@SuppressWarnings("hiding") List<PUserDefinedType> _type_,
-      @SuppressWarnings("hiding") TIdentifier _as_) {
+               @SuppressWarnings("hiding") TIdentifier _as_) {
     // Constructor
     setType(_type_);
 
@@ -63,7 +64,7 @@ public final class AUses extends PUses {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     for (ListIterator<PUserDefinedType> i = _type_.listIterator(); i.hasNext();) {
       if (i.next() == oldChild) {

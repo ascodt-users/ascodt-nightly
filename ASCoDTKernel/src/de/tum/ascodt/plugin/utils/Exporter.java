@@ -48,13 +48,11 @@ public class Exporter {
    * @return boolean value of the match
    */
   private static boolean checkForNamespaceMatch(File file,
-      String componentInterace) {
-    return new Path(file.getAbsolutePath())
-        .toPortableString()
-        .replaceAll("/", ".")
-        .contains(
-            componentInterace.substring(0,
-                componentInterace.lastIndexOf(".") - 1));
+                                                String componentInterace) {
+    return new Path(file.getAbsolutePath()).toPortableString()
+                                           .replaceAll("/", ".")
+                                           .contains(componentInterace.substring(0,
+                                                                                 componentInterace.lastIndexOf(".") - 1));
 
   }
 
@@ -72,18 +70,20 @@ public class Exporter {
    * @throws IOException
    */
   private static void exportAsZipArchive(Vector<File> classes,
-      Vector<File> dependencies, String componentInterface, String destination,
-      IProject project) throws IOException {
+                                         Vector<File> dependencies,
+                                         String componentInterface,
+                                         String destination,
+                                         IProject project) throws IOException {
 
     packToJar(classes, componentInterface, project.getLocation()
-        .toPortableString());
-    ZipOutputStream out = new ZipOutputStream(new FileOutputStream(destination));
+                                                  .toPortableString());
+    ZipOutputStream out =
+        new ZipOutputStream(new FileOutputStream(destination));
     File jarLibrary = new File(componentInterface + ".jar");
-    File componentSourceFile = new File(project.getLocation()
-        .toPortableString() +
-        "/sidl/" +
-        componentInterface.substring(componentInterface.lastIndexOf(".") + 1) +
-        ".sidl");
+    File componentSourceFile =
+        new File(project.getLocation().toPortableString() + "/sidl/" +
+                 componentInterface.substring(componentInterface.lastIndexOf(".") + 1) +
+                 ".sidl");
 
     writeEntryToZipFile(out, componentSourceFile, componentSourceFile.getName());
     writeEntryToZipFile(out, jarLibrary, jarLibrary.getName());
@@ -107,25 +107,35 @@ public class Exporter {
    * @throws ASCoDTException
    */
   public static void exportBinary(String componentInterface,
-      String destination, IProject project) throws ASCoDTException {
+                                  String destination,
+                                  IProject project) throws ASCoDTException {
     // gather all resources for this component
     // Vector<String> sidlFiles;
     Vector<File> classes = new Vector<File>();
     Vector<File> sidlDependencies = new Vector<File>();
     try {
       retrieveClasses(classes, componentInterface, project.getLocation()
-          .toPortableString());
-      retrieveSIDLDependencies(ProjectBuilder.getInstance().getProject(project)
-          .getSIDLDependencies(), sidlDependencies);
+                                                          .toPortableString());
+      retrieveSIDLDependencies(ProjectBuilder.getInstance()
+                                             .getProject(project)
+                                             .getSIDLDependencies(),
+                               sidlDependencies);
 
-      exportAsZipArchive(classes, sidlDependencies, componentInterface,
-          destination, project);
+      exportAsZipArchive(classes,
+                         sidlDependencies,
+                         componentInterface,
+                         destination,
+                         project);
     } catch (CoreException e) {
       throw new ASCoDTException(Exporter.class.getCanonicalName(),
-          "exportBinary()", e.getLocalizedMessage(), e);
+                                "exportBinary()",
+                                e.getLocalizedMessage(),
+                                e);
     } catch (IOException e) {
       throw new ASCoDTException(Exporter.class.getCanonicalName(),
-          "exportBinary()", e.getLocalizedMessage(), e);
+                                "exportBinary()",
+                                e.getLocalizedMessage(),
+                                e);
     }
   }
 
@@ -139,21 +149,24 @@ public class Exporter {
    * @throws IOException
    */
   private static void packToJar(Vector<File> classes,
-      String componentInterface, String projectLocation) throws IOException {
+                                String componentInterface,
+                                String projectLocation) throws IOException {
     Manifest manifest = new Manifest();
     manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
     File libraryFile = new File(componentInterface + ".jar");
     if (!libraryFile.exists()) {
       libraryFile.createNewFile();
     }
-    JarOutputStream target = new JarOutputStream(new FileOutputStream(
-        componentInterface + ".jar"), manifest);
+    JarOutputStream target =
+        new JarOutputStream(new FileOutputStream(componentInterface + ".jar"),
+                            manifest);
     for (File classFile : classes) {
       String name = null;
-      if (new Path(classFile.getPath()).toPortableString().contains(
-          projectLocation)) {
-        name = new Path(classFile.getPath()).toPortableString().substring(
-            projectLocation.length() + 1);
+      if (new Path(classFile.getPath()).toPortableString()
+                                       .contains(projectLocation)) {
+        name =
+            new Path(classFile.getPath()).toPortableString()
+                                         .substring(projectLocation.length() + 1);
       }
 
       JarEntry entry = new JarEntry(name);
@@ -161,8 +174,8 @@ public class Exporter {
 
       target.putNextEntry(entry);
 
-      BufferedInputStream in = new BufferedInputStream(new FileInputStream(
-          classFile));
+      BufferedInputStream in =
+          new BufferedInputStream(new FileInputStream(classFile));
       writeEntry(target, in);
       in.close();
       target.closeEntry();
@@ -184,7 +197,8 @@ public class Exporter {
    *          path to the project
    */
   private static void retrieveClasses(Vector<File> classes,
-      String componentName, String projectPath) {
+                                      String componentName,
+                                      String projectPath) {
     File srcDir = new File(projectPath + new Path("/bin").toPortableString());
     if (srcDir.exists()) {
       for (File file : srcDir.listFiles()) {
@@ -207,8 +221,11 @@ public class Exporter {
    * @param componentInterface
    *          name of the component
    */
-  private static void retrieveFiles(String path, String ext,
-      Vector<File> classes, File file, String componentInterface) {
+  private static void retrieveFiles(String path,
+                                    String ext,
+                                    Vector<File> classes,
+                                    File file,
+                                    String componentInterface) {
     if (file.isFile() && file.getName().contains("." + ext) &&
         checkForNamespaceMatch(file, componentInterface)) {
       classes.add(file);
@@ -228,7 +245,7 @@ public class Exporter {
    *          file collection where to put the found files
    */
   private static void retrieveSIDLDependencies(String[] paths2SIDLDependencies,
-      Vector<File> sidlDependencies) {
+                                               Vector<File> sidlDependencies) {
     for (String path : paths2SIDLDependencies) {
       sidlDependencies.add(new File(path));
     }
@@ -243,8 +260,7 @@ public class Exporter {
    *          inputstream of the file
    * @throws IOException
    */
-  private static void writeEntry(OutputStream out, BufferedInputStream in)
-      throws IOException {
+  private static void writeEntry(OutputStream out, BufferedInputStream in) throws IOException {
     byte[] buffer = new byte[1024];
     while (true) {
       int count = in.read(buffer);
@@ -264,8 +280,10 @@ public class Exporter {
    * @throws IOException
    * @throws FileNotFoundException
    */
-  private static void writeEntryToZipFile(ZipOutputStream out, File file,
-      String entryName) throws IOException, FileNotFoundException {
+  private static void writeEntryToZipFile(ZipOutputStream out,
+                                          File file,
+                                          String entryName) throws IOException,
+                                                           FileNotFoundException {
     out.putNextEntry(new ZipEntry(entryName));
     BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
     writeEntry(out, in);

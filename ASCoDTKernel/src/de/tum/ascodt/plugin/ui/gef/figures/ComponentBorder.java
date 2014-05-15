@@ -53,10 +53,13 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder {
                                   // to a sticky
                                   // note
 
-  public ComponentBorder(boolean isRemote, Figure parent,
-      Vector<Port> usePorts, Vector<Port> providePorts,
-      Vector<RectangleFigure> input, Vector<RectangleFigure> output,
-      String projectName) {
+  public ComponentBorder(boolean isRemote,
+                         Figure parent,
+                         Vector<Port> usePorts,
+                         Vector<Port> providePorts,
+                         Vector<RectangleFigure> input,
+                         Vector<RectangleFigure> output,
+                         String projectName) {
     super();
     // TODO this.rep=rep;
     // this.isRemote=isRemote;
@@ -77,19 +80,26 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder {
   }
 
   private boolean checkIfClassesCompotible(String classUsePort,
-      String classProvidePort) {
+                                           String classProvidePort) {
     Class<?> usePortClass = null;
     Class<?> providePortClass = null;
     boolean res = false;
     try {
 
-      usePortClass = ProjectBuilder.getInstance().getProject(_projectName)
-          .getClasspathRepository().loadClass(classUsePort);
+      usePortClass =
+          ProjectBuilder.getInstance()
+                        .getProject(_projectName)
+                        .getClasspathRepository()
+                        .loadClass(classUsePort);
 
-      providePortClass = ProjectBuilder.getInstance().getProject(_projectName)
-          .getClasspathRepository().loadClass(classProvidePort);
-      res = usePortClass != null && providePortClass != null &&
-          usePortClass.isAssignableFrom(providePortClass);
+      providePortClass =
+          ProjectBuilder.getInstance()
+                        .getProject(_projectName)
+                        .getClasspathRepository()
+                        .loadClass(classProvidePort);
+      res =
+          usePortClass != null && providePortClass != null &&
+              usePortClass.isAssignableFrom(providePortClass);
       usePortClass = null;
       providePortClass = null;
     } catch (ClassNotFoundException e) {
@@ -99,8 +109,8 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder {
   }
 
   private void createConnectionAnchors(Rectangle rec) {
-    int y1 = rec.y, height = rec.height, x1 = rec.x, right = rec.x + rec.width -
-        rec.height / 8 - 1;
+    int y1 = rec.y, height = rec.height, x1 = rec.x, right =
+        rec.x + rec.width - rec.height / 8 - 1;
     for (int i = 0; i < providePorts.size(); i++) {
       y1 = rec.y + (int)(0.27 * rec.height) + (2 * i + 1) * height / 8;
       createTargetConnectionAnchor(providePorts.elementAt(i), x1, y1);
@@ -130,25 +140,30 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder {
    * @param rec
    * @param org_height
    */
-  private void drawConnectors(Graphics g, Rectangle portRectangle,
-      Rectangle componentRectange) {
+  private void drawConnectors(Graphics g,
+                              Rectangle portRectangle,
+                              Rectangle componentRectange) {
     anchorSize[1] = portRectangle.height / 8;
     anchorSize[0] = portRectangle.width / 8;
-    int y1 = componentRectange.y, height = portRectangle.height, x1 = componentRectange.x, right = componentRectange.x +
-        componentRectange.width - anchorSize[0];
+    int y1 = componentRectange.y, height = portRectangle.height, x1 =
+        componentRectange.x, right =
+        componentRectange.x + componentRectange.width - anchorSize[0];
 
     for (int i = 0; i < providePorts.size(); i++) {
-      y1 = componentRectange.y + (int)(0.27 * componentRectange.height) +
-          (2 * i + 1) * height / 8;
+      y1 =
+          componentRectange.y + (int)(0.27 * componentRectange.height) +
+              (2 * i + 1) *
+              height /
+              8;
       providePortsFigs.elementAt(i).setSize(anchorSize[0], anchorSize[1]);
       providePortsFigs.elementAt(i).setForegroundColor(ColorConstants.green);
       providePortsFigs.elementAt(i)
-          .setBackgroundColor(ColorConstants.lightGray);
-      if (matchingPort != null &&
-          checkIfClassesCompotible(
-              matchingPort.getDescription().substring(
-                  matchingPort.getDescription().indexOf(":") + 1), providePorts
-                  .elementAt(i).getDescription())) {
+                      .setBackgroundColor(ColorConstants.lightGray);
+      if (matchingPort != null && checkIfClassesCompotible(matchingPort.getDescription()
+                                                                       .substring(matchingPort.getDescription()
+                                                                                              .indexOf(":") + 1),
+                                                           providePorts.elementAt(i)
+                                                                       .getDescription())) {
         providePorts.elementAt(i).setIsConnectable(true);
         providePortsFigs.elementAt(i).setBackgroundColor(ColorConstants.green);
       } else {
@@ -161,8 +176,10 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder {
       // g.drawPolygon(connector);
       //
       // connector.translate(-x1, -y1);
-      invalidateTargetConnectionAnchor(providePorts.elementAt(i), x1, y1,
-          height / 8);
+      invalidateTargetConnectionAnchor(providePorts.elementAt(i),
+                                       x1,
+                                       y1,
+                                       height / 8);
     }
     g.setBackgroundColor(ColorConstants.lightGray);
     g.setForegroundColor(ColorConstants.red);
@@ -171,12 +188,17 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder {
       usePortsFigs.elementAt(i).setBackgroundColor(ColorConstants.lightGray);
       usePortsFigs.elementAt(i).setForegroundColor(ColorConstants.red);
       usePortsFigs.elementAt(i).setSize(anchorSize[0], anchorSize[1]);
-      y1 = componentRectange.y + (int)(0.27 * componentRectange.height) +
-          (2 * i + 1) * height / 8;
+      y1 =
+          componentRectange.y + (int)(0.27 * componentRectange.height) +
+              (2 * i + 1) *
+              height /
+              8;
       usePortsFigs.elementAt(i).setLocation(new Point(right, y1));
       usePortsFigs.elementAt(i).repaint();
-      invalidateSourceConnectionAnchor(usePorts.elementAt(i), right, y1,
-          height / 8);
+      invalidateSourceConnectionAnchor(usePorts.elementAt(i),
+                                       right,
+                                       y1,
+                                       height / 8);
 
     }
   }
@@ -186,7 +208,7 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder {
    * @return
    */
   private ConnectionAnchor getClosestConnectionAnchor(Point p,
-      HashMap<Port, PortAnchor> anchors) {
+                                                      HashMap<Port, PortAnchor> anchors) {
     ConnectionAnchor closest = null;
     if (!isLink) {
       Double min = Double.MAX_VALUE;
@@ -246,43 +268,61 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder {
   public void invalidateConnectors(Rectangle componentRectangle) {
     Rectangle portRectangle = componentRectangle.getCopy();
     if (getMaxConnectors() > 0) {
-      portRectangle.height = portRectangle.height /
-          (int)Math.ceil(getMaxConnectors() / 3.0);
+      portRectangle.height =
+          portRectangle.height / (int)Math.ceil(getMaxConnectors() / 3.0);
     }
 
-    int y1 = componentRectangle.y, height = portRectangle.height, x1 = componentRectangle.x, right = componentRectangle.x +
-        componentRectangle.width - portRectangle.height / 8 - 1;
+    int y1 = componentRectangle.y, height = portRectangle.height, x1 =
+        componentRectangle.x, right =
+        componentRectangle.x + componentRectangle.width -
+            portRectangle.height /
+            8 -
+            1;
 
     for (int i = 0; i < providePorts.size(); i++) {
-      y1 = componentRectangle.y + (int)(0.27 * componentRectangle.height) +
-          (2 * i + 1) * height / 8;
-      invalidateTargetConnectionAnchor(providePorts.elementAt(i), x1, y1,
-          height / 8);
+      y1 =
+          componentRectangle.y + (int)(0.27 * componentRectangle.height) +
+              (2 * i + 1) *
+              height /
+              8;
+      invalidateTargetConnectionAnchor(providePorts.elementAt(i),
+                                       x1,
+                                       y1,
+                                       height / 8);
     }
     for (int i = 0; i < usePorts.size(); i++) {
-      y1 = componentRectangle.y + (int)(0.27 * componentRectangle.height) +
-          (2 * i + 1) * height / 8;
-      invalidateSourceConnectionAnchor(usePorts.elementAt(i), right, y1,
-          height / 8);
+      y1 =
+          componentRectangle.y + (int)(0.27 * componentRectangle.height) +
+              (2 * i + 1) *
+              height /
+              8;
+      invalidateSourceConnectionAnchor(usePorts.elementAt(i),
+                                       right,
+                                       y1,
+                                       height / 8);
 
     }
   }
 
-  private void invalidateSourceConnectionAnchor(Port port, int right, int y1,
-      int width) {
+  private void invalidateSourceConnectionAnchor(Port port,
+                                                int right,
+                                                int y1,
+                                                int width) {
     // double zoom=1.0/((ComponentFigure)parent).getZoom();
     // int w=(int)(((double)width*zoom)/2.0);
     outputConnectionAnchors.get(port).setLocation(right + width / 2,
-        y1 + width / 2);
+                                                  y1 + width / 2);
   }
 
-  private void invalidateTargetConnectionAnchor(Port port, int x1, int y1,
-      int width) {
+  private void invalidateTargetConnectionAnchor(Port port,
+                                                int x1,
+                                                int y1,
+                                                int width) {
     // double zoom=1.0/((ComponentFigure)parent).getZoom();
     // int w=(int)(((double)width*zoom)/2.0);
 
     inputConnectionAnchors.get(port)
-        .setLocation(x1 + width / 2, y1 + width / 2);
+                          .setLocation(x1 + width / 2, y1 + width / 2);
   }
 
   public void markCompatibleTargets(Port port) {
@@ -298,8 +338,8 @@ public class ComponentBorder extends org.eclipse.draw2d.LineBorder {
     Rectangle compoentRectangle = figure.getBounds().getCopy();
     Rectangle portRectangle = figure.getBounds().getCopy();
     if (getMaxConnectors() > 0) {
-      portRectangle.height = portRectangle.height /
-          (int)Math.ceil(getMaxConnectors() / 3.0);
+      portRectangle.height =
+          portRectangle.height / (int)Math.ceil(getMaxConnectors() / 3.0);
     }
     portRectangle.width = portRectangle.height;
     drawConnectors(g, portRectangle, compoentRectangle);

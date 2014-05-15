@@ -21,13 +21,14 @@
 #include <fstream>
 namespace cca { 
 namespace cfd { 
-  
-     class NSImplementation;
+
+class NSImplementation;
 } 
 }
 class Configuration;
 class FlowField;
 class Simulation;
+class NSLBCommunicator;
 class cca::cfd::NSImplementation : public cca::cfd::NSAbstractImplementation{
 private:
 	pthread_mutex_t _mutex;
@@ -43,31 +44,61 @@ private:
 	std::vector<double> _velocityZ;
 	std::vector<double> _jacobian;
 	std::vector<double> _pressure;
+	std::vector<int> _startDomain;
+	std::vector<int> _endDomain;
+	std::vector<std::string> _mids;
+	std::vector<NSLBCommunicator*> _coms;
+	std::vector<int> _maxSizeCommunicators;
+	std::vector<int> _sizeCommunicators;
 	double _time;
 	LBField* _lbField;
 	int _iter;
 	std::ofstream _nsprofiles;
 	std::ofstream _nspressure;
+	int _comC;
+	void gatherDomainDescriptions();
+	void gatherMids();
 public:
-          NSImplementation();
-          ~NSImplementation();
-          void setup(const std::string inputScenario);
-          void solveOneTimestepPhaseOne();
-          void solveOneTimestepPhaseTwo();
-          void setVelocities(const double* velocitiesX, const int velocitiesX_len,const double* velocitiesY, const int velocitiesY_len,const double* velocitiesZ, const int velocitiesZ_len);
-          void retrieveTimestep(double& timestep);
-          void plot();
-          void iterate();
-          void iterateBoundary();
-          void iterateInner();
-          void retrieveVelocitiesSize(int& memory);
-          void retrieveVelocitiesCopy(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
-          void retrieveJacobianCopy(double* jacobian, const int jacobian_len);
-          void retrievePressureCopy(double* pressure, const int pressure_len);
-          void printNSPressure();
-          void printNSProfiles();
-          void closeNSProfiles();
-          void solve();
+	NSImplementation();
+	~NSImplementation();
+	void setup(const std::string inputScenario);
+	void solveOneTimestepPhaseOne();
+	void solveOneTimestepPhaseTwo();
+	void setVelocities(const double* velocitiesX, const int velocitiesX_len,const double* velocitiesY, const int velocitiesY_len,const double* velocitiesZ, const int velocitiesZ_len);
+	void retrieveTimestep(double& timestep);
+	void plot();
+	void iterate();
+	void iterateBoundary();
+	void iterateInner();
+	void retrieveVelocitiesSize(int& memory);
+	void retrieveVelocitiesCopy(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
+	void retrieveJacobianCopy(double* jacobian, const int jacobian_len);
+	void retrievePressureCopy(double* pressure, const int pressure_len);
+	void printNSPressure();
+	void printNSProfiles();
+	void closeNSProfiles();
+	void solve();
+	void forwardVelocities(
+			const int* keys,
+			const int keys_len,
+			const int * offsets,
+			const int offsets_len,
+			const int * flips,
+			const int flips_len,
+			const double* values,
+			const int values_len,
+			int& ackn
+	);
+	void setupCommForLBRegion(
+			const int* startOfRegion,
+			const int startOfRegion_len,
+			const int* endOfRegion,
+			const int endOfRegion_len,
+			const std::string* commids,
+			const int commids_len);
+	void syncr(int& atr){
+
+	}
 };     
 
 

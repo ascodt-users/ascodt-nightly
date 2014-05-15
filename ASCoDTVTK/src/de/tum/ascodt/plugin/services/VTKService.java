@@ -24,8 +24,9 @@ public class VTKService {
 
   private VTKView _view;
 
-  public void addObserver(final String event, final Object target,
-      final String method) {
+  public void addObserver(final String event,
+                          final Object target,
+                          final String method) {
     PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 
       @Override
@@ -74,7 +75,8 @@ public class VTKService {
   }
 
   public vtkRenderWindowInteractor getInteractor() throws PartInitException,
-      InterruptedException, ASCoDTException {
+                                                  InterruptedException,
+                                                  ASCoDTException {
     initView();
     return getVTKView().getInteractor();
   }
@@ -91,8 +93,10 @@ public class VTKService {
       return _view;
     }
 
-    throw new ASCoDTException(getClass().getName(), "getVTKView()",
-        "calling getVTKView() with non valid eclipse setup", null);
+    throw new ASCoDTException(getClass().getName(),
+                              "getVTKView()",
+                              "calling getVTKView() with non valid eclipse setup",
+                              null);
   }
 
   private void initView() throws InterruptedException, PartInitException {
@@ -100,8 +104,10 @@ public class VTKService {
       Thread.sleep(100);
     }
     if (_view == null) {
-      setView((VTKView)PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-          .getActivePage().showView(VTKView.ID));
+      setView((VTKView)PlatformUI.getWorkbench()
+                                 .getActiveWorkbenchWindow()
+                                 .getActivePage()
+                                 .showView(VTKView.ID));
     }
   }
 
@@ -121,9 +127,11 @@ public class VTKService {
 
         @Override
         public void run() {
-          _valid = !(PlatformUI.getWorkbench() == null ||
-              PlatformUI.getWorkbench().getActiveWorkbenchWindow() == null || PlatformUI
-              .getWorkbench().getActiveWorkbenchWindow().getActivePage() == null);
+          _valid =
+              !(PlatformUI.getWorkbench() == null || PlatformUI.getWorkbench()
+                                                               .getActiveWorkbenchWindow() == null || PlatformUI.getWorkbench()
+                                                                                                                .getActiveWorkbenchWindow()
+                                                                                                                .getActivePage() == null);
         }
       }
       CustomRunnable r = new CustomRunnable();

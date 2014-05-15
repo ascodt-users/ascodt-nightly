@@ -1,5 +1,5 @@
 #include "Configuration.h"
-#include "3rdparty/tinyxml2/tinyxml2.h"
+#include "tinyxml2.h"
 #include <string>
 
 void readFloatMandatory(FLOAT & storage, tinyxml2::XMLElement *node, const char* tag){
@@ -112,7 +112,7 @@ void Configuration::setFileName(const std::string & filename){
     _filename = filename;
 }
 
-void Configuration::loadParameters(Parameters & parameters, const MPI_Comm & communicator){
+void Configuration::loadParameters(Parameters & parameters, const MPI_Comm & communicator,std::string parallelTag){
     tinyxml2::XMLDocument confFile;
     tinyxml2::XMLElement *node;
     tinyxml2::XMLElement *subNode;
@@ -320,7 +320,7 @@ void Configuration::loadParameters(Parameters & parameters, const MPI_Comm & com
         // Parallel parameters
         //--------------------------------------------------
 
-        node = confFile.FirstChildElement()->FirstChildElement("parallel");
+        node = confFile.FirstChildElement()->FirstChildElement(parallelTag.c_str());
 
         if (node == NULL){
             handleError(1, "Error loading parallel parameters");
@@ -451,7 +451,7 @@ void Configuration::loadParameters(Parameters & parameters, const MPI_Comm & com
             readIntMandatory(parameters.coupling.ratio, node, "ratio");
             readFloatMandatory(parameters.coupling.refLength, node, "refLength");
             readIntOptional (parameters.coupling.overlap, node, "overlap", 2);
-            std::cout<<"ratio:"<<parameters.coupling.ratio<<"overlap:"<<parameters.coupling.overlap<<std::endl;
+
             readBoolOptional (parameters.coupling.set, node, "active", true);
         } else {
             parameters.coupling.set = false;

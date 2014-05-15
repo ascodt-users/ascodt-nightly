@@ -27,7 +27,8 @@ public class Link extends ModelElement {
   public static final String DASH_CONNECTION = "Dash";
 
   public static final String LINESTYLE_PROP = "LineStyle";
-  protected static final IPropertyDescriptor[] descriptors = new IPropertyDescriptor[1];
+  protected static final IPropertyDescriptor[] descriptors =
+      new IPropertyDescriptor[1];
   private static final String DASH_STR = "Dash Node";
 
   /** True, if the link is attached to its point. */
@@ -41,8 +42,10 @@ public class Link extends ModelElement {
 
   private Component source;
   static {
-    descriptors[0] = new ComboBoxPropertyDescriptor(LINESTYLE_PROP,
-        LINESTYLE_PROP, new String[] {DASH_STR});
+    descriptors[0] =
+        new ComboBoxPropertyDescriptor(LINESTYLE_PROP,
+                                       LINESTYLE_PROP,
+                                       new String[] {DASH_STR});
   }
 
   /**

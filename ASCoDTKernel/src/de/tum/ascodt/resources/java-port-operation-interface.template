@@ -1,2 +1,3 @@
 
   public void __OPERATION_NAME__(__OPERATION_PARAMETERS_LIST__);
+  public void __OPERATION_NAME__Parallel(__OPERATION_PARAMETERS_LIST__);

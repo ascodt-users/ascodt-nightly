@@ -76,9 +76,10 @@ public class ASCoDTKernel extends AbstractUIPlugin {
    */
   public ASCoDTKernel() {
     singleton = this;
-    System.out.println("plugin path:" +
-        ASCoDTKernel.class.getProtectionDomain().getCodeSource().getLocation()
-            .getPath());
+    System.out.println("plugin path:" + ASCoDTKernel.class.getProtectionDomain()
+                                                          .getCodeSource()
+                                                          .getLocation()
+                                                          .getPath());
     initialiseServices();
 
     initializeProjects();
@@ -102,14 +103,18 @@ public class ASCoDTKernel extends AbstractUIPlugin {
 
   public String getLocation() {
     boolean hasBinFolder = false;
-    if (FileLocator.find(Platform.getBundle(ASCoDTKernel.ID), new Path("bin"),
-        null) != null) {
+    if (FileLocator.find(Platform.getBundle(ASCoDTKernel.ID),
+                         new Path("bin"),
+                         null) != null) {
       hasBinFolder = true;
     }
     try {
-      return FileLocator.toFileURL(
-          FileLocator.find(Platform.getBundle(ASCoDTKernel.ID), new Path(
-              hasBinFolder ? "bin" : ""), null)).getPath();
+      return FileLocator.toFileURL(FileLocator.find(Platform.getBundle(ASCoDTKernel.ID),
+                                                    new Path(hasBinFolder
+                                                                         ? "bin"
+                                                                         : ""),
+                                                    null))
+                        .getPath();
     } catch (IOException e) {
       ErrorWriterDevice.getInstance().println(e);
     }
@@ -142,16 +147,16 @@ public class ASCoDTKernel extends AbstractUIPlugin {
   }
 
   private void initializeOutputDevice() {
-    OutputDevice output = ConsoleDevice.getInstance().getConsole(
-        "ASCoDT Components Output");
-    OutputDevice error_output = ConsoleDevice.getInstance().getConsole(
-        "ASCoDT Error Output");
+    OutputDevice output =
+        ConsoleDevice.getInstance().getConsole("ASCoDT Components Output");
+    OutputDevice error_output =
+        ConsoleDevice.getInstance().getConsole("ASCoDT Error Output");
     if (output != null && output instanceof ConsoleStream &&
-        error_output != null && error_output instanceof ConsoleStream) {
-      System
-          .setOut(new PrintStream(((ConsoleStream)output).newMessageStream()));
-      MessageConsoleStream errorStream = ((ConsoleStream)error_output)
-          .newMessageStream();
+        error_output != null &&
+        error_output instanceof ConsoleStream) {
+      System.setOut(new PrintStream(((ConsoleStream)output).newMessageStream()));
+      MessageConsoleStream errorStream =
+          ((ConsoleStream)error_output).newMessageStream();
       errorStream.setColor(new Color(Display.getDefault(), 255, 0, 0));
       System.setErr(new PrintStream(errorStream));
     }
@@ -163,37 +168,35 @@ public class ASCoDTKernel extends AbstractUIPlugin {
    * representation objects for newly opened ascodt projects
    */
   private void initializeProjectLifeCycle() {
-    ((Workspace)ResourcesPlugin.getWorkspace())
-        .addLifecycleListener(new ILifecycleListener() {
+    ((Workspace)ResourcesPlugin.getWorkspace()).addLifecycleListener(new ILifecycleListener() {
 
-          @Override
-          public void handleEvent(LifecycleEvent event) throws CoreException {
+      @Override
+      public void handleEvent(LifecycleEvent event) throws CoreException {
 
-            if (event.resource instanceof IProject &&
-                ((IProject)event.resource).isAccessible() &&
-                ((IProject)event.resource).isNatureEnabled(ASCoDTNature.ID)) {
+        if (event.resource instanceof IProject && ((IProject)event.resource).isAccessible() &&
+            ((IProject)event.resource).isNatureEnabled(ASCoDTNature.ID)) {
 
-              if (event.kind == LifecycleEvent.PRE_PROJECT_OPEN) {
-                try {
-                  prepareProject((IProject)event.resource);
-                } catch (ASCoDTException e) {
-                  ErrorWriterDevice.getInstance().println(e);
-                }
-              } else if (event.kind == LifecycleEvent.PRE_PROJECT_CLOSE) {
-                ProjectBuilder.getInstance()
-                    .getProject((IProject)event.resource)
-                    .closeRunningWorkbenchInstances();
-                ProjectBuilder.getInstance().removeProject(
-                    (IProject)event.resource);
-              } else if (event.kind == LifecycleEvent.PRE_PROJECT_DELETE) {
-                ProjectBuilder.getInstance().removeProject(
-                    (IProject)event.resource);
-              }
-
+          if (event.kind == LifecycleEvent.PRE_PROJECT_OPEN) {
+            try {
+              prepareProject((IProject)event.resource);
+            } catch (ASCoDTException e) {
+              ErrorWriterDevice.getInstance().println(e);
             }
+          } else if (event.kind == LifecycleEvent.PRE_PROJECT_CLOSE) {
+            ProjectBuilder.getInstance()
+                          .getProject((IProject)event.resource)
+                          .closeRunningWorkbenchInstances();
+            ProjectBuilder.getInstance()
+                          .removeProject((IProject)event.resource);
+          } else if (event.kind == LifecycleEvent.PRE_PROJECT_DELETE) {
+            ProjectBuilder.getInstance()
+                          .removeProject((IProject)event.resource);
           }
 
-        });
+        }
+      }
+
+    });
   }
 
   /**
@@ -206,8 +209,8 @@ public class ASCoDTKernel extends AbstractUIPlugin {
     // @Override
     // protected IStatus run(IProgressMonitor monitor) {
     try {
-      for (IProject project : ((Workspace)ResourcesPlugin.getWorkspace())
-          .getRoot().getProjects()) {
+      for (IProject project : ((Workspace)ResourcesPlugin.getWorkspace()).getRoot()
+                                                                         .getProjects()) {
 
         if (project.isOpen() && project.isNatureEnabled(ASCoDTNature.ID)) {
           prepareProject(project);

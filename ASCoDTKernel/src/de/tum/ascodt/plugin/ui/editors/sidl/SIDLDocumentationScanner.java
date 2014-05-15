@@ -41,8 +41,8 @@ public class SIDLDocumentationScanner extends RuleBasedScanner {
     }
   }
 
-  private static String[] fgKeywords = {
-    "@author", "@deprecated", "@exception", "@param", "@return", "@see", "@serial", "@serialData", "@serialField", "@since", "@throws", "@version"}; //$NON-NLS-12$ //$NON-NLS-11$ //$NON-NLS-10$ //$NON-NLS-7$ //$NON-NLS-9$ //$NON-NLS-8$ //$NON-NLS-6$ //$NON-NLS-5$ //$NON-NLS-4$ //$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
+  private static String[] fgKeywords =
+      {"@author", "@deprecated", "@exception", "@param", "@return", "@see", "@serial", "@serialData", "@serialField", "@since", "@throws", "@version"}; //$NON-NLS-12$ //$NON-NLS-11$ //$NON-NLS-10$ //$NON-NLS-7$ //$NON-NLS-9$ //$NON-NLS-8$ //$NON-NLS-6$ //$NON-NLS-5$ //$NON-NLS-4$ //$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
 
   /**
    * Create a new javadoc scanner for the given color provider.
@@ -53,12 +53,12 @@ public class SIDLDocumentationScanner extends RuleBasedScanner {
   public SIDLDocumentationScanner(SIDLColorProvider provider) {
     super();
 
-    IToken keyword = new Token(new TextAttribute(
-        provider.getColor(SIDLColorProvider.JAVADOC_KEYWORD)));
-    IToken tag = new Token(new TextAttribute(
-        provider.getColor(SIDLColorProvider.JAVADOC_TAG)));
-    IToken link = new Token(new TextAttribute(
-        provider.getColor(SIDLColorProvider.JAVADOC_LINK)));
+    IToken keyword =
+        new Token(new TextAttribute(provider.getColor(SIDLColorProvider.JAVADOC_KEYWORD)));
+    IToken tag =
+        new Token(new TextAttribute(provider.getColor(SIDLColorProvider.JAVADOC_TAG)));
+    IToken link =
+        new Token(new TextAttribute(provider.getColor(SIDLColorProvider.JAVADOC_LINK)));
 
     List<IRule> list = new ArrayList<IRule>();
 

@@ -28,11 +28,13 @@ import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 import de.tum.ascodt.plugin.project.Project;
 import de.tum.ascodt.plugin.project.ProjectBuilder;
+import de.tum.ascodt.plugin.services.SocketService;
 import de.tum.ascodt.plugin.utils.ProcessExitDetector;
 import de.tum.ascodt.plugin.utils.ProcessListener;
 import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
@@ -49,6 +51,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
   private String _projectLocation;
   private Process _process;
   private ExecutorService _executionService;
+  protected Spinner numberOfProcesses;
 
   protected ProgramArgsTab(String label, String containerId) {
     super(label, containerId);
@@ -59,6 +62,37 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
 
   public void addListener(ProcessListener processListner) {
     _exitDetector.addListener(processListner);
+  }
+
+  protected void createParallelControlItems(ExpandBar bar) {
+    GridLayout gridLayout = new GridLayout();
+    gridLayout.numColumns = 2;
+
+    Composite parallelComp = new Composite(bar, SWT.NONE);
+    parallelComp.setLayout(gridLayout);
+    GridData textGridData = new GridData();
+    textGridData.horizontalAlignment = GridData.FILL;
+    textGridData.grabExcessHorizontalSpace = true;
+
+    Label labelProcessesExecutable = new Label(parallelComp, SWT.LEFT);
+    labelProcessesExecutable.setText("Number of processes:");
+    labelProcessesExecutable.setLayoutData(textGridData);
+
+    numberOfProcesses =
+        new org.eclipse.swt.widgets.Spinner(parallelComp, SWT.RIGHT);
+    numberOfProcesses.setMinimum(1);
+    numberOfProcesses.setMaximum(1024);
+    numberOfProcesses.setSelection(1);
+    numberOfProcesses.setLayoutData(textGridData);
+
+    final ExpandItem parallelItemData = new ExpandItem(bar, SWT.NONE, 0);
+    bar.setSize(parallelComp.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
+                SWT.DEFAULT);
+    parallelItemData.setText("Parallel settings");
+    parallelItemData.setHeight(parallelComp.computeSize(SWT.DEFAULT,
+                                                        SWT.DEFAULT).y);
+    parallelItemData.setControl(parallelComp);
+    parallelItemData.setExpanded(true);
   }
 
   protected void createArgsCotrolItems(ExpandBar bar) {
@@ -101,8 +135,8 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
 
       @Override
       public void widgetSelected(SelectionEvent e) {
-        Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-            .getShell();
+        Shell shell =
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
         FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
         fileDialog.setText("Path to executable");
         // fileDialog.setFilterExtensions(new String[]{"*.ascodt-component"});
@@ -135,6 +169,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
     itemData.setHeight(argsComp.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
     itemData.setControl(argsComp);
     itemData.setExpanded(true);
+
   }
 
   @Override
@@ -145,8 +180,8 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
 
     super.tabFolderPage.setLayout(layout);
 
-    final ExpandBar bar = new org.eclipse.swt.widgets.ExpandBar(
-        super.tabFolderPage, SWT.NONE);
+    final ExpandBar bar =
+        new org.eclipse.swt.widgets.ExpandBar(super.tabFolderPage, SWT.NONE);
     GridData gridData = new GridData();
     gridData.horizontalAlignment = GridData.FILL;
     gridData.verticalAlignment = GridData.FILL;
@@ -159,6 +194,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
   protected void createControlGroup(ExpandBar bar) {
 
     createArgsCotrolItems(bar);
+    createParallelControlItems(bar);
   }
 
   /**
@@ -182,7 +218,11 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
 	 */
   public void execute() {
     try {
+      for (int i = 1; i < this.numberOfProcesses.getSelection(); i++) {
+        SocketService.getDefault().getFreePort();
+      }
       String cmd = getCommandForExecution();
+
       ProcessBuilder pb = new ProcessBuilder(cmd.split(" "));
       Map<String, String> env = pb.environment();
       if (env != null) {
@@ -201,8 +241,8 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
 
         @Override
         public void run() {
-          BufferedReader reader = new BufferedReader(new InputStreamReader(
-              _process.getInputStream()));
+          BufferedReader reader =
+              new BufferedReader(new InputStreamReader(_process.getInputStream()));
           String line = "";
           try {
             while ((line = reader.readLine()) != null) {
@@ -220,8 +260,8 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
 
         @Override
         public void run() {
-          BufferedReader reader = new BufferedReader(new InputStreamReader(
-              _process.getErrorStream()));
+          BufferedReader reader =
+              new BufferedReader(new InputStreamReader(_process.getErrorStream()));
           String line = "";
           try {
             while ((line = reader.readLine()) != null) {
@@ -271,15 +311,17 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
   private void loadStorageFiles() {
     if (hasApplicationSettings()) {
       try {
-        BufferedReader reader = new BufferedReader(new FileReader(
-            applicationSettings));
+        BufferedReader reader =
+            new BufferedReader(new FileReader(applicationSettings));
         String line = "";
         int counter = 0;
         while ((line = reader.readLine()) != null) {
           if (counter == 0) {
             textProgramExecutable.setText(line);
-          } else {
+          } else if (counter == 1) {
             textProgramArguments.setText(line);
+          } else if (counter == 2) {
+            numberOfProcesses.setSelection(Integer.parseInt(line));
           }
           counter++;
         }
@@ -303,8 +345,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
   }
 
   @Override
-  public void processFinished(int returnValue)
-      throws de.tum.ascodt.utils.exceptions.ASCoDTException {
+  public void processFinished(int returnValue) throws de.tum.ascodt.utils.exceptions.ASCoDTException {
     if (_process != null) {
       _process = null;
     }
@@ -326,11 +367,13 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
       BufferedWriter writer = new BufferedWriter(fwriter);
       writer.write(textProgramExecutable.getText() + "\n");
       writer.write(textProgramArguments.getText() + "\n");
+      writer.write(numberOfProcesses.getText() + "\n");
       writer.close();
-      Project project = ProjectBuilder.getInstance().getProject(
-          new Path(_projectLocation).lastSegment());
+      Project project =
+          ProjectBuilder.getInstance()
+                        .getProject(new Path(_projectLocation).lastSegment());
       project.getEclipseProjectHandle().refreshLocal(IResource.DEPTH_INFINITE,
-          null);
+                                                     null);
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -344,11 +387,17 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
   public void setProjectLocation(String location) {
     _projectLocation = location;
     if (textProgramExecutable != null) {
-      textProgramExecutable.setText(_projectLocation + File.separator + "bin" +
-          File.separator + _label);
+      textProgramExecutable.setText(_projectLocation + File.separator +
+                                    "bin" +
+                                    File.separator +
+                                    _label);
     }
-    applicationSettings = new java.io.File(_projectLocation + File.separator +
-        "settings" + File.separator + _label + ".settings");
+    applicationSettings =
+        new java.io.File(_projectLocation + File.separator +
+                         "settings" +
+                         File.separator +
+                         _label +
+                         ".settings");
     loadStorageFiles();
   }
 }

@@ -1,8 +1,8 @@
 package de.tum.ascodt.sidlcompiler.backend;
 
 
-import java.io.File;
-import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Stack;
 
 import org.eclipse.core.runtime.Assert;
@@ -26,31 +26,29 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
 
 
 public class CreateJNIProxyForCxx extends DepthFirstAdapter {
-  private Trace _trace = new Trace(
-      CreateJNIProxyForCxx.class.getCanonicalName());
+  private Trace _trace =
+      new Trace(CreateJNIProxyForCxx.class.getCanonicalName());
 
   private Stack<TemplateFile> _templateFilesOfJNIProxyHeader;
   private Stack<TemplateFile> _templateFilesOfJNIProxyImplementation;
   private Stack<TemplateFile> _templateFilesUsesPorts;
   private Stack<TemplateFile> _templateFilesProvidesPorts;
 
-  private URL _userImplementationsDestinationDirectory;
-  private URL _generatedFilesDirectory;
+  private Path _cxxDirectoryPath;
   private String[] _namespace;
   private SymbolTable _symbolTable;
-  private String _fullQualifiedName;
+  private String _fullyQualifiedComponentName;
   private boolean _generateProvidesMethods;
   private String _usesPortsIncludes;
 
   CreateJNIProxyForCxx(SymbolTable symbolTable,
-      URL userImplementationsDestinationDirectory, URL generatedFilesDirectory,
-      String[] namespace) {
+                       Path componentsDirectoryPath,
+                       String[] namespace) {
     _templateFilesOfJNIProxyHeader = new Stack<TemplateFile>();
     _templateFilesOfJNIProxyImplementation = new Stack<TemplateFile>();
     _templateFilesUsesPorts = new Stack<TemplateFile>();
     _templateFilesProvidesPorts = new Stack<TemplateFile>();
-    _userImplementationsDestinationDirectory = userImplementationsDestinationDirectory;
-    _generatedFilesDirectory = generatedFilesDirectory;
+    _cxxDirectoryPath = componentsDirectoryPath.resolve("c++");
     _namespace = namespace;
     _symbolTable = symbolTable;
     _usesPortsIncludes = "";
@@ -59,61 +57,53 @@ public class CreateJNIProxyForCxx extends DepthFirstAdapter {
   @Override
   public void inAClassPackageElement(AClassPackageElement node) {
     _trace.in("inAClassPackageElement(...)", "open new port interface");
-    try {
-      String componentName = node.getName().getText();
-      _fullQualifiedName = _symbolTable.getScope(node).getFullyQualifiedName(
-          componentName);
-      String templateFileForAbstractJNIProxyComponentHeader = "native-component-jniproxy-cxx-header.template";
-      String templateFileForAbstractJNIProxyComponentImplemention = "native-component-jniproxy-cxx-implementation.template";
-      String destinationFileForJNIProxyHeader = _generatedFilesDirectory
-          .toString() +
-          File.separatorChar +
-          _fullQualifiedName.replaceAll("[.]", "/") + "JNIProxy.h";
-      String destinationFileForJNIProxyImplementation = _generatedFilesDirectory
-          .toString() +
-          File.separatorChar +
-          _fullQualifiedName.replaceAll("[.]", "/") + "JNIProxy.cpp";
 
-      _templateFilesOfJNIProxyHeader.push(new TemplateFile(
-          templateFileForAbstractJNIProxyComponentHeader,
-          destinationFileForJNIProxyHeader, _namespace, TemplateFile
-              .getLanguageConfigurationForJNI(), true));
-      _templateFilesOfJNIProxyImplementation.push(new TemplateFile(
-          templateFileForAbstractJNIProxyComponentImplemention,
-          destinationFileForJNIProxyImplementation, _namespace, TemplateFile
-              .getLanguageConfigurationForJNI(), true));
-      _templateFilesOfJNIProxyImplementation.peek().addMapping(
-          "__COMPONENT_NAME__", componentName);
-      _templateFilesOfJNIProxyHeader.peek().addMapping(
-          "__INCLUDE_GUARD_FULL_QUALIFIED_NAME__",
-          _fullQualifiedName.replaceAll("[.]", "_").toUpperCase());
-      _templateFilesOfJNIProxyHeader.peek().addMapping(
-          "__JNI_FULL_QUALIFIED_NAME__",
-          _fullQualifiedName.replaceAll("[.]", "_"));
-      _templateFilesOfJNIProxyImplementation.peek().addMapping(
-          "__JNI_FULL_QUALIFIED_NAME__",
-          _fullQualifiedName.replaceAll("[.]", "_"));
-      _templateFilesOfJNIProxyImplementation.peek().addMapping(
-          "__CXX_FULL_QUALIFIED_NAME__",
-          _fullQualifiedName.replaceAll("[.]", "::"));
-      _templateFilesOfJNIProxyImplementation.peek().addMapping(
-          "__PATH_FULL_QUALIFIED_NAME__",
-          _fullQualifiedName.replaceAll("[.]", "/"));
-      _templateFilesOfJNIProxyImplementation.peek()
-          .addMapping("__GENERATED_OUTPUT__",
-              _generatedFilesDirectory.getPath().toString());
-      _templateFilesOfJNIProxyImplementation.peek().addMapping(
-          "__NATIVE_OUTPUT__",
-          _userImplementationsDestinationDirectory.getPath().toString());
-      _templateFilesOfJNIProxyHeader.peek().open();
-      _generateProvidesMethods = true;
-      for (PUserDefinedType definedType : node.getProvides()) {
-        definedType.apply(this);
-      }
-      _generateProvidesMethods = false;
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
+    String componentName = node.getName().getText();
+    _fullyQualifiedComponentName =
+        _symbolTable.getScope(node).getFullyQualifiedName(componentName);
+
+    _templateFilesOfJNIProxyHeader.push(new TemplateFile(Paths.get("native-component-jniproxy-cxx-header.template"),
+                                                         _cxxDirectoryPath.resolve(_fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                           "/") + "JNIProxy.h"),
+                                                         _namespace,
+                                                         TemplateFile.getLanguageConfigurationForJNI(),
+                                                         true));
+    _templateFilesOfJNIProxyImplementation.push(new TemplateFile(Paths.get("native-component-jniproxy-cxx-implementation.template"),
+                                                                 _cxxDirectoryPath.resolve(_fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                                                   "/") + "JNIProxy.cpp"),
+                                                                 _namespace,
+                                                                 TemplateFile.getLanguageConfigurationForJNI(),
+                                                                 true));
+    _templateFilesOfJNIProxyImplementation.peek()
+                                          .addMapping("__COMPONENT_NAME__",
+                                                      componentName);
+    _templateFilesOfJNIProxyHeader.peek()
+                                  .addMapping("__INCLUDE_GUARD_FULL_QUALIFIED_NAME__",
+                                              _fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                      "_")
+                                                                          .toUpperCase());
+    _templateFilesOfJNIProxyHeader.peek()
+                                  .addMapping("__JNI_FULL_QUALIFIED_NAME__",
+                                              _fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                      "_"));
+    _templateFilesOfJNIProxyImplementation.peek()
+                                          .addMapping("__JNI_FULL_QUALIFIED_NAME__",
+                                                      _fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                              "_"));
+    _templateFilesOfJNIProxyImplementation.peek()
+                                          .addMapping("__CXX_FULL_QUALIFIED_NAME__",
+                                                      _fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                              "::"));
+    _templateFilesOfJNIProxyImplementation.peek()
+                                          .addMapping("__PATH_FULL_QUALIFIED_NAME__",
+                                                      _fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                              "/"));
+    _templateFilesOfJNIProxyHeader.peek().open();
+    _generateProvidesMethods = true;
+    for (PUserDefinedType definedType : node.getProvides()) {
+      definedType.apply(this);
     }
+    _generateProvidesMethods = false;
 
     _trace.out("inAClassPackageElement(...)", "open new port interface");
   }
@@ -122,49 +112,43 @@ public class CreateJNIProxyForCxx extends DepthFirstAdapter {
   public void inAOperation(AOperation node) {
     Assert.isTrue(_generateProvidesMethods);
     try {
-      String templateJNIProxyImplementationFile = "native-component-jniproxy-cxx-implementation-provides-port.template";
-      String templateJNIProxyImplementationHeaderFile = "native-component-jniproxy-cxx-header-provides-port.template";
-
-      TemplateFile jniProxyImplementationHeaderTemplate = new TemplateFile(
-          _templateFilesOfJNIProxyHeader.peek(),
-          templateJNIProxyImplementationHeaderFile);
-      TemplateFile jniProxyImplementationTemplate = new TemplateFile(
-          _templateFilesOfJNIProxyImplementation.peek(),
-          templateJNIProxyImplementationFile);
+      TemplateFile jniProxyImplementationHeaderTemplate =
+          new TemplateFile(_templateFilesOfJNIProxyHeader.peek(),
+                           Paths.get("native-component-jniproxy-cxx-header-provides-port.template"));
+      TemplateFile jniProxyImplementationTemplate =
+          new TemplateFile(_templateFilesOfJNIProxyImplementation.peek(),
+                           Paths.get("native-component-jniproxy-cxx-implementation-provides-port.template"));
 
       ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
       node.apply(onlyInParameters);
 
-      GetParameterList parameterList = new GetParameterList(
-          _symbolTable.getScope(node));
+      GetParameterList parameterList =
+          new GetParameterList(_symbolTable.getScope(node));
       node.apply(parameterList);
 
       jniProxyImplementationHeaderTemplate.addMapping("__OPERATION_NAME__",
-          node.getName().getText());
-      jniProxyImplementationTemplate.addMapping("__OPERATION_NAME__", node
-          .getName().getText());
-      jniProxyImplementationHeaderTemplate.addMapping(
-          "__OPERATION_PARAMETERS_LIST__", parameterList
-              .getParameterListInJNI(onlyInParameters
-                  .areAllParametersInParameters()));
-      jniProxyImplementationTemplate.addMapping(
-          "__OPERATION_PARAMETERS_LIST__", parameterList
-              .getParameterListInJNI(onlyInParameters
-                  .areAllParametersInParameters()));
-      jniProxyImplementationHeaderTemplate.addMapping(
-          "__JNI_FULL_QUALIFIED_NAME__",
-          _fullQualifiedName.replaceAll("[.]", "_"));
+                                                      node.getName().getText());
+      jniProxyImplementationTemplate.addMapping("__OPERATION_NAME__",
+                                                node.getName().getText());
+      jniProxyImplementationHeaderTemplate.addMapping("__OPERATION_PARAMETERS_LIST__",
+                                                      parameterList.getParameterListInJNI(onlyInParameters.areAllParametersInParameters()));
+      jniProxyImplementationTemplate.addMapping("__OPERATION_PARAMETERS_LIST__",
+                                                parameterList.getParameterListInJNI(onlyInParameters.areAllParametersInParameters()));
+      jniProxyImplementationHeaderTemplate.addMapping("__JNI_FULL_QUALIFIED_NAME__",
+                                                      _fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                              "_"));
       jniProxyImplementationTemplate.addMapping("__JNI_FULL_QUALIFIED_NAME__",
-          _fullQualifiedName.replaceAll("[.]", "_"));
+                                                _fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                        "_"));
       jniProxyImplementationTemplate.addMapping("__CXX_FULL_QUALIFIED_NAME__",
-          _fullQualifiedName.replaceAll("[.]", "::"));
+                                                _fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                        "::"));
       jniProxyImplementationTemplate.addMapping("__START_METHOD_CALL__",
-          parameterList.prepareJNIParametersForCxxCall());
-      jniProxyImplementationTemplate.addMapping(
-          "__FUNCTION_CALL_PARAMETERS_LIST__",
-          parameterList.getFunctionCallListInJNI2Cxx(false));
+                                                parameterList.prepareJNIParametersForCxxCall());
+      jniProxyImplementationTemplate.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",
+                                                parameterList.getFunctionCallListInJNI2Cxx(false));
       jniProxyImplementationTemplate.addMapping("__END_METHOD_CALL__",
-          parameterList.writeCxxParamatersFromJNIProvideCall());
+                                                parameterList.writeCxxParamatersFromJNIProvideCall());
 
       _templateFilesProvidesPorts.add(jniProxyImplementationTemplate);
       jniProxyImplementationHeaderTemplate.open();
@@ -179,8 +163,9 @@ public class CreateJNIProxyForCxx extends DepthFirstAdapter {
   public void inAUserDefinedType(AUserDefinedType node) {
     if (_generateProvidesMethods) {
       String fullQualifiedSymbol = Scope.getSymbol(node);
-      AInterfacePackageElement interfaceNode = _symbolTable.getScope(node)
-          .getInterfaceDefinition(fullQualifiedSymbol);
+      AInterfacePackageElement interfaceNode =
+          _symbolTable.getScope(node)
+                      .getInterfaceDefinition(fullQualifiedSymbol);
       if (interfaceNode != null) {
         interfaceNode.apply(this);
       }
@@ -191,7 +176,8 @@ public class CreateJNIProxyForCxx extends DepthFirstAdapter {
   public void inAUses(AUses node) {
     _trace.in("inAUses(AUses)", node.toString());
     try {
-      GetProvidesAndUsesPortsOfComponent getPorts = new GetProvidesAndUsesPortsOfComponent();
+      GetProvidesAndUsesPortsOfComponent getPorts =
+          new GetProvidesAndUsesPortsOfComponent();
       node.apply(getPorts);
       ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
       node.apply(onlyInParameters);
@@ -200,18 +186,16 @@ public class CreateJNIProxyForCxx extends DepthFirstAdapter {
       String portName = node.getAs().getText();
       String portTypePath = getPorts.getUsesPorts("", "/");
 
-      String templateFileHeader = "native-component-jniproxy-cxx-header-uses-port.template";
-      String templateFileImlementation = "native-component-jniproxy-cxx-implementation-uses-port.template";
-
-      TemplateFile templateHeader = new TemplateFile(
-          _templateFilesOfJNIProxyHeader.peek(), templateFileHeader);
+      TemplateFile templateHeader =
+          new TemplateFile(_templateFilesOfJNIProxyHeader.peek(),
+                           Paths.get("native-component-jniproxy-cxx-header-uses-port.template"));
       templateHeader.addMapping("__USES_PORT_AS__", portName);
       // templateHeader.addMapping( "__USES_PORT_TYPE__", portType );
       _usesPortsIncludes += "#include \"" + portTypePath + ".h\"\n";
 
-      TemplateFile templateImplementation = new TemplateFile(
-          _templateFilesOfJNIProxyImplementation.peek(),
-          templateFileImlementation);
+      TemplateFile templateImplementation =
+          new TemplateFile(_templateFilesOfJNIProxyImplementation.peek(),
+                           Paths.get("native-component-jniproxy-cxx-implementation-uses-port.template"));
       templateImplementation.addMapping("__USES_PORT_AS__", portName);
       templateImplementation.addMapping("__USES_PORT_TYPE__", portType);
       _templateFilesUsesPorts.add(templateImplementation);
@@ -231,26 +215,24 @@ public class CreateJNIProxyForCxx extends DepthFirstAdapter {
   public void outAClassPackageElement(AClassPackageElement node) {
     Assert.isTrue(_templateFilesOfJNIProxyHeader.size() == 1);
     Assert.isTrue(_templateFilesOfJNIProxyImplementation.size() == 1);
-    try {
-      _templateFilesOfJNIProxyHeader.peek().close();
-      _templateFilesOfJNIProxyImplementation.peek().addMapping(
-          "__INCLUDE_USES_PORTS__", _usesPortsIncludes);
 
-      _templateFilesOfJNIProxyImplementation.peek().open();
-      while (!_templateFilesUsesPorts.isEmpty()) {
-        _templateFilesUsesPorts.peek().open();
-        _templateFilesUsesPorts.peek().close();
-        _templateFilesUsesPorts.pop();
-      }
-      while (!_templateFilesProvidesPorts.isEmpty()) {
-        _templateFilesProvidesPorts.peek().open();
-        _templateFilesProvidesPorts.peek().close();
-        _templateFilesProvidesPorts.pop();
-      }
-      _templateFilesOfJNIProxyImplementation.peek().close();
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
+    _templateFilesOfJNIProxyHeader.peek().close();
+    _templateFilesOfJNIProxyImplementation.peek()
+                                          .addMapping("__INCLUDE_USES_PORTS__",
+                                                      _usesPortsIncludes);
+
+    _templateFilesOfJNIProxyImplementation.peek().open();
+    while (!_templateFilesUsesPorts.isEmpty()) {
+      _templateFilesUsesPorts.peek().open();
+      _templateFilesUsesPorts.peek().close();
+      _templateFilesUsesPorts.pop();
     }
+    while (!_templateFilesProvidesPorts.isEmpty()) {
+      _templateFilesProvidesPorts.peek().open();
+      _templateFilesProvidesPorts.peek().close();
+      _templateFilesProvidesPorts.pop();
+    }
+    _templateFilesOfJNIProxyImplementation.peek().close();
     _templateFilesOfJNIProxyHeader.pop();
     _templateFilesOfJNIProxyImplementation.pop();
   }

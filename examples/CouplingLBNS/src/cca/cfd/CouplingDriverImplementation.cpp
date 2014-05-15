@@ -27,10 +27,10 @@ double cca::cfd::CouplingDriverImplementation::computePhysicalLBTimeStep(){
 }
 
 
-extern "C" void main_loop_();
+extern "C" void main_loop_(bool);
 int main(int argc, char *argv[]){
 	PetscInitialize(&argc, &argv, PETSC_NULL, PETSC_NULL);
-	main_loop_();
+	main_loop_(false);
 	PetscFinalize();
 }
 
@@ -54,10 +54,15 @@ void cca::cfd::CouplingDriverImplementation::go(const std::string configFile){
 	std::vector<double>  nsVelocityZ;
 	std::vector<double>  nsPressure;
 	std::vector<double>  nsJacobian;
-	_ns->setup(configFile);
-	_lb->setup(configFile);
+	//_ns->setup(configFile);
+	_lb->setupParallel(configFile);
+	_ns->setupParallel(configFile);
+
+
+//	_lb->solveParallel();
+//	_lb->plotParallel();
 	double timeSteps=1000;
-	LBField lbField(_parameters);
+	//LBField lbField(_parameters);
 	double time = 0.0;
 	double dt=0.0;
 	int velocitiesLB_X=0;
@@ -66,43 +71,17 @@ void cca::cfd::CouplingDriverImplementation::go(const std::string configFile){
 	int velocitiesNS=0;
 	for (int bigloop = 0; bigloop < 20; bigloop++){
 		std::cout << "Performing cycle " << bigloop << std::endl;
-		time = 0.0;
-		_lb2ns->iterateBoundary();
-		_lb2ns->retrieveVelocitiesSize(velocitiesLB_X,velocitiesLB_Y,velocitiesLB_Z);
-		assertion(velocitiesLB>0);
-		lbVelocityX.resize(velocitiesLB_X);
-		lbVelocityY.resize(velocitiesLB_Y);
-		lbVelocityZ.resize(velocitiesLB_Z);
 
+		_lb2ns->iterateBoundaryParallel();
 
-		_lb2ns->retrieveVelocitiesCopy(
-				&lbVelocityX[0],
-				velocitiesLB_X,
-				&lbVelocityY[0],
-				velocitiesLB_Y,
-				&lbVelocityZ[0],
-				velocitiesLB_Z);
-		_ns->setVelocities(
-			&lbVelocityX[0],
-			velocitiesLB_X,
-			&lbVelocityY[0],
-			velocitiesLB_Y,
-			&lbVelocityZ[0],
-			velocitiesLB_Z);
-		while (time < _parameters.simulation.finalTime){
+		_lb2ns->retrieveTimestep(dt);
+		_ns->solveParallel();
+		_ns2lb->iterateParallel();
+		_ns2lb->retrieveTimestep(dt);
 
-
-
-
-			_ns->solveOneTimestepPhaseOne();
-
-
-			_ns->iterateBoundary();
-			_ns->solveOneTimestepPhaseTwo();
-			_ns->retrieveTimestep(dt);
-			time += dt;
-		}
-		_lb2ns->iterateInner();
+		_lb->solveParallel();
+		//_lb->plotParallel();
+		/*_lb2ns->iterateInner();
 				_lb2ns->retrieveVelocitiesSize(velocitiesLB_X,velocitiesLB_Y,velocitiesLB_Z);
 				lbVelocityX.resize(velocitiesLB_X);
 				lbVelocityY.resize(velocitiesLB_Y);
@@ -150,12 +129,14 @@ void cca::cfd::CouplingDriverImplementation::go(const std::string configFile){
 		for (int i = 0; i < lbIterations * (lbField.getCellsZ()-1) * (lbField.getCellsZ()-1) / (40*40); i++){
 			_lb->solveOneTimestep();
 		}
-
-		_lb->printLBProfiles();
-		_ns->printNSProfiles();
-		_lb->plot();
-		_ns->plot();
+	    */
+		//_lb->printLBProfiles();
+		//_ns->printNSProfiles();
+		//_lb->plot();
+		_lb->plotParallel();
+		_ns->plotParallel();
 	}
-	_ns->closeNSProfiles();
-	_lb->closeLBProfiles();
+	//_ns->closeNSProfiles();
+	//_lb->closeLBProfiles();
+
 }

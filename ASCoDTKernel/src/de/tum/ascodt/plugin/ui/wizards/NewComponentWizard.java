@@ -57,16 +57,19 @@ public class NewComponentWizard extends Wizard implements INewWizard {
 
   @Override
   public boolean performFinish() {
-    de.tum.ascodt.plugin.utils.tracing.Trace trace = new de.tum.ascodt.plugin.utils.tracing.Trace(
-        getClass().getName());
+    de.tum.ascodt.plugin.utils.tracing.Trace trace =
+        new de.tum.ascodt.plugin.utils.tracing.Trace(getClass().getName());
     trace.in("performFinish()");
     try {
       String projectIdentifier = _page.getProjectName();
       String componentName = _page.getComponentName();
       String componentNamespace = _page.getComponentNamespace();
       Target componentTarget = _page.getComponentTarget();
-      ProjectBuilder.getInstance().getProject(projectIdentifier)
-          .createComponent(componentName, componentNamespace, componentTarget);
+      ProjectBuilder.getInstance()
+                    .getProject(projectIdentifier)
+                    .createComponent(componentName,
+                                     componentNamespace,
+                                     componentTarget);
 
     } catch (ASCoDTException e) {
       ErrorWriterDevice.getInstance().println(e);

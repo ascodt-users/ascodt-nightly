@@ -68,8 +68,8 @@ public class DepthFirstAdapter extends AnalysisAdapter {
       node.getName().apply(this);
     }
     {
-      List<PUserDefinedType> copy = new ArrayList<PUserDefinedType>(
-          node.getProvides());
+      List<PUserDefinedType> copy =
+          new ArrayList<PUserDefinedType>(node.getProvides());
       for (PUserDefinedType e : copy) {
         e.apply(this);
       }
@@ -102,8 +102,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
   }
 
   @Override
-  public void caseAEnumDeclarationPackageElement(
-      AEnumDeclarationPackageElement node) {
+  public void caseAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node) {
     inAEnumDeclarationPackageElement(node);
     if (node.getName() != null) {
       node.getName().apply(this);
@@ -130,8 +129,8 @@ public class DepthFirstAdapter extends AnalysisAdapter {
       node.getName().apply(this);
     }
     {
-      List<PUserDefinedType> copy = new ArrayList<PUserDefinedType>(
-          node.getSupertype());
+      List<PUserDefinedType> copy =
+          new ArrayList<PUserDefinedType>(node.getSupertype());
       for (PUserDefinedType e : copy) {
         e.apply(this);
       }
@@ -173,8 +172,8 @@ public class DepthFirstAdapter extends AnalysisAdapter {
       node.getName().apply(this);
     }
     {
-      List<PPackageElement> copy = new ArrayList<PPackageElement>(
-          node.getPackageElement());
+      List<PPackageElement> copy =
+          new ArrayList<PPackageElement>(node.getPackageElement());
       for (PPackageElement e : copy) {
         e.apply(this);
       }
@@ -183,8 +182,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
   }
 
   @Override
-  public void caseAParameterArrayInEnumParameter(
-      AParameterArrayInEnumParameter node) {
+  public void caseAParameterArrayInEnumParameter(AParameterArrayInEnumParameter node) {
     inAParameterArrayInEnumParameter(node);
     if (node.getType() != null) {
       node.getType().apply(this);
@@ -208,8 +206,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
   }
 
   @Override
-  public void caseAParameterArrayOutEnumParameter(
-      AParameterArrayOutEnumParameter node) {
+  public void caseAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node) {
     inAParameterArrayOutEnumParameter(node);
     if (node.getType() != null) {
       node.getType().apply(this);
@@ -281,8 +278,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
   }
 
   @Override
-  public void caseASpecificEnumeratorEnumerator(
-      ASpecificEnumeratorEnumerator node) {
+  public void caseASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node) {
     inASpecificEnumeratorEnumerator(node);
     if (node.getName() != null) {
       node.getName().apply(this);
@@ -324,8 +320,8 @@ public class DepthFirstAdapter extends AnalysisAdapter {
   public void caseAUses(AUses node) {
     inAUses(node);
     {
-      List<PUserDefinedType> copy = new ArrayList<PUserDefinedType>(
-          node.getType());
+      List<PUserDefinedType> copy =
+          new ArrayList<PUserDefinedType>(node.getType());
       for (PUserDefinedType e : copy) {
         e.apply(this);
       }
@@ -372,8 +368,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
     defaultIn(node);
   }
 
-  public void inAEnumDeclarationPackageElement(
-      AEnumDeclarationPackageElement node) {
+  public void inAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node) {
     defaultIn(node);
   }
 
@@ -397,8 +392,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
     defaultIn(node);
   }
 
-  public void inAParameterArrayInEnumParameter(
-      AParameterArrayInEnumParameter node) {
+  public void inAParameterArrayInEnumParameter(AParameterArrayInEnumParameter node) {
     defaultIn(node);
   }
 
@@ -406,8 +400,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
     defaultIn(node);
   }
 
-  public void inAParameterArrayOutEnumParameter(
-      AParameterArrayOutEnumParameter node) {
+  public void inAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node) {
     defaultIn(node);
   }
 
@@ -431,8 +424,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
     defaultIn(node);
   }
 
-  public void
-      inASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node) {
+  public void inASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node) {
     defaultIn(node);
   }
 
@@ -476,8 +468,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
     defaultOut(node);
   }
 
-  public void outAEnumDeclarationPackageElement(
-      AEnumDeclarationPackageElement node) {
+  public void outAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node) {
     defaultOut(node);
   }
 
@@ -501,8 +492,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
     defaultOut(node);
   }
 
-  public void outAParameterArrayInEnumParameter(
-      AParameterArrayInEnumParameter node) {
+  public void outAParameterArrayInEnumParameter(AParameterArrayInEnumParameter node) {
     defaultOut(node);
   }
 
@@ -510,8 +500,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
     defaultOut(node);
   }
 
-  public void outAParameterArrayOutEnumParameter(
-      AParameterArrayOutEnumParameter node) {
+  public void outAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node) {
     defaultOut(node);
   }
 
@@ -535,8 +524,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
     defaultOut(node);
   }
 
-  public void outASpecificEnumeratorEnumerator(
-      ASpecificEnumeratorEnumerator node) {
+  public void outASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node) {
     defaultOut(node);
   }
 

@@ -34,7 +34,7 @@ public class ASCoDTContextMenuProvider extends ContextMenuProvider {
    *           if registry is <tt>null</tt>.
    */
   public ASCoDTContextMenuProvider(EditPartViewer viewer,
-      ActionRegistry registry) {
+                                   ActionRegistry registry) {
     super(viewer);
     if (registry == null) {
       throw new IllegalArgumentException();
@@ -66,16 +66,16 @@ public class ASCoDTContextMenuProvider extends ContextMenuProvider {
 
     // Add actions to the menu
     menu.appendToGroup(GEFActionConstants.GROUP_UNDO, // target group id
-        getAction(ActionFactory.UNDO.getId())); // action to add
+                       getAction(ActionFactory.UNDO.getId())); // action to add
     menu.appendToGroup(GEFActionConstants.GROUP_UNDO, // target group id
-        getAction(ActionFactory.UNDO.getId()));
+                       getAction(ActionFactory.UNDO.getId()));
     menu.appendToGroup(GEFActionConstants.GROUP_UNDO,
-        getAction(ActionFactory.REDO.getId()));
+                       getAction(ActionFactory.REDO.getId()));
 
     menu.appendToGroup(GEFActionConstants.GROUP_EDIT,
-        getAction(ActionFactory.DELETE.getId()));
+                       getAction(ActionFactory.DELETE.getId()));
     menu.appendToGroup(GEFActionConstants.GROUP_VIEW,
-        getAction(ActionFactory.PROPERTIES.getId()));
+                       getAction(ActionFactory.PROPERTIES.getId()));
 
   }
 

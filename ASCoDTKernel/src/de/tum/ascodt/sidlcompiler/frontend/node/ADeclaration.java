@@ -50,7 +50,7 @@ public final class ADeclaration extends PDeclaration {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     for (ListIterator<PPackage> i = _package_.listIterator(); i.hasNext();) {
       if (i.next() == oldChild) {

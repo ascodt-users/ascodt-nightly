@@ -52,8 +52,9 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * 
  * 
  */
-public class Palette extends ViewPart implements RepositoryListener,
-    ProjectsListener {
+public class Palette extends ViewPart implements
+                                     RepositoryListener,
+                                     ProjectsListener {
   public static String ID = Palette.class.getCanonicalName();
 
   /**
@@ -80,8 +81,7 @@ public class Palette extends ViewPart implements RepositoryListener,
       @Override
       public void run() {
         Vector<PaletteEntry> entries = new Vector<PaletteEntry>();
-        for (Object paletteEntry : getComponentsGroupFromPalette()
-            .getChildren()) {
+        for (Object paletteEntry : getComponentsGroupFromPalette().getChildren()) {
           if (paletteEntry instanceof PaletteEntry) {
             entries.add((PaletteEntry)paletteEntry);
           }
@@ -148,12 +148,12 @@ public class Palette extends ViewPart implements RepositoryListener,
         combo.addSelectionChangedListener(new ISelectionChangedListener() {
           @Override
           public void selectionChanged(SelectionChangedEvent event) {
-            IStructuredSelection selection = (IStructuredSelection)event
-                .getSelection();
+            IStructuredSelection selection =
+                (IStructuredSelection)event.getSelection();
             if (selection.getFirstElement() instanceof Project) {
               if (_lastSelection != null) {
-                _lastSelection.getStaticRepository().removeListener(
-                    Palette.this);
+                _lastSelection.getStaticRepository()
+                              .removeListener(Palette.this);
               }
               _lastSelection = (Project)selection.getFirstElement();
               _lastSelection.getStaticRepository().addListener(Palette.this);
@@ -161,8 +161,10 @@ public class Palette extends ViewPart implements RepositoryListener,
           }
         });
         if (ProjectBuilder.getInstance().getProjects().size() > 0) {
-          combo.setSelection(new StructuredSelection(ProjectBuilder
-              .getInstance().getProjects().iterator().next()));
+          combo.setSelection(new StructuredSelection(ProjectBuilder.getInstance()
+                                                                   .getProjects()
+                                                                   .iterator()
+                                                                   .next()));
         }
         return combo.getControl();
       }
@@ -172,14 +174,16 @@ public class Palette extends ViewPart implements RepositoryListener,
     mgr.add(new Action("New component...") {
       @Override
       public void run() {
-        IWizardDescriptor descriptor = PlatformUI.getWorkbench()
-            .getNewWizardRegistry().findWizard(NewComponentWizard.ID);
+        IWizardDescriptor descriptor =
+            PlatformUI.getWorkbench()
+                      .getNewWizardRegistry()
+                      .findWizard(NewComponentWizard.ID);
         try {
           // Then if we have a wizard, open it.
           if (descriptor != null) {
             IWizard wizard = descriptor.createWizard();
-            WizardDialog wd = new WizardDialog(Display.getDefault()
-                .getActiveShell(), wizard);
+            WizardDialog wd =
+                new WizardDialog(Display.getDefault().getActiveShell(), wizard);
             wd.setTitle(wizard.getWindowTitle());
             wd.open();
           }
@@ -191,12 +195,10 @@ public class Palette extends ViewPart implements RepositoryListener,
   }
 
   public void deleteSelectedItem() {
-    if (_paletteViewer.getSelection() instanceof StructuredSelection &&
-        ((StructuredSelection)_paletteViewer.getSelection()).getFirstElement() instanceof ToolEntryEditPart &&
-        ((ToolEntryEditPart)((StructuredSelection)_paletteViewer.getSelection())
-            .getFirstElement()).getModel() instanceof CombinedTemplateCreationEntry) {
-      String componentName = ((CombinedTemplateCreationEntry)((ToolEntryEditPart)((StructuredSelection)_paletteViewer
-          .getSelection()).getFirstElement()).getModel()).getLabel();
+    if (_paletteViewer.getSelection() instanceof StructuredSelection && ((StructuredSelection)_paletteViewer.getSelection()).getFirstElement() instanceof ToolEntryEditPart &&
+        ((ToolEntryEditPart)((StructuredSelection)_paletteViewer.getSelection()).getFirstElement()).getModel() instanceof CombinedTemplateCreationEntry) {
+      String componentName =
+          ((CombinedTemplateCreationEntry)((ToolEntryEditPart)((StructuredSelection)_paletteViewer.getSelection()).getFirstElement()).getModel()).getLabel();
       try {
         getProject().removeComponent(componentName);
       } catch (ASCoDTException e) {
@@ -223,8 +225,8 @@ public class Palette extends ViewPart implements RepositoryListener,
    */
   private PaletteContainer getComponentsGroupFromPalette() {
     for (Object item : _palette_model.getChildren()) {
-      if (item instanceof PaletteContainer &&
-          ((PaletteContainer)item).getLabel().equals("Available components")) {
+      if (item instanceof PaletteContainer && ((PaletteContainer)item).getLabel()
+                                                                      .equals("Available components")) {
         return (PaletteContainer)item;
       }
     }
@@ -237,8 +239,7 @@ public class Palette extends ViewPart implements RepositoryListener,
    * @return
    */
   public Project getProject() {
-    return (Project)((StructuredSelection)combo.getSelection())
-        .getFirstElement();
+    return (Project)((StructuredSelection)combo.getSelection()).getFirstElement();
   }
 
   public PaletteViewer getViewer() {
@@ -246,9 +247,7 @@ public class Palette extends ViewPart implements RepositoryListener,
   }
 
   private void initializePaletteViewer() {
-    _paletteViewer
-        .addDragSourceListener(new TemplateTransferDragSourceListener(
-            _paletteViewer));
+    _paletteViewer.addDragSourceListener(new TemplateTransferDragSourceListener(_paletteViewer));
   }
 
   /**
@@ -260,11 +259,14 @@ public class Palette extends ViewPart implements RepositoryListener,
       @Override
       public void run() {
         try {
-          getComponentsGroupFromPalette().add(
-              new CombinedTemplateCreationEntry(componentInterface, "",
-                  ProjectBuilder.getInstance().getNewInstanceFactory(
-                      Palette.this.getProject(), componentInterface, target),
-                  null, null));
+          getComponentsGroupFromPalette().add(new CombinedTemplateCreationEntry(componentInterface,
+                                                                                "",
+                                                                                ProjectBuilder.getInstance()
+                                                                                              .getNewInstanceFactory(Palette.this.getProject(),
+                                                                                                                     componentInterface,
+                                                                                                                     target),
+                                                                                null,
+                                                                                null));
         } catch (ASCoDTException e) {
           ErrorWriterDevice.getInstance().println(e);
 

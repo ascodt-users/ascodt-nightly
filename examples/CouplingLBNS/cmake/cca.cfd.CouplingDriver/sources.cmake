@@ -2,7 +2,7 @@ SET(CPP_FILES
      ../../components/java/cca/cfd/CouplingDriverAbstractImplementation.cpp
      ../../src/cca/cfd/CouplingDriverImplementation.cpp
      ../../components/java/cca/cfd/CouplingDriverC2CxxProxy.cpp 
-     
+     ../../components/java/tinyxml2.cpp
 )
 
 set(CPP_FILES

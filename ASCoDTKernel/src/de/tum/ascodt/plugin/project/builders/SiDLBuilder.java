@@ -1,14 +1,13 @@
 package de.tum.ascodt.plugin.project.builders;
 
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
-import java.net.MalformedURLException;
+import java.nio.file.Paths;
 import java.util.Vector;
 
 import org.eclipse.core.resources.IFile;
@@ -60,8 +59,7 @@ public class SiDLBuilder {
    *          handle of the eclipse project
    * @throws ASCoDTException
    */
-  public static Start buildStartSymbolsForSIDLResource(InputStream stream)
-      throws ASCoDTException {
+  public static Start buildStartSymbolsForSIDLResource(InputStream stream) throws ASCoDTException {
     Start result = null;
     try {
       InputStreamReader fileReader = new InputStreamReader(stream);
@@ -70,13 +68,19 @@ public class SiDLBuilder {
 
     } catch (ParserException e) {
       throw new ASCoDTException(SiDLBuilder.class.getName(),
-          "buildComponentsAndInterfaces()", e.getMessage(), e);
+                                "buildComponentsAndInterfaces()",
+                                e.getMessage(),
+                                e);
     } catch (LexerException e) {
       throw new ASCoDTException(SiDLBuilder.class.getName(),
-          "buildComponentsAndInterfaces()", e.getMessage(), e);
+                                "buildComponentsAndInterfaces()",
+                                e.getMessage(),
+                                e);
     } catch (IOException e) {
       throw new ASCoDTException(SiDLBuilder.class.getName(),
-          "buildComponentsAndInterfaces()", e.getMessage(), e);
+                                "buildComponentsAndInterfaces()",
+                                e.getMessage(),
+                                e);
     }
     return result;
   }
@@ -98,14 +102,14 @@ public class SiDLBuilder {
    *          handle of the eclipse project
    * @throws ASCoDTException
    */
-  public static Start buildStartSymbolsForSIDLResource(String resourceLocation)
-      throws ASCoDTException {
+  public static Start buildStartSymbolsForSIDLResource(String resourceLocation) throws ASCoDTException {
     try {
-      return buildStartSymbolsForSIDLResource(new FileInputStream(
-          resourceLocation));
+      return buildStartSymbolsForSIDLResource(new FileInputStream(resourceLocation));
     } catch (FileNotFoundException e) {
       throw new ASCoDTException(SiDLBuilder.class.getName(),
-          "buildComponentsAndInterfaces()", e.getMessage(), e);
+                                "buildComponentsAndInterfaces()",
+                                e.getMessage(),
+                                e);
     }
   }
 
@@ -116,9 +120,8 @@ public class SiDLBuilder {
    *          a hash map for stroring resources startsymbols
    * @throws ASCoDTException
    */
-  public static void buildStartSymbolsForSIDLResources(
-      Vector<SIDLPair<String, Start>> startSymbolsMap, IResource resource)
-      throws ASCoDTException {
+  public static void buildStartSymbolsForSIDLResources(Vector<SIDLPair<String, Start>> startSymbolsMap,
+                                                       IResource resource) throws ASCoDTException {
 
     try {
       if (resource instanceof IFolder) {
@@ -135,26 +138,28 @@ public class SiDLBuilder {
           buildStartSymbolsForSIDLResources(startSymbolsMap, file);
         }
 
-      } else if (resource instanceof IFile &&
-          resource.getName().contains(".sidl")) {
+      } else if (resource instanceof IFile && resource.getName()
+                                                      .contains(".sidl")) {
         startSymbolsMap.add(new SIDLPair<String, Start>(resource.getLocation()
-            .toPortableString(),
-            de.tum.ascodt.plugin.project.builders.SiDLBuilder
-                .buildStartSymbolsForSIDLResource(resource.getLocation()
-                    .toPortableString())));
+                                                                .toPortableString(),
+                                                        de.tum.ascodt.plugin.project.builders.SiDLBuilder.buildStartSymbolsForSIDLResource(resource.getLocation()
+                                                                                                                                                   .toPortableString())));
       }
 
     } catch (CoreException e) {
       throw new ASCoDTException(SiDLBuilder.class.getName(),
-          "buildProjectSources()", "building sidl files failed", e);
+                                "buildProjectSources()",
+                                "building sidl files failed",
+                                e);
     }
   }
 
   public static void extendSymbolTable(Start startNode,
-      SymbolTable symbolTable, String resourceLocation) {
+                                       SymbolTable symbolTable,
+                                       String resourceLocation) {
 
-    BuildSymbolTable symbolTableBuilderForResource = new BuildSymbolTable(
-        symbolTable, resourceLocation);
+    BuildSymbolTable symbolTableBuilderForResource =
+        new BuildSymbolTable(symbolTable, resourceLocation);
     startNode.apply(symbolTableBuilderForResource);
 
   }
@@ -167,35 +172,33 @@ public class SiDLBuilder {
    *          the current eclipse project
    * @throws ASCoDTException
    */
-  public static void generateBlueprints(IProject eclipseProject)
-      throws ASCoDTException {
+  public static void generateBlueprints(IProject eclipseProject) throws ASCoDTException {
     Project project = ProjectBuilder.getInstance().getProject(eclipseProject);
     assert project.getSymbolTable() != null;
 
-    CreateComponentsAndInterfaces interfaces = new CreateComponentsAndInterfaces(
-        project.getSymbolTable());
+    CreateComponentsAndInterfaces interfaces =
+        new CreateComponentsAndInterfaces(project.getSymbolTable(),
+                                          project.getFunctionTable());
 
     try {
-      interfaces.create(
-
-          new File(eclipseProject.getLocation().toPortableString() +
-              project.getJavaProxiesFolder()).toURI().toURL(),
-          new File(eclipseProject.getLocation().toPortableString() +
-              project.getJavaSourcesFolder()).toURI().toURL(),
-          new File(eclipseProject.getLocation().toPortableString() +
-              project.getFolderForExecutables()).toURI().toURL()
-
-      );
+      interfaces.create(Paths.get(eclipseProject.getLocation()
+                                                .toPortableString(),
+                                  project.getComponentsDirectoryPrefix()),
+                        Paths.get(eclipseProject.getLocation()
+                                                .toPortableString(),
+                                  project.getSourcesDirectoryPrefix()),
+                        Paths.get(eclipseProject.getLocation()
+                                                .toPortableString(),
+                                  project.getBinariesDirectoryPrefix()),
+                        Paths.get(eclipseProject.getLocation()
+                                                .toPortableString()));
 
       eclipseProject.refreshLocal(IResource.DEPTH_INFINITE, null);
-    } catch (MalformedURLException e) {
-      throw new ASCoDTException(SiDLBuilder.class.getName(),
-          "generateBlueprints()", "wrong blueprint url:" +
-              e.getLocalizedMessage(), e);
     } catch (CoreException e) {
       throw new ASCoDTException(SiDLBuilder.class.getName(),
-          "generateBlueprints()", "eclipse core exception:" +
-              e.getLocalizedMessage(), e);
+                                "generateBlueprints()",
+                                "eclipse core exception:" + e.getLocalizedMessage(),
+                                e);
     }
   }
 
@@ -207,29 +210,23 @@ public class SiDLBuilder {
    *          the current eclipse project
    * @throws ASCoDTException
    */
-  public static void generateBuildScripts(IProject eclipseProject)
-      throws ASCoDTException {
+  public static void generateBuildScripts(IProject eclipseProject) throws ASCoDTException {
     Project project = ProjectBuilder.getInstance().getProject(eclipseProject);
     assert project.getSymbolTable() != null;
-    CreateGlobalBuildScripts buildScripts = new CreateGlobalBuildScripts(
-        project.getSymbolTable());
+    CreateGlobalBuildScripts buildScripts =
+        new CreateGlobalBuildScripts(project.getSymbolTable());
     try {
-      buildScripts.create(
-          new File(eclipseProject.getLocation().toPortableString() +
-              project.getJavaProxiesFolder()).toURI().toURL(),
-          new File(eclipseProject.getLocation().toPortableString() +
-              project.getJavaSourcesFolder()).toURI().toURL(),
-          new File(eclipseProject.getLocation().toPortableString() +
-              project.getFolderForExecutables()).toURI().toURL());
+      buildScripts.create(Paths.get(eclipseProject.getLocation()
+                                                  .toPortableString()),
+                          Paths.get(eclipseProject.getLocation()
+                                                  .toPortableString(),
+                                    project.getComponentsDirectoryPrefix()));
       eclipseProject.refreshLocal(IResource.DEPTH_INFINITE, null);
-    } catch (MalformedURLException e) {
-      throw new ASCoDTException(SiDLBuilder.class.getName(),
-          "generateBuildScripts()", "wrong blueprint url:" +
-              e.getLocalizedMessage(), e);
     } catch (CoreException e) {
       throw new ASCoDTException(SiDLBuilder.class.getName(),
-          "generateBuildScripts()", "eclipse core exception:" +
-              e.getLocalizedMessage(), e);
+                                "generateBuildScripts()",
+                                "eclipse core exception:" + e.getLocalizedMessage(),
+                                e);
     }
   }
 
@@ -243,7 +240,8 @@ public class SiDLBuilder {
    * @return a error string or "" if valid
    */
   public static String validateSymbolTableForSIDLResource(Start startNode,
-      String resourceLocation, SymbolTable symbolTable) {
+                                                          String resourceLocation,
+                                                          SymbolTable symbolTable) {
     ASTValidator validator = new ASTValidator(symbolTable, resourceLocation);
     startNode.apply(validator);
     return validator.getErrorMessages();

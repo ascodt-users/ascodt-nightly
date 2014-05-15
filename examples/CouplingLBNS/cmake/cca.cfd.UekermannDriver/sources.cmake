@@ -2,7 +2,7 @@ SET(CPP_FILES
      ../../components/java/cca/cfd/UekermannDriverAbstractImplementation.cpp
      ../../src/cca/cfd/UekermannDriverImplementation.cpp
      ../../components/java/cca/cfd/UekermannDriverC2CxxProxy.cpp 
-     
+     ../../components/java/tinyxml2.cpp
 )
 
 set(CPP_FILES

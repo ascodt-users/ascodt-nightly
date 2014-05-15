@@ -1,6 +1,6 @@
 #include "NSLBCouplingStencil.h"
 #include <math.h>
-
+#include "NSLBCommunicator.h"
 void checkConsistency (const LBField & lbField, int nsLowX, int nsHighX, int nsLowY,
 		int nsHighY, int nsLowZ, int nsHighZ,
 		int M){
@@ -15,84 +15,91 @@ void checkConsistency (const LBField & lbField, int nsLowX, int nsHighX, int nsL
 }
 
 void NSLBCouplingStencil::printParameters (){
-//	std::cout << "NS -> LB coupling parameters:" << std::endl;
-//	std::cout << "M: " << _M << std::endl;
-//	std::cout << "dx: " << _dx << std::endl;
-//	std::cout << "dt: " << _dt << std::endl;
-//	std::cout << "Low X: "  << _nsLowX  << std::endl;
-//	std::cout << "High X: " << _nsHighX << std::endl;
-//	std::cout << "Low Y: "  << _nsLowY  << std::endl;
-//	std::cout << "High Y: " << _nsHighY << std::endl;
-//	std::cout << "Low Z: "  << _nsLowZ  << std::endl;
-//	std::cout << "High Z: " << _nsHighZ << std::endl;
-//	std::cout << "velocity: " << 1.0 / _reciprocalVelocityLB << std::endl << std::endl;
+	//	std::cout << "NS -> LB coupling parameters:" << std::endl;
+	//	std::cout << "M: " << _M << std::endl;
+	//	std::cout << "dx: " << _dx << std::endl;
+	//	std::cout << "dt: " << _dt << std::endl;
+	//	std::cout << "Low X: "  << _nsLowX  << std::endl;
+	//	std::cout << "High X: " << _nsHighX << std::endl;
+	//	std::cout << "Low Y: "  << _nsLowY  << std::endl;
+	//	std::cout << "High Y: " << _nsHighY << std::endl;
+	//	std::cout << "Low Z: "  << _nsLowZ  << std::endl;
+	//	std::cout << "High Z: " << _nsHighZ << std::endl;
+	//	std::cout << "velocity: " << 1.0 / _reciprocalVelocityLB << std::endl << std::endl;
 }
 
+inline bool NSLBCouplingStencil::convertToLocalCoordinates(
+		const int i_in,
+		const int j_in,
+		const int k_in,
+		int& i_out,
+		int& j_out,
+		int& k_out) const {
+	i_out=i_in-_parameters.parallel.firstCorner[0];
+	j_out=j_in-_parameters.parallel.firstCorner[1];
+	k_out=k_in-_parameters.parallel.firstCorner[2];
+	//}
+	//std::cout<<"converting:"<<i_in<<","<<j_in<<","<<k_in<<"conv:"<<i_out<<","<<j_out<<","<<k_out<<std::endl;
+	return i_out-2>=0&&j_out-2>=0&&k_out-2>=0&&
+			i_out-2<_parameters.parallel.localSize[0]&&
+			j_out-2<_parameters.parallel.localSize[1]&&
+			k_out-2<_parameters.parallel.localSize[2];
+}
 NSLBCouplingStencil::NSLBCouplingStencil (const Parameters & parameters,
 		LBField & lbField, FlowField & nsField,
 		int nsLowX, int nsHighX,
 		int nsLowY, int nsHighY,
-		int nsLowZ, int nsHighZ,
-		std::vector<double>& velocityX,
-		std::vector<double>& velocityY,
-		std::vector<double>& velocityZ,
-		std::vector<double>& jacobian,
-		std::vector<double>& pressure) :
-			GlobalBoundaryStencil<LBField> (parameters), _lbField (lbField), _nsField (nsField),
-			_nsLowX (nsLowX), _nsHighX (nsHighX),
-			_nsLowY (nsLowY), _nsHighY (nsHighY),
-			_nsLowZ (nsLowZ), _nsHighZ (nsHighZ),
-			_nsSizeX(_nsHighX - _nsLowX + 1),
-			_nsSizeY(_nsHighY - _nsLowY + 1),
-			_nsSizeZ(_nsHighZ - _nsLowZ + 1),
-			_M (lbField.getCellsX() / (_nsHighX - nsLowX + 1)),
-			_floatM ((FLOAT)_M),
-			_reciprocalM (1.0 / _floatM),
-			_dx (parameters.coupling.refLength / _M),
-			_dt (parameters.lb.viscosity * parameters.flow.Re * _dx * _dx),
-			_reciprocalVelocityLB (_dt / _dx),
-			_jacobian(jacobian),
-			_pressure(pressure)
+		int nsLowZ, int nsHighZ) :
+									GlobalBoundaryStencil<LBField> (parameters), _lbField (lbField), _nsField (nsField),
+									_nsLowX (nsLowX), _nsHighX (nsHighX),
+									_nsLowY (nsLowY), _nsHighY (nsHighY),
+									_nsLowZ (nsLowZ), _nsHighZ (nsHighZ),
+									_nsSizeX(_nsHighX - _nsLowX + 1),
+									_nsSizeY(_nsHighY - _nsLowY + 1),
+									_nsSizeZ(_nsHighZ - _nsLowZ + 1),
+									_M (lbField.getCellsX() / (_nsHighX - nsLowX + 1)),
+									_floatM ((FLOAT)_M),
+									_reciprocalM (1.0 / _floatM),
+									_dx (parameters.coupling.refLength / _M),
+									_dt (parameters.lb.viscosity * parameters.flow.Re * _dx * _dx),
+									_reciprocalVelocityLB (_dt / _dx)
+									//			_jacobian(jacobian),
+									//			_pressure(pressure)
 
-			{
+									{
 
 
 	if (parameters.coupling.set) {  // We only care about this if the coupling is to happen
 		checkConsistency (lbField, nsLowX, nsHighX, nsLowY, nsHighY, nsLowZ, nsHighZ, _M);
 	}
-	_velocities[0]=&velocityX;
-	_velocities[1]=&velocityY;
-	_velocities[2]=&velocityZ;
+	//	_velocities[0]=&velocityX;
+	//	_velocities[1]=&velocityY;
+	//	_velocities[2]=&velocityZ;
 	printParameters();
-			}
+									}
 
 NSLBCouplingStencil::NSLBCouplingStencil (const Parameters & parameters,
-		LBField & lbField, FlowField & nsField,
-		std::vector<double>& velocityX,
-		std::vector<double>& velocityY,
-		std::vector<double>& velocityZ,
-		std::vector<double>& jacobian,
-		std::vector<double>& pressure
+		LBField & lbField, FlowField & nsField
 ) :
-			GlobalBoundaryStencil<LBField> (parameters), _lbField (lbField), _nsField (nsField),
-			_nsLowX  (parameters.coupling.offsetNS[0]),
-			_nsHighX (parameters.coupling.offsetNS[0] + parameters.coupling.sizeNS[0] - 1),
-			_nsLowY  (parameters.coupling.offsetNS[1]),
-			_nsHighY (parameters.coupling.offsetNS[1] + parameters.coupling.sizeNS[1] - 1),
-			_nsLowZ  (parameters.coupling.offsetNS[2]),
-			_nsHighZ (parameters.coupling.offsetNS[2] + parameters.coupling.sizeNS[2] - 1),
-			_nsSizeX(_nsHighX - _nsLowX + 1),
-			_nsSizeY(_nsHighY - _nsLowY + 1),
-			_nsSizeZ(_nsHighZ - _nsLowZ + 1),
-			_M (parameters.coupling.ratio),
-			_floatM ((FLOAT)_M),
-			_reciprocalM (1.0 / _floatM),
-			_dx (parameters.coupling.refLength / _M),
-			_dt (parameters.lb.viscosity * parameters.flow.Re * _dx * _dx),
-			_reciprocalVelocityLB (_dt / _dx),
-			_jacobian(jacobian),
-			_pressure(pressure)
-			{
+									GlobalBoundaryStencil<LBField> (parameters), _lbField (lbField), _nsField (nsField),
+									_nsLowX  (parameters.coupling.offsetNS[0]),
+									_nsHighX (parameters.coupling.offsetNS[0] + parameters.coupling.sizeNS[0] - 1),
+									_nsLowY  (parameters.coupling.offsetNS[1]),
+									_nsHighY (parameters.coupling.offsetNS[1] + parameters.coupling.sizeNS[1] - 1),
+									_nsLowZ  (parameters.coupling.offsetNS[2]),
+									_nsHighZ (parameters.coupling.offsetNS[2] + parameters.coupling.sizeNS[2] - 1),
+									_nsSizeX(_nsHighX - _nsLowX + 1),
+									_nsSizeY(_nsHighY - _nsLowY + 1),
+									_nsSizeZ(_nsHighZ - _nsLowZ + 1),
+									_M (parameters.coupling.ratio),
+									_floatM ((FLOAT)_M),
+									_reciprocalM (1.0 / _floatM),
+									_dx (parameters.coupling.refLength / _M),
+									_dt (parameters.lb.viscosity * parameters.flow.Re * _dx * _dx),
+									_reciprocalVelocityLB (_dt / _dx)
+									//			_jacobian(jacobian),
+									//			_pressure(pressure)
+									{
 	if (parameters.coupling.set) {  // We only care about this if the coupling is to happen
 		checkConsistency (lbField, parameters.coupling.offsetNS[0],
 				parameters.coupling.offsetNS[0] + parameters.coupling.sizeNS[0] - 1,
@@ -103,11 +110,11 @@ NSLBCouplingStencil::NSLBCouplingStencil (const Parameters & parameters,
 				parameters.coupling.ratio);
 	}
 
-	_velocities[0]=&velocityX;
-	_velocities[1]=&velocityY;
-	_velocities[2]=&velocityZ;
+	//	_velocities[0]=&velocityX;
+	//	_velocities[1]=&velocityY;
+	//	_velocities[2]=&velocityZ;
 	printParameters();
-			}
+									}
 
 
 NSLBCouplingStencil::~NSLBCouplingStencil() {
@@ -124,22 +131,95 @@ const FLOAT NSLBCouplingStencil::getDt() const{
 }
 
 
-void NSLBCouplingStencil::loadVelocity(int i, int j, int k, int component,
+void NSLBCouplingStencil::loadVelocity(
+		const int ins,
+		const int jns,
+		const int kns,
+		const int ilb,
+		const int jlb,
+		const int klb,
+		const int component,
 		const int *  const offset, const int * const flip){
+	int localCoordinatesX;
+	int localCoordinatesY;
+	int localCoordinatesZ;
 	for (int l = 0; l < stencilSize; l++){
-		_values[l] = _nsField.getVelocity().getVector(i + offset[0] + stencil[l][0] * flip[0],
-				j + offset[1] + stencil[l][1] * flip[1],
-				k + offset[2] + stencil[l][2] * flip[2])
-				[component];
+		if(convertToLocalCoordinates(
+				ins + offset[0] + stencil[l][0] * flip[0],
+				jns + offset[1] + stencil[l][1] * flip[1],
+				kns + offset[2] + stencil[l][2] * flip[2],
+				localCoordinatesX,
+				localCoordinatesY,
+				localCoordinatesZ)
+		){
+			//std::cout<<"i_local:"<<(ins + offset[0] + stencil[l][0] * flip[0])<<","<<localCoordinatesX<<std::endl;
+			std::vector<NSLBCommunicator*> coms;
+			getCommunicators(ilb,jlb,klb,coms);
+			if(coms.size()==0)
+				std::cout<<"com not found:"<<ilb<<","<<jlb<<","<<klb<<std::endl;
+			for(unsigned int i=0;i<coms.size();i++)
+			coms[i]->setVelocityComponent(
+					ilb,jlb,klb,l,component,offset,flip,
+					_nsField.getVelocity().getVector(
+							localCoordinatesX,
+							localCoordinatesY,
+							localCoordinatesZ)
+							[component]);
+		}else{
+
+		}
+		//		_values[l] = _nsField.getVelocity().getVector(
+		//				i + offset[0] + stencil[l][0] * flip[0],
+		//				j + offset[1] + stencil[l][1] * flip[1],
+		//				k + offset[2] + stencil[l][2] * flip[2])
+		//				[component];
 	}
 }
 
-void NSLBCouplingStencil::loadPressure(int i, int j, int k,
+void NSLBCouplingStencil::getCommunicators(
+		const int i,const int j, const int k,
+		std::vector<NSLBCommunicator*>& coms){
+	int index=-1;
+	for(unsigned int  comm_i = 0 ;comm_i<_communicators.size(); comm_i++)
+		if(_communicators[comm_i]->isInside(i,j,k))
+			coms.push_back(_communicators[comm_i]);
+
+
+}
+
+void NSLBCouplingStencil::loadPressure(
+		const int ins,
+		const int jns,
+		const int kns,
+		const int ilb,
+		const int jlb,
+		const int klb,
 		const int *  const offset, const int * const flip){
+	int localCoordinatesX;
+	int localCoordinatesY;
+	int localCoordinatesZ;
 	for (int l = 0; l < stencilSize; l++){
-		_values[l] = _nsField.getPressure().getScalar(i + offset[0] + stencil[l][0] * flip[0],
-				j + offset[1] + stencil[l][1] * flip[1],
-				k + offset[2] + stencil[l][2] * flip[2]);
+		if(convertToLocalCoordinates(
+				ins + offset[0] + stencil[l][0] * flip[0],
+				jns + offset[1] + stencil[l][1] * flip[1],
+				kns + offset[2] + stencil[l][2] * flip[2],
+				localCoordinatesX,
+				localCoordinatesY,
+				localCoordinatesZ)
+		){
+			std::vector<NSLBCommunicator*> coms;
+			getCommunicators(ilb,jlb,klb,coms);
+			if(coms.size()==0)
+				std::cout<<"com not found:"<<ilb<<","<<jlb<<","<<klb<<std::endl;
+			for(unsigned int i=0;i<coms.size();i++)
+			coms[i]->setPressure(
+					ilb,jlb,klb,l,
+					offset,flip,
+					_nsField.getPressure().getScalar(
+							localCoordinatesX,
+							localCoordinatesY,
+							localCoordinatesZ));
+		}
 	}
 }
 
@@ -157,11 +237,12 @@ FLOAT NSLBCouplingStencil::interpolatePressure (int i, int j, int k, const int *
 	setRPositionOffset (regularizedPosition, offset, flip, position, 2);
 
 	getLocationVector (locationVector, regularizedPosition);
-	loadPressure(ins, jns, kns, offset, flip);
-
-	matrix_vector(barycentricBasis, locationVector, weights, stencilSize, stencilSize);
-
-	return dot(_values, weights, stencilSize);
+	loadPressure(ins, jns, kns,i,j,k,offset, flip);
+	//
+	//	matrix_vector(barycentricBasis, locationVector, weights, stencilSize, stencilSize);
+	//
+	//	return dot(_values, weights, stencilSize);
+	return 0.0;
 }
 
 FLOAT NSLBCouplingStencil::computeBoundaryMeanPressure (){
@@ -343,35 +424,36 @@ void NSLBCouplingStencil::interpolate (int i, int j, int k, const int * const fl
 	for (int component = 0; component < 3; component++){
 		setArrays (offset, locationVector, dxVector, dyVector,  dzVector,
 				flip, position, component);
-		loadVelocity(ins, jns, kns, component, offset, flip);
+		loadVelocity(ins, jns, kns,i,j,k, component, offset, flip);
 
-		matrix_vector(barycentricBasis, locationVector, weights, stencilSize, stencilSize);
-		velocity[component] = dot(_values, weights, stencilSize) * _reciprocalVelocityLB;
-
-		matrix_vector(barycentricBasis, dxVector, weights, stencilSize, stencilSize);
-		jacobian[3 * component] = dot(_values, weights, stencilSize) * _reciprocalVelocityLB *
-				_reciprocalM;
-
-		matrix_vector(barycentricBasis, dyVector, weights, stencilSize, stencilSize);
-		jacobian[3 * component + 1] = dot(_values, weights, stencilSize) * _reciprocalVelocityLB *
-				_reciprocalM;
-
-		matrix_vector(barycentricBasis, dzVector, weights, stencilSize, stencilSize);
-		jacobian[3 * component + 2] = dot(_values, weights, stencilSize) * _reciprocalVelocityLB *
-				_reciprocalM;
-		_velocities[component]->push_back(velocity[component]);
-		_jacobian.push_back(jacobian[3 * component]);
-		_jacobian.push_back(jacobian[3 * component+1]);
-		_jacobian.push_back(jacobian[3 * component+2]);
+		//		matrix_vector(barycentricBasis, locationVector, weights, stencilSize, stencilSize);
+		//		velocity[component] = dot(_values, weights, stencilSize) * _reciprocalVelocityLB;
+		//
+		//		matrix_vector(barycentricBasis, dxVector, weights, stencilSize, stencilSize);
+		//		jacobian[3 * component] = dot(_values, weights, stencilSize) * _reciprocalVelocityLB *
+		//				_reciprocalM;
+		//
+		//		matrix_vector(barycentricBasis, dyVector, weights, stencilSize, stencilSize);
+		//		jacobian[3 * component + 1] = dot(_values, weights, stencilSize) * _reciprocalVelocityLB *
+		//				_reciprocalM;
+		//
+		//		matrix_vector(barycentricBasis, dzVector, weights, stencilSize, stencilSize);
+		//		jacobian[3 * component + 2] = dot(_values, weights, stencilSize) * _reciprocalVelocityLB *
+		//				_reciprocalM;
+		//		_velocities[component]->push_back(velocity[component]);
+		//		_jacobian.push_back(jacobian[3 * component]);
+		//		_jacobian.push_back(jacobian[3 * component+1]);
+		//		_jacobian.push_back(jacobian[3 * component+2]);
 	}
 
 	setArrays (offset, locationVector, dxVector, dyVector,  dzVector, flip, position, 3);
-	loadPressure(ins, jns, kns, offset, flip);
-	matrix_vector(barycentricBasis, locationVector, weights, stencilSize, stencilSize);
-	density = (dot(_values, weights, stencilSize) - _meanPressure) *
-			_reciprocalVelocityLB  * _reciprocalVelocityLB * 3.0 + 1.0;
+	loadPressure(ins, jns, kns, i,j,k, offset, flip);
+	//	matrix_vector(barycentricBasis, locationVector, weights, stencilSize, stencilSize);
+	//	density = (dot(_values, weights, stencilSize) - _meanPressure) *
+	//			_reciprocalVelocityLB  * _reciprocalVelocityLB * 3.0 + 1.0;
 
-	_pressure.push_back(density);
+	//_pressure.push_back(density);
+
 	//    FLOAT eq[Q], neq[Q];
 	//    computeEquilibrium(eq, density, velocity);
 	//    computeMinimumNonEquilibrium(neq, _parameters.lb.tau, density,
@@ -383,7 +465,23 @@ void NSLBCouplingStencil::interpolate (int i, int j, int k, const int * const fl
 	//        _lbField.getFOut()[_lbField.getIndexF(l, i, j, k)] = eq[l] + (1.0 - 1.0/_parameters.lb.tau) * neq[l];
 	//    }
 }
+void NSLBCouplingStencil::flush(){
+	for(unsigned int i=0;i<_communicators.size();i++){
 
+			_communicators[i]->gather();
+		}
+	for(unsigned int i=0;i<_communicators.size();i++){
+
+		_communicators[i]->flush();
+	}
+}
+
+void NSLBCouplingStencil::initGather(){
+	for(unsigned int i=0;i<_communicators.size();i++){
+
+			_communicators[i]->gather_init();
+	}
+}
 FLOAT NSLBCouplingStencil::interpolateVelocityComponent (const int * const cell,
 		const FLOAT * const position,
 		int component, const int * const flip){
@@ -412,6 +510,9 @@ void NSLBCouplingStencil::setMeanPressure (const FLOAT & pressure) {
 	_meanPressure = pressure;
 }
 
+void  NSLBCouplingStencil::registerLBRegion(NSLBCommunicator* com){
+	_communicators.push_back(com);
+}
 
 void NSLBCouplingStencil::applyLeftWall   ( LBField & lbField, int i, int j, int k ){
 	int ins, jns, kns;

@@ -7,3 +7,13 @@
     //}
   }
   
+  public void __OPERATION_NAME__Parallel(__OPERATION_PARAMETERS_LIST__) {
+   // if (_destination!=null) {
+      //_destination.lock();
+      _destination.__OPERATION_NAME__Parallel(__FUNCTION_CALL_PARAMETERS_LIST__);
+      //_destination.unlock();
+    //}
+  }
+  
+  
+  

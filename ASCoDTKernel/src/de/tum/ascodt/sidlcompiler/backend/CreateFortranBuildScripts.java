@@ -1,8 +1,8 @@
 package de.tum.ascodt.sidlcompiler.backend;
 
 
-import java.io.File;
-import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Stack;
 
 import org.eclipse.core.runtime.Assert;
@@ -25,122 +25,110 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * 
  */
 public class CreateFortranBuildScripts extends DepthFirstAdapter {
-
   private Stack<TemplateFile> _templateFilesOfFortranMakefile;
   private Stack<TemplateFile> _templateFilesOfFortranCMakefile;
 
   private Stack<TemplateFile> _templateFilesOfSourcesFortranCMakefile;
   private Stack<TemplateFile> _templateFilesOfTargetsFortranCMakefile;
-  private URL _userImplementationsDestinationDirectory;
-  private URL _generatedFilesDirectory;
+  private Path _cmakeDirectoryPath;
 
   private String[] _namespace;
   private SymbolTable _symbolTable;
   private Target _target;
 
-  CreateFortranBuildScripts(Target target, SymbolTable symbolTable,
-      URL userImplementationsDestinationDirectory, URL generatedFilesDirectory,
-      URL nativeDirectory, String[] namespace) {
+  CreateFortranBuildScripts(Target target,
+                            SymbolTable symbolTable,
+                            Path projectDirectoryPath,
+                            String[] namespace) {
 
     _templateFilesOfFortranMakefile = new Stack<TemplateFile>();
     _templateFilesOfFortranCMakefile = new Stack<TemplateFile>();
     _templateFilesOfSourcesFortranCMakefile = new Stack<TemplateFile>();
     _templateFilesOfTargetsFortranCMakefile = new Stack<TemplateFile>();
-    _userImplementationsDestinationDirectory = userImplementationsDestinationDirectory;
-    _generatedFilesDirectory = generatedFilesDirectory;
+    _cmakeDirectoryPath = projectDirectoryPath.resolve("cmake");
     _namespace = namespace;
     _symbolTable = symbolTable;
     _target = target;
   }
 
   private void createComponentMappings(String componentName,
-      String fullQualifiedName, Stack<TemplateFile> template) {
+                                       String fullQualifiedName,
+                                       Stack<TemplateFile> template) {
     template.peek().addMapping("__COMPONENT_NAME__", componentName);
     template.peek().addMapping("__PATH_FULL_QUALIFIED_NAME__",
-        fullQualifiedName.replaceAll("[.]", "/"));
-    template.peek().addMapping("__GENERATED_OUTPUT__",
-        _generatedFilesDirectory.getPath().toString());
-    template.peek().addMapping("__SRC_OUTPUT__",
-        _userImplementationsDestinationDirectory.getPath().toString());
+                               fullQualifiedName.replaceAll("[.]", "/"));
   }
 
   @Override
   public void inAClassPackageElement(AClassPackageElement node) {
-    try {
-      String componentName = node.getName().getText();
-      String fullQualifiedName = _symbolTable.getScope(node)
-          .getFullyQualifiedName(componentName);
+    String componentName = node.getName().getText();
+    String fullyQualifiedComponentName =
+        _symbolTable.getScope(node).getFullyQualifiedName(componentName);
 
-      String templateFileForFortranMakefile = "makefile-fortran.template";
-      String destinationFileForFortranMakefile = _userImplementationsDestinationDirectory
-          .toString() + File.separatorChar + "Makefile." + componentName;
-      String templateFileForFortranCMakefile = "cmakefile-fortran.template";
-      String destinationFileForFortranCMakefile = _userImplementationsDestinationDirectory
-          .toString() +
-          File.separatorChar +
-          "cmake-" +
-          fullQualifiedName +
-          File.separatorChar + "CMakeLists.txt";
-      String templateFileForSourcesCmakefile = "";
-      String templateFileForTargetsCmakefile = "";
-      switch (_target.getType()) {
-      case FortranNative:
-        templateFileForSourcesCmakefile = "cmakefile-sources-native-fortran.template";
-        templateFileForTargetsCmakefile = "cmakefile-targets-native-fortran.template";
+    Path sourcesCMakeSourceFilePath = null;
+    Path targetsCMakeSourceFilePath = null;
 
-        break;
-      case FortranRemoteSocket:
-        templateFileForSourcesCmakefile = "cmakefile-sources-remote-fortran.template";
-        templateFileForTargetsCmakefile = "cmakefile-targets-remote-fortran.template";
+    switch (_target.getType()) {
+    case FortranNative:
+      sourcesCMakeSourceFilePath =
+          Paths.get("cmakefile-sources-native-fortran.template");
+      targetsCMakeSourceFilePath =
+          Paths.get("cmakefile-targets-native-fortran.template");
 
-        break;
-      default:
-        break;
-      }
-      String destinationFileForSourcesFortranCMakefile = _userImplementationsDestinationDirectory
-          .toString() +
-          File.separatorChar +
-          "cmake-" +
-          fullQualifiedName +
-          File.separatorChar + "sources.cmake";
-      String destinationFileForTargetsFortranCMakefile = _userImplementationsDestinationDirectory
-          .toString() +
-          File.separatorChar +
-          "cmake-" +
-          fullQualifiedName +
-          File.separatorChar + "targets.cmake";
+      break;
+    case FortranRemoteSocket:
+      sourcesCMakeSourceFilePath =
+          Paths.get("cmakefile-sources-remote-fortran.template");
+      targetsCMakeSourceFilePath =
+          Paths.get("cmakefile-targets-remote-fortran.template");
 
-      _templateFilesOfFortranMakefile.push(new TemplateFile(
-          templateFileForFortranMakefile, destinationFileForFortranMakefile,
-          _namespace, TemplateFile.getLanguageConfigurationForCPP(), true));
-      _templateFilesOfFortranCMakefile.push(new TemplateFile(
-          templateFileForFortranCMakefile, destinationFileForFortranCMakefile,
-          _namespace, TemplateFile.getLanguageConfigurationForCPP(), true));
-      _templateFilesOfSourcesFortranCMakefile.push(new TemplateFile(
-          templateFileForSourcesCmakefile,
-          destinationFileForSourcesFortranCMakefile, _namespace, TemplateFile
-              .getLanguageConfigurationForCPP(), true));
-      _templateFilesOfTargetsFortranCMakefile.push(new TemplateFile(
-          templateFileForTargetsCmakefile,
-          destinationFileForTargetsFortranCMakefile, _namespace, TemplateFile
-              .getLanguageConfigurationForCPP(), false));
-      createComponentMappings(componentName, fullQualifiedName,
-          _templateFilesOfFortranMakefile);
-      createComponentMappings(componentName, fullQualifiedName,
-          _templateFilesOfFortranCMakefile);
-      createComponentMappings(componentName, fullQualifiedName,
-          _templateFilesOfSourcesFortranCMakefile);
-
-      createComponentMappings(componentName, fullQualifiedName,
-          _templateFilesOfTargetsFortranCMakefile);
-      _templateFilesOfFortranMakefile.peek().addMapping("__TAB__", "\t");
-      _templateFilesOfFortranMakefile.peek().open();
-      _templateFilesOfFortranCMakefile.peek().open();
-      _templateFilesOfSourcesFortranCMakefile.peek().open();
-      _templateFilesOfTargetsFortranCMakefile.peek().open();
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
+      break;
+    default:
+      break;
     }
+
+    _templateFilesOfFortranMakefile.push(new TemplateFile(Paths.get("makefile-fortran.template"),
+                                                          _cmakeDirectoryPath.resolve(fullyQualifiedComponentName)
+                                                                             .resolve("Makefile." + componentName),
+                                                          _namespace,
+                                                          TemplateFile.getLanguageConfigurationForCPP(),
+                                                          true));
+    _templateFilesOfFortranCMakefile.push(new TemplateFile(Paths.get("cmakefile-fortran.template"),
+                                                           _cmakeDirectoryPath.resolve(fullyQualifiedComponentName)
+                                                                              .resolve("CMakeLists.txt"),
+                                                           _namespace,
+                                                           TemplateFile.getLanguageConfigurationForCPP(),
+                                                           true));
+    _templateFilesOfSourcesFortranCMakefile.push(new TemplateFile(sourcesCMakeSourceFilePath,
+                                                                  _cmakeDirectoryPath.resolve(fullyQualifiedComponentName)
+                                                                                     .resolve("sources.cmake"),
+                                                                  _namespace,
+                                                                  TemplateFile.getLanguageConfigurationForCPP(),
+                                                                  true));
+    _templateFilesOfTargetsFortranCMakefile.push(new TemplateFile(targetsCMakeSourceFilePath,
+                                                                  _cmakeDirectoryPath.resolve(fullyQualifiedComponentName)
+                                                                                     .resolve("targets.cmake"),
+                                                                  _namespace,
+                                                                  TemplateFile.getLanguageConfigurationForCPP(),
+                                                                  false));
+    createComponentMappings(componentName,
+                            fullyQualifiedComponentName,
+                            _templateFilesOfFortranMakefile);
+    createComponentMappings(componentName,
+                            fullyQualifiedComponentName,
+                            _templateFilesOfFortranCMakefile);
+    createComponentMappings(componentName,
+                            fullyQualifiedComponentName,
+                            _templateFilesOfSourcesFortranCMakefile);
+
+    createComponentMappings(componentName,
+                            fullyQualifiedComponentName,
+                            _templateFilesOfTargetsFortranCMakefile);
+    _templateFilesOfFortranMakefile.peek().addMapping("__TAB__", "\t");
+    _templateFilesOfFortranMakefile.peek().open();
+    _templateFilesOfFortranCMakefile.peek().open();
+    _templateFilesOfSourcesFortranCMakefile.peek().open();
+    _templateFilesOfTargetsFortranCMakefile.peek().open();
   }
 
   /**
@@ -150,19 +138,21 @@ public class CreateFortranBuildScripts extends DepthFirstAdapter {
   @Override
   public void inAUses(AUses node) {
     try {
-      GetProvidesAndUsesPortsOfComponent getPorts = new GetProvidesAndUsesPortsOfComponent();
+      GetProvidesAndUsesPortsOfComponent getPorts =
+          new GetProvidesAndUsesPortsOfComponent();
       node.apply(getPorts);
-      String templateMakefileName = "makefile-fortran-uses-port.template";
-      String templateCMakefileName = "cmakefile-fortran-uses-port.template";
+
       String portTypePath = getPorts.getUsesPorts("", "/");
 
-      TemplateFile templateMakefile = new TemplateFile(
-          _templateFilesOfFortranMakefile.peek(), templateMakefileName);
+      TemplateFile templateMakefile =
+          new TemplateFile(_templateFilesOfFortranMakefile.peek(),
+                           Paths.get("makefile-fortran-uses-port.template"));
       templateMakefile.addMapping("__USES_PORT_PATH__", portTypePath);
       templateMakefile.open();
       templateMakefile.close();
-      TemplateFile templateCMakefile = new TemplateFile(
-          _templateFilesOfSourcesFortranCMakefile.peek(), templateCMakefileName);
+      TemplateFile templateCMakefile =
+          new TemplateFile(_templateFilesOfSourcesFortranCMakefile.peek(),
+                           Paths.get("cmakefile-fortran-uses-port.template"));
       templateCMakefile.addMapping("__USES_PORT_PATH__", portTypePath);
       templateCMakefile.open();
       templateCMakefile.close();
@@ -179,18 +169,12 @@ public class CreateFortranBuildScripts extends DepthFirstAdapter {
     Assert.isTrue(_templateFilesOfFortranMakefile.size() == 1);
     Assert.isTrue(_templateFilesOfFortranCMakefile.size() == 1);
     Assert.isTrue(_templateFilesOfSourcesFortranCMakefile.size() == 1);
-
     Assert.isTrue(_templateFilesOfTargetsFortranCMakefile.size() == 1);
 
-    try {
-      _templateFilesOfFortranMakefile.peek().close();
-      _templateFilesOfFortranCMakefile.peek().close();
-      _templateFilesOfSourcesFortranCMakefile.peek().close();
-      _templateFilesOfTargetsFortranCMakefile.peek().close();
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
-    }
-
+    _templateFilesOfFortranMakefile.peek().close();
+    _templateFilesOfFortranCMakefile.peek().close();
+    _templateFilesOfSourcesFortranCMakefile.peek().close();
+    _templateFilesOfTargetsFortranCMakefile.peek().close();
     _templateFilesOfFortranMakefile.pop();
     _templateFilesOfFortranCMakefile.pop();
     _templateFilesOfSourcesFortranCMakefile.pop();

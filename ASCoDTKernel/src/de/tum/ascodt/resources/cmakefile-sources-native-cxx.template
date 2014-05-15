@@ -1,6 +1,6 @@
 SET(CPP_FILES
-    ../../components/java/__FULLY_QUALIFIED_COMPONENT_PATH__JNIProxy.cpp
-    ../../components/java/__FULLY_QUALIFIED_COMPONENT_PATH__AbstractImplementation.cpp
+    ../../components/c++/__FULLY_QUALIFIED_COMPONENT_PATH__JNIProxy.cpp
+    ../../components/c++/__FULLY_QUALIFIED_COMPONENT_PATH__AbstractImplementation.cpp
     ../../src/__FULLY_QUALIFIED_COMPONENT_PATH__Implementation.cpp)
 
 -- INSERT HERE --

@@ -83,15 +83,21 @@ public class SIDLDoubleClickSelector implements ITextDoubleClickStrategy {
       }
 
       if (fStartPos > -1 && bracketIndex1 < bracketIndex2) {
-        fEndPos = searchForClosingBracket(fStartPos, prevChar,
-            fgBrackets[bracketIndex1 + 1], doc);
+        fEndPos =
+            searchForClosingBracket(fStartPos,
+                                    prevChar,
+                                    fgBrackets[bracketIndex1 + 1],
+                                    doc);
         if (fEndPos > -1) {
           return true;
         }
         fStartPos = -1;
       } else if (fEndPos > -1) {
-        fStartPos = searchForOpenBracket(fEndPos,
-            fgBrackets[bracketIndex2 - 1], nextChar, doc);
+        fStartPos =
+            searchForOpenBracket(fEndPos,
+                                 fgBrackets[bracketIndex2 - 1],
+                                 nextChar,
+                                 doc);
         if (fStartPos > -1) {
           return true;
         }
@@ -165,8 +171,10 @@ public class SIDLDoubleClickSelector implements ITextDoubleClickStrategy {
    * @throws BadLocationException
    *           in case <code>startPosition</code> is invalid in the document
    */
-  protected int searchForClosingBracket(int startPosition, char openBracket,
-      char closeBracket, IDocument document) throws BadLocationException {
+  protected int searchForClosingBracket(int startPosition,
+                                        char openBracket,
+                                        char closeBracket,
+                                        IDocument document) throws BadLocationException {
     int stack = 1;
     int closePosition = startPosition + 1;
     int length = document.getLength();
@@ -204,8 +212,10 @@ public class SIDLDoubleClickSelector implements ITextDoubleClickStrategy {
    * @throws BadLocationException
    *           in case <code>startPosition</code> is invalid in the document
    */
-  protected int searchForOpenBracket(int startPosition, char openBracket,
-      char closeBracket, IDocument document) throws BadLocationException {
+  protected int searchForOpenBracket(int startPosition,
+                                     char openBracket,
+                                     char closeBracket,
+                                     IDocument document) throws BadLocationException {
     int stack = 1;
     int openPos = startPosition - 1;
     char nextChar;

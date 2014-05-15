@@ -1,8 +1,8 @@
 package de.tum.ascodt.sidlcompiler.backend;
 
 
-import java.io.File;
-import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import de.tum.ascodt.plugin.services.SocketService;
 import de.tum.ascodt.plugin.utils.ProcessListener;
@@ -12,35 +12,31 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
 
 
 public class CreateSocketComponent {
-
   TemplateFile _templateFileForSocketComponent;
 
-  public CreateSocketComponent(URL generatedFilesDirectory, String[] namespaces)
-      throws ASCoDTException {
-    String namespacesPath = "";
+  public CreateSocketComponent(Path componentsDirectoryPath, String[] namespaces) throws ASCoDTException {
+    Path path = componentsDirectoryPath.resolve("java");
+
     for (String namespace : namespaces) {
-      namespacesPath += File.separatorChar + namespace;
+      path = path.resolve(namespace);
     }
-    String destinationFileForJavaSocketComponent = generatedFilesDirectory
-        .toString() +
-        namespacesPath +
-        File.separatorChar +
-        "SocketComponent.java";
-    String templateFileForJavaSocketComponent = "java-abstract-socket-component.template";
-    _templateFileForSocketComponent = new TemplateFile(
-        templateFileForJavaSocketComponent,
-        destinationFileForJavaSocketComponent, namespaces,
-        TemplateFile.getLanguageConfigurationForJava(), true);
+
+    _templateFileForSocketComponent =
+        new TemplateFile(Paths.get("java-abstract-socket-component.template"),
+                         path.resolve("SocketComponent.java"),
+                         namespaces,
+                         TemplateFile.getLanguageConfigurationForJava(),
+                         true);
 
   }
 
   public void apply() throws ASCoDTException {
     _templateFileForSocketComponent.addMapping("__SOCKET_COMPONENT__",
-        SocketComponent.class.getCanonicalName());
+                                               SocketComponent.class.getCanonicalName());
     _templateFileForSocketComponent.addMapping("__PROCESS_LISTENER__",
-        ProcessListener.class.getCanonicalName());
+                                               ProcessListener.class.getCanonicalName());
     _templateFileForSocketComponent.addMapping("__SOCKET_SERVICE__",
-        SocketService.class.getCanonicalName());
+                                               SocketService.class.getCanonicalName());
     _templateFileForSocketComponent.open();
     _templateFileForSocketComponent.close();
   }

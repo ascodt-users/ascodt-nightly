@@ -63,7 +63,8 @@ public class ProjectBuilder extends PlatformObject {
    * compilation of the file.
    * They show the position in the file, where the error has occurred.
    */
-  public static final String PROBLEM_MARKER_ID = "de.tum.ascodt.plugin.project.markers.ASCoDTProblemMarker";
+  public static final String PROBLEM_MARKER_ID =
+      "de.tum.ascodt.plugin.project.markers.ASCoDTProblemMarker";
 
   /**
    * setup the project nature, so that the ascodt project can be identified as
@@ -86,8 +87,7 @@ public class ProjectBuilder extends PlatformObject {
 
       ICommand[] newCommands = new ICommand[1];
       ICommand command = description.newCommand();
-      command
-          .setBuilderName(de.tum.ascodt.plugin.project.builders.SiDLBuilder.ID);
+      command.setBuilderName(de.tum.ascodt.plugin.project.builders.SiDLBuilder.ID);
       newCommands[newCommands.length - 1] = command;
       description.setBuildSpec(newCommands);
       project.setDescription(description, null);
@@ -102,18 +102,18 @@ public class ProjectBuilder extends PlatformObject {
    * @param projectName
    * @throws CoreException
    */
-  private static IProject createBaseProject(String projectName, URI location)
-      throws CoreException {
+  private static IProject createBaseProject(String projectName, URI location) throws CoreException {
     // it is acceptable to use the ResourcesPlugin class
-    IProject newProject = ResourcesPlugin.getWorkspace().getRoot()
-        .getProject(projectName);
+    IProject newProject =
+        ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
     if (!newProject.exists()) {
       URI projectLocation = location;
-      IProjectDescription desc = newProject.getWorkspace()
-          .newProjectDescription(newProject.getName());
-      if (location != null &&
-          ResourcesPlugin.getWorkspace().getRoot().getLocationURI()
-              .equals(location)) {
+      IProjectDescription desc =
+          newProject.getWorkspace().newProjectDescription(newProject.getName());
+      if (location != null && ResourcesPlugin.getWorkspace()
+                                             .getRoot()
+                                             .getLocationURI()
+                                             .equals(location)) {
         projectLocation = null;
       }
 
@@ -142,11 +142,10 @@ public class ProjectBuilder extends PlatformObject {
    * @return true if the resource lies in the source folder of the project
    */
   public static boolean isProjectSource(String resourceLocation,
-      IProject project, String extension) {
+                                        IProject project,
+                                        String extension) {
 
-    return resourceLocation.indexOf(project.getLocation().toPortableString() +
-        "") >= 0 &&
-        resourceLocation.endsWith(extension);
+    return resourceLocation.indexOf(project.getLocation().toPortableString() + "") >= 0 && resourceLocation.endsWith(extension);
 
   }
 
@@ -206,8 +205,9 @@ public class ProjectBuilder extends PlatformObject {
    * @return the internal eclipse object representing the project
    * @throws MalformedURLException
    */
-  public void createProject(String projectName, URI location)
-      throws ASCoDTException, CoreException, MalformedURLException {
+  public void createProject(String projectName, URI location) throws ASCoDTException,
+                                                             CoreException,
+                                                             MalformedURLException {
     Trace trace = new Trace(getClass().getName());
     trace.in("createProject(...)", projectName);
 
@@ -220,11 +220,13 @@ public class ProjectBuilder extends PlatformObject {
     createProject(eclipseProject);
 
     // make sure that the ascodt perspective is opened
-    PlatformUI.getWorkbench().showPerspective(ASCoDTPerspective.ID,
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+    PlatformUI.getWorkbench()
+              .showPerspective(ASCoDTPerspective.ID,
+                               PlatformUI.getWorkbench()
+                                         .getActiveWorkbenchWindow());
     // make sure that the ascodt palette is opened
-    IWorkbenchWindow activeWindow = PlatformUI.getWorkbench()
-        .getActiveWorkbenchWindow();
+    IWorkbenchWindow activeWindow =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow();
     IWorkbenchPage page = activeWindow.getActivePage();
     if (activeWindow != null && page != null) {
       page.showView(Palette.ID);
@@ -244,7 +246,8 @@ public class ProjectBuilder extends PlatformObject {
    * @throws ASCoDTException
    */
   public InstanceFactory getNewInstanceFactory(Project project,
-      String componentInterface, String target) throws ASCoDTException {
+                                               String componentInterface,
+                                               String target) throws ASCoDTException {
     return new InstanceFactory(project, componentInterface, target);
   }
 

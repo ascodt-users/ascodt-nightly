@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<diagram>
+    <component xsi:type="socketComponent" host="localhost" port="50045" name="cca.cfd.UekermannDriver" reference="oid9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <inputPort className="cca.cfd.Driver" classId="0" index="1026644387"/>
+        <outputPort xsi:type="usePort" alias="ns" createId="66" connectId="67" disconnectId="68" className="ns:cca.cfd.NSSolver" classId="0" index="1880286806"/>
+        <outputPort xsi:type="usePort" alias="lb2ns" createId="7" connectId="8" disconnectId="9" className="lb2ns:cca.cfd.LB2NS" classId="1" index="1151091445"/>
+        <outputPort xsi:type="usePort" alias="lb" createId="20" connectId="21" disconnectId="22" className="lb:cca.cfd.LBSolver" classId="2" index="1343940571"/>
+        <outputPort xsi:type="usePort" alias="ns2lb" createId="51" connectId="52" disconnectId="53" className="ns2lb:cca.cfd.NS2LB" classId="3" index="225923589"/>
+    </component>
+    <component xsi:type="socketComponent" host="localhost" port="50049" name="cca.cfd.NS" reference="oid11" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <inputPort className="cca.cfd.NS2LB" classId="0" index="1384966921"/>
+        <inputPort className="cca.cfd.NSSolver" classId="1" index="944444534"/>
+        <outputPort xsi:type="usePort" alias="lb" createId="20" connectId="21" disconnectId="22" className="lb:cca.cfd.LBSolver" classId="0" index="56400151"/>
+    </component>
+    <component xsi:type="socketComponent" host="localhost" port="50047" name="cca.cfd.LB" reference="oid10" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <inputPort className="cca.cfd.LBSolver" classId="0" index="1647605325"/>
+        <inputPort className="cca.cfd.LB2NS" classId="1" index="393854005"/>
+        <outputPort xsi:type="usePort" alias="ns" createId="66" connectId="67" disconnectId="68" className="ns:cca.cfd.NSSolver" classId="0" index="1436725697"/>
+    </component>
+    <connection source="1343940571" destination="1647605325"/>
+    <connection source="56400151" destination="1647605325"/>
+    <connection source="1436725697" destination="944444534"/>
+    <connection source="1880286806" destination="944444534"/>
+    <connection source="1151091445" destination="393854005"/>
+    <connection source="225923589" destination="1384966921"/>
+</diagram>

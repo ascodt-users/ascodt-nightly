@@ -12,6 +12,5 @@ import java.util.EventListener;
  * 
  */
 public interface ProcessListener extends EventListener {
-  public void processFinished(int returnValue)
-      throws de.tum.ascodt.utils.exceptions.ASCoDTException;
+  public void processFinished(int returnValue) throws de.tum.ascodt.utils.exceptions.ASCoDTException;
 }

@@ -52,10 +52,11 @@ public class SIDLSourceViewerConfiguration extends SourceViewerConfiguration {
    */
   @Override
   public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer,
-      String contentType) {
-    IAutoEditStrategy strategy = IDocument.DEFAULT_CONTENT_TYPE
-        .equals(contentType) ? new SIDLAutoIndentStrategy()
-        : new DefaultIndentLineAutoEditStrategy();
+                                                   String contentType) {
+    IAutoEditStrategy strategy =
+        IDocument.DEFAULT_CONTENT_TYPE.equals(contentType)
+                                                          ? new SIDLAutoIndentStrategy()
+                                                          : new DefaultIndentLineAutoEditStrategy();
     return new IAutoEditStrategy[] {strategy};
   }
 
@@ -66,8 +67,8 @@ public class SIDLSourceViewerConfiguration extends SourceViewerConfiguration {
   @Override
   public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
     return new String[] {IDocument.DEFAULT_CONTENT_TYPE,
-      SIDLPartitionScanner.SIDL_DOC,
-      SIDLPartitionScanner.SIDL_MULTILINE_COMMENT};
+                         SIDLPartitionScanner.SIDL_DOC,
+                         SIDLPartitionScanner.SIDL_MULTILINE_COMMENT};
   }
 
   /*
@@ -88,20 +89,21 @@ public class SIDLSourceViewerConfiguration extends SourceViewerConfiguration {
   public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
 
     ContentAssistant assistant = new ContentAssistant();
-    assistant
-        .setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
+    assistant.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
     assistant.setContentAssistProcessor(new SIDLCompletionProcessor(),
-        IDocument.DEFAULT_CONTENT_TYPE);
+                                        IDocument.DEFAULT_CONTENT_TYPE);
     // assistant.setContentAssistProcessor(new JavaDocCompletionProcessor(),
     // JavaPartitionScanner.JAVA_DOC);
 
     assistant.enableAutoActivation(true);
     assistant.setAutoActivationDelay(500);
     assistant.setProposalPopupOrientation(IContentAssistant.PROPOSAL_OVERLAY);
-    assistant
-        .setContextInformationPopupOrientation(IContentAssistant.CONTEXT_INFO_ABOVE);
+    assistant.setContextInformationPopupOrientation(IContentAssistant.CONTEXT_INFO_ABOVE);
     assistant.setContextInformationPopupBackground(SIDLEditor.getDefault()
-        .getSIDLColorProvider().getColor(new RGB(150, 150, 0)));
+                                                             .getSIDLColorProvider()
+                                                             .getColor(new RGB(150,
+                                                                               150,
+                                                                               0)));
 
     return assistant;
   }
@@ -111,8 +113,8 @@ public class SIDLSourceViewerConfiguration extends SourceViewerConfiguration {
    * Method declared on SourceViewerConfiguration
    */
   @Override
-  public ITextDoubleClickStrategy getDoubleClickStrategy(
-      ISourceViewer sourceViewer, String contentType) {
+  public ITextDoubleClickStrategy getDoubleClickStrategy(ISourceViewer sourceViewer,
+                                                         String contentType) {
     return new SIDLDoubleClickSelector();
   }
 
@@ -122,7 +124,7 @@ public class SIDLSourceViewerConfiguration extends SourceViewerConfiguration {
    */
   @Override
   public String[] getIndentPrefixes(ISourceViewer sourceViewer,
-      String contentType) {
+                                    String contentType) {
     return new String[] {"\t", "    "}; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
@@ -131,25 +133,24 @@ public class SIDLSourceViewerConfiguration extends SourceViewerConfiguration {
    * Method declared on SourceViewerConfiguration
    */
   @Override
-  public IPresentationReconciler getPresentationReconciler(
-      ISourceViewer sourceViewer) {
+  public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 
     SIDLColorProvider provider = SIDLEditor.getDefault().getSIDLColorProvider();
     PresentationReconciler reconciler = new PresentationReconciler();
-    reconciler
-        .setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
+    reconciler.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
 
-    DefaultDamagerRepairer dr = new DefaultDamagerRepairer(SIDLEditor
-        .getDefault().getSIDLCodeScanner());
+    DefaultDamagerRepairer dr =
+        new DefaultDamagerRepairer(SIDLEditor.getDefault().getSIDLCodeScanner());
     reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
     reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
-    dr = new DefaultDamagerRepairer(SIDLEditor.getDefault().getSIDLDocScanner());
+    dr =
+        new DefaultDamagerRepairer(SIDLEditor.getDefault().getSIDLDocScanner());
     reconciler.setDamager(dr, SIDLPartitionScanner.SIDL_DOC);
     reconciler.setRepairer(dr, SIDLPartitionScanner.SIDL_DOC);
 
-    dr = new DefaultDamagerRepairer(new SingleTokenScanner(new TextAttribute(
-        provider.getColor(SIDLColorProvider.MULTI_LINE_COMMENT))));
+    dr =
+        new DefaultDamagerRepairer(new SingleTokenScanner(new TextAttribute(provider.getColor(SIDLColorProvider.MULTI_LINE_COMMENT))));
     reconciler.setDamager(dr, SIDLPartitionScanner.SIDL_MULTILINE_COMMENT);
     reconciler.setRepairer(dr, SIDLPartitionScanner.SIDL_MULTILINE_COMMENT);
 
@@ -170,8 +171,7 @@ public class SIDLSourceViewerConfiguration extends SourceViewerConfiguration {
    * Method declared on SourceViewerConfiguration
    */
   @Override
-  public ITextHover
-      getTextHover(ISourceViewer sourceViewer, String contentType) {
+  public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
     return new SIDLTextHover();
   }
 }

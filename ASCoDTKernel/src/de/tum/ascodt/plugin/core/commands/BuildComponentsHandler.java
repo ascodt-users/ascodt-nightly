@@ -22,20 +22,21 @@ public class BuildComponentsHandler extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     try {
-      ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event)
-          .getActivePage().getSelection();
+      ISelection selection =
+          HandlerUtil.getActiveWorkbenchWindow(event)
+                     .getActivePage()
+                     .getSelection();
       if (selection != null && selection instanceof IStructuredSelection) {
         IStructuredSelection strucSelection = (IStructuredSelection)selection;
         for (@SuppressWarnings("unchecked")
-        Iterator<Object> iterator = strucSelection.iterator(); iterator
-            .hasNext();) {
+        Iterator<Object> iterator = strucSelection.iterator(); iterator.hasNext();) {
           Object element = iterator.next();
 
-          if (element instanceof IResource &&
-              ((IResource)element).getProject().hasNature(ASCoDTNature.ID)) {
+          if (element instanceof IResource && ((IResource)element).getProject()
+                                                                  .hasNature(ASCoDTNature.ID)) {
             ProjectBuilder.getInstance()
-                .getProject(((IResource)element).getProject())
-                .compileComponents();
+                          .getProject(((IResource)element).getProject())
+                          .compileComponents();
           }
 
         }

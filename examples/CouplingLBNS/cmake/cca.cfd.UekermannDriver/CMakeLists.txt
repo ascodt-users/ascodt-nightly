@@ -38,6 +38,13 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
                            ""
                            FORCE)
 endif()
+if(Parallel)
+	set(CMAKE_CXX_COMPILER "/home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc")
+	#set(CMAKE_C_COMPILER "mpicxx.openmpi")
+	
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DParallel -mt_mpi ")
+	
+endif(Parallel)
 # ==============================================================================
 # }}} General
 
@@ -66,6 +73,16 @@ add_definitions(-DTHREADSAFE -D_REENTRANT)
 set(Threads_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
 # ==============================================================================
 # }}} Threads
+
+# Sockets {{{
+# ==============================================================================
+if(WIN32)
+  set(Sockets_LIBRARIES ws2_32)
+else()
+  set(Sockets_LIBRARIES)
+endif()
+# ==============================================================================
+# }}} Sockets
 # ==============================================================================
 # }}} Packages
 
@@ -143,7 +160,8 @@ include("targets.cmake")
 
 target_link_libraries("cca.cfd.UekermannDriver"
                       ${JNI_LIBRARIES}
-                      ${Threads_LIBRARIES})
+                      ${Threads_LIBRARIES}
+                      ${Sockets_LIBRARIES})
 
 install(TARGETS "cca.cfd.UekermannDriver"
         ARCHIVE DESTINATION "lib"

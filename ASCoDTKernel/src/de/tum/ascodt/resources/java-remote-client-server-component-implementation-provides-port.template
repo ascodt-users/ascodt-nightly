@@ -10,4 +10,16 @@
        de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().println(e);
     }  
   }
-  
+
+  public void __OPERATION_NAME__Parallel(__OPERATION_PARAMETERS_LIST__) {
+    //__SWITCH_SYNC_ASYNC__
+    try{
+         int methodId=__OPERATION_ID__+1;
+         sendIntData(methodId);
+         __SOCKET_PUSH__
+         __SOCKET_PULL__  
+    }catch(de.tum.ascodt.utils.exceptions.ASCoDTException e){
+       de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().println(e);
+    }  
+  }
+    

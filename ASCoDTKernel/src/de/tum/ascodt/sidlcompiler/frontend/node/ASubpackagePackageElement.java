@@ -14,8 +14,7 @@ public final class ASubpackagePackageElement extends PPackageElement {
     // Constructor
   }
 
-  public ASubpackagePackageElement(
-      @SuppressWarnings("hiding") PPackage _package_) {
+  public ASubpackagePackageElement(@SuppressWarnings("hiding") PPackage _package_) {
     // Constructor
     setPackage(_package_);
 
@@ -48,7 +47,7 @@ public final class ASubpackagePackageElement extends PPackageElement {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     if (_package_ == oldChild) {
       setPackage((PPackage)newChild);

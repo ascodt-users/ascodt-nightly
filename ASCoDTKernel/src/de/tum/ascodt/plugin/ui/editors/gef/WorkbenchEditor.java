@@ -60,6 +60,7 @@ import de.tum.ascodt.plugin.ui.gef.model.Connection;
 import de.tum.ascodt.plugin.ui.gef.model.Diagram;
 import de.tum.ascodt.plugin.ui.gef.model.Geometry;
 import de.tum.ascodt.plugin.ui.gef.model.Port;
+import de.tum.ascodt.plugin.ui.gef.model.UsePort;
 import de.tum.ascodt.plugin.ui.views.Palette;
 import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
 import de.tum.ascodt.utils.exceptions.ASCoDTException;
@@ -119,25 +120,27 @@ public class WorkbenchEditor extends GraphicalEditor {
     IAction zoomOut = new ZoomOutAction(root.getZoomManager());
     getActionRegistry().registerAction(zoomIn);
     getActionRegistry().registerAction(zoomOut);
-    IHandlerService service = (IHandlerService)getEditorSite().getService(
-        IHandlerService.class);
+    IHandlerService service =
+        (IHandlerService)getEditorSite().getService(IHandlerService.class);
 
-    service.activateHandler(zoomIn.getActionDefinitionId(), new ActionHandler(
-        zoomIn));
+    service.activateHandler(zoomIn.getActionDefinitionId(),
+                            new ActionHandler(zoomIn));
 
-    service.activateHandler(zoomOut.getActionDefinitionId(), new ActionHandler(
-        zoomOut));
+    service.activateHandler(zoomOut.getActionDefinitionId(),
+                            new ActionHandler(zoomOut));
     GraphicalViewer viewer = getGraphicalViewer();
 
-    getGraphicalViewer().setEditPartFactory(
-        new EditPartsFactory(ProjectBuilder.getInstance()
-            .getProject(getProject()).getName()));
+    getGraphicalViewer().setEditPartFactory(new EditPartsFactory(ProjectBuilder.getInstance()
+                                                                               .getProject(getProject())
+                                                                               .getName()));
     try {
-      Palette pallette = (Palette)PlatformUI.getWorkbench()
-          .getActiveWorkbenchWindow().getActivePage().showView(Palette.ID);
+      Palette pallette =
+          (Palette)PlatformUI.getWorkbench()
+                             .getActiveWorkbenchWindow()
+                             .getActivePage()
+                             .showView(Palette.ID);
       getEditDomain().setPaletteViewer(pallette.getViewer());
-      pallette
-          .setProject(ProjectBuilder.getInstance().getProject(getProject()));
+      pallette.setProject(ProjectBuilder.getInstance().getProject(getProject()));
     } catch (PartInitException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -145,40 +148,38 @@ public class WorkbenchEditor extends GraphicalEditor {
 
     viewer.setRootEditPart(root);
     viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer));
-    viewer.addDropTargetListener(new TemplateTransferDropTargetListener(
-        getGraphicalViewer()));
+    viewer.addDropTargetListener(new TemplateTransferDropTargetListener(getGraphicalViewer()));
     viewer.setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(32, 32));
     viewer.setProperty(SnapToGrid.PROPERTY_GRID_ENABLED, false);
 
     viewer.setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE, false);
-    ZoomManager manager = (ZoomManager)getGraphicalViewer().getProperty(
-        ZoomManager.class.toString());
+    ZoomManager manager =
+        (ZoomManager)getGraphicalViewer().getProperty(ZoomManager.class.toString());
     if (manager != null) {
       manager.setZoom(_diagram.getZoom());
     }
     // Scroll-wheel Zoom
-    getGraphicalViewer().setProperty(
-        MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1),
-        MouseWheelZoomHandler.SINGLETON);
+    getGraphicalViewer().setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1),
+                                     MouseWheelZoomHandler.SINGLETON);
     IAction showGrid = new ToggleGridAction(getGraphicalViewer());
     getActionRegistry().registerAction(showGrid);
 
     /** * Snap To Geometry ** */
     getGraphicalViewer().setProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED,
-        new Boolean(false /*
-                           * getProcess().
-                           * 
-                           * 
-                           * 
-                           * isSnapToGeometryEnabled
-                           * ()
-                           */
-        ));
+                                     new Boolean(false /*
+                                                        * getProcess().
+                                                        * 
+                                                        * 
+                                                        * 
+                                                        * isSnapToGeometryEnabled
+                                                        * ()
+                                                        */
+                                     ));
     IAction snapAction = new ToggleSnapToGeometryAction(getGraphicalViewer());
     getActionRegistry().registerAction(snapAction);
 
-    ContextMenuProvider cmProvider = new ASCoDTContextMenuProvider(viewer,
-        getActionRegistry());
+    ContextMenuProvider cmProvider =
+        new ASCoDTContextMenuProvider(viewer, getActionRegistry());
     viewer.setContextMenu(cmProvider);
   }
 
@@ -190,8 +191,10 @@ public class WorkbenchEditor extends GraphicalEditor {
       getGraphicalViewer().removeDropTargetListener(_templateDropListener);
 
       {
-        Vector<ComponentDeleteCommand> commands = new Vector<ComponentDeleteCommand>();
-        Vector<ConnectionCommand> connectionCommands = new Vector<ConnectionCommand>();
+        Vector<ComponentDeleteCommand> commands =
+            new Vector<ComponentDeleteCommand>();
+        Vector<ConnectionCommand> connectionCommands =
+            new Vector<ConnectionCommand>();
         for (Geometry geometry : _diagram.getChildren()) {
           if (geometry instanceof Component) {
             Component component = (Component)geometry;
@@ -226,8 +229,11 @@ public class WorkbenchEditor extends GraphicalEditor {
       // _paletteViewer=null;
       _diagram = null;
       try {
-        Palette pallette = (Palette)PlatformUI.getWorkbench()
-            .getActiveWorkbenchWindow().getActivePage().showView(Palette.ID);
+        Palette pallette =
+            (Palette)PlatformUI.getWorkbench()
+                               .getActiveWorkbenchWindow()
+                               .getActivePage()
+                               .showView(Palette.ID);
         getEditDomain().removeViewer(pallette.getViewer());
       } catch (PartInitException e) {
         // TODO Auto-generated catch block
@@ -247,21 +253,30 @@ public class WorkbenchEditor extends GraphicalEditor {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         writeToOutputStream(out);
         IFile file = ((IFileEditorInput)getEditorInput()).getFile();
-        file.setContents(new ByteArrayInputStream(out.toByteArray()), true,
-            false, progressMonitor);
+        file.setContents(new ByteArrayInputStream(out.toByteArray()),
+                         true,
+                         false,
+                         progressMonitor);
         // saveComponents();
         getCommandStack().markSaveLocation();
 
-        String path = file.getRawLocation().makeAbsolute()
-            .removeFileExtension().toString() +
-            ".xml";
+        String path =
+            file.getRawLocation()
+                .makeAbsolute()
+                .removeFileExtension()
+                .toString() + ".xml";
         FileOutputStream fos = new FileOutputStream(path);
         OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
         JAXBContext context;
 
         try {
-          context = JAXBContext.newInstance(Diagram.class, Component.class,
-              Connection.class, Port.class);
+          context =
+              JAXBContext.newInstance(de.tum.ascodt.plugin.ui.gef.model.SocketComponent.class,
+                                      Diagram.class,
+                                      Component.class,
+                                      Connection.class,
+                                      Port.class,
+                                      UsePort.class);
           Marshaller marshaller = context.createMarshaller();
           marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
           marshaller.marshal(_diagram, osw);
@@ -292,8 +307,8 @@ public class WorkbenchEditor extends GraphicalEditor {
    */
   @Override
   protected void initializeGraphicalViewer() {
-    _templateDropListener = new TemplateTransferDropTargetListener(
-        getGraphicalViewer());
+    _templateDropListener =
+        new TemplateTransferDropTargetListener(getGraphicalViewer());
     getGraphicalViewer().addDropTargetListener(_templateDropListener);
 
     getGraphicalViewer().setContents(_diagram);
@@ -323,12 +338,12 @@ public class WorkbenchEditor extends GraphicalEditor {
         for (Geometry geometry : _diagram.getChildren()) {
           if (geometry instanceof Component) {
             Component component = (Component)geometry;
-            ProjectBuilder
-                .getInstance()
-                .getNewInstanceFactory(
-                    ProjectBuilder.getInstance().getProject(file.getProject()),
-                    component.getClassName(), component.getTarget())
-                .loadObject(component);
+            ProjectBuilder.getInstance()
+                          .getNewInstanceFactory(ProjectBuilder.getInstance()
+                                                               .getProject(file.getProject()),
+                                                 component.getClassName(),
+                                                 component.getTarget())
+                          .loadObject(component);
           }
         }
 
@@ -342,13 +357,19 @@ public class WorkbenchEditor extends GraphicalEditor {
       }
     } catch (CoreException e) {
       throw new ASCoDTException(WorkbenchEditor.class.getCanonicalName(),
-          "loadComponents()", e.getMessage() + "\n" + e.getCause(), e);
+                                "loadComponents()",
+                                e.getMessage() + "\n" + e.getCause(),
+                                e);
     } catch (IOException e) {
       throw new ASCoDTException(WorkbenchEditor.class.getCanonicalName(),
-          "loadComponents()", e.getMessage() + "\n" + e.getCause(), e);
+                                "loadComponents()",
+                                e.getMessage() + "\n" + e.getCause(),
+                                e);
     } catch (ClassNotFoundException e) {
       throw new ASCoDTException(WorkbenchEditor.class.getCanonicalName(),
-          "loadComponents()", e.getMessage() + "\n" + e.getCause(), e);
+                                "loadComponents()",
+                                e.getMessage() + "\n" + e.getCause(),
+                                e);
     }
   }
 

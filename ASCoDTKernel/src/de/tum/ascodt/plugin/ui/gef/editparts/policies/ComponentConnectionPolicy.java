@@ -30,7 +30,7 @@ import de.tum.ascodt.plugin.ui.gef.model.Link;
  * 
  */
 public class ComponentConnectionPolicy extends
-    org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy {
+                                      org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy {
   public static PolylineConnection createNewWire(Connection wire) {
 
     PolylineConnection conn = new PolylineConnection();
@@ -69,12 +69,11 @@ public class ComponentConnectionPolicy extends
       Command cmd = null;
       ComponentEditPart componentEditPart = getComponentEditPart();
       int interactionMode = 0;
-      if ((interactionMode = componentEditPart
-          .setUIEnabledHitTest(((SelectionRequest)request).getLocation()
-              .getCopy())) > 0) {
+      if ((interactionMode =
+          componentEditPart.setUIEnabledHitTest(((SelectionRequest)request).getLocation()
+                                                                           .getCopy())) > 0) {
         cmd = new ComponentUIInteractionCommand();
-        ((ComponentUIInteractionCommand)cmd)
-            .setSource((Component)componentEditPart.getModel());
+        ((ComponentUIInteractionCommand)cmd).setSource((Component)componentEditPart.getModel());
         ((ComponentUIInteractionCommand)cmd).setMode(interactionMode);
       }
       return cmd;
@@ -100,15 +99,14 @@ public class ComponentConnectionPolicy extends
   }
 
   @Override
-  protected Command
-      getConnectionCompleteCommand(CreateConnectionRequest request) {
+  protected Command getConnectionCompleteCommand(CreateConnectionRequest request) {
     if (request.getNewObjectType() == Link.DASH_CONNECTION) {
       return null;
     } else {
       ConnectionCommand command = (ConnectionCommand)request.getStartCommand();
       command.setTarget(getComponentModel());
-      ConnectionAnchor ctor = getComponentEditPart().getTargetConnectionAnchor(
-          request);
+      ConnectionAnchor ctor =
+          getComponentEditPart().getTargetConnectionAnchor(request);
       if (ctor == null) {
         return command;
 
@@ -116,10 +114,9 @@ public class ComponentConnectionPolicy extends
       if (!(ctor instanceof PortAnchor)) {
         return null;
       }
-      if (((ComponentFigure)getComponentEditPart().getFigure())
-          .getModelForAnchor((PortAnchor)ctor).isConnectable()) {
-        command.setTargetPort(((ComponentFigure)getComponentEditPart()
-            .getFigure()).getModelForAnchor((PortAnchor)ctor));
+      if (((ComponentFigure)getComponentEditPart().getFigure()).getModelForAnchor((PortAnchor)ctor)
+                                                               .isConnectable()) {
+        command.setTargetPort(((ComponentFigure)getComponentEditPart().getFigure()).getModelForAnchor((PortAnchor)ctor));
         return command;
       }
       return null;
@@ -136,16 +133,15 @@ public class ComponentConnectionPolicy extends
       ConnectionCommand command = new ConnectionCommand();
       command.setConnection(new Connection());
       command.setSource(getComponentModel());
-      ConnectionAnchor ctor = getComponentEditPart().getSourceConnectionAnchor(
-          request);
+      ConnectionAnchor ctor =
+          getComponentEditPart().getSourceConnectionAnchor(request);
       if (ctor == null) {
         return null;
       }
       if (!(ctor instanceof PortAnchor)) {
         return null;
       }
-      command.setSourcePort(((ComponentFigure)getComponentEditPart()
-          .getFigure()).getModelForAnchor((PortAnchor)ctor));
+      command.setSourcePort(((ComponentFigure)getComponentEditPart().getFigure()).getModelForAnchor((PortAnchor)ctor));
       request.setStartCommand(command);
       return command;
     } else {
@@ -158,11 +154,10 @@ public class ComponentConnectionPolicy extends
     ConnectionCommand cmd = new ConnectionCommand();
     cmd.setConnection((Connection)request.getConnectionEditPart().getModel());
 
-    ConnectionAnchor ctor = getComponentEditPart().getSourceConnectionAnchor(
-        request);
+    ConnectionAnchor ctor =
+        getComponentEditPart().getSourceConnectionAnchor(request);
     cmd.setSource(getComponentModel());
-    cmd.setSourcePort(((ComponentFigure)getComponentEditPart().getFigure())
-        .getModelForAnchor((PortAnchor)ctor));
+    cmd.setSourcePort(((ComponentFigure)getComponentEditPart().getFigure()).getModelForAnchor((PortAnchor)ctor));
     return cmd;
   }
 
@@ -171,19 +166,18 @@ public class ComponentConnectionPolicy extends
     ConnectionCommand cmd = new ConnectionCommand();
     cmd.setConnection((Connection)request.getConnectionEditPart().getModel());
 
-    ConnectionAnchor ctor = getComponentEditPart().getTargetConnectionAnchor(
-        request);
+    ConnectionAnchor ctor =
+        getComponentEditPart().getTargetConnectionAnchor(request);
     if (ctor == null) {
       return null;
     }
     if (!(ctor instanceof PortAnchor)) {
       return null;
     }
-    if (((ComponentFigure)getComponentEditPart().getFigure())
-        .getModelForAnchor((PortAnchor)ctor).isConnectable()) {
+    if (((ComponentFigure)getComponentEditPart().getFigure()).getModelForAnchor((PortAnchor)ctor)
+                                                             .isConnectable()) {
       cmd.setTarget(getComponentModel());
-      cmd.setTargetPort(((ComponentFigure)getComponentEditPart().getFigure())
-          .getModelForAnchor((PortAnchor)ctor));
+      cmd.setTargetPort(((ComponentFigure)getComponentEditPart().getFigure()).getModelForAnchor((PortAnchor)ctor));
       return cmd;
     }
     return null;

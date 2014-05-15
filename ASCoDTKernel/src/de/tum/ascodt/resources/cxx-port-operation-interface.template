@@ -1,1 +1,2 @@
      virtual void __OPERATION_NAME__(__OPERATION_PARAMETERS_LIST__)=0;
+     virtual void __OPERATION_NAME__Parallel(__OPERATION_PARAMETERS_LIST__)=0;

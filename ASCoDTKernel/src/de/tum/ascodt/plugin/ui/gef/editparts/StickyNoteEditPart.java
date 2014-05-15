@@ -44,7 +44,8 @@ import de.tum.ascodt.plugin.ui.gef.model.StickyNote;
  * 
  */
 public class StickyNoteEditPart extends AbstractGraphicalEditPart implements
-    PropertyChangeListener, NodeEditPart {
+                                                                 PropertyChangeListener,
+                                                                 NodeEditPart {
 
   protected DirectEditManager manager;
 
@@ -70,58 +71,56 @@ public class StickyNoteEditPart extends AbstractGraphicalEditPart implements
   protected void createEditPolicies() {
     // allow removal of the associated model element
     installEditPolicy(EditPolicy.COMPONENT_ROLE,
-        new StickyNoteComponentEditPolicy());
+                      new StickyNoteComponentEditPolicy());
     // allow moving of the associated model element
     installEditPolicy(EditPolicy.LAYOUT_ROLE, new StickyNoteFlowEditPolicy());
     // allow editing of the associated model element
     installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
       @Override
       protected Command getDirectEditCommand(DirectEditRequest request) {
-        return new ChangeTextCommand((StickyNote)getModel(), (String)request
-            .getCellEditor().getValue());
+        return new ChangeTextCommand((StickyNote)getModel(),
+                                     (String)request.getCellEditor().getValue());
       }
 
       @Override
       protected void showCurrentEditValue(DirectEditRequest request) {
         ((StickyNoteFigure)getFigure()).setText((String)request.getCellEditor()
-            .getValue());
+                                                               .getValue());
         getFigure().getUpdateManager().performUpdate();
       }
     });
     installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE,
-        new GraphicalNodeEditPolicy() {
+                      new GraphicalNodeEditPolicy() {
 
-          @Override
-          protected Command getConnectionCompleteCommand(
-              CreateConnectionRequest request) {
-            if (request.getStartCommand() instanceof LinkCreateCommand) {
-              LinkCreateCommand cmd = (LinkCreateCommand)request
-                  .getStartCommand();
-              cmd.setTarget((StickyNote)getHost().getModel());
-              return cmd;
-            }
-            return null;
-          }
+                        @Override
+                        protected Command getConnectionCompleteCommand(CreateConnectionRequest request) {
+                          if (request.getStartCommand() instanceof LinkCreateCommand) {
+                            LinkCreateCommand cmd =
+                                (LinkCreateCommand)request.getStartCommand();
+                            cmd.setTarget((StickyNote)getHost().getModel());
+                            return cmd;
+                          }
+                          return null;
+                        }
 
-          @Override
-          protected Command getConnectionCreateCommand(
-              CreateConnectionRequest request) {
-            // TODO Auto-generated method stub
-            return null;
-          }
+                        @Override
+                        protected Command getConnectionCreateCommand(CreateConnectionRequest request) {
+                          // TODO Auto-generated method stub
+                          return null;
+                        }
 
-          @Override
-          protected Command getReconnectSourceCommand(ReconnectRequest request) {
-            // TODO Auto-generated method stub
-            return null;
-          }
+                        @Override
+                        protected Command getReconnectSourceCommand(ReconnectRequest request) {
+                          // TODO Auto-generated method stub
+                          return null;
+                        }
 
-          @Override
-          protected Command getReconnectTargetCommand(ReconnectRequest request) {
-            // TODO Auto-generated method stub
-            return null;
-          }
-        });
+                        @Override
+                        protected Command getReconnectTargetCommand(ReconnectRequest request) {
+                          // TODO Auto-generated method stub
+                          return null;
+                        }
+                      });
   }
 
   @Override
@@ -181,8 +180,9 @@ public class StickyNoteEditPart extends AbstractGraphicalEditPart implements
 
   protected void performDirectEdit() {
     if (manager == null) {
-      manager = new LabelDirectEditManager(this, new LabelCellEditorLocator(
-          getDirectEditFigure()));
+      manager =
+          new LabelDirectEditManager(this,
+                                     new LabelCellEditorLocator(getDirectEditFigure()));
     }
     manager.show();
   }
@@ -202,8 +202,7 @@ public class StickyNoteEditPart extends AbstractGraphicalEditPart implements
   public void propertyChange(PropertyChangeEvent evt) {
     String prop = evt.getPropertyName();
     // System.out.println("prop="+prop);
-    if (StickyNote.SIZE_PROP.equals(prop) ||
-        StickyNote.LOCATION_PROP.equals(prop)) {
+    if (StickyNote.SIZE_PROP.equals(prop) || StickyNote.LOCATION_PROP.equals(prop)) {
       size = getCastedModel().getSize();
       refreshVisuals();
     }
@@ -225,8 +224,9 @@ public class StickyNoteEditPart extends AbstractGraphicalEditPart implements
       size = getCastedModel().getSize();
     }
     Rectangle bounds = new Rectangle(getCastedModel().getLocation(), size);
-    ((GraphicalEditPart)getParent()).setLayoutConstraint(this, getFigure(),
-        bounds);
+    ((GraphicalEditPart)getParent()).setLayoutConstraint(this,
+                                                         getFigure(),
+                                                         bounds);
     ((StickyNoteFigure)getFigure()).setText(getCastedModel().getText());
     ((StickyNoteFigure)getFigure()).repaint();
     super.refreshVisuals();

@@ -73,14 +73,18 @@ public class VTKView extends ViewPart {
 
           @Override
           public void run() {
-            _panel.GetRenderWindow().GetRenderers().GetFirstRenderer()
-                .AddViewProp(actor);
+            _panel.GetRenderWindow()
+                  .GetRenderers()
+                  .GetFirstRenderer()
+                  .AddViewProp(actor);
           }
 
         });
       } else {
-        _panel.GetRenderWindow().GetRenderers().GetFirstRenderer()
-            .AddViewProp(actor);
+        _panel.GetRenderWindow()
+              .GetRenderers()
+              .GetFirstRenderer()
+              .AddViewProp(actor);
       }
     }
     _trace.out("addPipeline()");
@@ -96,12 +100,17 @@ public class VTKView extends ViewPart {
     _panel = new vtkCanvas();
     vtkActor dummyActor = new vtkActor();
     // _panel.GetRenderWindow().DoubleBufferOn();
-    _panel.GetRenderWindow().GetRenderers().GetFirstRenderer()
-        .AddActor(dummyActor);
-    _panel.GetRenderWindow().GetInteractor()
-        .SetInteractorStyle(new vtkInteractorStyleTrackballCamera());
-    _panel.GetRenderWindow().GetRenderers().GetFirstRenderer()
-        .SetBackground(0, 0, 0);
+    _panel.GetRenderWindow()
+          .GetRenderers()
+          .GetFirstRenderer()
+          .AddActor(dummyActor);
+    _panel.GetRenderWindow()
+          .GetInteractor()
+          .SetInteractorStyle(new vtkInteractorStyleTrackballCamera());
+    _panel.GetRenderWindow()
+          .GetRenderers()
+          .GetFirstRenderer()
+          .SetBackground(0, 0, 0);
     // _picker=new vtkCellPicker();
     // _panel.addMouseMotionListener(new MouseMotionListener(){
     //
@@ -183,20 +192,30 @@ public class VTKView extends ViewPart {
 
         @Override
         public void run() {
-          if (_panel.GetRenderWindow().GetRenderers().GetFirstRenderer()
-              .GetViewProps().IsItemPresent(act) != 0) {
-            _panel.GetRenderWindow().GetRenderers().GetFirstRenderer()
-                .RemoveViewProp(act);
+          if (_panel.GetRenderWindow()
+                    .GetRenderers()
+                    .GetFirstRenderer()
+                    .GetViewProps()
+                    .IsItemPresent(act) != 0) {
+            _panel.GetRenderWindow()
+                  .GetRenderers()
+                  .GetFirstRenderer()
+                  .RemoveViewProp(act);
           }
         }
 
       });
 
     } else {
-      if (_panel.GetRenderWindow().GetRenderers().GetFirstRenderer()
-          .GetViewProps().IsItemPresent(act) != 0) {
-        _panel.GetRenderWindow().GetRenderers().GetFirstRenderer()
-            .RemoveViewProp(act);
+      if (_panel.GetRenderWindow()
+                .GetRenderers()
+                .GetFirstRenderer()
+                .GetViewProps()
+                .IsItemPresent(act) != 0) {
+        _panel.GetRenderWindow()
+              .GetRenderers()
+              .GetFirstRenderer()
+              .RemoveViewProp(act);
       }
     }
     _trace.out("removePipeline()");

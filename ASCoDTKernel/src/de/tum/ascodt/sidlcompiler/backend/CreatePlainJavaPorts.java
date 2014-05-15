@@ -1,8 +1,8 @@
 package de.tum.ascodt.sidlcompiler.backend;
 
 
-import java.io.File;
-import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Stack;
 
 import org.eclipse.core.runtime.Assert;
@@ -28,20 +28,21 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * @author Tobias Weinzierl
  */
 public class CreatePlainJavaPorts extends DepthFirstAdapter {
-  private static Trace _trace = new Trace(
-      CreatePlainJavaPorts.class.getCanonicalName());
+  private static Trace _trace =
+      new Trace(CreatePlainJavaPorts.class.getCanonicalName());
 
   private Stack<TemplateFile> _templateFiles;
-  private URL _destinationDirectory;
+  private Path _javaDirectoryPath;
   private String[] _namespace;
 
   private SymbolTable _symbolTable;
   private boolean _generateSuperport;
 
   public CreatePlainJavaPorts(SymbolTable symbolTable,
-      URL destinationDirectory, String[] namespace) {
+                              Path componentsDirectoryPath,
+                              String[] namespace) {
     _templateFiles = new Stack<TemplateFile>();
-    _destinationDirectory = destinationDirectory;
+    _javaDirectoryPath = componentsDirectoryPath.resolve("java");
     _namespace = namespace;
     _symbolTable = symbolTable;
     _generateSuperport = false;
@@ -50,25 +51,21 @@ public class CreatePlainJavaPorts extends DepthFirstAdapter {
   @Override
   public void inAInterfacePackageElement(AInterfacePackageElement node) {
     _trace.in("inAInterfacePackageElement(...)", "open new port interface");
-    try {
-      if (!_generateSuperport) {
-        String portName = node.getName().getText();
-        String templateFile = "java-port-plain-port.template";
-        String fullQualifiedComponentName = _symbolTable.getScope(node)
-            .getFullyQualifiedName(portName);
-        String destinationFile = _destinationDirectory.toString() +
-            File.separatorChar +
-            fullQualifiedComponentName.replaceAll("[.]", "/") +
-            "PlainJavaPort.java";
 
-        _templateFiles.push(new TemplateFile(templateFile, destinationFile,
-            _namespace, TemplateFile.getLanguageConfigurationForJava(), true));
+    if (!_generateSuperport) {
+      String componentName = node.getName().getText();
+      String fullyQualifiedComponentName =
+          _symbolTable.getScope(node).getFullyQualifiedName(componentName);
 
-        _templateFiles.peek().addMapping("__PORT_NAME__", portName);
-        _templateFiles.peek().open();
-      }
-    } catch (ASCoDTException e) {
-      ErrorWriterDevice.getInstance().println(e);
+      _templateFiles.push(new TemplateFile(Paths.get("java-port-plain-port.template"),
+                                           _javaDirectoryPath.resolve(fullyQualifiedComponentName.replaceAll("[.]",
+                                                                                                             "/") + "PlainJavaPort.java"),
+                                           _namespace,
+                                           TemplateFile.getLanguageConfigurationForJava(),
+                                           true));
+
+      _templateFiles.peek().addMapping("__PORT_NAME__", componentName);
+      _templateFiles.peek().open();
     }
 
     _trace.out("inAInterfacePackageElement(...)", "open new port interface");
@@ -84,28 +81,19 @@ public class CreatePlainJavaPorts extends DepthFirstAdapter {
       ExclusivelyInParameters onlyInParameters = new ExclusivelyInParameters();
       node.apply(onlyInParameters);
 
-      String templateFile;
+      TemplateFile template =
+          new TemplateFile(_templateFiles.peek(),
+                           Paths.get("java-port-operation-plain-java-implementation.template"));
 
-      // if (onlyInParameters.areAllParametersInParameters()) {
-      // templateFile = _templateDirectory.toString() + File.separatorChar +
-      // "java-port-operation-plain-java-implementation-only-in-parameters.template";
-      // }
-      // else {
-      templateFile = "java-port-operation-plain-java-implementation.template";
-      // }
-      TemplateFile template = new TemplateFile(_templateFiles.peek(),
-          templateFile);
-
-      GetParameterList parameterList = new GetParameterList(
-          _symbolTable.getScope(node));
+      GetParameterList parameterList =
+          new GetParameterList(_symbolTable.getScope(node));
       node.apply(parameterList);
 
       template.addMapping("__OPERATION_NAME__", node.getName().getText());
-      template.addMapping("__OPERATION_PARAMETERS_LIST__", parameterList
-          .getParameterListInJava(onlyInParameters
-              .areAllParametersInParameters()));
+      template.addMapping("__OPERATION_PARAMETERS_LIST__",
+                          parameterList.getParameterListInJava(onlyInParameters.areAllParametersInParameters()));
       template.addMapping("__FUNCTION_CALL_PARAMETERS_LIST__",
-          parameterList.getFunctionCallListInJava());
+                          parameterList.getFunctionCallListInJava());
 
       template.open();
       template.close();
@@ -120,8 +108,8 @@ public class CreatePlainJavaPorts extends DepthFirstAdapter {
   public void inAUserDefinedType(AUserDefinedType node) {
 
     String fullQualifiedSymbol = Scope.getSymbol(node);
-    AInterfacePackageElement interfaceDefintion = _symbolTable.getScope(node)
-        .getInterfaceDefinition(fullQualifiedSymbol);
+    AInterfacePackageElement interfaceDefintion =
+        _symbolTable.getScope(node).getInterfaceDefinition(fullQualifiedSymbol);
     if (interfaceDefintion != null) {
       _generateSuperport = true;
       interfaceDefintion.apply(this);
@@ -133,15 +121,9 @@ public class CreatePlainJavaPorts extends DepthFirstAdapter {
   public void outAInterfacePackageElement(AInterfacePackageElement node) {
     Assert.isTrue(_templateFiles.size() == 1);
     if (!_generateSuperport) {
-      try {
 
-        _templateFiles.peek().close();
-      } catch (ASCoDTException e) {
-        ErrorWriterDevice.getInstance().println(e);
-      }
-
+      _templateFiles.peek().close();
       _templateFiles.pop();
     }
   }
-
 }

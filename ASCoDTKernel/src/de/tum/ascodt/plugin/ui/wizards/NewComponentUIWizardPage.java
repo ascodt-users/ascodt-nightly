@@ -21,7 +21,7 @@ import de.tum.ascodt.repository.RepositoryListener;
 
 
 public class NewComponentUIWizardPage extends WizardPage implements
-    RepositoryListener {
+                                                        RepositoryListener {
   private String _initialProjectIdentifier;
   private Project _lastProject;
 
@@ -88,10 +88,9 @@ public class NewComponentUIWizardPage extends WizardPage implements
     _componentInterfacesComboBox = new Combo(projectGroup, SWT.NONE);
     int selectionIndex = 0, counter = 0;
     for (String projectId : ProjectBuilder.getInstance()
-        .getProjectsIdentifiers()) {
+                                          .getProjectsIdentifiers()) {
       _projectsComboBox.add(projectId);
-      if (_initialProjectIdentifier != null &&
-          projectId.equals(_initialProjectIdentifier)) {
+      if (_initialProjectIdentifier != null && projectId.equals(_initialProjectIdentifier)) {
         selectionIndex = counter;
       }
       counter++;
@@ -140,8 +139,8 @@ public class NewComponentUIWizardPage extends WizardPage implements
   @Override
   public void dispose() {
     if (_lastProject != null) {
-      _lastProject.getStaticRepository().removeListener(
-          NewComponentUIWizardPage.this);
+      _lastProject.getStaticRepository()
+                  .removeListener(NewComponentUIWizardPage.this);
     }
 
   }
@@ -154,8 +153,8 @@ public class NewComponentUIWizardPage extends WizardPage implements
   @Override
   protected void finalize() {
     if (_lastProject != null) {
-      _lastProject.getStaticRepository().removeListener(
-          NewComponentUIWizardPage.this);
+      _lastProject.getStaticRepository()
+                  .removeListener(NewComponentUIWizardPage.this);
     }
 
   }
@@ -199,13 +198,14 @@ public class NewComponentUIWizardPage extends WizardPage implements
 	 */
   public void onProjectSelected() {
     if (_lastProject != null) {
-      _lastProject.getStaticRepository().removeListener(
-          NewComponentUIWizardPage.this);
+      _lastProject.getStaticRepository()
+                  .removeListener(NewComponentUIWizardPage.this);
     }
-    _lastProject = ProjectBuilder.getInstance().getProject(
-        _projectsComboBox.getItem(_projectsComboBox.getSelectionIndex()));
-    _lastProject.getStaticRepository().addListener(
-        NewComponentUIWizardPage.this);
+    _lastProject =
+        ProjectBuilder.getInstance()
+                      .getProject(_projectsComboBox.getItem(_projectsComboBox.getSelectionIndex()));
+    _lastProject.getStaticRepository()
+                .addListener(NewComponentUIWizardPage.this);
     if (_componentInterfacesComboBox.getItemCount() > 0) {
       _componentInterfacesComboBox.select(0);
     }
@@ -235,7 +235,8 @@ public class NewComponentUIWizardPage extends WizardPage implements
       return false;
     }
 
-    String componentInterfacesFieldContents = getComponentInterfacesFieldValue();
+    String componentInterfacesFieldContents =
+        getComponentInterfacesFieldValue();
     if (componentInterfacesFieldContents.equals("")) { //$NON-NLS-1$
       setErrorMessage(null);
       setMessage("Invalid component interface");

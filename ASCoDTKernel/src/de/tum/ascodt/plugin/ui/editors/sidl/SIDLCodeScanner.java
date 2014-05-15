@@ -35,11 +35,11 @@ import org.eclipse.jface.text.rules.WordRule;
  */
 public class SIDLCodeScanner extends RuleBasedScanner {
 
-  private static String[] fgKeywords = {
-    "class", "extends", "implements-all", "package", "interface", "uses", "in", "inout", "as"}; //$NON-NLS-9$ //$NON-NLS-8$ //$NON-NLS-7$ //$NON-NLS-6$ //$NON-NLS-5$ //$NON-NLS-4$ //$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
+  private static String[] fgKeywords =
+      {"class", "extends", "implements-all", "package", "interface", "uses", "in", "inout", "as"}; //$NON-NLS-9$ //$NON-NLS-8$ //$NON-NLS-7$ //$NON-NLS-6$ //$NON-NLS-5$ //$NON-NLS-4$ //$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
 
-  private static String[] fgTypes = {
-    "bool", "int", "float", "double", "string", "bool[]", "int[]", "double[]", "string[]"}; //$NON-NLS-1$ //$NON-NLS-5$ //$NON-NLS-7$ //$NON-NLS-6$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-2$
+  private static String[] fgTypes =
+      {"bool", "int", "float", "double", "string", "bool[]", "int[]", "double[]", "string[]"}; //$NON-NLS-1$ //$NON-NLS-5$ //$NON-NLS-7$ //$NON-NLS-6$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-2$
 
   private static String[] fgConstants = {"false", "null", "true"}; //$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
 
@@ -51,16 +51,16 @@ public class SIDLCodeScanner extends RuleBasedScanner {
    */
   public SIDLCodeScanner(SIDLColorProvider provider) {
 
-    IToken keyword = new Token(new TextAttribute(
-        provider.getColor(SIDLColorProvider.KEYWORD)));
-    IToken type = new Token(new TextAttribute(
-        provider.getColor(SIDLColorProvider.TYPE)));
-    IToken string = new Token(new TextAttribute(
-        provider.getColor(SIDLColorProvider.STRING)));
-    IToken comment = new Token(new TextAttribute(
-        provider.getColor(SIDLColorProvider.SINGLE_LINE_COMMENT)));
-    IToken other = new Token(new TextAttribute(
-        provider.getColor(SIDLColorProvider.DEFAULT)));
+    IToken keyword =
+        new Token(new TextAttribute(provider.getColor(SIDLColorProvider.KEYWORD)));
+    IToken type =
+        new Token(new TextAttribute(provider.getColor(SIDLColorProvider.TYPE)));
+    IToken string =
+        new Token(new TextAttribute(provider.getColor(SIDLColorProvider.STRING)));
+    IToken comment =
+        new Token(new TextAttribute(provider.getColor(SIDLColorProvider.SINGLE_LINE_COMMENT)));
+    IToken other =
+        new Token(new TextAttribute(provider.getColor(SIDLColorProvider.DEFAULT)));
 
     List<IRule> rules = new ArrayList<IRule>();
 

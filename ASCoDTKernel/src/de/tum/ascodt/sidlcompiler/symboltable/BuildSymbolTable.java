@@ -51,8 +51,7 @@ public class BuildSymbolTable extends DepthFirstAdapter {
   }
 
   @Override
-  public void inAEnumDeclarationPackageElement(
-      AEnumDeclarationPackageElement node) {
+  public void inAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node) {
     defaultIn(node);
     _table.getScope(node).addSymbol(node, _inputFileName);
 

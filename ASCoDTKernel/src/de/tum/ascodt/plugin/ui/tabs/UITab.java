@@ -27,7 +27,7 @@ public abstract class UITab extends ContainerTab {
    */
   public UITab(de.tum.ascodt.repository.entities.Component implementation) {
     super(":" + implementation.getClass().getCanonicalName(),
-        UIViewContainer.ID);
+          UIViewContainer.ID);
     _component = implementation;
   }
 

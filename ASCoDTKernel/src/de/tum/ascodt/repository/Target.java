@@ -135,8 +135,9 @@ public class Target {
    */
   public static boolean isValidTarget(String identifier) {
     return isJavaLocal(identifier) || isCxxNative(identifier) ||
-        isFortranRemoteSocket(identifier) || isCxxRemoteSocket(identifier) ||
-        isFortranNative(identifier);
+           isFortranRemoteSocket(identifier) ||
+           isCxxRemoteSocket(identifier) ||
+           isFortranNative(identifier);
   }
 
   private TargetType _targetType;

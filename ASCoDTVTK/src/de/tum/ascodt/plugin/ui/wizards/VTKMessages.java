@@ -5,7 +5,8 @@ import org.eclipse.osgi.util.NLS;
 
 
 public class VTKMessages extends NLS {
-  private static final String BUNDLE_NAME = "de.tum.ascodt.plugin.ui.wizards.messages"; //$NON-NLS-1$
+  private static final String BUNDLE_NAME =
+      "de.tum.ascodt.plugin.ui.wizards.messages"; //$NON-NLS-1$
   public static String NewVTKWizard;
   public static String VTKFromScratch;
   public static String CustomVTKNewWizard_2;

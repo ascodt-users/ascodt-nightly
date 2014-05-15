@@ -16,9 +16,9 @@ import de.tum.ascodt.utils.exceptions.ASCoDTException;
  * can use the visiblity setters. Only pipelines defined in createPipeline will
  * be added
  * to the vtk view and removed by object destruction
- *
+ * 
  * @author Atanas Atanasov
- *
+ * 
  */
 public abstract class VTKPipeline {
   protected vtkProp _pipeline;
@@ -32,8 +32,9 @@ public abstract class VTKPipeline {
   }
 
   public void addObserver(String event, String method) {
-    ASCoDTVTKPlugin.getDefault().getVTKService()
-        .addObserver(event, this, method);
+    ASCoDTVTKPlugin.getDefault()
+                   .getVTKService()
+                   .addObserver(event, this, method);
   }
 
   protected abstract vtkProp createPipeline();
@@ -63,7 +64,9 @@ public abstract class VTKPipeline {
       return ASCoDTVTKPlugin.getDefault().getVTKService().getInteractor();
     } catch (Exception e) {
       throw new ASCoDTException(VTKPipeline.class.getCanonicalName(),
-          "getInteractor()", e.getLocalizedMessage(), e);
+                                "getInteractor()",
+                                e.getLocalizedMessage(),
+                                e);
     }
   }
 
@@ -74,8 +77,9 @@ public abstract class VTKPipeline {
   abstract public void OnPickEvent(double[] pos);
 
   public void registerForPicking() {
-    ASCoDTVTKPlugin.getDefault().getVTKService()
-        .registerPipelineForPicking(this);
+    ASCoDTVTKPlugin.getDefault()
+                   .getVTKService()
+                   .registerPipelineForPicking(this);
   }
 
   public void repaint() {
@@ -84,7 +88,7 @@ public abstract class VTKPipeline {
 
   /**
    * controls the visibility of the pipeline
-   *
+   * 
    * @param visibility
    */
   public void setVisiblity(boolean visibility) {
@@ -99,7 +103,8 @@ public abstract class VTKPipeline {
   }
 
   public void unregisterForPicking() {
-    ASCoDTVTKPlugin.getDefault().getVTKService()
-        .unregisterPipelineForPicking(this);
+    ASCoDTVTKPlugin.getDefault()
+                   .getVTKService()
+                   .unregisterPipelineForPicking(this);
   }
 }

@@ -23,6 +23,5 @@ public interface Project {
    * 
    * @param classpathEntries
    */
-  void addClasspathEntries(Set<IClasspathEntry> classpathEntries)
-      throws ASCoDTException;
+  void addClasspathEntries(Set<IClasspathEntry> classpathEntries) throws ASCoDTException;
 }

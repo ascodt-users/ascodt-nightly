@@ -40,6 +40,14 @@ public class BJavaImplementation extends BAbstractJavaNativeImplementation {
     super.destroy();
   }
 
+
+
+@Override
+public void barParallel() {
+	// TODO Auto-generated method stub
+	
+}
+
 }
  
 

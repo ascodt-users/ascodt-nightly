@@ -1,8 +1,8 @@
 SET(CPP_FILES
-     ../../components/java/__FULLY_QUALIFIED_COMPONENT_PATH__AbstractImplementation.cpp
+     ../../components/c++/__FULLY_QUALIFIED_COMPONENT_PATH__AbstractImplementation.cpp
      ../../src/__FULLY_QUALIFIED_COMPONENT_PATH__Implementation.cpp
-     ../../components/java/__FULLY_QUALIFIED_COMPONENT_PATH__C2CxxProxy.cpp 
-     
+     ../../components/c++/__FULLY_QUALIFIED_COMPONENT_PATH__C2CxxProxy.cpp 
+     ../../components/c++/tinyxml2.cpp
 )
 
 -- INSERT HERE --

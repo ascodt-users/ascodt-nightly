@@ -59,12 +59,14 @@ public class SIDLAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
    * @throws BadLocationException
    *           in case the line numbers are invalid in the document
    */
-  protected int findMatchingOpenBracket(IDocument document, int line, int end,
-      int closingBracketIncrease) throws BadLocationException {
+  protected int findMatchingOpenBracket(IDocument document,
+                                        int line,
+                                        int end,
+                                        int closingBracketIncrease) throws BadLocationException {
 
     int start = document.getLineOffset(line);
-    int brackcount = getBracketCount(document, start, end, false) -
-        closingBracketIncrease;
+    int brackcount =
+        getBracketCount(document, start, end, false) - closingBracketIncrease;
 
     // sum up the brackets counts of each line (closing brackets count negative,
     // opening positive) until we find a line the brings the count to zero
@@ -97,8 +99,10 @@ public class SIDLAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
    * @throws BadLocationException
    *           in case the positions are invalid in the document
    */
-  private int getBracketCount(IDocument document, int start, int end,
-      boolean ignoreCloseBrackets) throws BadLocationException {
+  private int getBracketCount(IDocument document,
+                              int start,
+                              int end,
+                              boolean ignoreCloseBrackets) throws BadLocationException {
 
     int begin = start;
     int bracketcount = 0;
@@ -163,8 +167,7 @@ public class SIDLAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
    *           in case <code>position</code> and <code>end</code> are invalid in
    *           the document
    */
-  private int getCommentEnd(IDocument document, int position, int end)
-      throws BadLocationException {
+  private int getCommentEnd(IDocument document, int position, int end) throws BadLocationException {
     int currentPosition = position;
     while (currentPosition < end) {
       char curr = document.getChar(currentPosition);
@@ -189,8 +192,7 @@ public class SIDLAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
    * @throws BadLocationException
    *           in case <code>line</code> is invalid in the document
    */
-  protected String getIndentOfLine(IDocument document, int line)
-      throws BadLocationException {
+  protected String getIndentOfLine(IDocument document, int line) throws BadLocationException {
     if (line > -1) {
       int start = document.getLineOffset(line);
       int end = start + document.getLineLength(line) - 1;
@@ -216,8 +218,10 @@ public class SIDLAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
    * @throws BadLocationException
    *           in case <code>position</code> is invalid in the document
    */
-  private int getStringEnd(IDocument document, int position, int end,
-      char character) throws BadLocationException {
+  private int getStringEnd(IDocument document,
+                           int position,
+                           int end,
+                           char character) throws BadLocationException {
     int currentPosition = position;
     while (currentPosition < end) {
       char currentCharacter = document.getChar(currentPosition);
@@ -242,7 +246,7 @@ public class SIDLAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
    *          - the command being performed
    */
   protected void smartIndentAfterNewLine(IDocument document,
-      DocumentCommand command) {
+                                         DocumentCommand command) {
 
     int docLength = document.getLength();
     if (command.offset == -1 || docLength == 0) {
@@ -255,7 +259,8 @@ public class SIDLAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
 
       StringBuffer buf = new StringBuffer(command.text);
       if (command.offset < docLength && document.getChar(command.offset) == '}') {
-        int indLine = findMatchingOpenBracket(document, line, command.offset, 0);
+        int indLine =
+            findMatchingOpenBracket(document, line, command.offset, 0);
         if (indLine == -1) {
           indLine = line;
         }
@@ -285,14 +290,16 @@ public class SIDLAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
    *          - the command being performed
    */
   protected void smartInsertAfterBracket(IDocument document,
-      DocumentCommand command) {
+                                         DocumentCommand command) {
     if (command.offset == -1 || document.getLength() == 0) {
       return;
     }
 
     try {
-      int p = command.offset == document.getLength() ? command.offset - 1
-          : command.offset;
+      int p =
+          command.offset == document.getLength()
+                                                ? command.offset - 1
+                                                : command.offset;
       int line = document.getLineOfOffset(p);
       int start = document.getLineOffset(line);
       int whiteend = findEndOfWhiteSpace(document, start, command.offset);
@@ -302,11 +309,12 @@ public class SIDLAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
       if (whiteend == command.offset) {
         // evaluate the line with the opening bracket that matches out closing
         // bracket
-        int indLine = findMatchingOpenBracket(document, line, command.offset, 1);
+        int indLine =
+            findMatchingOpenBracket(document, line, command.offset, 1);
         if (indLine != -1 && indLine != line) {
           // take the indent of the found line
-          StringBuffer replaceText = new StringBuffer(getIndentOfLine(document,
-              indLine));
+          StringBuffer replaceText =
+              new StringBuffer(getIndentOfLine(document, indLine));
           // add the rest of the current line including the just added close
           // bracket
           replaceText.append(document.get(whiteend, command.offset - whiteend));

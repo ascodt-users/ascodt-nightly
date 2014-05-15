@@ -99,8 +99,7 @@ public class AnalysisAdapter implements Analysis {
   }
 
   @Override
-  public void caseAEnumDeclarationPackageElement(
-      AEnumDeclarationPackageElement node) {
+  public void caseAEnumDeclarationPackageElement(AEnumDeclarationPackageElement node) {
     defaultCase(node);
   }
 
@@ -130,8 +129,7 @@ public class AnalysisAdapter implements Analysis {
   }
 
   @Override
-  public void caseAParameterArrayInEnumParameter(
-      AParameterArrayInEnumParameter node) {
+  public void caseAParameterArrayInEnumParameter(AParameterArrayInEnumParameter node) {
     defaultCase(node);
   }
 
@@ -141,8 +139,7 @@ public class AnalysisAdapter implements Analysis {
   }
 
   @Override
-  public void caseAParameterArrayOutEnumParameter(
-      AParameterArrayOutEnumParameter node) {
+  public void caseAParameterArrayOutEnumParameter(AParameterArrayOutEnumParameter node) {
     defaultCase(node);
   }
 
@@ -172,8 +169,7 @@ public class AnalysisAdapter implements Analysis {
   }
 
   @Override
-  public void caseASpecificEnumeratorEnumerator(
-      ASpecificEnumeratorEnumerator node) {
+  public void caseASpecificEnumeratorEnumerator(ASpecificEnumeratorEnumerator node) {
     defaultCase(node);
   }
 

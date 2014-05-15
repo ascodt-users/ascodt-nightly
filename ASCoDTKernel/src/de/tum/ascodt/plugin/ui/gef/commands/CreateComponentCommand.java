@@ -25,15 +25,17 @@ public class CreateComponentCommand extends Command {
   private Rectangle _bounds;
   private CreateRequest _request;
 
-  public CreateComponentCommand(Component componentGefModel, Diagram parent,
-      Rectangle bounds) {
+  public CreateComponentCommand(Component componentGefModel,
+                                Diagram parent,
+                                Rectangle bounds) {
     _component = componentGefModel;
     _parent = parent;
     _bounds = bounds;
   }
 
-  public CreateComponentCommand(CreateRequest request, Diagram parent,
-      Rectangle bounds) {
+  public CreateComponentCommand(CreateRequest request,
+                                Diagram parent,
+                                Rectangle bounds) {
     _request = request;
     _parent = parent;
     _bounds = bounds;

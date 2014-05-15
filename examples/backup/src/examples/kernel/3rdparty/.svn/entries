@@ -1,0 +1,31 @@
+10
+
+dir
+4
+svn+ssh://atanasoa@atsccs55.informatik.tu-muenchen.de/home_local/repositories/svn/lb_ns_eof/trunk/src/3rdparty
+svn+ssh://atanasoa@atsccs55.informatik.tu-muenchen.de/home_local/repositories/svn/lb_ns_eof
+
+
+
+2014-01-27T15:30:31.013713Z
+1
+neumanph
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+a841ff1d-8845-4ecf-b86e-713482ab9f6b
+
+tinyxml2
+dir
+

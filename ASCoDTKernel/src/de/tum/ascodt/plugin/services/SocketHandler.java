@@ -6,7 +6,7 @@ import java.nio.channels.CompletionHandler;
 
 
 public class SocketHandler implements
-    CompletionHandler<AsynchronousSocketChannel, Object> {
+                          CompletionHandler<AsynchronousSocketChannel, Object> {
   private AsynchronousSocketChannel _socketChannel;
 
   @Override

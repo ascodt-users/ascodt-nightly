@@ -85,8 +85,8 @@ public class NewProjectWizard extends Wizard implements INewWizard {
    */
   @Override
   public boolean performFinish() {
-    de.tum.ascodt.plugin.utils.tracing.Trace trace = new de.tum.ascodt.plugin.utils.tracing.Trace(
-        getClass().getName());
+    de.tum.ascodt.plugin.utils.tracing.Trace trace =
+        new de.tum.ascodt.plugin.utils.tracing.Trace(getClass().getName());
     trace.in("performFinish()");
 
     try {
@@ -100,8 +100,9 @@ public class NewProjectWizard extends Wizard implements INewWizard {
       IWorkbench workbench = PlatformUI.getWorkbench();
       IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
       IWorkbenchPage page = window.getActivePage();
-      IPerspectiveDescriptor perspective = workbench.getPerspectiveRegistry()
-          .findPerspectiveWithId(ASCoDTPerspective.ID);
+      IPerspectiveDescriptor perspective =
+          workbench.getPerspectiveRegistry()
+                   .findPerspectiveWithId(ASCoDTPerspective.ID);
       page.setPerspective(perspective);
     } catch (CoreException e) {
       ErrorWriterDevice.getInstance().println(e);

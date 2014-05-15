@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class TargetParameters {
   public static TargetParameters createRemoteSocketParameters(String host,
-      int port) {
+                                                              int port) {
     TargetParameters parameters = new TargetParameters();
     parameters._stringArgs.put("host", host);
     parameters._intArgs.put("port", port);

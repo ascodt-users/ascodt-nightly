@@ -81,13 +81,14 @@ public class SIDLPartitionScanner extends RuleBasedPartitionScanner {
     }
   }
 
-  public final static String SIDL_MULTILINE_COMMENT = "__sidl_multiline_comment";
+  public final static String SIDL_MULTILINE_COMMENT =
+      "__sidl_multiline_comment";
   public final static String SIDL_DOC = "__sidl_doc";
 
   public final static String SIDL_LINE_COMMENT = "__sidl_line_comment";
 
-  public final static String[] SIDL_PARTITION_TYPES = new String[] {
-    SIDL_LINE_COMMENT, SIDL_MULTILINE_COMMENT, SIDL_DOC};
+  public final static String[] SIDL_PARTITION_TYPES =
+      new String[] {SIDL_LINE_COMMENT, SIDL_MULTILINE_COMMENT, SIDL_DOC};
 
   /**
    * Creates the partitioner and sets up the appropriate rules.

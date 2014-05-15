@@ -100,8 +100,9 @@ public class NewProjectWizardPage extends WizardPage {
    * @since 3.4
    */
   @Deprecated
-  public NewProjectWizardPage(String pageName, IStructuredSelection selection,
-      String[] workingSetTypes) {
+  public NewProjectWizardPage(String pageName,
+                              IStructuredSelection selection,
+                              String[] workingSetTypes) {
     this(pageName);
   }
 
@@ -115,15 +116,16 @@ public class NewProjectWizardPage extends WizardPage {
 
     initializeDialogUnits(parent);
 
-    PlatformUI.getWorkbench().getHelpSystem()
-        .setHelp(composite, IIDEHelpContextIds.NEW_PROJECT_WIZARD_PAGE);
+    PlatformUI.getWorkbench()
+              .getHelpSystem()
+              .setHelp(composite, IIDEHelpContextIds.NEW_PROJECT_WIZARD_PAGE);
 
     composite.setLayout(new GridLayout());
     composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
     createProjectNameGroup(composite);
-    locationArea = new ProjectContentsLocationArea(getErrorReporter(),
-        composite);
+    locationArea =
+        new ProjectContentsLocationArea(getErrorReporter(), composite);
     if (initialProjectFieldValue != null) {
       locationArea.updateProjectName(initialProjectFieldValue);
     }
@@ -155,8 +157,7 @@ public class NewProjectWizardPage extends WizardPage {
 
     // new project label
     Label projectLabel = new Label(projectGroup, SWT.NONE);
-    projectLabel
-        .setText(IDEWorkbenchMessages.WizardNewProjectCreationPage_nameLabel);
+    projectLabel.setText(IDEWorkbenchMessages.WizardNewProjectCreationPage_nameLabel);
     projectLabel.setFont(parent.getFont());
 
     // new project name entry field
@@ -190,12 +191,13 @@ public class NewProjectWizardPage extends WizardPage {
    * @since 3.4
    */
   public WorkingSetGroup createWorkingSetGroup(Composite composite,
-      IStructuredSelection selection, String[] supportedWorkingSetTypes) {
+                                               IStructuredSelection selection,
+                                               String[] supportedWorkingSetTypes) {
     if (workingSetGroup != null) {
       return workingSetGroup;
     }
-    workingSetGroup = new WorkingSetGroup(composite, selection,
-        supportedWorkingSetTypes);
+    workingSetGroup =
+        new WorkingSetGroup(composite, selection, supportedWorkingSetTypes);
     return workingSetGroup;
   }
 
@@ -268,8 +270,9 @@ public class NewProjectWizardPage extends WizardPage {
    * @return the new project resource handle
    */
   public IProject getProjectHandle() {
-    return ResourcesPlugin.getWorkspace().getRoot()
-        .getProject(getProjectName());
+    return ResourcesPlugin.getWorkspace()
+                          .getRoot()
+                          .getProject(getProjectName());
   }
 
   /**
@@ -309,8 +312,9 @@ public class NewProjectWizardPage extends WizardPage {
    * @since 3.4
    */
   public IWorkingSet[] getSelectedWorkingSets() {
-    return workingSetGroup == null ? new IWorkingSet[0] : workingSetGroup
-        .getSelectedWorkingSets();
+    return workingSetGroup == null
+                                  ? new IWorkingSet[0]
+                                  : workingSetGroup.getSelectedWorkingSets();
   }
 
   /**
@@ -384,8 +388,8 @@ public class NewProjectWizardPage extends WizardPage {
       return false;
     }
 
-    IStatus nameStatus = workspace.validateName(projectFieldContents,
-        IResource.PROJECT);
+    IStatus nameStatus =
+        workspace.validateName(projectFieldContents, IResource.PROJECT);
     if (!nameStatus.isOK()) {
       setErrorMessage(nameStatus.getMessage());
       return false;
@@ -397,8 +401,10 @@ public class NewProjectWizardPage extends WizardPage {
       return false;
     }
 
-    IProject project = ResourcesPlugin.getWorkspace().getRoot()
-        .getProject(getProjectNameFieldValue());
+    IProject project =
+        ResourcesPlugin.getWorkspace()
+                       .getRoot()
+                       .getProject(getProjectNameFieldValue());
     locationArea.setExistingProject(project);
 
     String validLocationMessage = locationArea.checkValidLocation();

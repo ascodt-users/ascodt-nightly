@@ -242,8 +242,8 @@ public class Lexer {
 
   static {
     try {
-      DataInputStream s = new DataInputStream(new BufferedInputStream(
-          Lexer.class.getResourceAsStream("lexer.dat")));
+      DataInputStream s =
+          new DataInputStream(new BufferedInputStream(Lexer.class.getResourceAsStream("lexer.dat")));
 
       // read gotoTable
       int length = s.readInt();
@@ -275,8 +275,7 @@ public class Lexer {
 
       s.close();
     } catch (Exception e) {
-      throw new RuntimeException(
-          "The file \"lexer.dat\" is either missing or corrupted.");
+      throw new RuntimeException("The file \"lexer.dat\" is either missing or corrupted.");
     }
   }
 
@@ -612,8 +611,8 @@ public class Lexer {
           }
           case 27: {
             @SuppressWarnings("hiding")
-            Token token = new27(getText(accept_length), start_line + 1,
-                start_pos + 1);
+            Token token =
+                new27(getText(accept_length), start_line + 1, start_pos + 1);
             pushBack(accept_length);
             pos = accept_pos;
             line = accept_line;
@@ -621,8 +620,8 @@ public class Lexer {
           }
           case 28: {
             @SuppressWarnings("hiding")
-            Token token = new28(getText(accept_length), start_line + 1,
-                start_pos + 1);
+            Token token =
+                new28(getText(accept_length), start_line + 1, start_pos + 1);
             pushBack(accept_length);
             pos = accept_pos;
             line = accept_line;
@@ -630,8 +629,8 @@ public class Lexer {
           }
           case 29: {
             @SuppressWarnings("hiding")
-            Token token = new29(getText(accept_length), start_line + 1,
-                start_pos + 1);
+            Token token =
+                new29(getText(accept_length), start_line + 1, start_pos + 1);
             pushBack(accept_length);
             pos = accept_pos;
             line = accept_line;
@@ -639,8 +638,8 @@ public class Lexer {
           }
           case 30: {
             @SuppressWarnings("hiding")
-            Token token = new30(getText(accept_length), start_line + 1,
-                start_pos + 1);
+            Token token =
+                new30(getText(accept_length), start_line + 1, start_pos + 1);
             pushBack(accept_length);
             pos = accept_pos;
             line = accept_line;
@@ -648,8 +647,8 @@ public class Lexer {
           }
           case 31: {
             @SuppressWarnings("hiding")
-            Token token = new31(getText(accept_length), start_line + 1,
-                start_pos + 1);
+            Token token =
+                new31(getText(accept_length), start_line + 1, start_pos + 1);
             pushBack(accept_length);
             pos = accept_pos;
             line = accept_line;
@@ -657,8 +656,8 @@ public class Lexer {
           }
           case 32: {
             @SuppressWarnings("hiding")
-            Token token = new32(getText(accept_length), start_line + 1,
-                start_pos + 1);
+            Token token =
+                new32(getText(accept_length), start_line + 1, start_pos + 1);
             pushBack(accept_length);
             pos = accept_pos;
             line = accept_line;
@@ -666,8 +665,8 @@ public class Lexer {
           }
           case 33: {
             @SuppressWarnings("hiding")
-            Token token = new33(getText(accept_length), start_line + 1,
-                start_pos + 1);
+            Token token =
+                new33(getText(accept_length), start_line + 1, start_pos + 1);
             pushBack(accept_length);
             pos = accept_pos;
             line = accept_line;
@@ -675,8 +674,8 @@ public class Lexer {
           }
           case 34: {
             @SuppressWarnings("hiding")
-            Token token = new34(getText(accept_length), start_line + 1,
-                start_pos + 1);
+            Token token =
+                new34(getText(accept_length), start_line + 1, start_pos + 1);
             pushBack(accept_length);
             pos = accept_pos;
             line = accept_line;
@@ -685,8 +684,12 @@ public class Lexer {
           }
         } else {
           if (text.length() > 0) {
-            throw new LexerException("[" + (start_line + 1) + "," +
-                (start_pos + 1) + "]" + " Unknown token: " + text);
+            throw new LexerException("[" + (start_line + 1) +
+                                     "," +
+                                     (start_pos + 1) +
+                                     "]" +
+                                     " Unknown token: " +
+                                     text);
           }
 
           @SuppressWarnings("hiding")
@@ -698,193 +701,185 @@ public class Lexer {
   }
 
   Token new0(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+             @SuppressWarnings("hiding") int pos) {
     return new TLAngleBracket(line, pos);
   }
 
   Token new1(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+             @SuppressWarnings("hiding") int pos) {
     return new TRAngleBracket(line, pos);
   }
 
   Token new10(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TIntToken(line, pos);
   }
 
   Token new11(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TDoubleToken(line, pos);
   }
 
   Token new12(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TBoolToken(line, pos);
   }
 
   Token new13(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TOpaqueToken(line, pos);
   }
 
   Token new14(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TStringToken(line, pos);
   }
 
   Token new15(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TArrayToken(line, pos);
   }
 
   Token new16(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TInToken(line, pos);
   }
 
   Token new17(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TInoutToken(line, pos);
   }
 
   Token new18(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TPackageToken(line, pos);
   }
 
   Token new19(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TClassToken(line, pos);
   }
 
   Token new2(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+             @SuppressWarnings("hiding") int pos) {
     return new TComma(line, pos);
   }
 
   Token new20(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TTargetToken(line, pos);
   }
 
   Token new21(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TInterfaceToken(line, pos);
   }
 
   Token new22(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TExtendsToken(line, pos);
   }
 
   Token new23(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TImplementsToken(line, pos);
   }
 
   Token new24(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TUsesToken(line, pos);
   }
 
   Token new25(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TAsToken(line, pos);
   }
 
   Token new26(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+              @SuppressWarnings("hiding") int pos) {
     return new TEnumToken(line, pos);
   }
 
-  Token
-      new27(@SuppressWarnings("hiding") String text,
-          @SuppressWarnings("hiding") int line,
-          @SuppressWarnings("hiding") int pos) {
+  Token new27(@SuppressWarnings("hiding") String text,
+              @SuppressWarnings("hiding") int line,
+              @SuppressWarnings("hiding") int pos) {
     return new TBlank(text, line, pos);
   }
 
-  Token
-      new28(@SuppressWarnings("hiding") String text,
-          @SuppressWarnings("hiding") int line,
-          @SuppressWarnings("hiding") int pos) {
+  Token new28(@SuppressWarnings("hiding") String text,
+              @SuppressWarnings("hiding") int line,
+              @SuppressWarnings("hiding") int pos) {
     return new TDecimalConstant(text, line, pos);
   }
 
-  Token
-      new29(@SuppressWarnings("hiding") String text,
-          @SuppressWarnings("hiding") int line,
-          @SuppressWarnings("hiding") int pos) {
+  Token new29(@SuppressWarnings("hiding") String text,
+              @SuppressWarnings("hiding") int line,
+              @SuppressWarnings("hiding") int pos) {
     return new TSignedDecimalNumber(text, line, pos);
   }
 
   Token new3(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+             @SuppressWarnings("hiding") int pos) {
     return new TDot(line, pos);
   }
 
-  Token
-      new30(@SuppressWarnings("hiding") String text,
-          @SuppressWarnings("hiding") int line,
-          @SuppressWarnings("hiding") int pos) {
+  Token new30(@SuppressWarnings("hiding") String text,
+              @SuppressWarnings("hiding") int line,
+              @SuppressWarnings("hiding") int pos) {
     return new TIdentifier(text, line, pos);
   }
 
-  Token
-      new31(@SuppressWarnings("hiding") String text,
-          @SuppressWarnings("hiding") int line,
-          @SuppressWarnings("hiding") int pos) {
+  Token new31(@SuppressWarnings("hiding") String text,
+              @SuppressWarnings("hiding") int line,
+              @SuppressWarnings("hiding") int pos) {
     return new TTraditionalComment(text, line, pos);
   }
 
-  Token
-      new32(@SuppressWarnings("hiding") String text,
-          @SuppressWarnings("hiding") int line,
-          @SuppressWarnings("hiding") int pos) {
+  Token new32(@SuppressWarnings("hiding") String text,
+              @SuppressWarnings("hiding") int line,
+              @SuppressWarnings("hiding") int pos) {
     return new TDocumentationComment(text, line, pos);
   }
 
-  Token
-      new33(@SuppressWarnings("hiding") String text,
-          @SuppressWarnings("hiding") int line,
-          @SuppressWarnings("hiding") int pos) {
+  Token new33(@SuppressWarnings("hiding") String text,
+              @SuppressWarnings("hiding") int line,
+              @SuppressWarnings("hiding") int pos) {
     return new TEndOfLineComment(text, line, pos);
   }
 
-  Token
-      new34(@SuppressWarnings("hiding") String text,
-          @SuppressWarnings("hiding") int line,
-          @SuppressWarnings("hiding") int pos) {
+  Token new34(@SuppressWarnings("hiding") String text,
+              @SuppressWarnings("hiding") int line,
+              @SuppressWarnings("hiding") int pos) {
     return new TConstant(text, line, pos);
   }
 
   Token new4(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+             @SuppressWarnings("hiding") int pos) {
     return new TSemicolon(line, pos);
   }
 
   Token new5(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+             @SuppressWarnings("hiding") int pos) {
     return new TLBrace(line, pos);
   }
 
   Token new6(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+             @SuppressWarnings("hiding") int pos) {
     return new TRBrace(line, pos);
   }
 
   Token new7(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+             @SuppressWarnings("hiding") int pos) {
     return new TLBracket(line, pos);
   }
 
   Token new8(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+             @SuppressWarnings("hiding") int pos) {
     return new TRBracket(line, pos);
   }
 
   Token new9(@SuppressWarnings("hiding") int line,
-      @SuppressWarnings("hiding") int pos) {
+             @SuppressWarnings("hiding") int pos) {
     return new TEquals(line, pos);
   }
 
@@ -932,8 +927,7 @@ public class Lexer {
     }
   }
 
-  protected void unread(@SuppressWarnings("hiding") Token token)
-      throws IOException {
+  protected void unread(@SuppressWarnings("hiding") Token token) throws IOException {
     @SuppressWarnings("hiding")
     String text = token.getText();
     int length = text.length();

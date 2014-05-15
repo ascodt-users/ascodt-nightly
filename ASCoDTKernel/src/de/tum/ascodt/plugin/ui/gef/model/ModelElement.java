@@ -39,11 +39,12 @@ public abstract class ModelElement implements IPropertySource, Serializable {
   private static final long serialVersionUID = 1L;
 
   /** An empty property descriptor. */
-  private static final IPropertyDescriptor[] EMPTY_ARRAY = new IPropertyDescriptor[0];
+  private static final IPropertyDescriptor[] EMPTY_ARRAY =
+      new IPropertyDescriptor[0];
 
   /** Delegate used to implemenent property-change-support. */
-  private transient PropertyChangeSupport pcsDelegate = new PropertyChangeSupport(
-      this);
+  private transient PropertyChangeSupport pcsDelegate =
+      new PropertyChangeSupport(this);
 
   protected ArrayList<Geometry> children = new ArrayList<Geometry>();
 
@@ -72,8 +73,9 @@ public abstract class ModelElement implements IPropertySource, Serializable {
    * @param newValue
    *          the new value of this property
    */
-  protected void firePropertyChange(String property, Object oldValue,
-      Object newValue) {
+  protected void firePropertyChange(String property,
+                                    Object oldValue,
+                                    Object newValue) {
     if (pcsDelegate.hasListeners(property)) {
       pcsDelegate.firePropertyChange(property, oldValue, newValue);
     }
@@ -140,7 +142,7 @@ public abstract class ModelElement implements IPropertySource, Serializable {
    * @see java.io.Serializable
    */
   private void readObject(ObjectInputStream in) throws IOException,
-      ClassNotFoundException {
+                                               ClassNotFoundException {
     in.defaultReadObject();
     pcsDelegate = new PropertyChangeSupport(this);
   }
@@ -151,8 +153,7 @@ public abstract class ModelElement implements IPropertySource, Serializable {
    * @param l
    *          a PropertyChangeListener instance
    */
-  public synchronized void
-      removePropertyChangeListener(PropertyChangeListener l) {
+  public synchronized void removePropertyChangeListener(PropertyChangeListener l) {
     if (l != null) {
       pcsDelegate.removePropertyChangeListener(l);
     }

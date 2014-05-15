@@ -1,16 +1,18 @@
 package de.tum.ascodt.utils;
 
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.eclipse.core.runtime.Assert;
 
 import de.tum.ascodt.plugin.ASCoDTKernel;
+import de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice;
 import de.tum.ascodt.plugin.utils.tracing.Trace;
 import de.tum.ascodt.resources.ResourceManager;
 import de.tum.ascodt.utils.exceptions.ASCoDTException;
@@ -100,8 +102,8 @@ public class TemplateFile {
     return result;
   }
 
-  private java.io.OutputStreamWriter _destinationFileWriter;
-  private java.io.BufferedReader _templateFileReader;
+  private BufferedWriter _writer;
+  private BufferedReader _reader;
 
   private boolean _hasToCloseOutputStream;
 
@@ -137,10 +139,12 @@ public class TemplateFile {
   private boolean _overwrite;
   private boolean _readable;
 
-  public TemplateFile(InputStream templateStream, URL destinationFile,
-      String[] namespace, LanguageConfiguration languageConfiguration,
-      boolean overwrite) throws ASCoDTException {
-    _trace.in("TemplateFile(...)", destinationFile.toString(), namespace);
+  public TemplateFile(InputStream sourceStream,
+                      Path targetFilePath,
+                      String[] namespace,
+                      LanguageConfiguration languageConfiguration,
+                      boolean overwrite) {
+    _trace.in("TemplateFile(...)", targetFilePath.toString(), namespace);
 
     _mapping = new java.util.HashMap<String, String>();
     _namespace = namespace;
@@ -150,14 +154,14 @@ public class TemplateFile {
     _parentTemplateFile = null;
     _overwrite = overwrite;
     _readable = true;
-    openTemplateStream(templateStream);
-    openOutputStream(destinationFile);
+    openTemplateStream(sourceStream);
+    openOutputStream(targetFilePath);
     _trace.out("TemplateFile(...)");
   }
 
   /**
    * 
-   * @param templateFile
+   * @param sourceFilePath
    * @param overwriteExistingFile
    * @param namespace
    * @param namespaceSeparator
@@ -165,14 +169,13 @@ public class TemplateFile {
    * @param namespaceIdentifier
    *          For C++ use "namespace", for SIDL use "
    */
-  public TemplateFile(String templateFile, String destinationFile,
-      String[] namespace, LanguageConfiguration languageConfiguration,
-      boolean overwrite) throws ASCoDTException {
+  public TemplateFile(Path sourceFilePath,
+                      Path targetFilePath,
+                      String[] namespace,
+                      LanguageConfiguration languageConfiguration,
+                      boolean overwrite) {
     try {
-      _trace.in("TemplateFile(...)", templateFile, destinationFile, namespace);
-
-      destinationFile = destinationFile.replaceAll("\\\\", "/");
-      templateFile = templateFile.replaceAll("\\\\", "/");
+      _trace.in("TemplateFile(...)");
 
       _mapping = new java.util.HashMap<String, String>();
       _conditions = new java.util.HashSet<String>();
@@ -183,73 +186,40 @@ public class TemplateFile {
       _parentTemplateFile = null;
       _overwrite = overwrite;
       _readable = true;
-      openTemplateStream(ResourceManager.getResourceAsStream(templateFile,
-          ASCoDTKernel.ID));
-      openOutputStream(new URL(destinationFile));
+      openTemplateStream(ResourceManager.getResourceAsStream(sourceFilePath,
+                                                             ASCoDTKernel.ID));
+      openOutputStream(targetFilePath);
       _trace.out("TemplateFile(...)");
-    } catch (MalformedURLException e) {
-      throw new ASCoDTException(getClass().getName(), "TemplateFile(...)",
-          "invalid URL", e);
-    } catch (IOException e) {
-      throw new ASCoDTException(getClass().getName(), "TemplateFile(...)",
-          "invalid template stream", e);
+    } catch (Exception e) {
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
-
-  //
-  // /**
-  // * Kind of a copy constructor. Takes another template file and inserts data
-  // * into it.
-  // *
-  // * @param copy
-  // */
-  // public TemplateFile(
-  // TemplateFile copy,
-  // InputStream templateStream
-  // ) throws ASCoDTException {
-  // _trace.in( "TemplateFile(...)");
-  //
-  // openTemplateStream( templateStream );
-  //
-  // _destinationFileWriter = copy._destinationFileWriter;
-  // _mapping = new java.util.HashMap<String, String>();
-  // _namespace = copy._namespace;
-  // _languageConfiguration = copy._languageConfiguration;
-  //
-  // _hasToCloseOutputStream = false;
-  // _parentTemplateFile = copy;
-  // _overwrite=copy._overwrite;
-  // _readable=copy._readable;
-  // _trace.out( "TemplateFile(...)" );
-  // }
 
   /**
    * Kind of a copy constructor. Takes another template file and inserts data
    * into it.
    * 
-   * @param copy
+   * @param other
    */
-  public TemplateFile(TemplateFile copy, String templateFile)
-      throws ASCoDTException {
+  public TemplateFile(TemplateFile other, Path sourceFilePath) throws ASCoDTException {
     _trace.in("TemplateFile(...)");
 
     try {
-      openTemplateStream(ResourceManager.getResourceAsStream(templateFile,
-          ASCoDTKernel.ID));
+      openTemplateStream(ResourceManager.getResourceAsStream(sourceFilePath,
+                                                             ASCoDTKernel.ID));
     } catch (Exception e) {
-      throw new ASCoDTException(getClass().getName(), "TemplateFile(...)",
-          "cannot open stream of file ", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
-    _destinationFileWriter = copy._destinationFileWriter;
+    _writer = other._writer;
     _mapping = new java.util.HashMap<String, String>();
-    _namespace = copy._namespace;
-    _languageConfiguration = copy._languageConfiguration;
+    _namespace = other._namespace;
+    _languageConfiguration = other._languageConfiguration;
 
     _hasToCloseOutputStream = false;
-    _parentTemplateFile = copy;
-    _overwrite = copy._overwrite;
-    _readable = copy._readable;
+    _parentTemplateFile = other;
+    _overwrite = other._overwrite;
+    _readable = other._readable;
     _trace.out("TemplateFile(...)");
   }
 
@@ -279,7 +249,7 @@ public class TemplateFile {
    * 
    * @throws ASCoDTException
    */
-  public void close() throws ASCoDTException {
+  public void close() {
     _trace.in("close()");
 
     processTemplateStream();
@@ -288,25 +258,24 @@ public class TemplateFile {
     _trace.out("close()");
   }
 
-  private void closeStreams() throws ASCoDTException {
+  private void closeStreams() {
     try {
       if (_hasToCloseOutputStream) {
-        if (_destinationFileWriter != null) {
-          _destinationFileWriter.flush();
-          _destinationFileWriter.close();
+        if (_writer != null) {
+          _writer.flush();
+          _writer.close();
         }
       }
-      _templateFileReader.close();
+      _reader.close();
     } catch (IOException e) {
-      throw new ASCoDTException(getClass().getName(), "closeStreams(URL)",
-          "write file failed", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
   /**
    * You always have to call close() after open().
    */
-  public void open() throws ASCoDTException {
+  public void open() {
     _trace.in("open()");
 
     processTemplateStream();
@@ -324,61 +293,53 @@ public class TemplateFile {
    * @param file
    * @throws ASCoDTException
    */
-  private void openOutputStream(URL file) throws ASCoDTException {
-    _trace.in("openOutputStream(URL)", file.toString());
+  private void openOutputStream(Path filePath) {
+    _trace.in("openOutputStream()");
 
     try {
-      String pathOfFile = file.getPath().toString();
-      String dirPath = pathOfFile.substring(0, pathOfFile.lastIndexOf("/"));
-      File path = new File(pathOfFile);
-      File dir = new File(dirPath);
-      if (!_overwrite && !path.exists() || _overwrite) {
-        if (!dir.exists()) {
-          _trace.debug("openOutputStream(URL)", "path of " + path.toString() +
-              " does not exist. create");
-          dir.mkdirs();
+      if (!_overwrite && !Files.exists(filePath) || _overwrite) {
+        if (!Files.exists(filePath.getParent())) {
+          _trace.debug("openOutputStream()", "path of " + filePath.getParent()
+                                                                  .toString() +
+                                             " does not exist. create");
+          Files.createDirectories(filePath.getParent());
         } else {
-          _trace.debug("openOutputStream(URL)", "path of " + path.toString() +
-              " already exists");
+          _trace.debug("openOutputStream(URL)",
+                       "path of " + filePath.getParent().toString() +
+                           " already exists");
         }
 
-        _destinationFileWriter = new java.io.OutputStreamWriter(
-            new java.io.FileOutputStream(file.getFile()));
+        _writer = Files.newBufferedWriter(filePath);
       }
     } catch (Exception e) {
-      throw new ASCoDTException(getClass().getName(),
-          "openTemplateStream(URL)", "write file failed for file " +
-              file.getFile(), e);
+      ErrorWriterDevice.getInstance().println(e);
     }
 
-    _trace.out("openOutputStream(URL)");
+    _trace.out("openOutputStream()");
   }
 
-  private void openTemplateStream(InputStream io) throws ASCoDTException {
+  private void openTemplateStream(InputStream stream) {
     try {
-      _templateFileReader = new java.io.BufferedReader(
-          new InputStreamReader(io));
+      _reader = new BufferedReader(new InputStreamReader(stream));
     } catch (Exception e) {
-      throw new ASCoDTException(getClass().getName(),
-          "openTemplateStream(URL)", "open file failed for file ", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
-  private void processTemplateStream() throws ASCoDTException {
+  private void processTemplateStream() {
     try {
-      String text = _templateFileReader.readLine();
+      String text = _reader.readLine();
 
       while (text != null && !text.trim().equals(KeywordInsertHere)) {
         text = replaceKeywords(text);
-        if (_destinationFileWriter != null) {
-          _destinationFileWriter.write(text);
-          _destinationFileWriter.write("\n");
+        if (_writer != null) {
+          _writer.write(text);
+          _writer.write("\n");
         }
-        text = _templateFileReader.readLine();
+        text = _reader.readLine();
       }
     } catch (Exception e) {
-      throw new ASCoDTException(getClass().getName(),
-          "openTemplateStream(URL)", "write file failed", e);
+      ErrorWriterDevice.getInstance().println(e);
     }
   }
 
@@ -412,22 +373,27 @@ public class TemplateFile {
       if (line.contains(KeywordOpenPackage)) {
         if (_languageConfiguration._openNamespaceHierarchically) {
           for (int indent = 0; indent < _namespace.length; indent++) {
-            text = text.replaceFirst(KeywordOpenPackage,
-                _languageConfiguration._openNamespaceIdentifier + " " +
-                    _namespace[indent] + " { \n");
+            text =
+                text.replaceFirst(KeywordOpenPackage,
+                                  _languageConfiguration._openNamespaceIdentifier + " " +
+                                      _namespace[indent] +
+                                      " { \n");
             for (int i = 0; i < indent; i++) {
               text += "  ";
             }
             text = text + KeywordOpenPackage;
           }
         } else {
-          text = text.replaceFirst(KeywordOpenPackage,
-              _languageConfiguration._openNamespaceIdentifier + " " +
-                  _namespace[0] + "__OPEN_PACKAGE__");
+          text =
+              text.replaceFirst(KeywordOpenPackage,
+                                _languageConfiguration._openNamespaceIdentifier + " " +
+                                    _namespace[0] +
+                                    "__OPEN_PACKAGE__");
           for (int i = 1; i < _namespace.length; i++) {
-            text = text.replaceFirst(KeywordOpenPackage,
-                _languageConfiguration._namespaceSeparator + _namespace[i] +
-                    KeywordOpenPackage);
+            text =
+                text.replaceFirst(KeywordOpenPackage,
+                                  _languageConfiguration._namespaceSeparator + _namespace[i] +
+                                      KeywordOpenPackage);
           }
         }
         text = text.replaceFirst(KeywordOpenPackage, "");
@@ -438,24 +404,29 @@ public class TemplateFile {
             for (int i = 0; i < indent; i++) {
               text += "  ";
             }
-            text = text.replaceFirst(KeywordClosePackage, "} \n" +
-                KeywordClosePackage);
+            text =
+                text.replaceFirst(KeywordClosePackage,
+                                  "} \n" + KeywordClosePackage);
           }
           if (indent < _namespace.length) {
             text = text.replaceFirst(KeywordClosePackage, "}");
           }
         } else {
           if (!_languageConfiguration._useCloseIdentifier) {
-            text = text.replaceAll(KeywordClosePackage,
-                _languageConfiguration._closeNamespaceIdentifier);
+            text =
+                text.replaceAll(KeywordClosePackage,
+                                _languageConfiguration._closeNamespaceIdentifier);
           } else {
-            text = text.replaceFirst(KeywordClosePackage,
-                _languageConfiguration._closeNamespaceIdentifier + " " +
-                    _namespace[0] + KeywordClosePackage);
+            text =
+                text.replaceFirst(KeywordClosePackage,
+                                  _languageConfiguration._closeNamespaceIdentifier + " " +
+                                      _namespace[0] +
+                                      KeywordClosePackage);
             for (int i = 1; i < _namespace.length; i++) {
-              text = text.replaceFirst(KeywordClosePackage,
-                  _languageConfiguration._namespaceSeparator + _namespace[i] +
-                      KeywordClosePackage);
+              text =
+                  text.replaceFirst(KeywordClosePackage,
+                                    _languageConfiguration._namespaceSeparator + _namespace[i] +
+                                        KeywordClosePackage);
             }
           }
         }
@@ -471,5 +442,4 @@ public class TemplateFile {
       return text;
     }
   }
-
 }

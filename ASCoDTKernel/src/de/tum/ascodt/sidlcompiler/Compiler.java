@@ -7,8 +7,9 @@ package de.tum.ascodt.sidlcompiler;
 import jargs.gnu.CmdLineParser.IllegalOptionValueException;
 import jargs.gnu.CmdLineParser.UnknownOptionException;
 
-import java.io.File;
 import java.io.FileReader;
+import java.nio.file.Paths;
+import java.util.HashMap;
 
 import de.tum.ascodt.sidlcompiler.backend.CreateComponentsAndInterfaces;
 import de.tum.ascodt.sidlcompiler.backend.CreateGlobalBuildScripts;
@@ -27,9 +28,11 @@ public class Compiler {
    * Full command line arguments.
    */
   private static final String CommandLineParameterInclude = "include";
-  private static final String CommandLineParameterOutputDirectoryForUser = "output-user";
+  private static final String CommandLineParameterOutputDirectoryForUser =
+      "output-user";
 
-  private static final String CommandLineParameterOutputDirectoryForStubs = "output-stubs";
+  private static final String CommandLineParameterOutputDirectoryForStubs =
+      "output-stubs";
   private static final String CommandLineParameterVerbose = "verbose";
   private static final String CommandLineParameterAuthors = "authors";
 
@@ -81,31 +84,39 @@ public class Compiler {
    * prints the actual usage of the compiler
    */
   static void usage() {
-    System.out
-        .println("Usage: java de.tum.in.ascodt.sidl.Compiler [options] inputfile");
+    System.out.println("Usage: java de.tum.in.ascodt.sidl.Compiler [options] inputfile");
     System.out.println("Options: ");
 
-    System.out.println("-" + CommandLineParameterIncludeShort + " <file> | " +
-        "--" + CommandLineParameterInclude + " <file> ");
-    System.out
-        .println("    Read types from a SIDL file, but don't generate code");
+    System.out.println("-" + CommandLineParameterIncludeShort +
+                       " <file> | " +
+                       "--" +
+                       CommandLineParameterInclude +
+                       " <file> ");
+    System.out.println("    Read types from a SIDL file, but don't generate code");
     System.out.println("    for them. Multiple include options are allowed.");
 
     System.out.println("-" + CommandLineParameterOutputDirectoryUserShort +
-        " <dir>  | " + "--" + CommandLineParameterOutputDirectoryForUser +
-        " <dir>");
+                       " <dir>  | " +
+                       "--" +
+                       CommandLineParameterOutputDirectoryForUser +
+                       " <dir>");
     System.out.println("-" + CommandLineParameterOutputDirectoryStubsShort +
-        " <dir>  | " + "--" + CommandLineParameterOutputDirectoryForStubs +
-        " <dir>");
+                       " <dir>  | " +
+                       "--" +
+                       CommandLineParameterOutputDirectoryForStubs +
+                       " <dir>");
     System.out.println("    Set output directory ('.' default).");
 
-    System.out.println("-" + CommandLineParameterAuthorsShort + "        | " +
-        "--" + CommandLineParameterAuthors);
-    System.out
-        .println("    Set authors of component. Multiple authors allowed. ");
+    System.out.println("-" + CommandLineParameterAuthorsShort +
+                       "        | " +
+                       "--" +
+                       CommandLineParameterAuthors);
+    System.out.println("    Set authors of component. Multiple authors allowed. ");
 
-    System.out.println("-" + CommandLineParameterVerboseShort + "        | " +
-        "--" + CommandLineParameterVerbose);
+    System.out.println("-" + CommandLineParameterVerboseShort +
+                       "        | " +
+                       "--" +
+                       CommandLineParameterVerbose);
     System.out.println("    Verbose output.");
 
   }
@@ -137,11 +148,12 @@ public class Compiler {
    * Symbol table of the compile run.
    */
   private de.tum.ascodt.sidlcompiler.symboltable.SymbolTable _symbolTable;
-
+  private HashMap<String, Integer> _functionTable;
   private boolean _isValid;
 
   Compiler() {
     _symbolTable = new de.tum.ascodt.sidlcompiler.symboltable.SymbolTable();
+    _functionTable = new HashMap<String, Integer>();
   }
 
   /**
@@ -152,40 +164,44 @@ public class Compiler {
    *          the start symbol of the sidl file to be parsed
    * @throws Exception
    */
-  private void buildSymbolTable(
-      de.tum.ascodt.sidlcompiler.frontend.node.Start astRootNode,
-      String fileName) {
-    de.tum.ascodt.sidlcompiler.symboltable.BuildSymbolTable adapter = new de.tum.ascodt.sidlcompiler.symboltable.BuildSymbolTable(
-        _symbolTable, fileName);
+  private void buildSymbolTable(de.tum.ascodt.sidlcompiler.frontend.node.Start astRootNode,
+                                String fileName) {
+    de.tum.ascodt.sidlcompiler.symboltable.BuildSymbolTable adapter =
+        new de.tum.ascodt.sidlcompiler.symboltable.BuildSymbolTable(_symbolTable,
+                                                                    fileName);
     astRootNode.apply(adapter);
   }
 
   private void generateBluePrints() throws ASCoDTException {
-    CreateComponentsAndInterfaces interfaces = new CreateComponentsAndInterfaces(
-        _symbolTable);
+    CreateComponentsAndInterfaces interfaces =
+        new CreateComponentsAndInterfaces(_symbolTable, _functionTable);
     try {
-      interfaces.create(new File(_outputDirectoryForStubs).toURI().toURL(),
-          new File(_outputDirectoryForUserImplementation).toURI().toURL(),
-          new File(_outputDirectoryForStubs).toURI().toURL());
+      interfaces.create(Paths.get(_outputDirectoryForStubs),
+                        Paths.get(_outputDirectoryForUserImplementation),
+                        Paths.get(_outputDirectoryForStubs),
+                        Paths.get(_outputDirectoryForStubs));
     } catch (Exception e) {
       _isValid = false;
       throw new ASCoDTException(Compiler.class.getCanonicalName(),
-          "generateBluePrints()", e.getLocalizedMessage(), e);
+                                "generateBluePrints()",
+                                e.getLocalizedMessage(),
+                                e);
     }
 
   }
 
   private void generateBuildScripts() throws ASCoDTException {
-    CreateGlobalBuildScripts buildScripts = new CreateGlobalBuildScripts(
-        _symbolTable);
+    CreateGlobalBuildScripts buildScripts =
+        new CreateGlobalBuildScripts(_symbolTable);
     try {
-      buildScripts.create(new File(_outputDirectoryForStubs).toURI().toURL(),
-          new File(_outputDirectoryForUserImplementation).toURI().toURL(),
-          new File(_outputDirectoryForStubs).toURI().toURL());
+      buildScripts.create(Paths.get(_outputDirectoryForUserImplementation),
+                          Paths.get(_outputDirectoryForStubs));
     } catch (Exception e) {
       _isValid = false;
       throw new ASCoDTException(Compiler.class.getCanonicalName(),
-          "generateBuildScripts()", e.getLocalizedMessage(), e);
+                                "generateBuildScripts()",
+                                e.getLocalizedMessage(),
+                                e);
     }
 
   }
@@ -209,53 +225,60 @@ public class Compiler {
     jargs.gnu.CmdLineParser commandLineParser = new jargs.gnu.CmdLineParser();
     try {
 
-      jargs.gnu.CmdLineParser.Option commandLineOptionInclude = commandLineParser
-          .addStringOption(CommandLineParameterIncludeShort,
-              CommandLineParameterInclude);
-      jargs.gnu.CmdLineParser.Option commandLineOptionOutputUserDir = commandLineParser
-          .addStringOption(CommandLineParameterOutputDirectoryUserShort,
-              CommandLineParameterOutputDirectoryForUser);
-      jargs.gnu.CmdLineParser.Option commandLineOptionOutputStubsDir = commandLineParser
-          .addStringOption(CommandLineParameterOutputDirectoryStubsShort,
-              CommandLineParameterOutputDirectoryForStubs);
+      jargs.gnu.CmdLineParser.Option commandLineOptionInclude =
+          commandLineParser.addStringOption(CommandLineParameterIncludeShort,
+                                            CommandLineParameterInclude);
+      jargs.gnu.CmdLineParser.Option commandLineOptionOutputUserDir =
+          commandLineParser.addStringOption(CommandLineParameterOutputDirectoryUserShort,
+                                            CommandLineParameterOutputDirectoryForUser);
+      jargs.gnu.CmdLineParser.Option commandLineOptionOutputStubsDir =
+          commandLineParser.addStringOption(CommandLineParameterOutputDirectoryStubsShort,
+                                            CommandLineParameterOutputDirectoryForStubs);
 
-      jargs.gnu.CmdLineParser.Option commandLineOptionVerbose = commandLineParser
-          .addBooleanOption(CommandLineParameterVerboseShort,
-              CommandLineParameterVerbose);
+      jargs.gnu.CmdLineParser.Option commandLineOptionVerbose =
+          commandLineParser.addBooleanOption(CommandLineParameterVerboseShort,
+                                             CommandLineParameterVerbose);
 
       commandLineParser.parse(args);
-      _verbose = ((Boolean)commandLineParser.getOptionValue(
-          commandLineOptionVerbose, false)).booleanValue();
-      _outputDirectoryForUserImplementation = (String)commandLineParser
-          .getOptionValue(commandLineOptionOutputUserDir, "./");
-      _outputDirectoryForStubs = (String)commandLineParser.getOptionValue(
-          commandLineOptionOutputStubsDir, "./");
+      _verbose =
+          ((Boolean)commandLineParser.getOptionValue(commandLineOptionVerbose,
+                                                     false)).booleanValue();
+      _outputDirectoryForUserImplementation =
+          (String)commandLineParser.getOptionValue(commandLineOptionOutputUserDir,
+                                                   "./");
+      _outputDirectoryForStubs =
+          (String)commandLineParser.getOptionValue(commandLineOptionOutputStubsDir,
+                                                   "./");
 
-      _includedSIDLFiles = commandLineParser
-          .getOptionValues(commandLineOptionInclude);
+      _includedSIDLFiles =
+          commandLineParser.getOptionValues(commandLineOptionInclude);
       _sourceSIDLFile = commandLineParser.getRemainingArgs()[0];
       if (!_sourceSIDLFile.contains(".sidl")) {
         _isValid = false;
         throw new ASCoDTException(Compiler.class.getCanonicalName(),
-            "parseCommandLineArguments()",
-            "Compiler error invalid sidl source file", null);
+                                  "parseCommandLineArguments()",
+                                  "Compiler error invalid sidl source file",
+                                  null);
       }
     } catch (IllegalOptionValueException e) {
       _isValid = false;
       throw new ASCoDTException(Compiler.class.getCanonicalName(),
-          "parseCommandLineArguments()", "Compiler error illegal value:" +
-              e.getMessage(), e);
+                                "parseCommandLineArguments()",
+                                "Compiler error illegal value:" + e.getMessage(),
+                                e);
 
     } catch (UnknownOptionException e) {
       _isValid = false;
       throw new ASCoDTException(Compiler.class.getCanonicalName(),
-          "parseCommandLineArguments()", "Compiler error unknown argument:" +
-              e.getMessage(), e);
+                                "parseCommandLineArguments()",
+                                "Compiler error unknown argument:" + e.getMessage(),
+                                e);
     } catch (ArrayIndexOutOfBoundsException e) {
       _isValid = false;
       throw new ASCoDTException(Compiler.class.getCanonicalName(),
-          "parseCommandLineArguments()",
-          "Compiler error wrong number of arguments:" + e.getMessage(), e);
+                                "parseCommandLineArguments()",
+                                "Compiler error wrong number of arguments:" + e.getMessage(),
+                                e);
 
     }
 
@@ -285,8 +308,7 @@ public class Compiler {
    * @return
    * @throws ASCoDTException
    */
-  private de.tum.ascodt.sidlcompiler.frontend.node.Start processSource(
-      String fileName) throws ASCoDTException {
+  private de.tum.ascodt.sidlcompiler.frontend.node.Start processSource(String fileName) throws ASCoDTException {
     de.tum.ascodt.sidlcompiler.frontend.node.Start start = null;
     if (_verbose) {
       System.out.println("read input file " + fileName + " ... ");
@@ -295,14 +317,15 @@ public class Compiler {
     try {
       reader = new java.io.FileReader(fileName);
 
-      de.tum.ascodt.sidlcompiler.frontend.parser.Parser parser = new de.tum.ascodt.sidlcompiler.frontend.parser.Parser(
-          new de.tum.ascodt.sidlcompiler.frontend.lexer.Lexer(
-              new java.io.PushbackReader(reader)));
+      de.tum.ascodt.sidlcompiler.frontend.parser.Parser parser =
+          new de.tum.ascodt.sidlcompiler.frontend.parser.Parser(new de.tum.ascodt.sidlcompiler.frontend.lexer.Lexer(new java.io.PushbackReader(reader)));
       start = parser.parse();
       reader.close();
     } catch (Exception e) {
       throw new ASCoDTException(Compiler.class.getCanonicalName(),
-          "readSIDLFile()", e.getMessage(), e);
+                                "readSIDLFile()",
+                                e.getMessage(),
+                                e);
     }
     return start;
   }
@@ -314,14 +337,14 @@ public class Compiler {
    *          starting symbol of a sidl file.
    * @throws ASCoDTException
    */
-  private void validate(Start startSymbol, String resourceLocation)
-      throws ASCoDTException {
+  private void validate(Start startSymbol, String resourceLocation) throws ASCoDTException {
     ASTValidator validator = new ASTValidator(_symbolTable, resourceLocation);
     startSymbol.apply(validator);
     if (!validator.isValid()) {
-      throw new ASCoDTException(Compiler.class.getName(), "validate()",
-          "AST not valid! AST error message:" + validator.getErrorMessages(),
-          null);
+      throw new ASCoDTException(Compiler.class.getName(),
+                                "validate()",
+                                "AST not valid! AST error message:" + validator.getErrorMessages(),
+                                null);
     }
 
   }

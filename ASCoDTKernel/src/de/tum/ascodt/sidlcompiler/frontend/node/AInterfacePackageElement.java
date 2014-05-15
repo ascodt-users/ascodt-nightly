@@ -13,17 +13,18 @@ import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
 @SuppressWarnings("nls")
 public final class AInterfacePackageElement extends PPackageElement {
   private TIdentifier _name_;
-  private final LinkedList<PUserDefinedType> _supertype_ = new LinkedList<PUserDefinedType>();
-  private final LinkedList<POperation> _operation_ = new LinkedList<POperation>();
+  private final LinkedList<PUserDefinedType> _supertype_ =
+      new LinkedList<PUserDefinedType>();
+  private final LinkedList<POperation> _operation_ =
+      new LinkedList<POperation>();
 
   public AInterfacePackageElement() {
     // Constructor
   }
 
-  public AInterfacePackageElement(
-      @SuppressWarnings("hiding") TIdentifier _name_,
-      @SuppressWarnings("hiding") List<PUserDefinedType> _supertype_,
-      @SuppressWarnings("hiding") List<POperation> _operation_) {
+  public AInterfacePackageElement(@SuppressWarnings("hiding") TIdentifier _name_,
+                                  @SuppressWarnings("hiding") List<PUserDefinedType> _supertype_,
+                                  @SuppressWarnings("hiding") List<POperation> _operation_) {
     // Constructor
     setName(_name_);
 
@@ -41,7 +42,8 @@ public final class AInterfacePackageElement extends PPackageElement {
   @Override
   public Object clone() {
     return new AInterfacePackageElement(cloneNode(_name_),
-        cloneList(_supertype_), cloneList(_operation_));
+                                        cloneList(_supertype_),
+                                        cloneList(_operation_));
   }
 
   public TIdentifier getName() {
@@ -77,15 +79,14 @@ public final class AInterfacePackageElement extends PPackageElement {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     if (_name_ == oldChild) {
       setName((TIdentifier)newChild);
       return;
     }
 
-    for (ListIterator<PUserDefinedType> i = _supertype_.listIterator(); i
-        .hasNext();) {
+    for (ListIterator<PUserDefinedType> i = _supertype_.listIterator(); i.hasNext();) {
       if (i.next() == oldChild) {
         if (newChild != null) {
           i.set((PUserDefinedType)newChild);
@@ -160,7 +161,8 @@ public final class AInterfacePackageElement extends PPackageElement {
 
   @Override
   public String toString() {
-    return "" + toString(_name_) + toString(_supertype_) +
-        toString(_operation_);
+    return "" + toString(_name_) +
+           toString(_supertype_) +
+           toString(_operation_);
   }
 }

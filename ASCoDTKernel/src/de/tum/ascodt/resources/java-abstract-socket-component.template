@@ -46,7 +46,7 @@ public class SocketComponent
       * server constructor
       */
      protected SocketComponent(int bufferSize)  throws de.tum.ascodt.utils.exceptions.ASCoDTException{
-          _host="localhost";
+          _host="127.0.0.1";
           _port=de.tum.ascodt.plugin.services.SocketService.getDefault().getFreePort();
           _bufferSize=bufferSize;
           _rcvBytes=new byte[bufferSize];
@@ -102,6 +102,7 @@ public class SocketComponent
                     _server=java.nio.channels.AsynchronousServerSocketChannel.open(_group).bind(
                               new java.net.InetSocketAddress(_port));
                     completed(_server.accept().get(),null);
+                    de.tum.ascodt.plugin.utils.exceptions.ErrorWriterDevice.getInstance().println("Opened");
                }catch (Exception e) {
                     throw new de.tum.ascodt.utils.exceptions.ASCoDTException(
                               SocketComponent.class.getCanonicalName(),

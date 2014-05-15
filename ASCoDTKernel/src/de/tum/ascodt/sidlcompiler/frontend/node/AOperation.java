@@ -13,14 +13,15 @@ import de.tum.ascodt.sidlcompiler.frontend.analysis.Analysis;
 @SuppressWarnings("nls")
 public final class AOperation extends POperation {
   private TIdentifier _name_;
-  private final LinkedList<PParameter> _parameter_ = new LinkedList<PParameter>();
+  private final LinkedList<PParameter> _parameter_ =
+      new LinkedList<PParameter>();
 
   public AOperation() {
     // Constructor
   }
 
   public AOperation(@SuppressWarnings("hiding") TIdentifier _name_,
-      @SuppressWarnings("hiding") List<PParameter> _parameter_) {
+                    @SuppressWarnings("hiding") List<PParameter> _parameter_) {
     // Constructor
     setName(_name_);
 
@@ -63,7 +64,7 @@ public final class AOperation extends POperation {
 
   @Override
   void replaceChild(@SuppressWarnings("unused") Node oldChild,
-      @SuppressWarnings("unused") Node newChild) {
+                    @SuppressWarnings("unused") Node newChild) {
     // Replace child
     if (_name_ == oldChild) {
       setName((TIdentifier)newChild);

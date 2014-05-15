@@ -24,7 +24,7 @@ public class PaletteComponentEntry extends CombinedTemplateCreationEntry {
    *          factory to be used by instantiation
    */
   public PaletteComponentEntry(String componentName,
-      InstanceFactory instanceFactory) {
+                               InstanceFactory instanceFactory) {
 
     super(componentName, "", instanceFactory, null, null);
 

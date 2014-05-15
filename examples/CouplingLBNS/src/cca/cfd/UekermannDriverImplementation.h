@@ -8,7 +8,7 @@
 //
 // Authors: Tobias Weinzierl, Atanas Atanasov   
 //
-
+#include <mpi.h>
 #include "cca/cfd/UekermannDriverAbstractImplementation.h"
 #include <string>
 #include <vector>
@@ -21,6 +21,7 @@ class UekermannDriverImplementation;
 
 class cca::cfd::UekermannDriverImplementation : public cca::cfd::UekermannDriverAbstractImplementation{
 private:
+
 	std::vector<double>  _lbVelocityX;
 	std::vector<double>  _lbVelocityY;
 	std::vector<double>  _lbVelocityZ;
@@ -31,6 +32,7 @@ private:
 	std::vector<double>  _nsJacobian;
 	void exchangeBoundaries();
 public:
+	static UekermannDriverImplementation* singleton;
 	UekermannDriverImplementation();
 	~UekermannDriverImplementation();
 	void go(const std::string configFile);

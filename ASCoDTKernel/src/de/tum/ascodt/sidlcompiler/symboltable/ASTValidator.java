@@ -34,8 +34,8 @@ import de.tum.ascodt.sidlcompiler.frontend.node.PParameter;
  * @author Tobias Weinzierl
  */
 public class ASTValidator extends DepthFirstAdapter {
-  static Trace _trace = new Trace(
-      "de.tum.ascodt.sidlcompiler.symboltable.ASTValidator");
+  static Trace _trace =
+      new Trace("de.tum.ascodt.sidlcompiler.symboltable.ASTValidator");
 
   private String _currentSymbol;
 
@@ -127,8 +127,8 @@ public class ASTValidator extends DepthFirstAdapter {
     }
     if (_symbolTable.getScope(node) != null) {
 
-      AClassPackageElement classFromSymbolTable = _symbolTable.getScope(node)
-          .getClassDefinition(_currentSymbol);
+      AClassPackageElement classFromSymbolTable =
+          _symbolTable.getScope(node).getClassDefinition(_currentSymbol);
 
       ASTEquals compare = new ASTEquals();
       node.apply(compare);
@@ -136,8 +136,8 @@ public class ASTValidator extends DepthFirstAdapter {
       classFromSymbolTable.apply(compare);
       if (!compare.ASTsAreEqual()) {
         addErrorMessage("ASTs for " + _currentSymbol +
-            " are not equal in different definition files: " +
-            compare.getDifferenceDescription());
+                        " are not equal in different definition files: " +
+                        compare.getDifferenceDescription());
       }
     }
     _trace.out("inAClassPackageElement(...)", _currentSymbol);
@@ -162,8 +162,8 @@ public class ASTValidator extends DepthFirstAdapter {
     _trace.in("inAInterfacePackageElement(...)", _currentSymbol);
     if (_symbolTable.getScope(node) != null) {
 
-      AInterfacePackageElement interfaceFromSymbolTable = _symbolTable
-          .getScope(node).getInterfaceDefinition(_currentSymbol);
+      AInterfacePackageElement interfaceFromSymbolTable =
+          _symbolTable.getScope(node).getInterfaceDefinition(_currentSymbol);
 
       ASTEquals compare = new ASTEquals();
       node.apply(compare);
@@ -171,8 +171,8 @@ public class ASTValidator extends DepthFirstAdapter {
       interfaceFromSymbolTable.apply(compare);
       if (!compare.ASTsAreEqual()) {
         addErrorMessage("ASTs for " + _currentSymbol +
-            " are not equal in different definition files: " +
-            compare.getDifferenceDescription());
+                        " are not equal in different definition files: " +
+                        compare.getDifferenceDescription());
       }
     }
     _trace.out("inAInterfacePackageElement(...)", _currentSymbol);
@@ -192,10 +192,10 @@ public class ASTValidator extends DepthFirstAdapter {
       _trace.debug("inAOperation(...)", "check parameter " + parameterName);
       for (PParameter otherParameters : node.getParameter()) {
         String otherParameterName = getParameterName(otherParameters);
-        if (parameter != otherParameters &&
-            parameterName.equals(otherParameterName)) {
+        if (parameter != otherParameters && parameterName.equals(otherParameterName)) {
           addErrorMessage("two arguments with the same name " + parameterName +
-              " in operation " + node.getName().getText());
+                          " in operation " +
+                          node.getName().getText());
         }
       }
     }
@@ -210,8 +210,10 @@ public class ASTValidator extends DepthFirstAdapter {
       return;
     }
     if (!_symbolTable.getScope(node).containsSymbol(fullQualifiedSymbol)) {
-      addErrorMessage("symbol " + fullQualifiedSymbol + " within symbol " +
-          _currentSymbol + " is unknown");
+      addErrorMessage("symbol " + fullQualifiedSymbol +
+                      " within symbol " +
+                      _currentSymbol +
+                      " is unknown");
     }
   }
 

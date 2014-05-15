@@ -23,20 +23,27 @@ public class ProjectVTKExtension implements Project {
   }
 
   @Override
-  public void addClasspathEntries(Set<IClasspathEntry> classpathEntries)
-      throws ASCoDTException {
+  public void addClasspathEntries(Set<IClasspathEntry> classpathEntries) throws ASCoDTException {
     _trace.in("addClasspathEntries()");
     try {
-      classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager
-          .getResourceAsPath("share/java/vtk.jar", ASCoDTVTKPlugin.ID)
-          .getPath()), null, null, false));
-      classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager
-          .getResourceAsPath("", ASCoDTVTKPlugin.ID).getPath()), null, null,
-          false));
+      classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("share/java/vtk.jar",
+                                                                                               ASCoDTVTKPlugin.ID)
+                                                                            .toString()),
+                                                    null,
+                                                    null,
+                                                    false));
+      classpathEntries.add(JavaCore.newLibraryEntry(new Path(ResourceManager.getResourceAsPath("",
+                                                                                               ASCoDTVTKPlugin.ID)
+                                                                            .toString()),
+                                                    null,
+                                                    null,
+                                                    false));
 
     } catch (IOException e) {
       throw new ASCoDTException(ProjectVTKExtension.class.getCanonicalName(),
-          "addClasspathEntries()", e.getLocalizedMessage(), e);
+                                "addClasspathEntries()",
+                                e.getLocalizedMessage(),
+                                e);
     }
     _trace.out("addClasspathEntries()");
 
