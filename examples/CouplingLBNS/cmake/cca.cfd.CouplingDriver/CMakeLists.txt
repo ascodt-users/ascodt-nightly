@@ -155,6 +155,7 @@ find_library (PETSC_MKL_CORE_LIB mkl_core HINTS "/opt/intel/mkl" "/home/atanasoa
 include_directories("../../src")
 include_directories("../../components/java")
 include_directories(../../src/examples/kernel)
+include_directories("../../components/c++")
 
 file(GLOB STENCIL_SOURCES ../../src/examples/cfd/lb/stencils/*.cpp)
 file(GLOB LB_SOURCES  ../../src/examples/cfd/lb/*.cpp)

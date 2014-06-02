@@ -46,7 +46,7 @@ public class SocketComponent
       * server constructor
       */
      protected SocketComponent(int bufferSize)  throws de.tum.ascodt.utils.exceptions.ASCoDTException{
-          _host="localhost";
+          _host="127.0.0.1";
           _port=de.tum.ascodt.plugin.services.SocketService.getDefault().getFreePort();
           _bufferSize=bufferSize;
           _rcvBytes=new byte[bufferSize];

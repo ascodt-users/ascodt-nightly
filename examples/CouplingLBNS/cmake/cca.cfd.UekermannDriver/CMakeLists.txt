@@ -154,7 +154,7 @@ endif()
 # ==============================================================================
 include_directories("../../src")
 include_directories("../../components/java")
-
+include_directories("../../components/c++")
 include("sources.cmake")
 include("targets.cmake")
 

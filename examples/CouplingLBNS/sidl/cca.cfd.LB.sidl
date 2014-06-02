@@ -12,8 +12,6 @@ package cfd {
   @target = cxx_remote_socket
   class LB implements-all cca.cfd.LBSolver,cca.cfd.LB2NS
   uses cca.cfd.NSSolver as ns{
-  }
-  
-
+  }  
 } 
 }
