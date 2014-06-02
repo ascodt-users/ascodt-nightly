@@ -16,6 +16,7 @@ struct LBNSData{
 	int offset[3];
 	int flip[3];
 	double value;
+	int index;
 };
 class LBNSRemoteInterpolator {
 
@@ -50,6 +51,7 @@ private:
 	int _localVelocitiesCounters[3];
 	std::ofstream _logComm;
 	bool _open;
+	 std::vector<double> _couplingData;
 	/** Obtain the coordinates of a value in a NS cell in the LB grid.
 	 *
 	 * Since an integer number of LB cells fit in a NS cell, the value will lie either in the
@@ -103,6 +105,7 @@ private:
 	inline int index2array ( int i, int j, int k, int component, int stencil ) const;
 	void open();
 public:
+	void swap();
 	void setVelocity(
 			const int key,
 			const int offsetX,
@@ -124,7 +127,9 @@ public:
 	/** Interpolate one of the components of the velocity
 	 */
 	FLOAT interpolateVelocityComponent (int ins, int jns, int kns, int component);
-
+	std::vector<double>& getCouplingData(){
+		 return _couplingData;
+	}
 };
 
 #endif

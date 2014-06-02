@@ -21,6 +21,7 @@
 #include "examples/cfd/lb/coupling/NSLBCouplingStencil.h"
 #include "examples/cfd/lb/parallelManagers/LBParallelManager.h"
 #include "Iterators.h"
+#include "cplscheme/impl/IQNILSPostProcessing.hpp"
 #include <pthread.h>
 #include <fstream>
 namespace cca { 
@@ -47,6 +48,8 @@ private:
 	LBParallelManager* _parallelManager;
 	LBMovingWallStencil *_movingWallStencil;
 	GlobalBoundaryIterator<LBField>* _movingWallIterator;
+	precice::cplscheme::impl::IQNILSPostProcessing* _pp;
+	precice::cplscheme::impl::PostProcessing::DataMap _data;
 	std::ofstream _lbprofiles;
 	std::ofstream _lbvelocitycenter;
 	std::ofstream _lbdensityalong;
@@ -64,6 +67,7 @@ private:
 	void gatherDomainDescriptions();
 	void gatherMids();
 	void readGeometry(std::string);
+	void iqn(std::vector<double>& nslb,std::vector<double>& lbns,std::vector<double>& secondary);
 public:
 	LBImplementation();
 	~LBImplementation();

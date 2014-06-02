@@ -1,5 +1,5 @@
 #include "LBNSRemoteInterpolator.h"
-#include "LBNSCommunicator.h"
+
 #include "math.h"
 
 void LBNSRemoteInterpolator::printParameters() {
@@ -106,7 +106,7 @@ bool LBNSRemoteInterpolator::convertToLocalCoordinates(
 			j_out<_parameters.parallel.localSize[1]+2&&
 			k_out<_parameters.parallel.localSize[2]+2;
 }
-void LBNSRemoteInterpolator::loadVelocityComponent (int i,int j,int k,const int & component){
+bool LBNSRemoteInterpolator::loadVelocityComponent (int i,int j,int k,const int & component){
 	// This function is far from being efficient. It loads the whole velocity vector to get only
 	// one of its components, but it avoids rewriting all the velocity functions only for this
 	// operation.
@@ -114,6 +114,7 @@ void LBNSRemoteInterpolator::loadVelocityComponent (int i,int j,int k,const int 
 	int localCoordinatesX=0;
 	int localCoordinatesY=0;
 	int localCoordinatesZ=0;
+	bool res=false;
 	FLOAT temporalVelocity;
 	FLOAT density;
 	for (int l = 0; l < stencilSize; l++){
@@ -134,7 +135,7 @@ void LBNSRemoteInterpolator::loadVelocityComponent (int i,int j,int k,const int 
 					localCoordinatesY,
 					localCoordinatesZ,
 					component);
-
+			res=true;
 			//std::cout<<"setting velocity:"<<temporalVelocity<<std::endl;
 			//getCommunicator(i,j,k).setDensity(i,j,k,l,density);
 			std::vector<LBNSCommunicator*> coms;
@@ -147,6 +148,7 @@ void LBNSRemoteInterpolator::loadVelocityComponent (int i,int j,int k,const int 
 		}
 
 	}
+	return res;
 }
 
 void LBNSRemoteInterpolator::getCommunicators(
@@ -205,7 +207,7 @@ void LBNSRemoteInterpolator::setArrays (const int * const lbPosition, const int 
 }
 
 
-void LBNSRemoteInterpolator::interpolateVelocityComponent (int ins, int jns, int kns, int component){
+bool LBNSRemoteInterpolator::interpolateVelocityComponent (int ins, int jns, int kns, int component){
 	int lbPosition[3], middle[3];
 	locateInLBGrid (lbPosition, middle, ins, jns, kns, component);
 	if (!checkIfValid (lbPosition, middle)){
@@ -217,7 +219,7 @@ void LBNSRemoteInterpolator::interpolateVelocityComponent (int ins, int jns, int
 	// The velocities will never lie in the very center of a LB cell, so there's no need to check.
 
 	setArrays (lbPosition, middle);
-	loadVelocityComponent (ins,jns,kns,component);
+	return loadVelocityComponent (ins,jns,kns,component);
 	/*getLocationVector (_locationVector, _regularizedPosition);
 	matrix_vector(barycentricBasis, _locationVector, _weights, stencilSize, stencilSize);
 	return dot(_values, _weights, stencilSize) * _referenceVelocity;*/

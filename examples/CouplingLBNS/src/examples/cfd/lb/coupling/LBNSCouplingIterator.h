@@ -9,6 +9,12 @@
 // This class exists because it was not trivial to use the already existing iterator to perform
 // this operation.
 class LBNSCommunicator;
+	struct Contribution{
+			int x;
+			int y;
+			int z;
+			int component;
+		};
 class LBNSCouplingIterator {
 
     private:
@@ -17,12 +23,12 @@ class LBNSCouplingIterator {
         LBNSRemoteInterpolator _interpolator;
         const int _offset;  // How many cells away from the boundary
 
-        const int _lowerX;
-        const int _upperX;
-        const int _lowerY;
-        const int _upperY;
-        const int _lowerZ;
-        const int _upperZ;
+        int _lowerX;
+        int _upperX;
+        int _lowerY;
+        int _upperY;
+        int _lowerZ;
+        int _upperZ;
 
         int _offsets[3], _cell[3], _middle[3];
         int _normalVector[3];
@@ -30,6 +36,7 @@ class LBNSCouplingIterator {
         std::vector<double> _lbVelocityX;
         std::vector<double> _lbVelocityY;
         std::vector<double> _lbVelocityZ;
+        std::vector<Contribution> _localContributions;
         /** Interpolates the component for the given NS cell.
          * @param i Index of the NS cell in the X direction
          * @param j Index of the NS cell in the Y direction
@@ -69,6 +76,9 @@ class LBNSCouplingIterator {
         double* getVelocityY();
         double* getVelocityZ();
         void registerNSRegion(LBNSCommunicator* com);
+        std::vector<double>& getCouplingData(){
+        	return _interpolator.getCouplingData();
+        }
 };
 
 #endif

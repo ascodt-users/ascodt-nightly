@@ -1,6 +1,4 @@
 #include "PetscParallelConfiguration.h"
-#include <fstream>
-#include <sstream>
 
 PetscParallelConfiguration::PetscParallelConfiguration(Parameters & parameters):
     _parameters(parameters) {
@@ -16,7 +14,7 @@ PetscParallelConfiguration::PetscParallelConfiguration(Parameters & parameters):
     createIndices();
     locateNeighbors();
     computeSizes();
-    //resetCoupling();
+
     int nprocFromFile = _parameters.parallel.numProcessors[0] *
                         _parameters.parallel.numProcessors[1];
 
@@ -102,8 +100,9 @@ void PetscParallelConfiguration::computeSizes(){
 
     int geometrySizes[3];
     geometrySizes[0] = (_parameters.coupling.set)?_parameters.coupling.sizeNS[0] * _parameters.coupling.ratio - 1 :_parameters.geometry.sizeX;
-    geometrySizes[1] =  (_parameters.coupling.set)?_parameters.coupling.sizeNS[1] * _parameters.coupling.ratio - 1 :_parameters.geometry.sizeY;
-    geometrySizes[2] =  (_parameters.coupling.set)?_parameters.coupling.sizeNS[2] * _parameters.coupling.ratio - 1 :_parameters.geometry.sizeZ;
+        geometrySizes[1] = (_parameters.coupling.set)?_parameters.coupling.sizeNS[1] * _parameters.coupling.ratio - 1 :_parameters.geometry.sizeY;
+        geometrySizes[2] = (_parameters.coupling.set)?_parameters.coupling.sizeNS[2] * _parameters.coupling.ratio - 1 :_parameters.geometry.sizeZ;
+
 
     for (int i = 0; i < dim; i++){
         for (int j = 0; j < _parameters.parallel.numProcessors[i]; j++){
@@ -138,104 +137,9 @@ void PetscParallelConfiguration::computeSizes(){
         _parameters.parallel.sizes[i][0] ++;
         _parameters.parallel.sizes[i][_parameters.parallel.numProcessors[i]-1] ++;
     }
-
-    
 }
 
-void PetscParallelConfiguration::resetCoupling(){
-	    if((_parameters.coupling.offsetNS[0]-2>=_parameters.parallel.firstCorner[0]&&
-	      _parameters.coupling.offsetNS[0]-2<_parameters.parallel.firstCorner[0]+_parameters.parallel.localSize[0]
-	      ||
-	      _parameters.coupling.offsetNS[0]-2<_parameters.parallel.firstCorner[0]&&
-	      _parameters.coupling.offsetNS[0]+_parameters.coupling.sizeNS[0]-2>_parameters.parallel.firstCorner[0]
-	      )
-              &&
-	      (_parameters.coupling.offsetNS[1]-2>=_parameters.parallel.firstCorner[1]&&
-	       _parameters.coupling.offsetNS[1]-2<_parameters.parallel.firstCorner[1]+_parameters.parallel.localSize[1]
-	      ||
-	      _parameters.coupling.offsetNS[1]-2<_parameters.parallel.firstCorner[1]&&
-	      _parameters.coupling.offsetNS[1]+_parameters.coupling.sizeNS[1]-2>_parameters.parallel.firstCorner[1]
-	      )
-	      &&
-	      (_parameters.coupling.offsetNS[2]-2>=_parameters.parallel.firstCorner[2]&&
-	      _parameters.coupling.offsetNS[2]-2<_parameters.parallel.firstCorner[2]+_parameters.parallel.localSize[2]
-	      ||
-	      _parameters.coupling.offsetNS[2]-2<_parameters.parallel.firstCorner[2]&&
-	      _parameters.coupling.offsetNS[2]+_parameters.coupling.sizeNS[2]-2>_parameters.parallel.firstCorner[2]
-	      )){	
 
-
-	    if(_parameters.parallel.firstCorner[0]>=_parameters.coupling.offsetNS[0]-2){	
-	     	
-	    	_parameters.coupling.sizeNS[0]=_parameters.coupling.sizeNS[0]-(_parameters.parallel.firstCorner[0]-_parameters.coupling.offsetNS[0]+2);
-		if(_parameters.coupling.sizeNS[0]>_parameters.parallel.localSize[0])
-			_parameters.coupling.sizeNS[0]=_parameters.parallel.localSize[0];
-		_parameters.coupling.offsetNS[0] = 2 ;
-            
-	    }else if(_parameters.parallel.firstCorner[0]<_parameters.coupling.offsetNS[0]-2){
-		if(_parameters.coupling.sizeNS[0]>_parameters.parallel.localSize[0]-(_parameters.coupling.offsetNS[0]-2)+_parameters.parallel.firstCorner[0])
-			_parameters.coupling.sizeNS[0]=	_parameters.parallel.localSize[0]-(_parameters.coupling.offsetNS[0]-2)+_parameters.parallel.firstCorner[0];	
-
-		_parameters.coupling.offsetNS[0] = (_parameters.coupling.offsetNS[0]-2)-_parameters.parallel.firstCorner[0]+2;
-		
-	    }
-	    
-	    if(_parameters.parallel.firstCorner[1]>=_parameters.coupling.offsetNS[1]-2){	
-	     	
-	    	_parameters.coupling.sizeNS[1]=_parameters.coupling.sizeNS[1]-(_parameters.parallel.firstCorner[1]-_parameters.coupling.offsetNS[1]+2);
-		if(_parameters.coupling.sizeNS[1]>_parameters.parallel.localSize[1])
-			_parameters.coupling.sizeNS[1]=_parameters.parallel.localSize[1];
-		_parameters.coupling.offsetNS[1] = 2 ;
-            
-	    }else if(_parameters.parallel.firstCorner[1]<_parameters.coupling.offsetNS[1]-2){
-		if(_parameters.coupling.sizeNS[1]>_parameters.parallel.localSize[1]-(_parameters.coupling.offsetNS[1]-2)+_parameters.parallel.firstCorner[1])
-			_parameters.coupling.sizeNS[1]=	_parameters.parallel.localSize[1]-(_parameters.coupling.offsetNS[1]-2)+_parameters.parallel.firstCorner[1];		
-		_parameters.coupling.offsetNS[1] = (_parameters.coupling.offsetNS[1]-2)-_parameters.parallel.firstCorner[1]+2;
-			
-		
-	    }
-	    
-	    if(_parameters.parallel.firstCorner[2]>=_parameters.coupling.offsetNS[2]-2){	
-	     	
-	    	_parameters.coupling.sizeNS[2]=_parameters.coupling.sizeNS[2]-(_parameters.parallel.firstCorner[2]-_parameters.coupling.offsetNS[2]+2);
-		if(_parameters.coupling.sizeNS[2]>_parameters.parallel.localSize[2])
-			_parameters.coupling.sizeNS[2]=_parameters.parallel.localSize[2];
-		_parameters.coupling.offsetNS[2] = 2 ;
-            
-	    }else if(_parameters.parallel.firstCorner[2]<_parameters.coupling.offsetNS[2]-2){
-		if(_parameters.coupling.sizeNS[2]>_parameters.parallel.localSize[2]-(_parameters.coupling.offsetNS[2]-2)+_parameters.parallel.firstCorner[2])
-			_parameters.coupling.sizeNS[2]=	_parameters.parallel.localSize[2]-(_parameters.coupling.offsetNS[2]-2)+_parameters.parallel.firstCorner[2];	
-
-		_parameters.coupling.offsetNS[2] = (_parameters.coupling.offsetNS[2]-2)-_parameters.parallel.firstCorner[2]+2;
-		
-	    }		
-	    
-	   }else{
-		_parameters.coupling.sizeNS[0]=-1;
-            	_parameters.coupling.sizeNS[1]=-1;
-            	_parameters.coupling.sizeNS[2]=-1;
-		_parameters.coupling.offsetNS[0]=0;
-		_parameters.coupling.offsetNS[1]=0;
-		_parameters.coupling.offsetNS[2]=0;	
- 	   }
-	   std::ofstream rankInfo;
-	   std::stringstream rankFile;
-	   rankFile<<"rank_info."<<_parameters.parallel.rank<<".txt";
-	   rankInfo.open(rankFile.str().c_str());
-	   rankInfo<<"rank:"<<_parameters.parallel.rank<<",first["<<_parameters.parallel.firstCorner[0]<<","<<_parameters.parallel.firstCorner[1]<<","<<_parameters.parallel.firstCorner[2]<<"]"<<std::endl;
-	   
-	   rankInfo<<"rank:"<<_parameters.parallel.rank<<",local size["<<_parameters.parallel.localSize[0]<<","<<_parameters.parallel.localSize[1]<<","<<_parameters.parallel.localSize[2]<<"]"<<std::endl;	
-	   rankInfo<<"rank:"<<_parameters.parallel.rank<<",offset["<<_parameters.coupling.offsetNS[0]<<","<<_parameters.coupling.offsetNS[1]<<","<<_parameters.coupling.offsetNS[2]<<"]"<<std::endl;
-	   
-	   rankInfo<<"rank:"<<_parameters.parallel.rank<<",size["<<_parameters.coupling.sizeNS[0]<<","<<_parameters.coupling.sizeNS[1]<<","<<_parameters.coupling.sizeNS[2]<<"]"<<std::endl;
-	   rankInfo.close();
-	  /*_parameters.coupling.sizeNS[0]=-1;
-            	_parameters.coupling.sizeNS[1]=-1;
-            	_parameters.coupling.sizeNS[2]=-1;
-		_parameters.coupling.offsetNS[0]=0;
-		_parameters.coupling.offsetNS[1]=0;
-		_parameters.coupling.offsetNS[2]=0;*/		
-}
 void PetscParallelConfiguration::freeSizes(){
 
     int dim = _parameters.geometry.dim;

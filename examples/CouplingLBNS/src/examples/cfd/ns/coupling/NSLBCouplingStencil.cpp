@@ -45,12 +45,19 @@ inline bool NSLBCouplingStencil::convertToLocalCoordinates(
 			j_out-2<_parameters.parallel.localSize[1]&&
 			k_out-2<_parameters.parallel.localSize[2];
 }
+
+std::vector<double>& NSLBCouplingStencil::getCouplingData(){
+	return _communicators[0]->getCouplingData();
+}
+std::vector<double>& NSLBCouplingStencil::getSecondaryCouplingData(){
+	return _communicators[0]->getSecondaryCouplingData();
+}
 NSLBCouplingStencil::NSLBCouplingStencil (const Parameters & parameters,
 		LBField & lbField, FlowField & nsField,
 		int nsLowX, int nsHighX,
 		int nsLowY, int nsHighY,
 		int nsLowZ, int nsHighZ) :
-									GlobalBoundaryStencil<LBField> (parameters), _lbField (lbField), _nsField (nsField),
+									SmartGlobalBoundaryStencil<LBField> (parameters), _lbField (lbField), _nsField (nsField),
 									_nsLowX (nsLowX), _nsHighX (nsHighX),
 									_nsLowY (nsLowY), _nsHighY (nsHighY),
 									_nsLowZ (nsLowZ), _nsHighZ (nsHighZ),
@@ -81,7 +88,7 @@ NSLBCouplingStencil::NSLBCouplingStencil (const Parameters & parameters,
 NSLBCouplingStencil::NSLBCouplingStencil (const Parameters & parameters,
 		LBField & lbField, FlowField & nsField
 ) :
-									GlobalBoundaryStencil<LBField> (parameters), _lbField (lbField), _nsField (nsField),
+									SmartGlobalBoundaryStencil<LBField> (parameters), _lbField (lbField), _nsField (nsField),
 									_nsLowX  (parameters.coupling.offsetNS[0]),
 									_nsHighX (parameters.coupling.offsetNS[0] + parameters.coupling.sizeNS[0] - 1),
 									_nsLowY  (parameters.coupling.offsetNS[1]),
@@ -131,7 +138,7 @@ const FLOAT NSLBCouplingStencil::getDt() const{
 }
 
 
-void NSLBCouplingStencil::loadVelocity(
+bool NSLBCouplingStencil::loadVelocity(
 		const int ins,
 		const int jns,
 		const int kns,
@@ -143,6 +150,7 @@ void NSLBCouplingStencil::loadVelocity(
 	int localCoordinatesX;
 	int localCoordinatesY;
 	int localCoordinatesZ;
+	bool res=false;
 	for (int l = 0; l < stencilSize; l++){
 		if(convertToLocalCoordinates(
 				ins + offset[0] + stencil[l][0] * flip[0],
@@ -153,6 +161,7 @@ void NSLBCouplingStencil::loadVelocity(
 				localCoordinatesZ)
 		){
 			//std::cout<<"i_local:"<<(ins + offset[0] + stencil[l][0] * flip[0])<<","<<localCoordinatesX<<std::endl;
+			res=true;
 			std::vector<NSLBCommunicator*> coms;
 			getCommunicators(ilb,jlb,klb,coms);
 			if(coms.size()==0)
@@ -174,6 +183,7 @@ void NSLBCouplingStencil::loadVelocity(
 		//				k + offset[2] + stencil[l][2] * flip[2])
 		//				[component];
 	}
+	return res;
 }
 
 void NSLBCouplingStencil::getCommunicators(
@@ -400,13 +410,9 @@ void NSLBCouplingStencil::setArrays (int * const offset, FLOAT * const locationV
 
 
 // 2D functions. Not used
-void NSLBCouplingStencil::applyLeftWall   ( LBField & lbField, int i, int j ){}
-void NSLBCouplingStencil::applyRightWall  ( LBField & lbField, int i, int j ){}
-void NSLBCouplingStencil::applyBottomWall ( LBField & lbField, int i, int j ){}
-void NSLBCouplingStencil::applyTopWall    ( LBField & lbField, int i, int j ){}
 
 
-void NSLBCouplingStencil::interpolate (int i, int j, int k, const int * const flip){
+bool NSLBCouplingStencil::interpolate (int i, int j, int k, const int * const flip){
 	int ins, jns, kns;  // NS cell
 	int offset[3];
 	FLOAT position[3], locationVector[stencilSize];
@@ -420,11 +426,11 @@ void NSLBCouplingStencil::interpolate (int i, int j, int k, const int * const fl
 
 	// Pressure is represented as a fourth component with index 3
 
-
+	bool res=false;
 	for (int component = 0; component < 3; component++){
 		setArrays (offset, locationVector, dxVector, dyVector,  dzVector,
 				flip, position, component);
-		loadVelocity(ins, jns, kns,i,j,k, component, offset, flip);
+		res=res||loadVelocity(ins, jns, kns,i,j,k, component, offset, flip);
 
 		//		matrix_vector(barycentricBasis, locationVector, weights, stencilSize, stencilSize);
 		//		velocity[component] = dot(_values, weights, stencilSize) * _reciprocalVelocityLB;
@@ -464,6 +470,7 @@ void NSLBCouplingStencil::interpolate (int i, int j, int k, const int * const fl
 	//        _lbField.getFIn() [_lbField.getIndexF(l, i, j, k)] = eq[l] + (1.0 - 1.0/_parameters.lb.tau) * neq[l];
 	//        _lbField.getFOut()[_lbField.getIndexF(l, i, j, k)] = eq[l] + (1.0 - 1.0/_parameters.lb.tau) * neq[l];
 	//    }
+	return res;
 }
 void NSLBCouplingStencil::flush(){
 	for(unsigned int i=0;i<_communicators.size();i++){
@@ -514,7 +521,7 @@ void  NSLBCouplingStencil::registerLBRegion(NSLBCommunicator* com){
 	_communicators.push_back(com);
 }
 
-void NSLBCouplingStencil::applyLeftWall   ( LBField & lbField, int i, int j, int k ){
+bool NSLBCouplingStencil::applyLeftWall   ( LBField & lbField, int i, int j, int k ){
 	int ins, jns, kns;
 	FLOAT position[3];
 	identifyCellAndPosition (ins, jns, kns, position, i, j, k);
@@ -525,10 +532,10 @@ void NSLBCouplingStencil::applyLeftWall   ( LBField & lbField, int i, int j, int
 	if ((kns - _nsLowZ) < _nsSizeZ / 2) _flip[2] = 1;
 	else                                _flip[2] = -1;
 	_flip[0] = -1;
-	interpolate(i, j, k, _flip);
+	return interpolate(i, j, k, _flip);
 }
 
-void NSLBCouplingStencil::applyRightWall  ( LBField & lbField, int i, int j, int k ){
+bool NSLBCouplingStencil::applyRightWall  ( LBField & lbField, int i, int j, int k ){
 	int ins, jns, kns;
 	FLOAT position[3];
 	identifyCellAndPosition (ins, jns, kns, position, i, j, k);
@@ -537,10 +544,10 @@ void NSLBCouplingStencil::applyRightWall  ( LBField & lbField, int i, int j, int
 	if ((kns - _nsLowZ) < _nsSizeZ / 2) _flip[2] = 1;
 	else                                _flip[2] = -1;
 	_flip[0] = 1;
-	interpolate(i, j, k, _flip);
+	return interpolate(i, j, k, _flip);
 }
 
-void NSLBCouplingStencil::applyBottomWall ( LBField & lbField, int i, int j, int k ){
+bool NSLBCouplingStencil::applyBottomWall ( LBField & lbField, int i, int j, int k ){
 	int ins, jns, kns;
 	FLOAT position[3];
 	identifyCellAndPosition (ins, jns, kns, position, i, j, k);
@@ -549,10 +556,10 @@ void NSLBCouplingStencil::applyBottomWall ( LBField & lbField, int i, int j, int
 	if ((kns - _nsLowZ) < _nsSizeZ / 2) _flip[2] = 1;
 	else                                _flip[2] = -1;
 	_flip[1] = -1;
-	interpolate(i, j, k, _flip);
+	return interpolate(i, j, k, _flip);
 }
 
-void NSLBCouplingStencil::applyTopWall    ( LBField & lbField, int i, int j, int k ){
+bool NSLBCouplingStencil::applyTopWall    ( LBField & lbField, int i, int j, int k ){
 	int ins, jns, kns;
 	FLOAT position[3];
 	identifyCellAndPosition (ins, jns, kns, position, i, j, k);
@@ -561,10 +568,10 @@ void NSLBCouplingStencil::applyTopWall    ( LBField & lbField, int i, int j, int
 	if ((kns - _nsLowZ) < _nsSizeZ / 2) _flip[2] = 1;
 	else                                _flip[2] = -1;
 	_flip[1] = 1;
-	interpolate(i, j, k, _flip);
+	return interpolate(i, j, k, _flip);
 }
 
-void NSLBCouplingStencil::applyFrontWall  ( LBField & lbField, int i, int j, int k ){
+bool NSLBCouplingStencil::applyFrontWall  ( LBField & lbField, int i, int j, int k ){
 	int ins, jns, kns;
 	FLOAT position[3];
 	identifyCellAndPosition (ins, jns, kns, position, i, j, k);
@@ -573,10 +580,10 @@ void NSLBCouplingStencil::applyFrontWall  ( LBField & lbField, int i, int j, int
 	if ((jns - _nsLowY) < _nsSizeY / 2) _flip[1] = 1;
 	else                                _flip[1] = -1;
 	_flip[2] = -1;
-	interpolate(i, j, k, _flip);
+	return interpolate(i, j, k, _flip);
 }
 
-void NSLBCouplingStencil::applyBackWall   ( LBField & lbField, int i, int j, int k ){
+bool NSLBCouplingStencil::applyBackWall   ( LBField & lbField, int i, int j, int k ){
 	int ins, jns, kns;
 	FLOAT position[3];
 	identifyCellAndPosition (ins, jns, kns, position, i, j, k);
@@ -585,5 +592,5 @@ void NSLBCouplingStencil::applyBackWall   ( LBField & lbField, int i, int j, int
 	if ((jns - _nsLowY) < _nsSizeY / 2) _flip[1] = 1;
 	else                                _flip[1] = -1;
 	_flip[2] = 1;
-	interpolate(i, j, k, _flip);
+	return interpolate(i, j, k, _flip);
 }

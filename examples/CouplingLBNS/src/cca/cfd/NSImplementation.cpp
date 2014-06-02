@@ -7,7 +7,20 @@
 #include "examples/cfd/ns/coupling/LBNSFGHCorrectionIterator.h"
 #include "examples/cfd/ns/coupling/LBNSInitFlagsIterator.h"
 #include "examples/cfd/ns/coupling/NSLBCommunicator.h"
+
+
+#include "utils/Dimensions.hpp"
+#include "cplscheme/SharedPointer.hpp"
+#include "cplscheme/CouplingData.hpp"
 #include <unistd.h>
+
+namespace boost
+{
+
+void throw_exception(std::exception const & e){}
+
+}
+
 cca::cfd::NSImplementation::NSImplementation(){
 	pthread_mutex_init(&_mutex, NULL);
 	_configuration = NULL;
@@ -19,9 +32,21 @@ cca::cfd::NSImplementation::NSImplementation(){
 	_nslbCouplingIterator=NULL;
 	_lbField=NULL;
 	_iter=0;
-	_nsprofiles.open("/work_fast/atanasoa/Programme/eclipse/nsprofiles.txt");
-	_nspressure.open("/work_fast/atanasoa/Programme/eclipse/nspressure.txt");
+	_nsprofiles.open("nsprofiles.txt");
+	_nspressure.open("nspressure.txt");
 	_comC=0;
+	double initialRelaxation =  1.05;
+	int    maxIterationsUsed = 1000;
+	int    timestepsReused = 6;
+	double singularityLimit = 1e-10;
+	std::vector<int> dataIDs;
+	dataIDs.push_back(0);
+	dataIDs.push_back(1);
+	std::map<int, double> scalings;
+	scalings.insert(std::make_pair(0,1.0));
+	scalings.insert(std::make_pair(1,1.0));
+	_pp = new precice::cplscheme::impl::IQNILSPostProcessing(initialRelaxation,
+			maxIterationsUsed,timestepsReused, singularityLimit, dataIDs, scalings);
 }
 void setTimeStep(MaxUStencil &maxUStencil,Parameters &parameters,FlowField &flowField){
 
@@ -82,12 +107,12 @@ void test(int argc ,char**argv){
 
 	std::cout<<"start solving loop ns"<<std::endl;
 	FLOAT time=0;
-	//_parameters.coupling.set = false;
 	Configuration configuration(argv[1]);
 	Parameters parameters;
 	configuration.loadParameters(parameters);
+	parameters.coupling.set = false;
 	PetscParallelConfiguration parallelConfiguration(parameters);
-
+	parameters.coupling.set = true;
 
 	FlowField flowField(parameters);
 	std::cout<<"flow field created"<<std::endl;
@@ -113,12 +138,12 @@ void test(int argc ,char**argv){
 	GlobalBoundaryIterator<FlowField> maxUBoundaryIterator(flowField, parameters, maxUStencil, 1, 0);
 	std::cout<<"petsc parallel"<<std::endl;
 	PetscParallelManager parallelManager(flowField, parameters);
-	LBNSFGHCorrectionIterator LBNSFGHCorrectionIterator(parameters, flowField);
-	LBNSInitFlagsIterator initFlagsIterator(parameters, flowField);
+	//LBNSFGHCorrectionIterator LBNSFGHCorrectionIterator(parameters, flowField);
+	//LBNSInitFlagsIterator initFlagsIterator(parameters, flowField);
 	VTKStencil vtkStencil( parameters );
 	FieldIterator<FlowField> vtkIterator( flowField, vtkStencil, 1, 0 );
 
-	initFlagsIterator.iterate();
+	//initFlagsIterator.iterate();
 	std::cout<<"starting time loop"<<std::endl;
 	// time loop
 	//std::cout << "Performing cycle " << bigloop << std::endl;
@@ -127,53 +152,58 @@ void test(int argc ,char**argv){
 	while (time < parameters.simulation.finalTime){
 
 		// Get the time step
+		std::cout<<" u reset"<<std::endl;
 		maxUStencil.reset();    // Not that nice
+		std::cout<<" u field"<<std::endl;
 		maxUFieldIterator.iterate();
+		std::cout<<" u boundary"<<std::endl;
 		maxUBoundaryIterator.iterate();
+		std::cout<<" time"<<std::endl;
 		setTimeStep(maxUStencil, parameters, flowField);
-
+		std::cout<<"fgh"<<std::endl;
 		// compute fgh
 		fghIterator.iterate();
-
+		std::cout<<"wall fgh"<<std::endl;
 		// set global boundary values
 		wallFGHIterator.iterate();
 
 		// set velocities from lb in ns
 		//lbnsCouplingIterator.iterateBoundary();
 		// Set FGH in coupling boundaries
-		LBNSFGHCorrectionIterator.iterate();
-
+		//LBNSFGHCorrectionIterator.iterate();
+		std::cout<<"rhs"<<std::endl;
 		// compute the right hand side
 		rhsIterator.iterate();
-
+		std::cout<<"solve"<<std::endl;
 		// solve for pressure
 		solver.solve();
-
+		std::cout<<"comm"<<std::endl;
 		parallelManager.communicatePressure();
-
+		std::cout<<"v it"<<std::endl;
 		// compute velocity
 		velocityIterator.iterate();
-
+		std::cout<<"p com v"<<std::endl;
 		parallelManager.communicateVelocity();
-
+		std::cout<<" wall v"<<std::endl;
 		// Iterate for velocities on the boundary
 		wallVelocityIterator.iterate();
 		//lbnsCouplingIterator.iterateBoundary();
 		// Transfer velocity from LB to NS
 		// lbnsCouplingIterator.iterate();
-
+		std::cout<<"dt++"<<std::endl;
 		time += parameters.timestep.dt;
-		//std::cout<<"time:"<<time<<std::endl;
+		std::cout<<"time:"<<time<<std::endl;
 		// if ( (timeSteps % parameters.stdOut.interval) == 0 && rank == 0) {
 		//     std::cout << "Current time: " << time << "\ttimestep: " <<
 		//         parameters.timestep.dt << std::endl;
 		// }
 		// timeSteps++;
+		vtkStencil.openFile ( flowField, (float)0 );
+		vtkIterator.iterate();
+		vtkStencil.write( flowField );
+		vtkStencil.closeFile();
 	}
-	vtkStencil.openFile ( flowField, (float)0 );
-	vtkIterator.iterate();
-	vtkStencil.write( flowField );
-	vtkStencil.closeFile();
+
 
 }
 void testGather(int argc ,char**argv){
@@ -232,7 +262,7 @@ void testGather(int argc ,char**argv){
 	if(rank==2)
 		MPI_Gatherv(MPI_IN_PLACE,0, MPI_INT,&data[0], &data_size[0],&displ[0], MPI_INT,2, MPI_COMM_WORLD);
 	else
-	MPI_Gatherv(&data[0],count, MPI_INT,&data[0], &data_size[0],&displ[0], MPI_INT,2, MPI_COMM_WORLD);
+		MPI_Gatherv(&data[0],count, MPI_INT,&data[0], &data_size[0],&displ[0], MPI_INT,2, MPI_COMM_WORLD);
 
 	if(rank==2){
 		for(int i=0;i<data.size();i++)
@@ -244,6 +274,7 @@ void testGather(int argc ,char**argv){
 int main(int argc, char *argv[]){
 	int provided;
 	MPI_Init_thread(&argc,&argv,MPI_THREAD_MULTIPLE ,&provided);
+	std::cout<<"prov:"<<provided<<std::endl;
 	//testGather(argc,argv);
 	//MPI_Finalize();
 	PetscInitialize(&argc, &argv, PETSC_NULL, PETSC_NULL);
@@ -297,12 +328,14 @@ void cca::cfd::NSImplementation::setup(const std::string inputScenario){
 	_parameters.coupling.set=false;
 	PetscParallelConfiguration parallelConfiguration(_parameters);
 	_parameters.coupling.set=true;
-	//
+	_lbField = new LBField(_parameters);
+
+
 	_flowField = new FlowField(_parameters);
 	//		assert(_flowField);
 	_simulation = new Simulation(_parameters,*_flowField);
 	LBNSInitFlagsIterator lbnsInitFlagsIterator(_parameters,*_flowField);
-
+	//
 	lbnsInitFlagsIterator.iterate();
 
 	_lbnsCouplingIterator = new LBNSCouplingIterator(_parameters,*_flowField);
@@ -321,13 +354,12 @@ void cca::cfd::NSImplementation::setup(const std::string inputScenario){
 		int atr;
 		_lb->syncr(atr);
 	}
-
-	_lbField = new LBField(_parameters);
 	_nslbStencil = new NSLBCouplingStencil (
 			_parameters,
 			*_lbField,
 			*_flowField);
-	_nslbCouplingIterator =  new GlobalBoundaryIterator<LBField> (*_lbField,_parameters, *_nslbStencil);
+	_nslbCouplingIterator =  new SmartGlobalBoundaryIterator<LBField> (*_lbField,_parameters, *_nslbStencil);
+
 	for(unsigned int i=0;i<_coms.size();i++)
 		_nslbStencil->registerLBRegion(_coms[i]);
 
@@ -356,6 +388,10 @@ void cca::cfd::NSImplementation::solve(){
 	std::cout<<"start solving loop ns"<<std::endl;
 	FLOAT time=0;
 	_parameters.coupling.set=false;
+	iqn(_nslbStencil->getCouplingData(),_lbnsCouplingIterator->getCouplingData(),_nslbStencil->getSecondaryCouplingData());
+	_nslbStencil->getCouplingData().clear();
+	_nslbStencil->getSecondaryCouplingData().clear();
+
 	while (time <=_parameters.simulation.finalTime){
 		_simulation->solveTimestepPhaseOne();
 		_lbnsCouplingIterator->iterateBoundary();
@@ -363,10 +399,13 @@ void cca::cfd::NSImplementation::solve(){
 		_lbnsCouplingIterator->iterateBoundary();
 		//time++;
 		time += _parameters.timestep.dt;
-		std::cout<<"time:"<<time<<std::endl;
+		//std::cout<<"time:"<<time<<std::endl;
 
 	}
+	std::cout<<"clear mapping"<<std::endl;
 	_lbnsCouplingIterator->clear();
+
+	std::cout<<"clear mapping end"<<std::endl;
 	MPI_Barrier(MPI_COMM_WORLD);
 	pthread_mutex_unlock(&_mutex);
 
@@ -400,9 +439,107 @@ void cca::cfd::NSImplementation::plot(){
 	_simulation->plotVTK(_iter++);
 	pthread_mutex_unlock(&_mutex);
 }
+void cca::cfd::NSImplementation::iqn(std::vector<double>& nslb,std::vector<double>& lbns,std::vector<double>& secondary){
+	if(_iter>=2){
+		precice::utils::DynVector dvalues;
+//		double nslb_min=nslb[0];
+//		double nslb_max=nslb[0];
+//		double lbns_min=lbns[0];
+//		double lbns_max=lbns[0];
+//		double secondary_min=secondary[0];
+//		double secondary_max=secondary[0];
+//		int nslb_min_index=0,nslb_max_index=0;
+//		int lbns_min_index=0,lbns_max_index=0;
+//		int secondary_min_index=0,secondary_max_index=0;
+//
+//
+//		for(unsigned int i=0;i<nslb.size();i++){
+//			if(nslb[i]< nslb_min){
+//				nslb_min=nslb[i];
+//				nslb_min_index=i;
+//			}
+//			if(nslb[i]>nslb_max){
+//				nslb_max=nslb[i];
+//				nslb_max_index=i;
+//			}
+//		}
+//		for(unsigned int i=0;i<lbns.size();i++){
+//			if(lbns[i]< lbns_min){
+//				lbns_min=lbns[i];
+//				lbns_min_index=i;
+//			}
+//			if(lbns[i]>lbns_max){
+//				lbns_max=lbns[i];
+//				lbns_max_index=i;
+//			}
+//		}
+//		for(unsigned int i=0;i<secondary.size();i++){
+//			if(secondary[i]< secondary_min){
+//				secondary_min=secondary[i];
+//				secondary_min_index=i;
+//			}
+//			if(secondary[i]>secondary_max){
+//				secondary_max=secondary[i];
+//				secondary_max_index=i;
+//			}
+//		}
+		double dx= (double)_parameters.coupling.refLength/(double) _parameters.coupling.ratio;
+				double dt= (double)_parameters.lb.viscosity * (double)_parameters.flow.Re * dx * dx;
+				double scale= dx / dt;
+		for(unsigned int i=0;i<nslb.size();i++)
+			dvalues.append(nslb[i]);
+		precice::utils::DynVector fvalues;
+
+		for(unsigned int i=0;i<lbns.size();i++){
+			fvalues.append(lbns[i]*scale);
+		}
+		precice::utils::DynVector sValues;
+		for(unsigned int i=0;i<secondary.size();i++){
+			sValues.append(secondary[i]);
+		}
+		if(_iter==2){
+			std::cout<<"init cpl iqn"<<std::endl;
+			precice::cplscheme::PtrCouplingData dpcd(new precice::cplscheme::CouplingData(&dvalues,false));
+			precice::cplscheme::PtrCouplingData fpcd(new precice::cplscheme::CouplingData(&fvalues,false));
+			precice::cplscheme::PtrCouplingData spcd(new precice::cplscheme::CouplingData(&sValues,false));
+			dpcd->oldValues.append(precice::cplscheme::CouplingData::DataMatrix(
+											dvalues.size(), 1, 0.0));
+			fpcd->oldValues.append(precice::cplscheme::CouplingData::DataMatrix(
+											fvalues.size(), 1, 0.0));
+			spcd->oldValues.append(precice::cplscheme::CouplingData::DataMatrix(
+					sValues.size(), 1, 0.0));
+			_data.insert(std::pair<int, precice::cplscheme::PtrCouplingData>(0,dpcd));
+			_data.insert(std::pair<int, precice::cplscheme::PtrCouplingData>(1,fpcd));
+
+			_data.insert(std::pair<int, precice::cplscheme::PtrCouplingData>(2,spcd));
+			_pp->initialize(_data);
+		}else{
+			std::cout<<"setting data in iqn"<<std::endl;
+			_data.at(0)->values = &dvalues;
+			_data.at(1)->values = &fvalues;
+			_data.at(2)->values = &sValues;
+
+
+
+
+			std::cout<<"start pp"<<std::endl;
+		}
+		_pp->performPostProcessing(_data);
+		_data.at(0)->oldValues.column(0) = (*_data.at(0)->values);
+		_data.at(1)->oldValues.column(0) =(*_data.at(1)->values);
+		_data.at(2)->oldValues.column(0) =(*_data.at(2)->values);
+
+		for(unsigned int i=0;i<_data.at(1)->values->size();i++){
+			lbns[i]=(*_data.at(1)->values)(i)/scale;
+
+		}
+	}
+
+}
 void cca::cfd::NSImplementation::iterate(){
 	pthread_mutex_lock(&_mutex);
-	std::cout<<"starting ns stencil iter"<<std::endl;
+
+	//	std::cout<<"starting ns stencil iter"<<std::endl;
 	_parameters.coupling.set=true;
 	//_nslbStencil->computeBoundaryMeanPressure();
 
@@ -480,31 +617,35 @@ extern std::string retrieveSocketAddress();
 void cca::cfd::NSImplementation::gatherMids(){
 	std::string mid=retrieveSocketAddress();
 	_mids.push_back(mid);
-	if(_parameters.parallel.rank!=0){
+	int comm_size=0;
+	MPI_Comm_size(MPI_COMM_WORLD,&comm_size);
 
-		std::vector<char> bytes(mid.begin(), mid.end());
-		bytes.push_back('\0');
-		int num_of_bytes=(int)bytes.size();
-		assert(num_of_bytes>0);
-		MPI_Send(&num_of_bytes,1,MPI_INT,0,1000,MPI_COMM_WORLD);
-		MPI_Send(&bytes[0],num_of_bytes,MPI_BYTE,0,1000,MPI_COMM_WORLD);
-	}else{
-		int pieces=
-				_parameters.parallel.numProcessors[0]*
-				_parameters.parallel.numProcessors[1]*
-				_parameters.parallel.numProcessors[2];
-		for(int i=1;i<pieces;i++)
-		{
-			int number_of_bytes=0;
-			MPI_Status status;
-			MPI_Recv (&number_of_bytes,1, MPI_INT,i, 1000, MPI_COMM_WORLD,&status);
-			assert(number_of_bytes>0);
-			std::vector<char> buff(number_of_bytes);
-			MPI_Recv (&buff[0],number_of_bytes,MPI_BYTE,i,1000,MPI_COMM_WORLD,&status);
-			std::cout<<"rank:"<<i<<" mid:"<<std::string(&buff[0])<<std::endl;
-			_mids.push_back(std::string(&buff[0]));
+	if(comm_size>0)
+		if(_parameters.parallel.rank!=0){
+
+			std::vector<char> bytes(mid.begin(), mid.end());
+			bytes.push_back('\0');
+			int num_of_bytes=(int)bytes.size();
+			assert(num_of_bytes>0);
+			MPI_Send(&num_of_bytes,1,MPI_INT,0,1000,MPI_COMM_WORLD);
+			MPI_Send(&bytes[0],num_of_bytes,MPI_BYTE,0,1000,MPI_COMM_WORLD);
+		}else{
+			int pieces=
+					_parameters.parallel.numProcessors[0]*
+					_parameters.parallel.numProcessors[1]*
+					_parameters.parallel.numProcessors[2];
+			for(int i=1;i<pieces;i++)
+			{
+				int number_of_bytes=0;
+				MPI_Status status;
+				MPI_Recv (&number_of_bytes,1, MPI_INT,i, 1000, MPI_COMM_WORLD,&status);
+				assert(number_of_bytes>0);
+				std::vector<char> buff(number_of_bytes);
+				MPI_Recv (&buff[0],number_of_bytes,MPI_BYTE,i,1000,MPI_COMM_WORLD,&status);
+				std::cout<<"rank:"<<i<<" mid:"<<std::string(&buff[0])<<std::endl;
+				_mids.push_back(std::string(&buff[0]));
+			}
 		}
-	}
 
 }
 

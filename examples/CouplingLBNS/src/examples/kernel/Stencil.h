@@ -144,6 +144,72 @@ class GlobalBoundaryStencil {
         virtual void applyBackWall   (FlowField & flowField, int i, int j, int k) = 0;
 };
 
+template<class FlowField>
+class SmartGlobalBoundaryStencil {
+
+    protected:
+
+        const Parameters & _parameters;  //! Reference to the parameters
+
+    public:
+
+        SmartGlobalBoundaryStencil ( const Parameters & parameters );
+        virtual ~SmartGlobalBoundaryStencil(){}
+
+        /** Represents an operation in the left wall of a 3D domain.
+         *
+         * @param flowField State of the flow field
+         * @param i Index in the x direction
+         * @param j Index in the y direction
+         * @param k Index in the z direction
+         */
+        virtual bool applyLeftWall   (FlowField & flowField, int i, int j, int k) = 0;
+
+        /** Represents an operation in the right wall of a 3D domain.
+         *
+         * @param flowField State of the flow field
+         * @param i Index in the x direction
+         * @param j Index in the y direction
+         * @param k Index in the z direction
+         */
+        virtual bool applyRightWall  (FlowField & flowField, int i, int j, int k) = 0;
+
+        /** Represents an operation in the bottom wall of a 3D domain.
+         *
+         * @param flowField State of the flow field
+         * @param i Index in the x direction
+         * @param j Index in the y direction
+         * @param k Index in the z direction
+         */
+        virtual bool applyBottomWall (FlowField & flowField, int i, int j, int k) = 0;
+
+        /** Represents an operation in the top wall of a 3D domain.
+         *
+         * @param flowField State of the flow field
+         * @param i Index in the x direction
+         * @param j Index in the y direction
+         * @param k Index in the z direction
+         */
+        virtual bool applyTopWall    (FlowField & flowField, int i, int j, int k) = 0;
+
+        /** Represents an operation in the front wall of a 3D domain.
+         *
+         * @param flowField State of the flow field
+         * @param i Index in the x direction
+         * @param j Index in the y direction
+         * @param k Index in the z direction
+         */
+        virtual bool applyFrontWall  (FlowField & flowField, int i, int j, int k) = 0;
+
+        /** Represents an operation in the back wall of a 3D domain.
+         *
+         * @param flowField State of the flow field
+         * @param i Index in the x direction
+         * @param j Index in the y direction
+         * @param k Index in the z direction
+         */
+        virtual bool applyBackWall   (FlowField & flowField, int i, int j, int k) = 0;
+};
 
 template<class FlowField>
 class ParallelBoundaryStencil {

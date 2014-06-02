@@ -19,20 +19,31 @@
 #include <sstream>
 #include <iostream>
 #include "tinyxml2.h"
+
+#include "utils/Dimensions.hpp"
+#include "cplscheme/SharedPointer.hpp"
+#include "cplscheme/CouplingData.hpp"
+namespace boost
+{
+
+void throw_exception(std::exception const & e){}
+
+}
+
 cca::cfd::LBImplementation::LBImplementation():
 
-_configuration(NULL),
-_lbField(NULL),
-_streamAndCollideStencil(NULL),
-_streamAndCollideIterator(NULL),
-_bounceBackStencil(NULL),
-_bounceBackIterator(NULL),
-_lbnsCouplingIterator(NULL),
-_nslbCouplingStencil(NULL),
-_nslbCouplingIterator(NULL),
-_parallelManager(NULL),
-_movingWallStencil(NULL),
-_movingWallIterator(NULL)
+								_configuration(NULL),
+								_lbField(NULL),
+								_streamAndCollideStencil(NULL),
+								_streamAndCollideIterator(NULL),
+								_bounceBackStencil(NULL),
+								_bounceBackIterator(NULL),
+								_lbnsCouplingIterator(NULL),
+								_nslbCouplingStencil(NULL),
+								_nslbCouplingIterator(NULL),
+								_parallelManager(NULL),
+								_movingWallStencil(NULL),
+								_movingWallIterator(NULL)
 {
 	pthread_mutex_init(&_mutex, NULL);
 	_iter=0;
@@ -43,6 +54,18 @@ _movingWallIterator(NULL)
 	_setupFinished=false;
 	_iterC=0;
 	_comC=0;
+	double initialRelaxation = 1.05;
+	int    maxIterationsUsed = 1000;
+	int    timestepsReused = 6;
+	double singularityLimit = 1e-10;
+	std::vector<int> dataIDs;
+	dataIDs.push_back(0);
+	dataIDs.push_back(1);
+	std::map<int, double> scalings;
+	scalings.insert(std::make_pair(0,1.0));
+	scalings.insert(std::make_pair(1,1.0));
+	_pp = new precice::cplscheme::impl::IQNILSPostProcessing(initialRelaxation,
+			maxIterationsUsed,timestepsReused, singularityLimit, dataIDs, scalings);
 }
 
 
@@ -117,7 +140,103 @@ void cca::cfd::LBImplementation::closeLBProfiles(){
 	pthread_mutex_unlock(&_mutex);
 
 }
+void cca::cfd::LBImplementation::iqn(std::vector<double>& nslb,std::vector<double>& lbns,std::vector<double>& secondary){
+	if(_iter>=2){
+		precice::utils::DynVector dvalues;
+//		double nslb_min=nslb[0];
+//				double nslb_max=nslb[0];
+//				double lbns_min=lbns[0];
+//				double lbns_max=lbns[0];
+//				double secondary_min=secondary[0];
+//				double secondary_max=secondary[0];
+//		int nslb_min_index=0,nslb_max_index=0;
+//				int lbns_min_index=0,lbns_max_index=0;
+//				int secondary_min_index=0,secondary_max_index=0;
+//
+//
+//				for(unsigned int i=0;i<nslb.size();i++){
+//					if(nslb[i]< nslb_min){
+//						nslb_min=nslb[i];
+//						nslb_min_index=i;
+//					}
+//					if(nslb[i]>nslb_max){
+//						nslb_max=nslb[i];
+//						nslb_max_index=i;
+//					}
+//				}
+//				for(unsigned int i=0;i<lbns.size();i++){
+//					if(lbns[i]< lbns_min){
+//						lbns_min=lbns[i];
+//						lbns_min_index=i;
+//					}
+//					if(lbns[i]>lbns_max){
+//						lbns_max=lbns[i];
+//						lbns_max_index=i;
+//					}
+//				}
+//				for(unsigned int i=0;i<secondary.size();i++){
+//					if(secondary[i]< secondary_min){
+//						secondary_min=secondary[i];
+//						secondary_min_index=i;
+//					}
+//					if(secondary[i]>secondary_max){
+//						secondary_max=secondary[i];
+//						secondary_max_index=i;
+//					}
+//				}
+		double dx= (double)_parameters.coupling.refLength/(double) _parameters.coupling.ratio;
+						double dt= (double)_parameters.lb.viscosity * (double)_parameters.flow.Re * dx * dx;
+						double scale= dx / dt;
+				for(unsigned int i=0;i<nslb.size();i++)
+					dvalues.append(nslb[i]);
+				precice::utils::DynVector fvalues;
 
+				for(unsigned int i=0;i<lbns.size();i++){
+					fvalues.append(lbns[i]*scale);
+				}
+						precice::utils::DynVector sValues;
+				for(unsigned int i=0;i<secondary.size();i++){
+					sValues.append(secondary[i]);
+				}
+		if(_iter==2){
+			std::cout<<"init cpl iqn"<<std::endl;
+			precice::cplscheme::PtrCouplingData dpcd(new precice::cplscheme::CouplingData(&dvalues,false));
+			precice::cplscheme::PtrCouplingData fpcd(new precice::cplscheme::CouplingData(&fvalues,false));
+			precice::cplscheme::PtrCouplingData spcd(new precice::cplscheme::CouplingData(&sValues,false));
+			dpcd->oldValues.append(precice::cplscheme::CouplingData::DataMatrix(
+								dvalues.size(), 1, 0.0));
+						fpcd->oldValues.append(precice::cplscheme::CouplingData::DataMatrix(
+								fvalues.size(), 1, 0.0));
+						spcd->oldValues.append(precice::cplscheme::CouplingData::DataMatrix(
+														sValues.size(), 1, 0.0));
+			_data.insert(std::pair<int, precice::cplscheme::PtrCouplingData>(0,dpcd));
+			_data.insert(std::pair<int, precice::cplscheme::PtrCouplingData>(1,fpcd));
+
+			_data.insert(std::pair<int, precice::cplscheme::PtrCouplingData>(2,spcd));
+			_pp->initialize(_data);
+		}else{
+			std::cout<<"setting data in iqn"<<std::endl;
+			_data.at(0)->values = &dvalues;
+			_data.at(1)->values = &fvalues;
+			_data.at(2)->values = &sValues;
+
+
+
+
+			std::cout<<"start pp"<<std::endl;
+		}
+		_pp->performPostProcessing(_data);
+		_data.at(0)->oldValues.column(0) = (*_data.at(0)->values);
+		_data.at(1)->oldValues.column(0) =(*_data.at(1)->values);
+		_data.at(2)->oldValues.column(0) =(*_data.at(2)->values);
+		for(unsigned int i=0;i<_data.at(0)->values->size();i++)
+			nslb[i]=(*_data.at(0)->values)(i);
+		for(unsigned int i=0;i<_data.at(2)->values->size();i++)
+			secondary[i]=(*_data.at(2)->values)(i);
+//		for(unsigned int i=0;i<_data.at(2)->values->size();i++)
+//					secondary[i]=(*_data.at(2)->values)(i);
+	}
+}
 void cca::cfd::LBImplementation::printLBDensity(){
 
 }
@@ -227,7 +346,9 @@ void cca::cfd::LBImplementation::readGeometry(std::string file){
 }
 void cca::cfd::LBImplementation::solve(){
 	pthread_mutex_lock(&_mutex);
-	const int lbIterations = 10000* (_lbField->getCellsZ()-1) * (_lbField->getCellsZ()-1) / (40*40);
+	int cellZ= _parameters.coupling.sizeNS[2] * _parameters.coupling.ratio + 1;
+	const int lbIterations = 10000* (cellZ-1) * (cellZ-1) / (40*40);
+
 	// The original experiments had a field of size 40
 	//s* (_lbField->getCellsZ()-1) * (_lbField->getCellsZ()-1) / (40*40)
 	//_nslbCouplingStencil->computeBoundaryMeanPressure();
@@ -238,6 +359,8 @@ void cca::cfd::LBImplementation::solve(){
 	//
 	//if(_parameters.parallel.rank==0)
 	//_nslbCouplingStencil->computeBoundaryMeanPressure();
+	iqn(_nslbCouplingStencil->getCouplingData(),_lbnsCouplingIterator->getCouplingData(),_nslbCouplingStencil->getSecondaryCouplingData());
+	_lbnsCouplingIterator->getCouplingData().clear();
 	_nslbCouplingIterator->iterate();
 	for (int i = 0; i < lbIterations; i++){
 		_parallelManager->communicatePdfs();
@@ -252,8 +375,11 @@ void cca::cfd::LBImplementation::solve(){
 		_bounceBackIterator->iterate();
 		//_movingWallIterator->iterate();
 	}
+	std::cout<<"clear mapping"<<std::endl;
 	_nslbCouplingStencil->clear();
-	MPI_Barrier(MPI_COMM_WORLD);
+
+	std::cout<<"clear mapping end"<<std::endl;
+	//MPI_Barrier(MPI_COMM_WORLD);
 	pthread_mutex_unlock(&_mutex);
 
 
@@ -303,14 +429,14 @@ void cca::cfd::LBImplementation::iterateBoundary(){
 	std::cout<<"lb rank:"<<rank<<"starting boundary iter"<<std::endl;
 	_lbnsCouplingIterator->iterateBoundary();
 	if(_maxSizeCommunicators.size()==0){
-			_maxSizeCommunicators.resize(_comC*2);
-			_sizeCommunicators.resize(_comC*2);
-			_lbnsCouplingIterator->initGather();
-			MPI_Allreduce(&_sizeCommunicators[0],&_maxSizeCommunicators[0],_comC,MPI_2INT,MPI_MAXLOC,MPI_COMM_WORLD);
-			std::cout<<"init gather finished"<<std::endl;
-			for(int i=0;i<_comC;i++){
-				std::cout<<"region i:"<<i<<_maxSizeCommunicators[i*2+1]<<" data:"<<_maxSizeCommunicators[i*2]<<std::endl;
-			}
+		_maxSizeCommunicators.resize(_comC*2);
+		_sizeCommunicators.resize(_comC*2);
+		_lbnsCouplingIterator->initGather();
+		MPI_Allreduce(&_sizeCommunicators[0],&_maxSizeCommunicators[0],_comC,MPI_2INT,MPI_MAXLOC,MPI_COMM_WORLD);
+		std::cout<<"init gather finished"<<std::endl;
+		for(int i=0;i<_comC;i++){
+			std::cout<<"region i:"<<i<<_maxSizeCommunicators[i*2+1]<<" data:"<<_maxSizeCommunicators[i*2]<<std::endl;
+		}
 	}
 	_lbnsCouplingIterator->flush();
 	MPI_Barrier(MPI_COMM_WORLD);
@@ -453,17 +579,17 @@ void cca::cfd::LBImplementation::forwardVelocities(
 		int& ack){
 	pthread_mutex_lock(&_mutex);
 	for (int i=0;i<keys_len;i++){
-			_nslbCouplingStencil->setVelocityComponent(
-					keys[i],
-					offsets[3*i],
-					offsets[3*i+1],
-					offsets[3*i+2],
-					flips[3*i],
-					flips[3*i+1],
-					flips[3*i+2],
-					values[i]);
+		_nslbCouplingStencil->setVelocityComponent(
+				keys[i],
+				offsets[3*i],
+				offsets[3*i+1],
+				offsets[3*i+2],
+				flips[3*i],
+				flips[3*i+1],
+				flips[3*i+2],
+				values[i]);
 
-		}
+	}
 	ack=1;
 	//std::cout<<"receiving velocities on lb"<<std::endl;
 	pthread_mutex_unlock(&_mutex);
@@ -480,9 +606,9 @@ void cca::cfd::LBImplementation::forwardPressure(
 		const int values_len,
 		int& ack){
 	pthread_mutex_lock(&_mutex);
-//	std::cout<<"start iter:"<<_iterC++<<std::endl;
-//	std::cout<<"receiving pressure on rank:"
-//			<<_parameters.parallel.rank<<" size:"<<values_len<<std::endl;
+	//	std::cout<<"start iter:"<<_iterC++<<std::endl;
+	//	std::cout<<"receiving pressure on rank:"
+	//			<<_parameters.parallel.rank<<" size:"<<values_len<<std::endl;
 	for (unsigned int i = 0 ; i < values_len;i++)
 		_nslbCouplingStencil->setPressure(
 				keys[i],

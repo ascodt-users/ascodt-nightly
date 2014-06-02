@@ -10,25 +10,37 @@ void LBNSCouplingIterator::setNormalVector(int nx, int ny, int nz){
 
 void LBNSCouplingIterator::interpolateComponent (int i, int j, int k, int component) {
 	int localI,localJ,localK;
-	if(toLocalIndex(i,j,k,localI,localJ,localK))
+	if(toLocalIndex(i,j,k,localI,localJ,localK)){
 		_flowField.getVelocity().getVector(localI,localJ,localK)[component] =
 				_interpolator.interpolateVelocityComponent(i, j, k, component);
+		struct Contribution cont;
+			cont.x=i;
+			cont.y=j;
+			cont.z=k;
+			cont.component=component;
+			_localContributions.push_back(cont);
 
+	}
 }
 
 
 LBNSCouplingIterator::LBNSCouplingIterator(const Parameters & parameters,FlowField & flowField):
-						_interpolator(parameters),
-						_flowField (flowField), _parameters (parameters),
-						_offset (getOverlapWidth (parameters)),
+								_interpolator(parameters),
+								_flowField (flowField), _parameters (parameters),
+								_offset (getOverlapWidth (parameters)),
 
-						_lowerX (parameters.coupling.offsetNS[0] + _offset),
-						_upperX (parameters.coupling.offsetNS[0] + parameters.coupling.sizeNS[0] - _offset - 1),
-						_lowerY (parameters.coupling.offsetNS[1] + _offset),
-						_upperY (parameters.coupling.offsetNS[1] + parameters.coupling.sizeNS[1] - _offset - 1),
-						_lowerZ (parameters.coupling.offsetNS[2] + _offset),
-						_upperZ (parameters.coupling.offsetNS[2] + parameters.coupling.sizeNS[2] - _offset - 1)
-{}
+								_lowerX (parameters.coupling.offsetNS[0] + _offset),
+								_upperX (parameters.coupling.offsetNS[0] + parameters.coupling.sizeNS[0] - _offset - 1),
+								_lowerY (parameters.coupling.offsetNS[1] + _offset),
+								_upperY (parameters.coupling.offsetNS[1] + parameters.coupling.sizeNS[1] - _offset - 1),
+								_lowerZ (parameters.coupling.offsetNS[2] + _offset),
+								_upperZ (parameters.coupling.offsetNS[2] + parameters.coupling.sizeNS[2] - _offset - 1)
+{
+
+
+
+
+}
 
 inline bool LBNSCouplingIterator::toLocalIndex(const int i,const int j, const int k,int& i_out,int& j_out, int& k_out) const{
 	i_out=i-_parameters.parallel.firstCorner[0];
@@ -87,8 +99,17 @@ void LBNSCouplingIterator::clear(){
 	_interpolator.clear();
 }
 void LBNSCouplingIterator::iterateBoundary(){
-
+	int localI,localJ,localK;
 	_interpolator.switchToLocalVelocities();
+	if(_localContributions.size()>0){
+			for(unsigned int i=0;i<_localContributions.size();i++){
+				toLocalIndex(_localContributions[i].x,_localContributions[i].y,_localContributions[i].z,
+						localI,localJ,localK);
+				_flowField.getVelocity().getVector(localI,localJ,localK)[_localContributions[i].component] =
+						_interpolator.interpolateVelocityComponent(_localContributions[i].x,_localContributions[i].y,_localContributions[i].z, _localContributions[i].component);
+			}
+			return;
+		}
 	for (int j = _lowerY; j <= _upperY - 1; j++){
 		for (int k = _lowerZ; k <= _upperZ - 1; k++){
 			// Left face

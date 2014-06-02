@@ -21,12 +21,12 @@ class LBNSInitFlagsIterator {
 
         const int _offset;  // How many cells away from the boundary
 
-        const int _lowerX;
-        const int _upperX;
-        const int _lowerY;
-        const int _upperY;
-        const int _lowerZ;
-        const int _upperZ;
+        int _lowerX;
+        int _upperX;
+        int _lowerY;
+        int _upperY;
+        int _lowerZ;
+        int _upperZ;
 
         inline bool toLocalIndex(const int i,const int j, const int k,int& i_out,int& j_out, int& k_out) const;
 

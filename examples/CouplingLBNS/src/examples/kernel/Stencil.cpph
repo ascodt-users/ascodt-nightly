@@ -7,6 +7,9 @@ FieldStencil<FlowField>::FieldStencil ( const Parameters & parameters ) : _param
 template<class FlowField>
 GlobalBoundaryStencil<FlowField>::GlobalBoundaryStencil ( const Parameters & parameters ):
     _parameters(parameters) {}
+template<class FlowField>
+SmartGlobalBoundaryStencil<FlowField>::SmartGlobalBoundaryStencil ( const Parameters & parameters ):
+    _parameters(parameters) {}
 
 
 template<class FlowField>

@@ -19,6 +19,7 @@
 #include <vector>
 #include <pthread.h>
 #include <fstream>
+#include "cplscheme/impl/IQNILSPostProcessing.hpp"
 namespace cca { 
 namespace cfd { 
 
@@ -38,7 +39,8 @@ private:
 	Parameters _parameters;
 	LBNSCouplingIterator *_lbnsCouplingIterator;
 	NSLBCouplingStencil *_nslbStencil;
-	GlobalBoundaryIterator<LBField> *_nslbCouplingIterator;
+	precice::cplscheme::impl::IQNILSPostProcessing* _pp;
+	SmartGlobalBoundaryIterator<LBField> *_nslbCouplingIterator;
 	std::vector<double> _velocityX;
 	std::vector<double> _velocityY;
 	std::vector<double> _velocityZ;
@@ -56,8 +58,10 @@ private:
 	std::ofstream _nsprofiles;
 	std::ofstream _nspressure;
 	int _comC;
+	precice::cplscheme::impl::PostProcessing::DataMap _data;
 	void gatherDomainDescriptions();
 	void gatherMids();
+	void iqn(std::vector<double>& nslb,std::vector<double>& lbns,std::vector<double>& secondary);
 public:
 	NSImplementation();
 	~NSImplementation();
@@ -78,6 +82,7 @@ public:
 	void printNSProfiles();
 	void closeNSProfiles();
 	void solve();
+
 	void forwardVelocities(
 			const int* keys,
 			const int keys_len,
