@@ -55,14 +55,6 @@ SmartGlobalBoundaryIterator<FlowField>::SmartGlobalBoundaryIterator(FlowField & 
 	_upperY=flowField.getCellsY()+_highOffset;
 	_upperZ=flowField.getCellsZ()+_highOffset;
 	_init=false;
-	//if(_parameters.coupling.set){
-
-
-
-
-
-
-
 
 	_left_min[0]=_lowerZ;
 	_left_min[1]=_lowerY;

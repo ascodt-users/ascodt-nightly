@@ -110,9 +110,12 @@ void test(int argc ,char**argv){
 	Configuration configuration(argv[1]);
 	Parameters parameters;
 	configuration.loadParameters(parameters);
-	parameters.coupling.set = false;
-	PetscParallelConfiguration parallelConfiguration(parameters);
-	parameters.coupling.set = true;
+	PetscParallelConfiguration parallelConfiguration(
+			parameters,
+			parameters.geometry.sizeX,
+			parameters.geometry.sizeY,
+			parameters.geometry.sizeZ);
+
 
 	FlowField flowField(parameters);
 	std::cout<<"flow field created"<<std::endl;
@@ -325,10 +328,13 @@ void cca::cfd::NSImplementation::setup(const std::string inputScenario){
 	_configuration= new Configuration(inputScenario.c_str());
 
 	_configuration->loadParameters(_parameters);
-	_parameters.coupling.set=false;
-	PetscParallelConfiguration parallelConfiguration(_parameters);
-	_parameters.coupling.set=true;
-	_lbField = new LBField(_parameters);
+
+	PetscParallelConfiguration parallelConfiguration(_parameters,_parameters.geometry.sizeX,_parameters.geometry.sizeY,_parameters.geometry.sizeZ);
+
+	_lbField = new LBField(_parameters,
+			_parameters.coupling.sizeNS[0] * _parameters.coupling.ratio - 1,
+			_parameters.coupling.sizeNS[1] * _parameters.coupling.ratio - 1,
+			_parameters.coupling.sizeNS[2] * _parameters.coupling.ratio - 1);
 
 
 	_flowField = new FlowField(_parameters);

@@ -15,7 +15,10 @@ struct Sphere{
 class LBField{
 
 public:
-	LBField(const Parameters & parameters);
+	LBField(const Parameters & parameters,
+			const int geometrySizeX,
+			const int geometrySizeY,
+			const int geometrySizeZ);
 
 	// Constructs an LBField out of its size
 	//LBField(int cellsX, int cellsY, int cellsZ);

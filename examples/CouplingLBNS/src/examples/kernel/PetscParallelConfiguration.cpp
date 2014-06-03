@@ -1,7 +1,11 @@
 #include "PetscParallelConfiguration.h"
 
-PetscParallelConfiguration::PetscParallelConfiguration(Parameters & parameters):
-    _parameters(parameters) {
+PetscParallelConfiguration::PetscParallelConfiguration(
+		Parameters & parameters,
+		const int geomtrySizeX,
+	    const int geomtrySizeY,
+	    const int geomtrySizeZ):
+    _parameters(parameters){
 
     // Obtain the rank of the current processor
     int rank, nproc;
@@ -9,6 +13,9 @@ PetscParallelConfiguration::PetscParallelConfiguration(Parameters & parameters):
     MPI_Comm_size(PETSC_COMM_WORLD, &nproc);
 
     parameters.parallel.rank = rank;
+    _geometrySizes[0]=geomtrySizeX;
+    _geometrySizes[1]=geomtrySizeY;
+    _geometrySizes[2]=geomtrySizeZ;
 
     // Obtain the position of this subdomain, and locate its neighbors.
     createIndices();
@@ -25,6 +32,7 @@ PetscParallelConfiguration::PetscParallelConfiguration(Parameters & parameters):
     if (nproc != nprocFromFile){
         handleError(1, "The number of processors specified in the configuration file doesn't match the communicator");
     }
+
 }
 
 
@@ -98,17 +106,17 @@ void PetscParallelConfiguration::computeSizes(){
         _parameters.parallel.sizes[i] = new PetscInt[_parameters.parallel.numProcessors[i]];
     }
 
-    int geometrySizes[3];
+    /*int geometrySizes[3];
     geometrySizes[0] = (_parameters.coupling.set)?_parameters.coupling.sizeNS[0] * _parameters.coupling.ratio - 1 :_parameters.geometry.sizeX;
-        geometrySizes[1] = (_parameters.coupling.set)?_parameters.coupling.sizeNS[1] * _parameters.coupling.ratio - 1 :_parameters.geometry.sizeY;
-        geometrySizes[2] = (_parameters.coupling.set)?_parameters.coupling.sizeNS[2] * _parameters.coupling.ratio - 1 :_parameters.geometry.sizeZ;
-
+    geometrySizes[1] = (_parameters.coupling.set)?_parameters.coupling.sizeNS[1] * _parameters.coupling.ratio - 1 :_parameters.geometry.sizeY;
+    geometrySizes[2] = (_parameters.coupling.set)?_parameters.coupling.sizeNS[2] * _parameters.coupling.ratio - 1 :_parameters.geometry.sizeZ;
+	*/
 
     for (int i = 0; i < dim; i++){
         for (int j = 0; j < _parameters.parallel.numProcessors[i]; j++){
             _parameters.parallel.sizes[i][j] =
-                geometrySizes[i] / _parameters.parallel.numProcessors[i];
-            if (j < geometrySizes[i] % _parameters.parallel.numProcessors[i]){
+                _geometrySizes[i] / _parameters.parallel.numProcessors[i];
+            if (j < _geometrySizes[i] % _parameters.parallel.numProcessors[i]){
                 _parameters.parallel.sizes[i][j] ++;
             }
         }

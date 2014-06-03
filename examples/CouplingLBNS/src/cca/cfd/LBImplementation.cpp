@@ -70,42 +70,42 @@ cca::cfd::LBImplementation::LBImplementation():
 
 
 cca::cfd::LBImplementation::~LBImplementation(){
-	//	if(_configuration){
-	//		delete _configuration;
-	//	}
-	//	if(_lbField){
-	//		delete _lbField;
-	//	}
-	//	if(_streamAndCollideStencil){
-	//		delete _streamAndCollideStencil;
-	//	}
-	//	if(_streamAndCollideIterator){
-	//		delete _streamAndCollideIterator;
-	//	}
-	//	if(	_bounceBackStencil){
-	//		delete 	_bounceBackStencil;
-	//	}
-	//	if(	_bounceBackIterator){
-	//		delete 	_bounceBackIterator;
-	//	}
-	//	if(_lbnsCouplingIterator){
-	//		delete _lbnsCouplingIterator;
-	//	}
-	//	if(_nslbCouplingStencil){
-	//		delete _nslbCouplingStencil;
-	//	}
-	//	if(_nslbCouplingIterator){
-	//		delete _nslbCouplingIterator;
-	//	}
-	//	if(_parallelManager){
-	//		delete _parallelManager;
-	//	}
-	//	if(_movingWallStencil){
-	//		delete _movingWallStencil;
-	//	}
-	//	if(_movingWallIterator){
-	//		delete _movingWallIterator;
-	//	}
+		if(_configuration){
+			delete _configuration;
+		}
+		if(_lbField){
+			delete _lbField;
+		}
+		if(_streamAndCollideStencil){
+			delete _streamAndCollideStencil;
+		}
+		if(_streamAndCollideIterator){
+			delete _streamAndCollideIterator;
+		}
+		if(	_bounceBackStencil){
+			delete 	_bounceBackStencil;
+		}
+		if(	_bounceBackIterator){
+			delete 	_bounceBackIterator;
+		}
+		if(_lbnsCouplingIterator){
+			delete _lbnsCouplingIterator;
+		}
+		if(_nslbCouplingStencil){
+			delete _nslbCouplingStencil;
+		}
+		if(_nslbCouplingIterator){
+			delete _nslbCouplingIterator;
+		}
+		if(_parallelManager){
+			delete _parallelManager;
+		}
+		if(_movingWallStencil){
+			delete _movingWallStencil;
+		}
+		if(_movingWallIterator){
+			delete _movingWallIterator;
+		}
 
 }
 
@@ -121,13 +121,11 @@ extern "C" void main_loop_(bool);
 int main(int argc, char *argv[]){
 	int provided;
 	MPI_Init_thread(&argc,&argv,MPI_THREAD_MULTIPLE ,&provided);
-	//std::cout<<"thread levels:"<<MPI_THREAD_MULTIPLE<<","<<provided<<std::endl;
 	PetscInitialize(&argc, &argv, PETSC_NULL, PETSC_NULL);
-	/*
-	 * testParallelLBM(std::string(
-			"/work_fast/atanasoa/Programme/workspace_new/LB_NS_EOF/trunk/src/configurationFiles/cavity_lb.xml"));
-	 */
-	main_loop_(true);
+
+	testParallelLBM(std::string(argv[1]));
+
+	//main_loop_(true);
 	PetscFinalize();
 }
 
@@ -269,13 +267,24 @@ void cca::cfd::LBImplementation::setup(const std::string inputScenario){
 	pthread_mutex_lock(&_mutex);
 	_configuration= new Configuration(inputScenario);
 	_configuration->loadParameters(_parameters,MPI_COMM_WORLD,"parallel-lb");
-	_parameters.coupling.set = true;
-	PetscParallelConfiguration parallelConfiguration(_parameters);
+
+	PetscParallelConfiguration parallelConfiguration(
+			_parameters,
+			(_parameters.coupling.set)?_parameters.coupling.sizeNS[0] * _parameters.coupling.ratio - 1:
+					_parameters.geometry.sizeX,
+		    (_parameters.coupling.set)?_parameters.coupling.sizeNS[1] * _parameters.coupling.ratio - 1:
+		    		_parameters.geometry.sizeY,
+		    (_parameters.coupling.set)?_parameters.coupling.sizeNS[2] * _parameters.coupling.ratio - 1:
+		    		_parameters.geometry.sizeZ
+	);
 	int rank=0;
 	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 	std::cout<<"creating lb field on rank:"<<rank<<std::endl;
-	_parameters.coupling.set = false;
-	_lbField=new LBField(_parameters);
+	_lbField=new LBField(
+			_parameters,
+			_parameters.parallel.localSize[0],
+			_parameters.parallel.localSize[1],
+			_parameters.parallel.localSize[2]);
 	//readGeometry("/home/atanasoa/Desktop/spheresP2.xml");
 	_lbField->allocate();
 	_streamAndCollideStencil = new LBStreamAndCollideStencil(_parameters);
@@ -284,29 +293,30 @@ void cca::cfd::LBImplementation::setup(const std::string inputScenario){
 	_bounceBackIterator = new FieldIterator<LBField> (*_lbField, *_bounceBackStencil);
 	_movingWallStencil = new LBMovingWallStencil(_parameters);
 	_movingWallIterator = new GlobalBoundaryIterator<LBField>(*_lbField,_parameters,*_movingWallStencil, 1, -1);
-
-	_lbnsCouplingIterator = new LBNSCouplingIterator (_parameters,*_lbField);
-	for(unsigned int i=0;i<_coms.size();i++)
-		_lbnsCouplingIterator->registerNSRegion(_coms[i]);
-	gatherDomainDescriptions();
-	gatherMids();
-	if(_parameters.parallel.rank==0&&_ns){
-		std::cout<<"setting lb region"<<std::endl;
-		int regionSize=3*_parameters.parallel.numProcessors[0]*_parameters.parallel.numProcessors[1]*_parameters.parallel.numProcessors[2];
-		_ns->setupCommForLBRegionParallel(
-				&_startDomain[0],
-				regionSize,
-				&_endDomain[0],
-				regionSize,
-				&_mids[0],
-				regionSize/3);
-		int atr;
-		_ns->syncr(atr);
+	if(_parameters.coupling.set){
+		_lbnsCouplingIterator = new LBNSCouplingIterator (_parameters,*_lbField);
+		for(unsigned int i=0;i<_coms.size();i++)
+			_lbnsCouplingIterator->registerNSRegion(_coms[i]);
+		gatherDomainDescriptions();
+		gatherMids();
+		if(_parameters.parallel.rank==0&&_ns){
+			std::cout<<"setting lb region"<<std::endl;
+			int regionSize=3*_parameters.parallel.numProcessors[0]*_parameters.parallel.numProcessors[1]*_parameters.parallel.numProcessors[2];
+			_ns->setupCommForLBRegionParallel(
+					&_startDomain[0],
+					regionSize,
+					&_endDomain[0],
+					regionSize,
+					&_mids[0],
+					regionSize/3);
+			int atr;
+			_ns->syncr(atr);
+		}
+		_nslbCouplingStencil = new NSLBCouplingStencil (
+				_parameters,
+				*_lbField);
+		_nslbCouplingIterator = new GlobalBoundaryIterator<LBField>(*_lbField, _parameters,*_nslbCouplingStencil);
 	}
-	_nslbCouplingStencil = new NSLBCouplingStencil (
-			_parameters,
-			*_lbField);
-	_nslbCouplingIterator = new GlobalBoundaryIterator<LBField>(*_lbField, _parameters,*_nslbCouplingStencil);
 	_parallelManager = new LBParallelManager(*_lbField,_parameters);
 	//_parameters.coupling.set = false;
 	pthread_mutex_unlock(&_mutex);
@@ -349,37 +359,20 @@ void cca::cfd::LBImplementation::solve(){
 	int cellZ= _parameters.coupling.sizeNS[2] * _parameters.coupling.ratio + 1;
 	const int lbIterations = 10000* (cellZ-1) * (cellZ-1) / (40*40);
 
-	// The original experiments had a field of size 40
-	//s* (_lbField->getCellsZ()-1) * (_lbField->getCellsZ()-1) / (40*40)
-	//_nslbCouplingStencil->computeBoundaryMeanPressure();
-	_parameters.coupling.set=false;
-
-	//_nslbCouplingStencil->computeBoundaryMeanPressure();
-	//_nslbCouplingIterator->iterate();
-	//
-	//if(_parameters.parallel.rank==0)
-	//_nslbCouplingStencil->computeBoundaryMeanPressure();
-	iqn(_nslbCouplingStencil->getCouplingData(),_lbnsCouplingIterator->getCouplingData(),_nslbCouplingStencil->getSecondaryCouplingData());
-	_lbnsCouplingIterator->getCouplingData().clear();
-	_nslbCouplingIterator->iterate();
+	if(_parameters.coupling.set){
+		iqn(_nslbCouplingStencil->getCouplingData(),_lbnsCouplingIterator->getCouplingData(),_nslbCouplingStencil->getSecondaryCouplingData());
+		_lbnsCouplingIterator->getCouplingData().clear();
+		_nslbCouplingIterator->iterate();
+	}
 	for (int i = 0; i < lbIterations; i++){
 		_parallelManager->communicatePdfs();
-
-
-		//_nslbCouplingStencil->computeBoundaryMeanPressure();
-
 		_lbField->swap();
-
 		_streamAndCollideIterator->iterate();
-
 		_bounceBackIterator->iterate();
-		//_movingWallIterator->iterate();
 	}
-	std::cout<<"clear mapping"<<std::endl;
-	_nslbCouplingStencil->clear();
-
-	std::cout<<"clear mapping end"<<std::endl;
-	//MPI_Barrier(MPI_COMM_WORLD);
+	if(_parameters.coupling.set){
+		_nslbCouplingStencil->clear();
+	}
 	pthread_mutex_unlock(&_mutex);
 
 

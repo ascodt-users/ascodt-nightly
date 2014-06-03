@@ -27,8 +27,8 @@ find_library (PETSC_MKL_INTEL_THREAD_LIB mkl_intel_thread HINTS "/opt/intel/mkl"
 find_library (PETSC_MKL_CORE_LIB mkl_core HINTS "/opt/intel/mkl" "/home/atanasoa/Programme/petsc-3.3-p7/-Xlinker" "/opt/intel/mpi-rt/4.1" "/opt/intel/impi/4.1.3.049/intel64/lib" "/usr/lib/gcc/x86_64-linux-gnu/4.7" "/lib/x86_64-linux-gnu" "/usr/lib/x86_64-linux-gnu" "/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64" "/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64" "/usr/lib/i386-linux-gnu" )
 find_library (PETSC_MKL_LAPACK_LIB mkl_lapack HINTS "/opt/intel/mkl" "/home/atanasoa/Programme/petsc-3.3-p7/-Xlinker" "/opt/intel/mpi-rt/4.1" "/opt/intel/impi/4.1.3.049/intel64/lib" "/usr/lib/gcc/x86_64-linux-gnu/4.7" "/lib/x86_64-linux-gnu" "/usr/lib/x86_64-linux-gnu" "/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64" "/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64" "/usr/lib/i386-linux-gnu" )
 find_library (PETSC_MKL_BLAS_LIB mkl_blas HINTS "/opt/intel/mkl" "/home/atanasoa/Programme/petsc-3.3-p7/-Xlinker" "/opt/intel/mpi-rt/4.1" "/opt/intel/impi/4.1.3.049/intel64/lib" "/usr/lib/gcc/x86_64-linux-gnu/4.7" "/lib/x86_64-linux-gnu" "/usr/lib/x86_64-linux-gnu" "/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64" "/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64" "/usr/lib/i386-linux-gnu" )
-find_library (BOOST_SYSTEM_LIB boost_system HINTS "/opt/intel/mkl" "/home/atanasoa/Programme/petsc-3.3-p7/-Xlinker" "/opt/intel/mpi-rt/4.1" "/opt/intel/impi/4.1.3.049/intel64/lib" "/usr/lib/gcc/x86_64-linux-gnu/4.7" "/lib/x86_64-linux-gnu" "/usr/lib/x86_64-linux-gnu" "/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64" "/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64" "/usr/lib/i386-linux-gnu" )
-find_library (BOOST_THEAD_LIB boost_thread HINTS "/opt/intel/mkl" "/home/atanasoa/Programme/petsc-3.3-p7/-Xlinker" "/opt/intel/mpi-rt/4.1" "/opt/intel/impi/4.1.3.049/intel64/lib" "/usr/lib/gcc/x86_64-linux-gnu/4.7" "/lib/x86_64-linux-gnu" "/usr/lib/x86_64-linux-gnu" "/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64" "/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64" "/usr/lib/i386-linux-gnu" )
+#find_library (BOOST_SYSTEM_LIB boost_system HINTS "/opt/intel/mkl" "/home/atanasoa/Programme/petsc-3.3-p7/-Xlinker" "/opt/intel/mpi-rt/4.1" "/opt/intel/impi/4.1.3.049/intel64/lib" "/usr/lib/gcc/x86_64-linux-gnu/4.7" "/lib/x86_64-linux-gnu" "/usr/lib/x86_64-linux-gnu" "/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64" "/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64" "/usr/lib/i386-linux-gnu" )
+#find_library (BOOST_THEAD_LIB boost_thread HINTS "/opt/intel/mkl" "/home/atanasoa/Programme/petsc-3.3-p7/-Xlinker" "/opt/intel/mpi-rt/4.1" "/opt/intel/impi/4.1.3.049/intel64/lib" "/usr/lib/gcc/x86_64-linux-gnu/4.7" "/lib/x86_64-linux-gnu" "/usr/lib/x86_64-linux-gnu" "/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib/intel64" "/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64" "/usr/lib/i386-linux-gnu" )
 
 # ------------------------------------------------------------------------------
 # Issue deprecation errors for macros and functions.
@@ -196,8 +196,6 @@ target_link_libraries("cca.cfd.LB"
                       ${Threads_LIBRARIES}
                       ${PETSC_LIBRARIES}
                       ${MKL_LIBRARIES}
-                      ${BOOST_THEAD_LIB}
-                      ${BOOST_SYSTEM_LIB}
                       iomp5)
 
 install(TARGETS "cca.cfd.LB"
