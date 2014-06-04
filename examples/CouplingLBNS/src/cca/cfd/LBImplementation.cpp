@@ -123,9 +123,9 @@ int main(int argc, char *argv[]){
 	MPI_Init_thread(&argc,&argv,MPI_THREAD_MULTIPLE ,&provided);
 	PetscInitialize(&argc, &argv, PETSC_NULL, PETSC_NULL);
 
-	testParallelLBM(std::string(argv[1]));
+	//testParallelLBM(std::string(argv[1]));
 
-	//main_loop_(true);
+	main_loop_(true);
 	PetscFinalize();
 }
 

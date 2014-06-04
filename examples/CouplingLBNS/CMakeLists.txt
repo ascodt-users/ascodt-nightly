@@ -15,7 +15,8 @@ endif()
 set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH "")
 # ==============================================================================
 # }}} General
-
+set(PETSC_EXECUTABLE_RUNS ON)
+set(MKL_DIR "/lrz/sys/intel/mkl110u3")
 add_subdirectory(cmake/cca.cfd.CouplingDriver)
 add_subdirectory(cmake/cca.cfd.UekermannDriver)
 add_subdirectory(cmake/cca.cfd.LB)
