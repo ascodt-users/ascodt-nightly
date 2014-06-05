@@ -1100,17 +1100,18 @@ void initialise_(CCA_CFD_UEKERMANNDRIVER_arg& arg,bool joinable){
      arg.number_of_workers = 10;
      arg.xml=NULL;
      arg.joinable=joinable;
+     invoker_create_instance(&arg.ref,0,0,NULL,NULL
+#ifdef Parallel
+   ,MPI_COMM_WORLD,0
+#endif
+   );
+
      initialiseENV(arg);
      
      initialiseXMLDaemons(arg);
      initialiseParallel(arg);
      
 
-   invoker_create_instance(&arg.ref,0,0,NULL,NULL
-#ifdef Parallel
-   ,MPI_COMM_WORLD,0 	
-#endif   
-   );
    if(arg.java_client_flag)         
      open_client(arg.hostname.c_str(),arg.client_port.c_str(),arg.java_serverfd,arg.java_clientfd);
 
