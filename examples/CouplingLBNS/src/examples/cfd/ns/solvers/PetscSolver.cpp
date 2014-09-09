@@ -261,6 +261,20 @@ void PetscSolver::solve(){
     } else if (_flowField.getDim() == 3){
         KSPSetComputeRHS(_ksp, computeRHS3D, &_ctx);
         KSPSolve(_ksp, PETSC_NULL, _x);
+//        KSPConvergedReason reason;
+//               PetscInt iters;
+//               PetscReal norm;
+//               KSPGetConvergedReason(_ksp,&reason);
+//               if(reason<0){
+//                       printf("diverge:%d\n",(int)reason);
+//                       KSPGetResidualNorm(_ksp,&norm);
+//                       printf("res:%F\n",(double)norm);
+//               }else{
+//                       KSPGetIterationNumber(_ksp,&iters);
+//                       printf("convergence in %d iters\n",(int)iters);
+//
+//               }
+
 
         // Then extract the information
         PetscScalar ***array;
@@ -441,10 +455,10 @@ PetscErrorCode computeMatrix2D(KSP ksp, Mat A, Mat pc, MatStructure * matStructu
     MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY);
     MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY);
 
-    MatNullSpace nullspace;
-    MatNullSpaceCreate(PETSC_COMM_WORLD,PETSC_TRUE,0,0,&nullspace);
-    MatSetNullSpace(A,nullspace);
-    MatNullSpaceDestroy(&nullspace);
+//    MatNullSpace nullspace;
+//    MatNullSpaceCreate(PETSC_COMM_WORLD,PETSC_TRUE,0,0,&nullspace);
+//    MatSetNullSpace(A,nullspace);
+//    MatNullSpaceDestroy(&nullspace);
 
     return 0;
 }

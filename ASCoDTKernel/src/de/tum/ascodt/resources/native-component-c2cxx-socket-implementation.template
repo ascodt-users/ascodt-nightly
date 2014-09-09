@@ -26,7 +26,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sstream>
-#include "tinyxml2.h"
+#include "tinyxml_ascodt.h"
 #include <hash_map>
 #include <vector>
 #ifdef Parallel

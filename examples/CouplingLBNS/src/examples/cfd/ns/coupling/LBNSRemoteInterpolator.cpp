@@ -75,6 +75,7 @@ void LBNSRemoteInterpolator::setVelocity(
 		const int flipsY,
 		const int flipsZ,
 		const double value){
+	_couplingData.push_back(value);
 	LBNSData data;
 	data.value=value;
 	data.offset[0]=offsetX;
@@ -83,10 +84,21 @@ void LBNSRemoteInterpolator::setVelocity(
 	data.flip[0]=flipsX;
 	data.flip[1]=flipsY;
 	data.flip[2]=flipsZ;
+	data.index=_couplingData.size()-1;
 	_velocities[key].push_back(data);
+
+	//_couplingDataRef.push_back(&(_velocities[key][_velocities[key].size()-1]));
+}
+void LBNSRemoteInterpolator::swap(){
+//	for(unsigned int i=0;i<_couplingData.size();i++){
+//		(*_couplingDataRef[i]).value=_couplingData[i];
+//	}
+
 }
 void LBNSRemoteInterpolator::clear(){
 	_velocities.clear();
+
+	_couplingData.clear();
 //	for(int i=0;i<3;i++){
 //		_localVelocities[i].clear();
 //		_localVelocitiesCounters[i]=0;
@@ -133,7 +145,7 @@ const double  LBNSRemoteInterpolator::getVelocity(
 				){
 					//_localVelocities[component].push_back((*it).second[i].value);
 
-					return (*it).second[i].value;
+					return _couplingData[(*it).second[i].index];
 				}
 			}
 
@@ -147,7 +159,8 @@ const double  LBNSRemoteInterpolator::getVelocity(
 //				<<" component:"<<component
 //				<<" index:"<<index<<std::endl;
 
-		//std::cout<<"index not found"<<std::endl;
+		std::cout<<"index not found"<<std::endl;
+
 		return 0.0;
 	//}
 //	else{

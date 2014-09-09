@@ -19,7 +19,8 @@ private:
 	int _startIndex[3];
 	int _endIndex[3];
 	int _index;
-
+	std::vector<double> _couplingData;
+	std::vector<double> _couplingDataSecondary;
 	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _velocities;
 	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _pressure;
 
@@ -115,6 +116,12 @@ public:
 			std::vector<int>& maxSizeCommunicators,
 			std::vector<int>& sizeCommunicators
 	);
+	std::vector<double>& getCouplingData(){
+		return _couplingData;
+	}
+	std::vector<double>& getSecondaryCouplingData(){
+			return _couplingDataSecondary;
+	}
 	~NSLBCommunicator();
 	const bool isInside(
 			const int i,const int j , const int k) const;

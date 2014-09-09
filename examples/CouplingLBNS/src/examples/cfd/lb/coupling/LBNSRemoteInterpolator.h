@@ -8,7 +8,7 @@
 #include "Parameters.h"
 #include "../LBField.h"
 #include <vector>
-class LBNSCommunicator;
+#include "LBNSCommunicator.h"
 /** This class only has to deal with interpolating values on the NS field for a given cell
  */
 class LBNSRemoteInterpolator {
@@ -83,7 +83,7 @@ class LBNSRemoteInterpolator {
          * @param flip Array of flips for the stencil
          * @param component value (0, 1 or 2) determining what component of the velocity
          */
-        void loadVelocityComponent (int i, int j, int k,const int & component);
+        bool loadVelocityComponent (int i, int j, int k,const int & component);
 
         void printParameters();
         bool convertToLocalCoordinates(
@@ -107,10 +107,13 @@ class LBNSRemoteInterpolator {
 
         /** Interpolate one of the components of the velocity
          */
-        void interpolateVelocityComponent (int ins, int jns, int kns, int component);
+        bool interpolateVelocityComponent (int ins, int jns, int kns, int component);
         void registerNSRegion(LBNSCommunicator *com);
         void flush();
         void initGather();
+        std::vector<double>& getCouplingData(){
+                	return _communicators[0]->getCouplingData();
+        }
         /** Interpolate the pressure in a NS cell
          */
         //FLOAT interpolatePressure (int ins, int jns, int kns);

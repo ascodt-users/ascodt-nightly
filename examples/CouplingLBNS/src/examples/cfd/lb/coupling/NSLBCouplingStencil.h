@@ -17,10 +17,14 @@
 struct NSLBData{
 	int offset[3];
 	int flip[3];
+	int index;
 	double value;
 };
 class NSLBCouplingStencil : public GlobalBoundaryStencil<LBField> {
 
+private:
+	 std::vector<double> _couplingData;
+	 std::vector<double> _couplingDataSecondary;
 
 public:
 
@@ -168,7 +172,14 @@ public:
 			const int flipZ,
 			const double value);
 	void clear();
+	void swap();
 	void resetS();
+	std::vector<double>& getCouplingData(){
+			 return _couplingData;
+		}
+	std::vector<double>& getSecondaryCouplingData(){
+				 return _couplingDataSecondary;
+	}
 private:
 
 	LBField & _lbField;
@@ -204,6 +215,7 @@ private:
 
 	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _velocities;
 	__gnu_cxx::hash_map<int,std::vector<NSLBData> > _pressure;
+
 //	std::ofstream _logComm;
 //	bool _open;
 	/** Loads the requested velocity components in the points of the stencil into the private

@@ -134,7 +134,7 @@ const double  NSLBCouplingStencil::getVelocity(
 					flip[1]==(*it).second[i].flip[1]&&
 					flip[2]==(*it).second[i].flip[2]
 			)
-				return (*it).second[i].value;
+				return _couplingData[(*it).second[i].index];
 		}
 
 	}
@@ -158,9 +158,9 @@ const double  NSLBCouplingStencil::getPressure(
 					flip[1]==(*it).second[i].flip[1]&&
 					flip[2]==(*it).second[i].flip[2]
 			)
-				return (*it).second[i].value;
+				return _couplingDataSecondary[(*it).second[i].index];
 		}
-
+	std::cout<<"pressure alarms"<<std::endl;
 	return 0.0;
 
 }
@@ -218,6 +218,7 @@ void NSLBCouplingStencil::setVelocityComponent(
 		const int flipZ,
 		const double value){
 	NSLBData data;
+	_couplingData.push_back(value);
 	data.value=value;
 	data.offset[0]=offsetX;
 	data.offset[1]=offsetY;
@@ -225,7 +226,16 @@ void NSLBCouplingStencil::setVelocityComponent(
 	data.flip[0]=flipX;
 	data.flip[1]=flipY;
 	data.flip[2]=flipZ;
+	data.index=_couplingData.size()-1;
 	_velocities[key].push_back(data);
+
+	//_couplingDataRef.push_back(&(_velocities[key][_velocities[key].size()-1]));
+}
+void NSLBCouplingStencil::swap(){
+//	for(unsigned int i=0;i<_couplingData.size();i++){
+//		(*_couplingDataRef[i]).value=_couplingData[i];
+//	}
+	//_couplingData.clear();
 }
 void NSLBCouplingStencil::setPressure(
 		const int key,
@@ -238,6 +248,7 @@ void NSLBCouplingStencil::setPressure(
 		const double value){
 	//open();
 	NSLBData data;
+	_couplingDataSecondary.push_back(value);
 	data.value=value;
 	data.offset[0]=offsetX;
 	data.offset[1]=offsetY;
@@ -245,11 +256,14 @@ void NSLBCouplingStencil::setPressure(
 	data.flip[0]=flipX;
 	data.flip[1]=flipY;
 	data.flip[2]=flipZ;
+	data.index=_couplingDataSecondary.size()-1;
 	_pressure[key].push_back(data);
 }
 void NSLBCouplingStencil::clear(){
 	_velocities.clear();
 	_pressure.clear();
+	_couplingData.clear();
+	_couplingDataSecondary.clear();
 	//_logComm.flush();
 }
 

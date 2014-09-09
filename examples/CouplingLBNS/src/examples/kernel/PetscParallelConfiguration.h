@@ -14,7 +14,7 @@ class PetscParallelConfiguration {
     private:
 
         Parameters & _parameters;   //! Reference to the parameters
-
+        int _geometrySizes[3];
         /** Locates the six neighbors of the current process
          */
         void locateNeighbors();
@@ -35,7 +35,6 @@ class PetscParallelConfiguration {
         /** Compute local sizes and sizes in all directions. Requires deallocation of sizes
          */
         void computeSizes();
-        void resetCoupling();
         /** Deletes the arrays allocated in the parameters. To be called in the destructor of this
          * class
          */
@@ -46,7 +45,13 @@ class PetscParallelConfiguration {
         /** Constructor
          * @param parameters Reference to the parameters
          */
-        PetscParallelConfiguration(Parameters & parameters);
+        PetscParallelConfiguration(Parameters & parameters,
+        		const int geomtrySizeX,
+        		const int geomtrySizeY,
+        		const int geomtrySizeZ
+
+
+        );
 
         /** Destructor */
         ~PetscParallelConfiguration();

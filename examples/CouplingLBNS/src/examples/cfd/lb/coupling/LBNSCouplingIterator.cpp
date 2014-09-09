@@ -12,39 +12,61 @@ void LBNSCouplingIterator::setNormalVector(int nx, int ny, int nz){
 
 void LBNSCouplingIterator::interpolateComponentX (int i, int j, int k) {
 	//_lbVelocityX.push_back(
-	_interpolator.interpolateVelocityComponent(i, j, k, 0);
+	if(_interpolator.interpolateVelocityComponent(i, j, k, 0)) {
+		struct Contribution cont;
+		cont.x=i;
+		cont.y=j;
+		cont.z=k;
+		cont.component=0;
+		_localContributions.push_back(cont);
+	}
 	//);
 
 }
 
 void LBNSCouplingIterator::interpolateComponentY (int i, int j, int k) {
 	//_lbVelocityY.push_back(
-	_interpolator.interpolateVelocityComponent(i, j, k, 1);
-	//);
+	if(_interpolator.interpolateVelocityComponent(i, j, k, 1)) {
+		struct Contribution cont;
+		cont.x=i;
+		cont.y=j;
+		cont.z=k;
+		cont.component=1;
+		_localContributions.push_back(cont);
+	}
 
 
 }
 
 void LBNSCouplingIterator::interpolateComponentZ (int i, int j, int k) {
 	//_lbVelocityZ.push_back(
-	_interpolator.interpolateVelocityComponent(i, j, k, 2);
+	if(_interpolator.interpolateVelocityComponent(i, j, k, 2)) {
+		struct Contribution cont;
+		cont.x=i;
+		cont.y=j;
+		cont.z=k;
+		cont.component=2;
+		_localContributions.push_back(cont);
+	}
 	//);
 }
 
 
 LBNSCouplingIterator::LBNSCouplingIterator(const Parameters & parameters,
 		LBField & lbField):
-    						_lbField (lbField), _parameters (parameters),
-    						_interpolator (parameters, lbField),
-    						_offset (getOverlapWidth (parameters)),
+    								_lbField (lbField), _parameters (parameters),
+    								_interpolator (parameters, lbField),
+    								_offset (getOverlapWidth (parameters)),
 
-    						_lowerX (parameters.coupling.offsetNS[0] + _offset),
-    						_upperX (parameters.coupling.offsetNS[0] + parameters.coupling.sizeNS[0] - _offset - 1),
-    						_lowerY (parameters.coupling.offsetNS[1] + _offset),
-    						_upperY (parameters.coupling.offsetNS[1] + parameters.coupling.sizeNS[1] - _offset - 1),
-    						_lowerZ (parameters.coupling.offsetNS[2] + _offset),
-    						_upperZ (parameters.coupling.offsetNS[2] + parameters.coupling.sizeNS[2] - _offset - 1)
-{}
+    								_lowerX (parameters.coupling.offsetNS[0] + _offset),
+    								_upperX (parameters.coupling.offsetNS[0] + parameters.coupling.sizeNS[0] - _offset - 1),
+    								_lowerY (parameters.coupling.offsetNS[1] + _offset),
+    								_upperY (parameters.coupling.offsetNS[1] + parameters.coupling.sizeNS[1] - _offset - 1),
+    								_lowerZ (parameters.coupling.offsetNS[2] + _offset),
+    								_upperZ (parameters.coupling.offsetNS[2] + parameters.coupling.sizeNS[2] - _offset - 1)
+{
+
+}
 
 void LBNSCouplingIterator::iterateInner(){
 	// Left and right faces
@@ -79,8 +101,15 @@ void LBNSCouplingIterator::iterateBoundary(){
 	std::cout<<"boundary iteration on rank:"<<_parameters.parallel.rank<<
 			"lower:"<<_lowerX<<","<<_lowerY<<","<<_lowerZ<<
 			"upper:"<<_upperX<<","<<_upperY<<","<<_upperZ<<std::endl;
-
-
+	if(_localContributions.size()>0){
+		for(unsigned int i=0;i<_localContributions.size();i++)
+			_interpolator.interpolateVelocityComponent(
+					_localContributions[i].x,
+					_localContributions[i].y,
+					_localContributions[i].z,
+					_localContributions[i].component);
+		return;
+	}
 
 	for (int j = _lowerY; j <= _upperY - 1; j++){
 		for (int k = _lowerZ; k <= _upperZ - 1; k++){

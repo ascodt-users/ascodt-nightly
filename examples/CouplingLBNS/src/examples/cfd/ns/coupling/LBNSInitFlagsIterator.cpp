@@ -13,7 +13,10 @@ LBNSInitFlagsIterator::LBNSInitFlagsIterator(const Parameters & parameters,
 		_upperY (parameters.coupling.offsetNS[1] + parameters.coupling.sizeNS[1] - _offset - 1),
 		_lowerZ (parameters.coupling.offsetNS[2] + _offset),
 		_upperZ (parameters.coupling.offsetNS[2] + parameters.coupling.sizeNS[2] - _offset - 1)
-{}
+{
+
+
+}
 inline bool LBNSInitFlagsIterator::toLocalIndex(const int i,const int j, const int k,int& i_out,int& j_out, int& k_out) const{
 	i_out=i-_parameters.parallel.firstCorner[0];
 	j_out=j-_parameters.parallel.firstCorner[1];
@@ -25,7 +28,13 @@ inline bool LBNSInitFlagsIterator::toLocalIndex(const int i,const int j, const i
 }
 void LBNSInitFlagsIterator::iterate(){
 	IntScalarField & flags = _flowField.getFlags();
+	std::cout<<"boundary init flags on rank:"<<_parameters.parallel.rank<<
+				"corner:"<<_parameters.parallel.firstCorner[0]<<","<<_parameters.parallel.firstCorner[1]<<","<<_parameters.parallel.firstCorner[2]<<
+				std::endl;
 
+	std::cout<<"flags:"<<_parameters.parallel.rank<<
+					"lower:"<<_lowerX<<","<<_lowerY<<","<<_lowerZ<<
+					"upper:"<<_upperX<<","<<_upperY<<","<<_upperZ<<std::endl;
 
 
 	//	// Left and right faces

@@ -1,47 +1,47 @@
 SET(CPP_FILES
-     ../../components/java/cca/cfd/UekermannDriverAbstractImplementation.cpp
+     ../../components/c++/cca/cfd/UekermannDriverAbstractImplementation.cpp
      ../../src/cca/cfd/UekermannDriverImplementation.cpp
-     ../../components/java/cca/cfd/UekermannDriverC2CxxProxy.cpp 
-     ../../components/java/tinyxml2.cpp
+     ../../components/c++/cca/cfd/UekermannDriverC2CxxProxy.cpp 
+     ../../components/c++/tinyxml_ascodt.cpp
 )
 
 set(CPP_FILES
    	${CPP_FILES}
-   	../../components/java/cca/cfd/LBSolverNative2JavaPlainPort.cpp 
-   	../../components/java/cca/cfd/LBSolverNative2NativePlainPort.cpp
-	../../components/java/cca/cfd/LBSolverCxx2SocketPlainPort.cpp
-	../../components/java/cca/cfd/LBSolverC2CxxSocketPlainPort.cpp 
-	../../components/java/cca/cfd/LBSolverNativeDispatcher.cpp
-	../../components/java/cca/cfd/LBSolverNativeSocketDispatcher.cpp
-	../../components/java/cca/cfd/LBSolverCProxyNativeSocketDispatcher.cpp
+   	../../components/c++/cca/cfd/LBSolverNative2JavaPlainPort.cpp 
+   	../../components/c++/cca/cfd/LBSolverNative2NativePlainPort.cpp
+	../../components/c++/cca/cfd/LBSolverCxx2SocketPlainPort.cpp
+	../../components/c++/cca/cfd/LBSolverC2CxxSocketPlainPort.cpp 
+	../../components/c++/cca/cfd/LBSolverNativeDispatcher.cpp
+	../../components/c++/cca/cfd/LBSolverNativeSocketDispatcher.cpp
+	../../components/c++/cca/cfd/LBSolverCProxyNativeSocketDispatcher.cpp
 )
 set(CPP_FILES
    	${CPP_FILES}
-   	../../components/java/cca/cfd/LB2NSNative2JavaPlainPort.cpp 
-   	../../components/java/cca/cfd/LB2NSNative2NativePlainPort.cpp
-	../../components/java/cca/cfd/LB2NSCxx2SocketPlainPort.cpp
-	../../components/java/cca/cfd/LB2NSC2CxxSocketPlainPort.cpp 
-	../../components/java/cca/cfd/LB2NSNativeDispatcher.cpp
-	../../components/java/cca/cfd/LB2NSNativeSocketDispatcher.cpp
-	../../components/java/cca/cfd/LB2NSCProxyNativeSocketDispatcher.cpp
+   	../../components/c++/cca/cfd/LB2NSNative2JavaPlainPort.cpp 
+   	../../components/c++/cca/cfd/LB2NSNative2NativePlainPort.cpp
+	../../components/c++/cca/cfd/LB2NSCxx2SocketPlainPort.cpp
+	../../components/c++/cca/cfd/LB2NSC2CxxSocketPlainPort.cpp 
+	../../components/c++/cca/cfd/LB2NSNativeDispatcher.cpp
+	../../components/c++/cca/cfd/LB2NSNativeSocketDispatcher.cpp
+	../../components/c++/cca/cfd/LB2NSCProxyNativeSocketDispatcher.cpp
 )
 set(CPP_FILES
    	${CPP_FILES}
-   	../../components/java/cca/cfd/NS2LBNative2JavaPlainPort.cpp 
-   	../../components/java/cca/cfd/NS2LBNative2NativePlainPort.cpp
-	../../components/java/cca/cfd/NS2LBCxx2SocketPlainPort.cpp
-	../../components/java/cca/cfd/NS2LBC2CxxSocketPlainPort.cpp 
-	../../components/java/cca/cfd/NS2LBNativeDispatcher.cpp
-	../../components/java/cca/cfd/NS2LBNativeSocketDispatcher.cpp
-	../../components/java/cca/cfd/NS2LBCProxyNativeSocketDispatcher.cpp
+   	../../components/c++/cca/cfd/NS2LBNative2JavaPlainPort.cpp 
+   	../../components/c++/cca/cfd/NS2LBNative2NativePlainPort.cpp
+	../../components/c++/cca/cfd/NS2LBCxx2SocketPlainPort.cpp
+	../../components/c++/cca/cfd/NS2LBC2CxxSocketPlainPort.cpp 
+	../../components/c++/cca/cfd/NS2LBNativeDispatcher.cpp
+	../../components/c++/cca/cfd/NS2LBNativeSocketDispatcher.cpp
+	../../components/c++/cca/cfd/NS2LBCProxyNativeSocketDispatcher.cpp
 )
 set(CPP_FILES
    	${CPP_FILES}
-   	../../components/java/cca/cfd/NSSolverNative2JavaPlainPort.cpp 
-   	../../components/java/cca/cfd/NSSolverNative2NativePlainPort.cpp
-	../../components/java/cca/cfd/NSSolverCxx2SocketPlainPort.cpp
-	../../components/java/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp 
-	../../components/java/cca/cfd/NSSolverNativeDispatcher.cpp
-	../../components/java/cca/cfd/NSSolverNativeSocketDispatcher.cpp
-	../../components/java/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp
+   	../../components/c++/cca/cfd/NSSolverNative2JavaPlainPort.cpp 
+   	../../components/c++/cca/cfd/NSSolverNative2NativePlainPort.cpp
+	../../components/c++/cca/cfd/NSSolverCxx2SocketPlainPort.cpp
+	../../components/c++/cca/cfd/NSSolverC2CxxSocketPlainPort.cpp 
+	../../components/c++/cca/cfd/NSSolverNativeDispatcher.cpp
+	../../components/c++/cca/cfd/NSSolverNativeSocketDispatcher.cpp
+	../../components/c++/cca/cfd/NSSolverCProxyNativeSocketDispatcher.cpp
 )

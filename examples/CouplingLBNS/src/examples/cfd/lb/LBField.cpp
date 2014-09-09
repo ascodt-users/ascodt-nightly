@@ -1,17 +1,24 @@
 #include "LBField.h"
 #include "stencils/LBFunctions.h"
 
-LBField::LBField(const Parameters & parameters):
+LBField::LBField(
+		const Parameters & parameters,
+		const int geometrySizeX,
+		const int geometrySizeY,
+		const int geometrySizeZ):
 _parameters(parameters),
 _dim (parameters.geometry.dim),
 _Q (_dim==2 ? Q2D : Q3D),
-_Nx (parameters.coupling.set ? parameters.coupling.sizeNS[0] * parameters.coupling.ratio - 1 :
-	parameters.parallel.localSize[0]),
-_Ny (parameters.coupling.set ? parameters.coupling.sizeNS[1] * parameters.coupling.ratio - 1 :
-	parameters.parallel.localSize[1]),
-_Nz (_dim==2 ? 1 : (parameters.coupling.set ? parameters.coupling.sizeNS[2] *
-	parameters.coupling.ratio - 1 :
-	parameters.parallel.localSize[2])),
+_Nx(geometrySizeX),
+_Ny(geometrySizeY),
+_Nz(geometrySizeZ),
+//_Nx (parameters.coupling.set ? parameters.coupling.sizeNS[0] * parameters.coupling.ratio - 1 :
+//	parameters.parallel.localSize[0]),
+//_Ny (parameters.coupling.set ? parameters.coupling.sizeNS[1] * parameters.coupling.ratio - 1 :
+//	parameters.parallel.localSize[1]),
+//_Nz (_dim==2 ? 1 : (parameters.coupling.set ? parameters.coupling.sizeNS[2] *
+//	parameters.coupling.ratio - 1 :
+//	parameters.parallel.localSize[2])),
 _cellsX (_Nx+2),
 _cellsY (_Ny+2),
 _cellsZ (_dim==2 ? 1 : _Nz+2),

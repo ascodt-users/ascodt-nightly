@@ -39,7 +39,7 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
                            FORCE)
 endif()
 if(Parallel)
-	set(CMAKE_CXX_COMPILER "/home/atanasoa/intel/impi/4.1.3.049/intel64/bin/mpiicpc")
+	set(CMAKE_CXX_COMPILER "mpiicpc")
 	#set(CMAKE_C_COMPILER "mpicxx.openmpi")
 	
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DParallel -mt_mpi ")
@@ -52,9 +52,9 @@ endif(Parallel)
 # ==============================================================================
 # JNI {{{
 # ==============================================================================
-find_package(JNI REQUIRED)
+#find_package(JNI REQUIRED)
 
-include_directories(${JNI_INCLUDE_DIRS})
+#include_directories(${JNI_INCLUDE_DIRS})
 # ==============================================================================
 # }}} JNI
 
@@ -154,7 +154,7 @@ endif()
 # ==============================================================================
 include_directories("../../src")
 include_directories("../../components/java")
-
+include_directories("../../components/c++")
 include("sources.cmake")
 include("targets.cmake")
 

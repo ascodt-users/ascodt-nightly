@@ -94,12 +94,12 @@ public class CreateSocketProxyForCxx extends DepthFirstAdapter {
                                                            TemplateFile.getLanguageConfigurationForJNI(),
                                                            true));
     _templateFilesOfTinyXMLHeader.push(new TemplateFile(Paths.get("tinyxml-header.template"),
-                                                        _cxxDirectoryPath.resolve("tinyxml2.h"),
+                                                        _cxxDirectoryPath.resolve("tinyxml_ascodt.h"),
                                                         _namespace,
                                                         TemplateFile.getLanguageConfigurationForCPP(),
                                                         true));
     _templateFilesOfTinyXMLImplementation.push(new TemplateFile(Paths.get("tinyxml-cpp.template"),
-                                                                _cxxDirectoryPath.resolve("tinyxml2.cpp"),
+                                                                _cxxDirectoryPath.resolve("tinyxml_ascodt.cpp"),
                                                                 _namespace,
                                                                 TemplateFile.getLanguageConfigurationForCPP(),
                                                                 true));

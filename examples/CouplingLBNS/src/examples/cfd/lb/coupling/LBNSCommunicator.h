@@ -45,6 +45,7 @@ private:
 	std::vector<int> _velocityOffsets;
 	std::vector<int> _velocityFlips;
 	std::vector<int> _velocityKeys;
+	std::vector<double> _couplingData;
 	int index2array ( int i, int j, int k, int component, int stencil ) const ;
 	void connect();
 	void convertVelocity(
@@ -94,5 +95,8 @@ public:
 			const int* offset,
 			const int* flip,
 			double velocity);
+	std::vector<double>& getCouplingData(){
+		return _couplingData;
+	}
 };
 #endif

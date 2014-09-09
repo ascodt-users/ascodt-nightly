@@ -13,6 +13,5 @@ package cfd {
   uses cca.cfd.LBSolver as lb{
   }
   
-
 } 
 }

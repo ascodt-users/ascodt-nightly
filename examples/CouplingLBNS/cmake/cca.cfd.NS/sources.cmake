@@ -1,17 +1,17 @@
 SET(CPP_FILES
-     ../../components/java/cca/cfd/NSAbstractImplementation.cpp
+     ../../components/c++/cca/cfd/NSAbstractImplementation.cpp
      ../../src/cca/cfd/NSImplementation.cpp
-     ../../components/java/cca/cfd/NSC2CxxProxy.cpp 
-     ../../components/java/tinyxml2.cpp
+     ../../components/c++/cca/cfd/NSC2CxxProxy.cpp 
+     ../../components/c++/tinyxml_ascodt.cpp
 )
 
 set(CPP_FILES
    	${CPP_FILES}
-   	../../components/java/cca/cfd/LBSolverNative2JavaPlainPort.cpp 
-   	../../components/java/cca/cfd/LBSolverNative2NativePlainPort.cpp
-	../../components/java/cca/cfd/LBSolverCxx2SocketPlainPort.cpp
-	../../components/java/cca/cfd/LBSolverC2CxxSocketPlainPort.cpp 
-	../../components/java/cca/cfd/LBSolverNativeDispatcher.cpp
-	../../components/java/cca/cfd/LBSolverNativeSocketDispatcher.cpp
-	../../components/java/cca/cfd/LBSolverCProxyNativeSocketDispatcher.cpp
+   	../../components/c++/cca/cfd/LBSolverNative2JavaPlainPort.cpp 
+   	../../components/c++/cca/cfd/LBSolverNative2NativePlainPort.cpp
+	../../components/c++/cca/cfd/LBSolverCxx2SocketPlainPort.cpp
+	../../components/c++/cca/cfd/LBSolverC2CxxSocketPlainPort.cpp 
+	../../components/c++/cca/cfd/LBSolverNativeDispatcher.cpp
+	../../components/c++/cca/cfd/LBSolverNativeSocketDispatcher.cpp
+	../../components/c++/cca/cfd/LBSolverCProxyNativeSocketDispatcher.cpp
 )

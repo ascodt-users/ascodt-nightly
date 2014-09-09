@@ -383,6 +383,7 @@ void NSLBCommunicator::convertVelocity(
 			velocityFlips.push_back((*it).second[i].flip[0]);
 			velocityFlips.push_back((*it).second[i].flip[1]);
 			velocityFlips.push_back((*it).second[i].flip[2]);
+			_couplingData.push_back((*it).second[i].value);
 		}
 	}
 
@@ -406,7 +407,7 @@ void NSLBCommunicator::convertPressure(
 			pressureFlips.push_back((*it).second[i].flip[0]);
 			pressureFlips.push_back((*it).second[i].flip[1]);
 			pressureFlips.push_back((*it).second[i].flip[2]);
-
+			_couplingDataSecondary.push_back((*it).second[i].value);
 		}
 	}
 
@@ -516,6 +517,7 @@ void NSLBCommunicator::setPressure(
 	data.flip[1]=flip[1];
 	data.flip[2]=flip[2];
 	_pressure[index].push_back(data);
+
 	//	_logComm<<"i_j_k_index:"<<i
 	//			<<" "<<j<<" "<<k
 	//			<<" stencil:"<<stencilIndex

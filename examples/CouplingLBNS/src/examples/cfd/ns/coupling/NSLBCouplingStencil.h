@@ -14,7 +14,7 @@
 /** Stencil to copy information from the NS to the LB domain.
  */
 class NSLBCommunicator;
-class NSLBCouplingStencil : public GlobalBoundaryStencil<LBField> {
+class NSLBCouplingStencil : public SmartGlobalBoundaryStencil<LBField> {
 private:
 	//std::vector<double>* _velocities[3];
 	//std::vector<double>& _pressure;
@@ -88,7 +88,7 @@ public:
 	 * @param flip Vector stating in which directions the interpolation stencil has been
 	 * flipped.
 	 */
-	void interpolate (int i, int j, int k, const int * const flip);
+	bool interpolate (int i, int j, int k, const int * const flip);
 
 	/** Interpolates the value of the pressure from the NS field in the given LB cell.
 	 * This is an auxiliary function for the function computeBoundaryMeanPressure
@@ -126,11 +126,7 @@ public:
 	 * @{
 	 */
 
-	/** @brief Function for the left wall */
-	void applyLeftWall   ( LBField & lbField, int i, int j );
-	void applyRightWall  ( LBField & lbField, int i, int j );
-	void applyBottomWall ( LBField & lbField, int i, int j );
-	void applyTopWall    ( LBField & lbField, int i, int j );
+
 	/** @} */
 
 	/** @defgroup 3Dfunctions
@@ -141,16 +137,18 @@ public:
 	 * @param k Position of the cell in the Z direction
 	 * @{
 	 */
-	void applyLeftWall   ( LBField & lbField, int i, int j, int k );
-	void applyRightWall  ( LBField & lbField, int i, int j, int k );
-	void applyBottomWall ( LBField & lbField, int i, int j, int k );
-	void applyTopWall    ( LBField & lbField, int i, int j, int k );
-	void applyFrontWall  ( LBField & lbField, int i, int j, int k );
-	void applyBackWall   ( LBField & lbField, int i, int j, int k );
+	bool applyLeftWall   ( LBField & lbField, int i, int j, int k );
+	bool applyRightWall  ( LBField & lbField, int i, int j, int k );
+	bool applyBottomWall ( LBField & lbField, int i, int j, int k );
+	bool applyTopWall    ( LBField & lbField, int i, int j, int k );
+	bool applyFrontWall  ( LBField & lbField, int i, int j, int k );
+	bool applyBackWall   ( LBField & lbField, int i, int j, int k );
 	/** @} */
 	void registerLBRegion(NSLBCommunicator* com);
 	void flush();
 	void initGather();
+	std::vector<double>& getCouplingData();
+	std::vector<double>& getSecondaryCouplingData();
 private:
 	LBField & _lbField;
 	FlowField & _nsField;
@@ -201,7 +199,7 @@ private:
 	 * @param offset Array with offsets to translate the interpolation stencil.
 	 * @param flip Array stating in which directions the stencil has been flipped.
 	 */
-	void loadVelocity(
+	bool loadVelocity(
 			const int ins,
 			const int jns,
 			const int kns,
@@ -291,6 +289,7 @@ private:
 	void setArrays (int * const offset, FLOAT * const locationVector,
 			FLOAT * const dxVector, FLOAT * const dyVector, FLOAT * const dzVector,
 			const int * const flip, const FLOAT * const position, int component);
+
 };
 
 #endif

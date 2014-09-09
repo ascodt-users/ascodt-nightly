@@ -11,21 +11,27 @@
 
 // This class exists because it was not trivial to use the already existing iterator to perform
 // this operation.
-
+struct Contribution{
+		int x;
+		int y;
+		int z;
+		int component;
+	};
 class LBNSCouplingIterator {
 
     private:
 	    LBNSRemoteInterpolator _interpolator;
         FlowField & _flowField;
+
         const Parameters & _parameters;
         const int _offset;  // How many cells away from the boundary
-
-        const int _lowerX;
-        const int _upperX;
-        const int _lowerY;
-        const int _upperY;
-        const int _lowerZ;
-        const int _upperZ;
+        std::vector<Contribution> _localContributions;
+        int _lowerX;
+        int _upperX;
+        int _lowerY;
+        int _upperY;
+        int _lowerZ;
+        int _upperZ;
 
         int _offsets[3], _cell[3], _middle[3];
         int _normalVector[3];
@@ -63,7 +69,13 @@ class LBNSCouplingIterator {
         		const int flipsZ,
         		const double value);
         void iterateInner();
+        void swap(){
+        	_interpolator.swap();
+        }
         void clear();
+        std::vector<double>& getCouplingData(){
+        	return _interpolator.getCouplingData();
+        }
         /** Performs the interpolation of values from the LB to the NS field
          */
         void iterateBoundary();

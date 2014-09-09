@@ -31,12 +31,7 @@ LBNSFGHCorrectionIterator::LBNSFGHCorrectionIterator(const Parameters & paramete
 {}
 
 void LBNSFGHCorrectionIterator::iterate(){
-if(
-_lowerX<_upperX &&
-_lowerY<_upperY &&
-_lowerZ<_upperZ
 
-){
     // Left and right faces
     for (int j = _lowerY; j <= _upperY; j++){
         for (int k = _lowerZ; k <= _upperZ; k++){
@@ -60,5 +55,5 @@ _lowerZ<_upperZ
             setComponent(i, j, _upperZ  , 2);
         }
     }
-}
+
 }

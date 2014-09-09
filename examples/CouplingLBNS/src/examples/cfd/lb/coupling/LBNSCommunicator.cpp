@@ -76,6 +76,7 @@ void LBNSCommunicator::convertVelocity(
 			velocityFlips.push_back((*it).second[i].flip[0]);
 			velocityFlips.push_back((*it).second[i].flip[1]);
 			velocityFlips.push_back((*it).second[i].flip[2]);
+			_couplingData.push_back((*it).second[i].value);
 		}
 	}
 }
