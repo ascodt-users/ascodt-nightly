@@ -1,4 +1,9 @@
 #include "__PATH_FULL_QUALIFIED_NAME__C2CxxProxy.h"
+
+#ifdef Parallel
+  #include <mpi.h> // NOTE: Must always be included first!
+#endif
+
 #ifdef _WIN32
 	#include <winsock2.h>
 	#include <ws2tcpip.h>
@@ -29,9 +34,6 @@
 #include "tinyxml_ascodt.h"
 #include <hash_map>
 #include <vector>
-#ifdef Parallel
-#include <mpi.h>
-#endif
 
 #include "__PATH_FULL_QUALIFIED_NAME__Implementation.h"
 
@@ -312,7 +314,19 @@ int
 #endif
 }
 
-#ifndef _WIN32
+
+#ifdef _WIN32
+std::string retrieveSocketAddress(){
+  std::stringstream res;
+    int rank = 0 ;
+#ifdef Parallel
+
+     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+#endif
+          res<<"127.0.0.1"<<":"<<daemon_args.daemon_port;
+  return res.str();
+}
+#else
 std::string retrieveSocketAddress(){
 	std::stringstream res;
 	  int rank = 0 ;
