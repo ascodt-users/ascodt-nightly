@@ -68,9 +68,10 @@ public class SocketServerAppsTab extends ProgramArgsTab {
   }
 
   @Override
-  public String getCommandForExecution() {
-    return textProgramExecutable.getText() + " " +
-           textProgramArguments.getText();
+  public String[] getCommand() {
+    return (getBinariesDirectoryPath().resolve(textProgramExecutable.getText())
+                                      .toAbsolutePath()
+                                      .toString() + " " + textProgramArguments.getText()).split(" ");
   }
 
   @Override

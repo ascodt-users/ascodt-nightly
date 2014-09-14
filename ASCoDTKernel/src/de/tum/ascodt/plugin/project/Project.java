@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -653,7 +654,7 @@ public class Project {
         _eclipseProjectHandle.getFolder(getComponentsDirectoryPrefix() + "/java");
 
     IFolder classOutputFolder =
-        _eclipseProjectHandle.getFolder(getClassOutputFolder());
+        _eclipseProjectHandle.getFolder(getBinariesDirectoryPrefix());
     try {
       sourcesFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
       proxiesFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
@@ -929,10 +930,6 @@ public class Project {
 
   }
 
-  public String getClassOutputFolder() {
-    return "/bin";
-  }
-
   /**
    * @return the _classpathRepository
    */
@@ -941,20 +938,24 @@ public class Project {
   }
 
   public File[] getComponentJavaProxies() {
-    // TODO Auto-generated method stub
     Vector<File> proxies = new Vector<File>();
-    retrieveSources(_eclipseProjectHandle.getLocation().toPortableString() + "/" +
-                        getComponentsDirectoryPrefix(),
-                    proxies);
+    retrieveSources(getComponentsDirectoryPath(), proxies);
     return proxies.toArray(new File[] {});
   }
 
   public File[] getComponentJavaSources() {
     Vector<File> sources = new Vector<File>();
-    retrieveSources(_eclipseProjectHandle.getLocation().toPortableString() + "/" +
-                        getSourcesDirectoryPrefix(),
-                    sources);
+    retrieveSources(getSourcesDirectoryPath(), sources);
     return sources.toArray(new File[] {});
+  }
+
+  /**
+   * 
+   * @return all children folders
+   */
+  public Object[] getFolders() {
+
+    return _folders.toArray();
   }
 
   /**
@@ -972,15 +973,6 @@ public class Project {
     return "lib";
   }
 
-  /**
-   * 
-   * @return all children folders
-   */
-  public Object[] getFolders() {
-
-    return _folders.toArray();
-  }
-
   public String getImportsDirectoryPrefix() {
     return "imports";
   }
@@ -995,6 +987,40 @@ public class Project {
 
   public String getSourcesDirectoryPrefix() {
     return "src";
+  }
+
+  public java.nio.file.Path getDirectoryPath() {
+    return Paths.get(_eclipseProjectHandle.getLocation().toPortableString());
+  }
+
+  public java.nio.file.Path getBinariesDirectoryPath() {
+    return Paths.get(_eclipseProjectHandle.getLocation().toPortableString(),
+                     getBinariesDirectoryPrefix());
+  }
+
+  public java.nio.file.Path getLibrariesDirectoryPath() {
+    return Paths.get(_eclipseProjectHandle.getLocation().toPortableString(),
+                     getLibrariesDirectoryPrefix());
+  }
+
+  public java.nio.file.Path getImportsDirectoryPath() {
+    return Paths.get(_eclipseProjectHandle.getLocation().toPortableString(),
+                     getImportsDirectoryPrefix());
+  }
+
+  public java.nio.file.Path getIncludesDirectoryPath() {
+    return Paths.get(_eclipseProjectHandle.getLocation().toPortableString(),
+                     getIncludesDirectoryPrefix());
+  }
+
+  public java.nio.file.Path getComponentsDirectoryPath() {
+    return Paths.get(_eclipseProjectHandle.getLocation().toPortableString(),
+                     getComponentsDirectoryPrefix());
+  }
+
+  public java.nio.file.Path getSourcesDirectoryPath() {
+    return Paths.get(_eclipseProjectHandle.getLocation().toPortableString(),
+                     getSourcesDirectoryPrefix());
   }
 
   /**
@@ -1233,15 +1259,12 @@ public class Project {
    * @param sources
    *          a collection, where to put the founded source files
    */
-  private void retrieveSources(String path, Vector<File> sources) {
-    File f = new File(path);
-    if (f.isFile() && f.getName().endsWith(".java")) {
-      sources.add(f);
+  private void retrieveSources(java.nio.file.Path path, Vector<File> sources) {
+    if (Files.isRegularFile(path) && path.endsWith(".java")) {
+      sources.add(path.toFile());
     } else {
-      if (f.listFiles() != null) {
-        for (File file : f.listFiles()) {
-          retrieveSources(file.getAbsolutePath(), sources);
-        }
+      for (File file : path.toFile().listFiles()) {
+        retrieveSources(file.toPath(), sources);
       }
     }
   }

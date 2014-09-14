@@ -76,6 +76,20 @@ else()
 endif()
 # ==============================================================================
 # }}} Sockets
+
+# MPI {{{
+# ==============================================================================
+if(PARALLEL)
+  add_definitions(-DParallel)
+
+  find_package(MPI REQUIRED)
+
+  include_directories(${MPI_CXX_INCLUDE_PATH})
+
+  set(MPI_LIBRARIES ${MPI_CXX_LIBRARIES})
+endif()
+# ==============================================================================
+# }}} MPI
 # ==============================================================================
 # }}} Packages
 
@@ -154,7 +168,8 @@ include("targets.cmake")
 target_link_libraries("__FULLY_QUALIFIED_COMPONENT_NAME__"
                       ${JNI_LIBRARIES}
                       ${Threads_LIBRARIES}
-                      ${Sockets_LIBRARIES})
+                      ${Sockets_LIBRARIES}
+                      ${MPI_LIBRARIES})
 
 install(TARGETS "__FULLY_QUALIFIED_COMPONENT_NAME__"
         ARCHIVE DESTINATION "lib"

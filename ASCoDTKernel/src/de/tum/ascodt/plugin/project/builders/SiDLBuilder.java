@@ -181,17 +181,10 @@ public class SiDLBuilder {
                                           project.getFunctionTable());
 
     try {
-      interfaces.create(Paths.get(eclipseProject.getLocation()
-                                                .toPortableString(),
-                                  project.getComponentsDirectoryPrefix()),
-                        Paths.get(eclipseProject.getLocation()
-                                                .toPortableString(),
-                                  project.getSourcesDirectoryPrefix()),
-                        Paths.get(eclipseProject.getLocation()
-                                                .toPortableString(),
-                                  project.getBinariesDirectoryPrefix()),
-                        Paths.get(eclipseProject.getLocation()
-                                                .toPortableString()));
+      interfaces.create(project.getComponentsDirectoryPath(),
+                        project.getSourcesDirectoryPath(),
+                        project.getBinariesDirectoryPath(),
+                        project.getDirectoryPath());
 
       eclipseProject.refreshLocal(IResource.DEPTH_INFINITE, null);
     } catch (CoreException e) {

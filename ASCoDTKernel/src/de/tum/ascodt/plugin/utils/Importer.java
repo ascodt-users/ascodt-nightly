@@ -16,6 +16,7 @@ import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IProject;
 
+import de.tum.ascodt.plugin.project.Project;
 import de.tum.ascodt.plugin.project.ProjectBuilder;
 import de.tum.ascodt.utils.exceptions.ASCoDTException;
 
@@ -126,7 +127,8 @@ public class Importer {
    */
   private static void extract(String sourcePath,
                               String targetPath,
-                              IProject project) throws ASCoDTException {
+                              IProject eclipseProject) throws ASCoDTException {
+    Project project = ProjectBuilder.getInstance().getProject(eclipseProject);
     File f = new File(sourcePath);
     ZipFile zipFile = null;
     if (f.exists()) {
@@ -137,14 +139,9 @@ public class Importer {
         File destinationDirectory =
             new File(targetPath + File.separatorChar +
                      f.getName().substring(0, f.getName().lastIndexOf(".")));
-        File libDirectory =
-            new File(project.getLocation().toPortableString() + ProjectBuilder.getInstance()
-                                                                              .getProject(project)
-                                                                              .getLibrariesDirectoryPrefix());
-        File exeDirectory =
-            new File(project.getLocation().toPortableString() + ProjectBuilder.getInstance()
-                                                                              .getProject(project)
-                                                                              .getBinariesDirectoryPrefix());
+        File libDirectory = project.getLibrariesDirectoryPath().toFile();
+        File exeDirectory = project.getBinariesDirectoryPath().toFile();
+
         if (destinationDirectory.exists()) {
           // TODO deleteDirectory(directory);
           destinationDirectory.mkdirs();

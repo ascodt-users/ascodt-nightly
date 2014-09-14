@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <diagram>
-    <component xsi:type="socketComponent" host="127.0.0.1" port="50002" name="examples.B" reference="oid1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <inputPort className="examples.Foo" classId="0" index="1396827930"/>
+    <component xsi:type="socketComponent" host="127.0.0.1" port="50008" name="examples.A" reference="oid0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <inputPort className="examples.Driver" classId="0" index="1692202851"/>
+        <outputPort xsi:type="usePort" alias="fooHandler" createId="7" connectId="8" disconnectId="9" className="fooHandler:examples.Foo" classId="0" index="564892060"/>
     </component>
-    <component xsi:type="socketComponent" host="127.0.0.1" port="50000" name="examples.A" reference="oid0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <inputPort className="examples.Driver" classId="0" index="90250170"/>
-        <outputPort xsi:type="usePort" alias="fooHandler" createId="7" connectId="8" disconnectId="9" className="fooHandler:examples.Foo" classId="0" index="1291586632"/>
+    <component xsi:type="socketComponent" host="127.0.0.1" port="50010" name="examples.B" reference="oid1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <inputPort className="examples.Foo" classId="0" index="1095575585"/>
     </component>
 </diagram>

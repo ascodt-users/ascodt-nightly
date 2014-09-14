@@ -33,7 +33,7 @@ public class CreateComponentsAndInterfaces {
 
   public void create(Path componentsDirectoryPath,
                      Path sourcesDirectoryPath,
-                     Path bineriesDirectoryPath,
+                     Path binariesDirectoryPath,
                      Path projectDirectoryPath) {
     _trace.in("create(...)", componentsDirectoryPath.toString());
 

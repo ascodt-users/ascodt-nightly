@@ -221,13 +221,18 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
       for (int i = 1; i < this.numberOfProcesses.getSelection(); i++) {
         SocketService.getDefault().getFreePort();
       }
-      String cmd = getCommandForExecution();
+      String[] command = getCommand();
 
-      ProcessBuilder pb = new ProcessBuilder(cmd.split(" "));
+      ProcessBuilder pb = new ProcessBuilder(command);
+
+      pb.directory(getBinariesDirectoryPath().toFile());
+
       Map<String, String> env = pb.environment();
+
       if (env != null) {
         for (String envVar : getEnv()) {
           String[] envPair = envVar.split("=");
+
           Assert.isTrue(envPair.length == 2);
           env.put(envPair[0], envPair[1]);
         }
@@ -285,7 +290,7 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
     }
   }
 
-  public abstract String getCommandForExecution();
+  public abstract String[] getCommand();
 
   // public String[] getCmd(){
   // String[] tokenizedArgs= textProgramArguments.getText().split(" ");
@@ -387,17 +392,20 @@ abstract class ProgramArgsTab extends ContainerTab implements ProcessListener {
   public void setProjectLocation(String location) {
     _projectLocation = location;
     if (textProgramExecutable != null) {
-      textProgramExecutable.setText(_projectLocation + File.separator +
-                                    "bin" +
-                                    File.separator +
-                                    _label);
+      textProgramExecutable.setText(_label);
     }
     applicationSettings =
-        new java.io.File(_projectLocation + File.separator +
-                         "settings" +
-                         File.separator +
-                         _label +
-                         ".settings");
+        new File(_projectLocation + File.separator +
+                 "settings" +
+                 File.separator +
+                 _label +
+                 ".settings");
     loadStorageFiles();
+  }
+
+  protected java.nio.file.Path getBinariesDirectoryPath() {
+    return ProjectBuilder.getInstance()
+                         .getProject(new Path(_projectLocation).lastSegment())
+                         .getBinariesDirectoryPath();
   }
 }
