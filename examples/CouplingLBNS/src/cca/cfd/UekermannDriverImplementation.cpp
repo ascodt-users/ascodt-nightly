@@ -53,15 +53,16 @@ void cca::cfd::UekermannDriverImplementation::go(const std::string configFile){
 		exchangeBoundaries();
 		_ns->solveParallel();
 		_lb->solveParallel();
-		//		_ns->printNSPressure();
-		//		_ns->printNSProfiles();
+		_ns->printNSPressure();
+		_ns->printNSProfiles();
+		_lb->printLBProfiles();
 		_ns->plotParallel();
 		_lb->plotParallel();
 		//_lb->plot();
 		//_ns->plot();
 	}
-	//_ns->closeNSProfiles();
-	//_lb->closeLBProfiles();
+	_ns->closeNSProfiles();
+	_lb->closeLBProfiles();
 	//	 gettimeofday(&t2, NULL);
 	//	 elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
 	//	    elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms

@@ -36,6 +36,51 @@ void FieldIterator<FlowField>::iterate (){
 		}
 	}
 }
+/**
+ * SOA field iterator
+ */
+template<class FlowField>
+SOAFieldIterator<FlowField>::SOAFieldIterator (FlowField & flowField, SOAFieldStencil<FlowField> & stencil,
+		int lowOffset, int highOffset,int q):
+		Iterator<FlowField>(flowField), _stencil(stencil), _lowOffset(lowOffset), _highOffset(highOffset),_q(q){}
+
+
+template<class FlowField>
+void SOAFieldIterator<FlowField>::iterate (){
+
+	const int cellsX = Iterator<FlowField>::_flowField.getCellsX();
+	const int cellsY = Iterator<FlowField>::_flowField.getCellsY();
+	const int cellsZ = Iterator<FlowField>::_flowField.getCellsZ();
+
+	// The index k can be used for the 2D and 3D cases.
+
+	if (Iterator<FlowField>::_flowField.getDim() == 2){
+
+		// Loop without lower boundaries. These will be dealt with by the global boundary stencils
+		// or by the subdomain boundary iterators.
+		for(int q=0;q<_q;q++){
+			for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
+				for (int i = 1 + _lowOffset; i < cellsX - 1 + _highOffset; i++){
+					_stencil.apply ( Iterator<FlowField>::_flowField,q, i, j );
+				}
+			}
+		}
+	}
+
+	if (Iterator<FlowField>::_flowField.getDim() == 3){
+
+		for(int q=0;q<_q;q++){
+			for (int k = 1 + _lowOffset; k < cellsZ - 1 + _highOffset; k++){
+				for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
+					for (int i = 1 + _lowOffset; i < cellsX - 1 + _highOffset; i++){
+						_stencil.apply ( Iterator<FlowField>::_flowField, q, i, j, k );
+					}
+				}
+			}
+		}
+	}
+}
+
 
 template<class FlowField>
 SmartGlobalBoundaryIterator<FlowField>::SmartGlobalBoundaryIterator(FlowField & flowField,
@@ -55,6 +100,14 @@ SmartGlobalBoundaryIterator<FlowField>::SmartGlobalBoundaryIterator(FlowField & 
 	_upperY=flowField.getCellsY()+_highOffset;
 	_upperZ=flowField.getCellsZ()+_highOffset;
 	_init=false;
+	//if(_parameters.coupling.set){
+
+
+
+
+
+
+
 
 	_left_min[0]=_lowerZ;
 	_left_min[1]=_lowerY;

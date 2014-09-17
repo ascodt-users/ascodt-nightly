@@ -1,5 +1,7 @@
 #include "cca/cfd/NS2LBNative2JavaPlainPort.h"
 
+#ifdef JAVA
+
 JNIEXPORT void JNICALL Java_cca_cfd_NS2LBNative2JavaPlainPort_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -16,6 +18,8 @@ JNIEXPORT void JNICALL Java_cca_cfd_NS2LBNative2JavaPlainPort_destroyInstance(JN
   delete ((cca::cfd::NS2LBNative2JavaPlainPort*)ref);
   
 }
+
+
 
 cca::cfd::NS2LBNative2JavaPlainPort::NS2LBNative2JavaPlainPort(JavaVM* jvm,jobject obj):
      _jvm(jvm),
@@ -215,3 +219,4 @@ env->SetDoubleArrayRegion(pressure_jni,0,pressure_len,(jdouble*)pressure);
 
   }
 }
+#endif

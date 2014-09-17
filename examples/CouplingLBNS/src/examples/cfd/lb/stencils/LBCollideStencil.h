@@ -10,10 +10,11 @@ class LBCollideStencil : public FieldStencil<LBField> {
     private:
 
         FLOAT _equilibrium[Q];
-
+        FLOAT _f[Q];
         FLOAT _velocity[3];
 
         FLOAT _density;
+
 
     public:
 

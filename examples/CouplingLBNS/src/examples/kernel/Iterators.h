@@ -61,6 +61,33 @@ class FieldIterator : public Iterator<FlowField> {
         void iterate ();
 };
 
+template<class FlowField>
+class SOAFieldIterator : public Iterator<FlowField> {
+
+    private:
+
+        SOAFieldStencil<FlowField> & _stencil;         //! Reference to a stencil
+
+        //@brief Define the iteration domain to include more or less layers
+        // Added since the ability to select the iteration domain provides more flexibility
+        //@{
+        const int _lowOffset;
+        const int _highOffset;
+        const int _q;
+        //@}
+
+    public:
+
+        SOAFieldIterator (FlowField & flowField, SOAFieldStencil<FlowField> & stencil,
+                       int lowOffset = 0, int highOffset = 0,int q = 19);
+
+        /** Volume iteration over the field.
+         *
+         * Volume iteration. The stencil will be applied to all cells in the domain plus the upper
+         * boundaries. Lower boundaries are not included.
+         */
+        void iterate ();
+};
 
 template<class FlowField>
 class GlobalBoundaryIterator : public Iterator<FlowField> {

@@ -1,6 +1,7 @@
 #include "cca/cfd/LBSolverNativeDispatcher.h"
 #include <algorithm>
 
+#ifdef JAVA
 JNIEXPORT void JNICALL Java_cca_cfd_LBSolverNativeDispatcher_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -23,7 +24,7 @@ JNIEXPORT void JNICALL Java_cca_cfd_LBSolverNativeDispatcher_connect(JNIEnv *env
 JNIEXPORT void JNICALL Java_cca_cfd_LBSolverNativeDispatcher_disconnect(JNIEnv *env, jobject obj,jlong ref,jlong destination){
   ((cca::cfd::LBSolverNativeDispatcher*)ref)->disconnect((cca::cfd::LBSolver*)destination);
 }
-
+#endif
 
 cca::cfd::LBSolverNativeDispatcher::LBSolverNativeDispatcher(){
 

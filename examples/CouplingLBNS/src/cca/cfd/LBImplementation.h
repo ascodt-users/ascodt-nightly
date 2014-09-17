@@ -14,9 +14,12 @@
 #include "examples/kernel/Parameters.h"
 #include "examples/cfd/lb/LBField.h"
 #include "examples/cfd/lb//stencils/LBStreamAndCollideStencil.h"
+#include "examples/cfd/lb//stencils/LBStreamStencil.h"
+#include "examples/cfd/lb//stencils/LBCollideStencil.h"
 #include "examples/cfd/lb/stencils/LBBounceBackStencil.h"
 #include "examples/cfd/lb/stencils/LBVTKStencil.h"
 #include "examples/cfd/lb/stencils/LBMovingWallStencil.h"
+#include "examples/cfd/lb/stencils/LBParabolicStencil.h"
 #include "examples/cfd/lb/coupling/LBNSCouplingIterator.h"
 #include "examples/cfd/lb/coupling/NSLBCouplingStencil.h"
 #include "examples/cfd/lb/parallelManagers/LBParallelManager.h"
@@ -40,6 +43,12 @@ private:
 	LBField* _lbField;
 	LBStreamAndCollideStencil* _streamAndCollideStencil;
 	FieldIterator<LBField>* _streamAndCollideIterator;
+	SOAFieldIterator<LBField>* _streamIterator;
+	FieldIterator<LBField>* _collideIterator;
+
+	LBStreamStencil* _streamStencil;
+	LBCollideStencil* _collideStencil;
+
 	LBBounceBackStencil* _bounceBackStencil;
 	FieldIterator<LBField>* _bounceBackIterator;
 	LBNSCouplingIterator* _lbnsCouplingIterator;
@@ -48,6 +57,9 @@ private:
 	LBParallelManager* _parallelManager;
 	LBMovingWallStencil *_movingWallStencil;
 	GlobalBoundaryIterator<LBField>* _movingWallIterator;
+	LBParabolicStencil *_parabolicStencil;
+	GlobalBoundaryIterator<LBField>* _parabolicIterator;
+
 	precice::cplscheme::impl::IQNILSPostProcessing* _pp;
 	precice::cplscheme::impl::PostProcessing::DataMap _data;
 	std::ofstream _lbprofiles;

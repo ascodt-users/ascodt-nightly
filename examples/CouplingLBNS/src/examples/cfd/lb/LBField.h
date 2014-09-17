@@ -70,7 +70,9 @@ public:
 	void getSecondMoment (FLOAT * const moments, int i, int j, int k) const;
 
 	inline const int getIndexF (int a, int i, int j, int k = 0) const {
-		return i + _cellsX * (j + _cellsY * (k + _cellsZ * a));
+		return (_cellsX*_cellsY*_cellsZ)*a+i + _cellsX * (j + _cellsY * k);
+
+		//return i + _cellsX * (j + _cellsY * (k + _cellsZ * a));
 	}
 
 	const int getIndexCell (int i, int j, int k = 0) const;

@@ -2,9 +2,10 @@
 #define CCA_CFD_DRIVERNATIVE2NATIVEPLAINPORT_H_ 
 
 #include "cca/cfd/Driver.h"
-#include <jni.h> 
 #include <iostream>
 
+#ifdef JAVA
+#include <jni.h> 
 #ifdef __cplusplus
   extern "C" {
 #endif
@@ -18,6 +19,7 @@ JNIEXPORT void JNICALL Java_cca_cfd_DriverNative2NativePlainPort_connect(JNIEnv 
 
 #ifdef __cplusplus
   }
+#endif
 #endif
 
 namespace cca { 

@@ -57,6 +57,7 @@ private:
 	int _iter;
 	std::ofstream _nsprofiles;
 	std::ofstream _nspressure;
+	std::ofstream _mcFile;
 	int _comC;
 	precice::cplscheme::impl::PostProcessing::DataMap _data;
 	void gatherDomainDescriptions();

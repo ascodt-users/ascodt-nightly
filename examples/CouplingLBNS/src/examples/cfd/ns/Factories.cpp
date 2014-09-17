@@ -39,8 +39,8 @@ GlobalBoundaryFactory::GlobalBoundaryFactory(Parameters & parameters):
         parameters.walls.typeBack   = DIRICHLET;
     } else if (scenario == "channel"){
         // To the left, we have the input
-        _velocityStencils[0] = _channelInput[0];
-        _FGHStencils[0] = _channelInput[1];
+        _velocityStencils[0] = _BFChannelInput[0];
+        _FGHStencils[0] = _BFChannelInput[1];
 
         // To the right, there is an outflow boundary
         _velocityStencils[1] = _outflow[0];

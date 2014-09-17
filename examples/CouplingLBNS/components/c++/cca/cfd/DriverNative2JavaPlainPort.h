@@ -2,7 +2,7 @@
 #define CCA_CFD_DRIVER2NATIVE2JAVAPLAINPORT_H_ 
 
 #include "cca/cfd/Driver.h"
-#include <jni.h> 
+
 #include <iostream>
 //
 // ASCoDT - Advanced Scientific Computing Development Toolkit
@@ -11,6 +11,9 @@
 //
 // Authors: Tobias Weinzierl, Atanas Atanasov   
 //
+
+#ifdef JAVA
+#include <jni.h> 
 #ifdef __cplusplus
   extern "C" {
 #endif
@@ -45,4 +48,5 @@ class cca::cfd::DriverNative2JavaPlainPort: public cca::cfd::Driver{
     void goParallel(const std::string configFile);
    
 };
+#endif
 #endif

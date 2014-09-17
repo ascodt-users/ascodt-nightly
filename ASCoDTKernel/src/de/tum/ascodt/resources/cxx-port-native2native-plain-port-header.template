@@ -2,9 +2,10 @@
 #define __INCLUDE_GUARD_FULL_QUALIFIED_NAME__NATIVE2NATIVEPLAINPORT_H_ 
 
 #include "__PATH_FULL_QUALIFIED_NAME__.h"
-#include <jni.h> 
 #include <iostream>
 
+#ifdef JAVA
+#include <jni.h> 
 #ifdef __cplusplus
   extern "C" {
 #endif
@@ -18,6 +19,7 @@ JNIEXPORT void JNICALL Java___JNI_FULL_QUALIFIED_NAME__Native2NativePlainPort_co
 
 #ifdef __cplusplus
   }
+#endif
 #endif
 
 __OPEN_PACKAGE__

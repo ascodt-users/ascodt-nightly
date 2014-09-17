@@ -2,7 +2,7 @@
 #define CCA_CFD_NS2LB2NATIVE2JAVAPLAINPORT_H_ 
 
 #include "cca/cfd/NS2LB.h"
-#include <jni.h> 
+
 #include <iostream>
 //
 // ASCoDT - Advanced Scientific Computing Development Toolkit
@@ -11,6 +11,9 @@
 //
 // Authors: Tobias Weinzierl, Atanas Atanasov   
 //
+
+#ifdef JAVA
+#include <jni.h> 
 #ifdef __cplusplus
   extern "C" {
 #endif
@@ -60,4 +63,5 @@ class cca::cfd::NS2LBNative2JavaPlainPort: public cca::cfd::NS2LB{
     void retrievePressureCopyParallel(double* pressure, const int pressure_len);
    
 };
+#endif
 #endif

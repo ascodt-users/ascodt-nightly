@@ -1,5 +1,7 @@
 #include "__PATH_FULL_QUALIFIED_NAME__Native2JavaPlainPort.h"
 
+#ifdef JAVA
+
 JNIEXPORT void JNICALL Java___JNI_FULL_QUALIFIED_NAME__Native2JavaPlainPort_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -17,6 +19,8 @@ JNIEXPORT void JNICALL Java___JNI_FULL_QUALIFIED_NAME__Native2JavaPlainPort_dest
   
 }
 
+
+
 __FULL_QUALIFIED_NAME__Native2JavaPlainPort::__PORT_NAME__Native2JavaPlainPort(JavaVM* jvm,jobject obj):
      _jvm(jvm),
      _obj(obj){
@@ -30,3 +34,4 @@ __FULL_QUALIFIED_NAME__Native2JavaPlainPort::~__PORT_NAME__Native2JavaPlainPort(
 }
 
 -- INSERT HERE --
+#endif

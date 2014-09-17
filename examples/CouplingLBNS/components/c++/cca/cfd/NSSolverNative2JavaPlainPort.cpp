@@ -1,5 +1,7 @@
 #include "cca/cfd/NSSolverNative2JavaPlainPort.h"
 
+#ifdef JAVA
+
 JNIEXPORT void JNICALL Java_cca_cfd_NSSolverNative2JavaPlainPort_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -16,6 +18,8 @@ JNIEXPORT void JNICALL Java_cca_cfd_NSSolverNative2JavaPlainPort_destroyInstance
   delete ((cca::cfd::NSSolverNative2JavaPlainPort*)ref);
   
 }
+
+
 
 cca::cfd::NSSolverNative2JavaPlainPort::NSSolverNative2JavaPlainPort(JavaVM* jvm,jobject obj):
      _jvm(jvm),
@@ -421,3 +425,4 @@ env->SetIntArrayRegion(value_jni,0,1,(jint*)&value);
 
   }
 }
+#endif

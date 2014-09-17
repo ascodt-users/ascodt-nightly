@@ -430,7 +430,8 @@ bool NSLBCouplingStencil::interpolate (int i, int j, int k, const int * const fl
 	for (int component = 0; component < 3; component++){
 		setArrays (offset, locationVector, dxVector, dyVector,  dzVector,
 				flip, position, component);
-		res=res||loadVelocity(ins, jns, kns,i,j,k, component, offset, flip);
+		bool temp=loadVelocity(ins, jns, kns,i,j,k, component, offset, flip);
+		res=res||temp;
 
 		//		matrix_vector(barycentricBasis, locationVector, weights, stencilSize, stencilSize);
 		//		velocity[component] = dot(_values, weights, stencilSize) * _reciprocalVelocityLB;

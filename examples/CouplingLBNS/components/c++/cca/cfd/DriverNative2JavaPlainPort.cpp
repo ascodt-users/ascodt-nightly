@@ -1,5 +1,7 @@
 #include "cca/cfd/DriverNative2JavaPlainPort.h"
 
+#ifdef JAVA
+
 JNIEXPORT void JNICALL Java_cca_cfd_DriverNative2JavaPlainPort_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -16,6 +18,8 @@ JNIEXPORT void JNICALL Java_cca_cfd_DriverNative2JavaPlainPort_destroyInstance(J
   delete ((cca::cfd::DriverNative2JavaPlainPort*)ref);
   
 }
+
+
 
 cca::cfd::DriverNative2JavaPlainPort::DriverNative2JavaPlainPort(JavaVM* jvm,jobject obj):
      _jvm(jvm),
@@ -55,3 +59,4 @@ void cca::cfd::DriverNative2JavaPlainPort::goParallel(const std::string configFi
      
   }
 }
+#endif

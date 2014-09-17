@@ -1,6 +1,7 @@
 #include "cca/cfd/NSSolverNativeDispatcher.h"
 #include <algorithm>
 
+#ifdef JAVA
 JNIEXPORT void JNICALL Java_cca_cfd_NSSolverNativeDispatcher_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -23,7 +24,7 @@ JNIEXPORT void JNICALL Java_cca_cfd_NSSolverNativeDispatcher_connect(JNIEnv *env
 JNIEXPORT void JNICALL Java_cca_cfd_NSSolverNativeDispatcher_disconnect(JNIEnv *env, jobject obj,jlong ref,jlong destination){
   ((cca::cfd::NSSolverNativeDispatcher*)ref)->disconnect((cca::cfd::NSSolver*)destination);
 }
-
+#endif
 
 cca::cfd::NSSolverNativeDispatcher::NSSolverNativeDispatcher(){
 

@@ -9,6 +9,7 @@ __OPEN_PACKAGE__
      class __PORT_NAME__NativeDispatcher;
 __CLOSE_PACKAGE__
 
+#ifdef JAVA
 #include <jni.h> 
 
 #ifdef __cplusplus
@@ -25,6 +26,8 @@ JNIEXPORT void JNICALL Java___JNI_FULL_QUALIFIED_NAME__NativeDispatcher_disconne
 
 #ifdef __cplusplus
   }
+#endif
+
 #endif
 
 class __FULL_QUALIFIED_NAME__NativeDispatcher: public __FULL_QUALIFIED_NAME__{

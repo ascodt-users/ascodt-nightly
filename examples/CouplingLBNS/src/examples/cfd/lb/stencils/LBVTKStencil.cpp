@@ -37,9 +37,14 @@ void writePoints (std::ostream & file, const LBField & field,
 	for ( int k = parameters.parallel.firstCorner[2]; k < parameters.parallel.firstCorner[2]+ pz; k++ ){
 		for ( int j = parameters.parallel.firstCorner[1]; j < parameters.parallel.firstCorner[1] + py; j++ ){
 			for ( int i = parameters.parallel.firstCorner[0]; i < parameters.parallel.firstCorner[0] + px; i++ ){
-				sprintf (buffer, "%f %f %f\n", i * parameters.geometry.dx/(double)parameters.coupling.ratio,
+				if(parameters.coupling.set)
+					sprintf (buffer, "%f %f %f\n", i * parameters.geometry.dx/(double)parameters.coupling.ratio,
 						j * parameters.geometry.dy/(double)parameters.coupling.ratio,
 						k * parameters.geometry.dz/(double)parameters.coupling.ratio);
+				else
+					sprintf (buffer, "%f %f %f\n", i * parameters.geometry.dx,
+											j * parameters.geometry.dy,
+											k * parameters.geometry.dz );
 				grid.append ( buffer );
 				count++;
 			}
@@ -53,7 +58,7 @@ void writePoints (std::ostream & file, const LBField & field,
 
 
 LBVTKStencil::LBVTKStencil (const Parameters & parameters) :
-    		FieldStencil<LBField> ( parameters ), _prefix(parameters.vtk.prefix), _written(false) {
+		FieldStencil<LBField> ( parameters ), _prefix(parameters.vtk.prefix), _written(false) {
 
 	//    _prefix = parameters.vtk.prefix;
 	//    _written = false;

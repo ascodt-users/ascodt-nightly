@@ -6,14 +6,14 @@
 
 // To be applied before the collision
 
-class LBStreamStencil : public FieldStencil<LBField> {
+class LBStreamStencil : public SOAFieldStencil<LBField> {
 
     public:
 
         LBStreamStencil(const Parameters & parameters);
 
-        void apply(LBField & field, int i, int j);
-        void apply(LBField & field, int i, int j, int k);
+        void apply(LBField & field,int q, int i, int j);
+        void apply(LBField & field,int q, int i, int j, int k);
 };
 
 #endif

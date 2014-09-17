@@ -2,7 +2,7 @@
 #define CCA_CFD_LBSOLVER2NATIVE2JAVAPLAINPORT_H_ 
 
 #include "cca/cfd/LBSolver.h"
-#include <jni.h> 
+
 #include <iostream>
 //
 // ASCoDT - Advanced Scientific Computing Development Toolkit
@@ -11,6 +11,9 @@
 //
 // Authors: Tobias Weinzierl, Atanas Atanasov   
 //
+
+#ifdef JAVA
+#include <jni.h> 
 #ifdef __cplusplus
   extern "C" {
 #endif
@@ -84,4 +87,5 @@ class cca::cfd::LBSolverNative2JavaPlainPort: public cca::cfd::LBSolver{
     void plotParallel();
    
 };
+#endif
 #endif

@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "Component.h"
 
+#ifdef JAVA
 JNIEXPORT void JNICALL Java_cca_cfd_LB2NSNative2NativePlainPort_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -22,6 +23,7 @@ JNIEXPORT void JNICALL Java_cca_cfd_LB2NSNative2NativePlainPort_connect(JNIEnv *
   ((cca::cfd::LB2NSNative2NativePlainPort*)ref)->connect(dynamic_cast<cca::cfd::LB2NS*>((Component*)destination));
 }
 
+#endif 
 
 cca::cfd::LB2NSNative2NativePlainPort::LB2NSNative2NativePlainPort():
      _destination(0){

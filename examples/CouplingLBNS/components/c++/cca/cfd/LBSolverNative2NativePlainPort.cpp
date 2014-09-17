@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "Component.h"
 
+#ifdef JAVA
 JNIEXPORT void JNICALL Java_cca_cfd_LBSolverNative2NativePlainPort_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -22,6 +23,7 @@ JNIEXPORT void JNICALL Java_cca_cfd_LBSolverNative2NativePlainPort_connect(JNIEn
   ((cca::cfd::LBSolverNative2NativePlainPort*)ref)->connect(dynamic_cast<cca::cfd::LBSolver*>((Component*)destination));
 }
 
+#endif 
 
 cca::cfd::LBSolverNative2NativePlainPort::LBSolverNative2NativePlainPort():
      _destination(0){

@@ -12,6 +12,7 @@ namespace cfd {
 } 
 }
 
+#ifdef JAVA
 #include <jni.h> 
 
 #ifdef __cplusplus
@@ -28,6 +29,8 @@ JNIEXPORT void JNICALL Java_cca_cfd_NS2LBNativeDispatcher_disconnect(JNIEnv *env
 
 #ifdef __cplusplus
   }
+#endif
+
 #endif
 
 class cca::cfd::NS2LBNativeDispatcher: public cca::cfd::NS2LB{

@@ -1,6 +1,7 @@
 #include "cca/cfd/DriverNativeDispatcher.h"
 #include <algorithm>
 
+#ifdef JAVA
 JNIEXPORT void JNICALL Java_cca_cfd_DriverNativeDispatcher_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -23,7 +24,7 @@ JNIEXPORT void JNICALL Java_cca_cfd_DriverNativeDispatcher_connect(JNIEnv *env, 
 JNIEXPORT void JNICALL Java_cca_cfd_DriverNativeDispatcher_disconnect(JNIEnv *env, jobject obj,jlong ref,jlong destination){
   ((cca::cfd::DriverNativeDispatcher*)ref)->disconnect((cca::cfd::Driver*)destination);
 }
-
+#endif
 
 cca::cfd::DriverNativeDispatcher::DriverNativeDispatcher(){
 

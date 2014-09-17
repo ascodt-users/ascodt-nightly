@@ -2,7 +2,7 @@
 #define CCA_CFD_NSSOLVER2NATIVE2JAVAPLAINPORT_H_ 
 
 #include "cca/cfd/NSSolver.h"
-#include <jni.h> 
+
 #include <iostream>
 //
 // ASCoDT - Advanced Scientific Computing Development Toolkit
@@ -11,6 +11,9 @@
 //
 // Authors: Tobias Weinzierl, Atanas Atanasov   
 //
+
+#ifdef JAVA
+#include <jni.h> 
 #ifdef __cplusplus
   extern "C" {
 #endif
@@ -84,4 +87,5 @@ class cca::cfd::NSSolverNative2JavaPlainPort: public cca::cfd::NSSolver{
     void syncrParallel(int& value);
    
 };
+#endif
 #endif

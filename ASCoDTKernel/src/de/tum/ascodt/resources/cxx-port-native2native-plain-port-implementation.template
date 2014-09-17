@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "Component.h"
 
+#ifdef JAVA
 JNIEXPORT void JNICALL Java___JNI_FULL_QUALIFIED_NAME__Native2NativePlainPort_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -22,6 +23,7 @@ JNIEXPORT void JNICALL Java___JNI_FULL_QUALIFIED_NAME__Native2NativePlainPort_co
   ((__FULL_QUALIFIED_NAME__Native2NativePlainPort*)ref)->connect(dynamic_cast<__FULL_QUALIFIED_NAME__*>((Component*)destination));
 }
 
+#endif 
 
 __FULL_QUALIFIED_NAME__Native2NativePlainPort::__PORT_NAME__Native2NativePlainPort():
      _destination(0){

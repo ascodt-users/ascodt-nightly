@@ -373,6 +373,8 @@ void NSLBCommunicator::convertVelocity(
 
 ){
 	__gnu_cxx::hash_map<int,std::vector<NSLBData> >::iterator it;
+	std::cout<<"converting velocity:"<<_velocities.size()<<std::endl;
+
 	for(it=_velocities.begin();it!=_velocities.end();it++){
 		for(unsigned int i=0;i<(*it).second.size();i++){
 			keysVelocity.push_back((*it).first);
@@ -396,6 +398,7 @@ void NSLBCommunicator::convertPressure(
 		std::vector<double>& pressureValues
 ){
 	__gnu_cxx::hash_map<int,std::vector<NSLBData> >::iterator it;
+	std::cout<<"converting pressure:"<<_pressure.size()<<std::endl;
 	for(it=_pressure.begin();it!=_pressure.end();it++){
 
 		for(unsigned int i=0;i<(*it).second.size();i++){

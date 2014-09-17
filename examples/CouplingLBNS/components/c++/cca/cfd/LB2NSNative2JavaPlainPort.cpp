@@ -1,5 +1,7 @@
 #include "cca/cfd/LB2NSNative2JavaPlainPort.h"
 
+#ifdef JAVA
+
 JNIEXPORT void JNICALL Java_cca_cfd_LB2NSNative2JavaPlainPort_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -16,6 +18,8 @@ JNIEXPORT void JNICALL Java_cca_cfd_LB2NSNative2JavaPlainPort_destroyInstance(JN
   delete ((cca::cfd::LB2NSNative2JavaPlainPort*)ref);
   
 }
+
+
 
 cca::cfd::LB2NSNative2JavaPlainPort::LB2NSNative2JavaPlainPort(JavaVM* jvm,jobject obj):
      _jvm(jvm),
@@ -191,3 +195,4 @@ env->GetDoubleArrayRegion(velocityZ_jni,0,velocityZ_len,(jdouble*)velocityZ);
 
   }
 }
+#endif

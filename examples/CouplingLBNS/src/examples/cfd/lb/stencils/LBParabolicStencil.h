@@ -1,3 +1,6 @@
+#ifndef _LB_PARABOLIC_STENCIL_H_
+#define _LB_PARABOLIC_STENCIL_H_
+
 #include "Stencil.h"
 #include "Parameters.h"
 #include "../LBField.h"
@@ -52,3 +55,4 @@ class LBParabolicStencil : public GlobalBoundaryStencil<LBField> {
         void applyFrontWall  (LBField & field, int i, int j, int k);
         void applyBackWall   (LBField & field, int i, int j, int k);
 };
+#endif

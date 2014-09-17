@@ -65,7 +65,9 @@ FlowField::FlowField (const Parameters & parameters):
                  VectorField(_size_x + 3, _size_y + 3, _size_z + 3)),
     _RHS(_dim==2?ScalarField(_size_x + 3, _size_y + 3):
                  ScalarField(_size_x + 3, _size_y + 3, _size_z + 3))
-{}
+{
+	std::cout<<"lsize:"<<_cellsX<<","<<_cellsY<<std::endl;
+}
 
 void FlowField::copyToField(FlowField & dest){
     FLOAT *vDest, *vSource;

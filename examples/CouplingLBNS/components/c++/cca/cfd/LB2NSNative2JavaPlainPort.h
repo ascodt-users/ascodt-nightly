@@ -2,7 +2,7 @@
 #define CCA_CFD_LB2NS2NATIVE2JAVAPLAINPORT_H_ 
 
 #include "cca/cfd/LB2NS.h"
-#include <jni.h> 
+
 #include <iostream>
 //
 // ASCoDT - Advanced Scientific Computing Development Toolkit
@@ -11,6 +11,9 @@
 //
 // Authors: Tobias Weinzierl, Atanas Atanasov   
 //
+
+#ifdef JAVA
+#include <jni.h> 
 #ifdef __cplusplus
   extern "C" {
 #endif
@@ -57,4 +60,5 @@ class cca::cfd::LB2NSNative2JavaPlainPort: public cca::cfd::LB2NS{
     void retrieveVelocitiesCopyParallel(double* velocityX, const int velocityX_len,double* velocityY, const int velocityY_len,double* velocityZ, const int velocityZ_len);
    
 };
+#endif
 #endif

@@ -2,9 +2,10 @@
 #define CCA_CFD_NSSOLVERNATIVE2NATIVEPLAINPORT_H_ 
 
 #include "cca/cfd/NSSolver.h"
-#include <jni.h> 
 #include <iostream>
 
+#ifdef JAVA
+#include <jni.h> 
 #ifdef __cplusplus
   extern "C" {
 #endif
@@ -18,6 +19,7 @@ JNIEXPORT void JNICALL Java_cca_cfd_NSSolverNative2NativePlainPort_connect(JNIEn
 
 #ifdef __cplusplus
   }
+#endif
 #endif
 
 namespace cca { 

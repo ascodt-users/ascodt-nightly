@@ -36,7 +36,7 @@ void LBField::allocate(){
 	_fIn =  new FLOAT[_Q * _nofCellsWithBoundaries];
 	_fOut = new FLOAT[_Q * _nofCellsWithBoundaries];
 	_flags = new char[_nofCellsWithBoundaries];
-
+	std::cout<<"cells X:"<<_cellsX<<std::endl;
 	// Here, the indexing function is used to initialize the array discarding any possibly faster
 	// method. However, this function is called once, and this accounts for possible changes in
 	// indexing and the layout of the arrays
@@ -93,9 +93,18 @@ const bool LBField::isInside(int i,int j,int k) const{
 //	if(	i==0||j==0||k==0||
 //			i==_cellsX-1||j==_cellsY-1||k==_cellsZ-1)
 //		return false;
-	double dx=1.0/(double)(_parameters.coupling.sizeNS[0] * _parameters.coupling.ratio - 1);
-	double dy=1.0/(double)(_parameters.coupling.sizeNS[1] * _parameters.coupling.ratio - 1);
-	double dz=1.0/(double)(_parameters.coupling.sizeNS[2] * _parameters.coupling.ratio - 1);
+	int sizeX=(_parameters.coupling.set)?
+			_parameters.coupling.sizeNS[0] * _parameters.coupling.ratio-1:
+			_parameters.geometry.sizeX;
+	int sizeY=(_parameters.coupling.set)?
+			_parameters.coupling.sizeNS[1] * _parameters.coupling.ratio-1:
+			_parameters.geometry.sizeY;
+	int sizeZ=(_parameters.coupling.set)?
+			_parameters.coupling.sizeNS[2] * _parameters.coupling.ratio-1:
+			_parameters.geometry.sizeZ;
+	double dx=1.0/(double)(sizeX);
+	double dy=1.0/(double)(sizeY);
+	double dz=1.0/(double)(sizeZ);
 
 	pos[0]= ((_parameters.parallel.firstCorner[0]+(i-1))
 					*dx)+dx/2.0;
@@ -325,7 +334,13 @@ const int LBField::getQ() const {
 }
 
 const int LBField::getIndexCell(int i, int j, int k) const {
-	return getIndexF(0, i, j, k);
+	if(i + _cellsX * (j + _cellsY * k)>=_cellsX*_cellsY*_cellsZ){
+
+		std::cout<<"alarm"<<std::endl;
+		exit(-1);
+	}
+	return  i + _cellsX * (j + _cellsY * k);
+			//getIndexF(0, i, j, k);
 }
 void LBField::registerSphere(double x,double y,double z,double r){
 	Sphere s;

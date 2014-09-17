@@ -3,6 +3,10 @@
 template<class FlowField>
 FieldStencil<FlowField>::FieldStencil ( const Parameters & parameters ) : _parameters ( parameters ) {}
 
+template<class FlowField>
+SOAFieldStencil<FlowField>::SOAFieldStencil ( const Parameters & parameters ) : _parameters ( parameters ) {}
+
+
 
 template<class FlowField>
 GlobalBoundaryStencil<FlowField>::GlobalBoundaryStencil ( const Parameters & parameters ):

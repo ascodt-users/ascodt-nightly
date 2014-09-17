@@ -29,9 +29,7 @@
 #include "tinyxml_ascodt.h"
 #include <hash_map>
 #include <vector>
-#ifdef Parallel
-#include <mpi.h>
-#endif
+
 
 #include "cca/cfd/NSImplementation.h"
 
@@ -1613,7 +1611,10 @@ void startMPIDaemon(CCA_CFD_NS_arg& arg){
 int rank = -1;
 MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 if(rank>0){
-	 parallel_deamon_run(&arg);
+	  pthread_t task;
+       //tasks.push_back(task);
+       pthread_create(&task,NULL,parallel_deamon_run,&arg);
+	 //parallel_deamon_run(&arg);
 }
 #endif     
 }
@@ -1856,16 +1857,33 @@ void initialise_(CCA_CFD_NS_arg& arg,bool joinable){
      arg.joinable=joinable;
      invoker_create_instance(&arg.ref,0,0,NULL,NULL
 #ifdef Parallel
-   ,MPI_COMM_WORLD,0
-#endif
+   ,MPI_COMM_WORLD,0     
+#endif   
    );
-
      initialiseENV(arg);
      
      initialiseXMLDaemons(arg);
      initialiseParallel(arg);
      
 
+   
+   /*if(arg.java_client_flag)         
+     open_client(arg.hostname.c_str(),arg.client_port.c_str(),arg.java_serverfd,arg.java_clientfd);
+
+   bind_server(arg.daemon_port.c_str(),arg.daemon_serverfd,arg.number_of_workers);
+   startSocketDaemons(arg);
+   initialiseXMLConnections(arg);
+   if(arg.joinable)
+     server_deamon_run(&arg);
+   startMPIDaemon(arg);*/
+}
+
+
+#ifdef _WIN32
+void BIND_COMPONENT(CCA_CFD_NS_arg& arg,bool joinable){
+#else
+void bind_component_(CCA_CFD_NS_arg& arg,bool joinable){
+#endif
    if(arg.java_client_flag)         
      open_client(arg.hostname.c_str(),arg.client_port.c_str(),arg.java_serverfd,arg.java_clientfd);
 
@@ -1878,14 +1896,12 @@ void initialise_(CCA_CFD_NS_arg& arg,bool joinable){
 }
 
 
-
-
-
 #ifdef _WIN32
-void DESTROY(CCA_CFD_NS_arg& arg){
+void DESTROY(CCA_CFD_NS_arg& arg, bool joinable){
 #else
-void destroy_(CCA_CFD_NS_arg& arg){
+void destroy_(CCA_CFD_NS_arg& arg, bool joinable){
 #endif
+if(joinable){
 #ifdef _WIN32
   closesocket(arg.daemon_serverfd);
   if(arg.java_client_flag)
@@ -1901,7 +1917,7 @@ void destroy_(CCA_CFD_NS_arg& arg){
 #ifdef _WIN32
   WSACleanup();
 #endif   
-
+}
 }
 
 #ifdef _WIN32
@@ -1928,16 +1944,19 @@ void main_loop_(bool joinable){
 #ifdef _WIN32
   INITIALISE(daemon_args,joinable);
   SOCKET_LOOP(daemon_args,joinable);
-  DESTROY(daemon_args);     
+  DESTROY(daemon_args,joinable);     
 #else  
   initialise_(daemon_args,joinable);
+  bind_component_(daemon_args,joinable);
   socket_loop_(daemon_args,joinable);
-  destroy_(daemon_args);  
+  destroy_(daemon_args,joinable);  
 #endif
   
 }
 
 }
+
+
 
 
 

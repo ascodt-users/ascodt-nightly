@@ -1,6 +1,7 @@
 #include "cca/cfd/NS2LBNativeDispatcher.h"
 #include <algorithm>
 
+#ifdef JAVA
 JNIEXPORT void JNICALL Java_cca_cfd_NS2LBNativeDispatcher_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -23,7 +24,7 @@ JNIEXPORT void JNICALL Java_cca_cfd_NS2LBNativeDispatcher_connect(JNIEnv *env, j
 JNIEXPORT void JNICALL Java_cca_cfd_NS2LBNativeDispatcher_disconnect(JNIEnv *env, jobject obj,jlong ref,jlong destination){
   ((cca::cfd::NS2LBNativeDispatcher*)ref)->disconnect((cca::cfd::NS2LB*)destination);
 }
-
+#endif
 
 cca::cfd::NS2LBNativeDispatcher::NS2LBNativeDispatcher(){
 

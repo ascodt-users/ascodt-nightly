@@ -1,5 +1,7 @@
 #include "cca/cfd/LBSolverNative2JavaPlainPort.h"
 
+#ifdef JAVA
+
 JNIEXPORT void JNICALL Java_cca_cfd_LBSolverNative2JavaPlainPort_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -16,6 +18,8 @@ JNIEXPORT void JNICALL Java_cca_cfd_LBSolverNative2JavaPlainPort_destroyInstance
   delete ((cca::cfd::LBSolverNative2JavaPlainPort*)ref);
   
 }
+
+
 
 cca::cfd::LBSolverNative2JavaPlainPort::LBSolverNative2JavaPlainPort(JavaVM* jvm,jobject obj):
      _jvm(jvm),
@@ -451,3 +455,4 @@ void cca::cfd::LBSolverNative2JavaPlainPort::plotParallel(){
      
   }
 }
+#endif

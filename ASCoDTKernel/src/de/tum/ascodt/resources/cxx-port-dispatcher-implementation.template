@@ -1,6 +1,7 @@
 #include "__PATH_FULL_QUALIFIED_NAME__NativeDispatcher.h"
 #include <algorithm>
 
+#ifdef JAVA
 JNIEXPORT void JNICALL Java___JNI_FULL_QUALIFIED_NAME__NativeDispatcher_createInstance(JNIEnv *env, jobject obj){
   JavaVM* jvm;
   env->GetJavaVM(&jvm);
@@ -23,7 +24,7 @@ JNIEXPORT void JNICALL Java___JNI_FULL_QUALIFIED_NAME__NativeDispatcher_connect(
 JNIEXPORT void JNICALL Java___JNI_FULL_QUALIFIED_NAME__NativeDispatcher_disconnect(JNIEnv *env, jobject obj,jlong ref,jlong destination){
   ((__FULL_QUALIFIED_NAME__NativeDispatcher*)ref)->disconnect((__FULL_QUALIFIED_NAME__*)destination);
 }
-
+#endif
 
 __FULL_QUALIFIED_NAME__NativeDispatcher::__PORT_NAME__NativeDispatcher(){
 
