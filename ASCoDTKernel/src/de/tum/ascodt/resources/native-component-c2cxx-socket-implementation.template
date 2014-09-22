@@ -390,6 +390,10 @@ clientfd,int bufferSize
      
      while(methodId!=1){
           readData((char*)&methodId,sizeof(int),rcvBuffer,clientfd,bufferSize);
+          
+     if(methodId < 0)
+       break;
+          
           invokers[methodId](&ref,clientfd,bufferSize,rcvBuffer,sendBuffer
 #ifdef Parallel
 	 		,communicator,methodId
@@ -440,7 +444,7 @@ void* server_deamon_run(void* daemon_args){
       int clientfd=0;
 #endif
       accept_on_server(((__COMPONENT_NAME_ENV___arg*)daemon_args)->daemon_serverfd,clientfd);
-      std::cout<<"server accepted"<<std::endl;
+      //std::cout<<"server accepted"<<std::endl;
       socket_worker_loop(
       	((__COMPONENT_NAME_ENV___arg*)daemon_args)->ref,
       	clientfd,

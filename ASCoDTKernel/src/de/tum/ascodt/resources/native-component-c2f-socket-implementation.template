@@ -333,7 +333,7 @@ void* server_deamon_run(void* daemon_args){
 #endif      
 
       accept_on_server(((__COMPONENT_NAME_ENV___arg*)daemon_args)->daemon_serverfd,clientfd);
-      std::cout<<"server accepted"<<std::endl;
+      //std::cout<<"server accepted"<<std::endl;
       socket_worker_loop(((__COMPONENT_NAME_ENV___arg*)daemon_args)->ref,clientfd,((__COMPONENT_NAME_ENV___arg*)daemon_args)->buffer_size);
 }
 extern "C"{

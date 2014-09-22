@@ -28,7 +28,7 @@ class __FULL_QUALIFIED_NAME__Cxx2SocketPlainPort: public __FULL_QUALIFIED_NAME__
     int _buffer_size;
     char *_rcvBuffer;
     char *_sendBuffer;
-    void open_client(char* hostname,int port,
+    void open_client(char const* hostname,int port,
     #ifdef _WIN32
     SOCKET
     #else
@@ -70,7 +70,7 @@ class __FULL_QUALIFIED_NAME__Cxx2SocketPlainPort: public __FULL_QUALIFIED_NAME__
     #endif 
     &newsockfd);
   public:
-    __PORT_NAME__Cxx2SocketPlainPort(char* host,int port,int buffer_size);
+    __PORT_NAME__Cxx2SocketPlainPort(char const* host,int port,int buffer_size);
      __PORT_NAME__Cxx2SocketPlainPort(int port,int buffer_size);
     ~__PORT_NAME__Cxx2SocketPlainPort();
     //int getSockfd();
